@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""PreToolUse(SendMessage) gate: payload vs. pointer (cache-safety).
+"""PreToolUse(SendMessage) gate: payload vs. pointer.
 
-A large message injected into a running session can trigger a full
-prompt-cache rewrite of the receiving session (Claude Code #27048
-class). The expensive direction is subagent → dispatcher (long main
-context); the reverse (dispatcher briefing a subagent) may be long —
-the receiver's cache is small. So: in a SUBAGENT context, a string
+Primary rationale — context economy: a large result injected into the
+dispatcher's running session occupies its context window for the rest
+of the session; every later turn carries it, and the long-context
+session is where tokens are scarcest. A file plus a short pointer
+keeps the full data on disk, selectively readable on demand.
+
+Secondary (hypothesis, n=2): large injections have coincided with
+full prompt-cache rewrites of the receiving session (Claude Code
+#27048 class). Cache-key-stabilizing proxies may mitigate that class
+upstream; they do not touch the context-economy point at all.
+
+The expensive direction is subagent → dispatcher (long main context);
+the reverse (dispatcher briefing a subagent) may be long — the
+receiver's context is small. So: in a SUBAGENT context, a string
 message beyond `max_message_chars` is denied with the file+pointer
 instruction. Structured (object) messages — protocol responses — pass.
 
@@ -41,10 +50,11 @@ def check(payload: dict) -> str | None:
         return None
     return (
         f"Payload gate: message is {len(msg)} chars (limit "
-        f"{max_chars()}). Large results injected into the dispatcher's "
-        "running session can force a full prompt-cache rewrite. Write "
-        "the full result to a FILE, then send a SHORT message: the key "
-        "findings plus the file path."
+        f"{max_chars()}). A large result injected into the dispatcher's "
+        "session occupies its context for the rest of the session (and "
+        "can force a full prompt-cache rewrite). Write the full result "
+        "to a FILE, then send a SHORT message: the key findings plus "
+        "the file path."
     )
 
 

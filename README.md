@@ -13,7 +13,7 @@ of a dispatch discipline.
 | `subagent-push-gate` | PreToolUse Bash | denies `git`/`gh` push in a subagent context — subagents commit unpushed, the dispatcher pushes after verification |
 | `report-reminder` | PostToolUse Agent\|Task | one line next to every dispatch result: check the closing report, verify claims in the artifact |
 | `report-enforcer` | SubagentStop | instructs a stopping subagent to actually SEND its closing report (background agents' final text reaches no one) |
-| `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher (cache-safety: large injections can force a full prompt-cache rewrite of the receiving session) — write a file, send the pointer; dispatcher→subagent stays free |
+| `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher — payload belongs in a file, the message carries the pointer: an injected payload occupies the dispatcher's context for the rest of the session (and has coincided with full prompt-cache rewrites); dispatcher→subagent stays free |
 | `dispatch-log` | PostToolUse Agent\|Task | appends one mechanical JSONL line per dispatch (`~/.local/share/claude/dispatch-log.jsonl`, `$CLAUDE_DISPATCH_LOG` override) |
 
 All guards fail open on hook-input parse errors and ship a `--test`
