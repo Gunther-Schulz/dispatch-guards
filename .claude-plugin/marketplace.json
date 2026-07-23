@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dispatch-guards-marketplace",
+  "description": "Mechanical guards for disciplined subagent dispatching",
+  "owner": {
+    "name": "Gunther Schulz"
+  },
+  "plugins": [
+    {
+      "name": "dispatch-guards",
+      "description": "Model gate, push gate, brief/report reminders, report enforcer, dispatch log — the hook side of a dispatch discipline.",
+      "source": "./plugin"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Agent|Task|Workflow",
+        "hooks": [
+          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/agent-model-gate.py"},
+          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/brief-reminder.py"}
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/subagent-push-gate.py"}
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/report-reminder.py"},
+          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/dispatch-log.py"}
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/report-enforcer.py"}
+        ]
+      }
+    ]
+  }
+}
