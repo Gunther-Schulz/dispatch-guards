@@ -61,6 +61,7 @@ _DEFAULTS: dict = {
     "deny_models": [],
     "ask_models": [],
     "discipline_doc": None,
+    "max_message_chars": 3000,
 }
 _POLICY_CACHE: dict | None = None
 

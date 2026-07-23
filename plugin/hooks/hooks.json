@@ -4,14 +4,32 @@
       {
         "matcher": "Agent|Task|Workflow",
         "hooks": [
-          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/agent-model-gate.py"},
-          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/brief-reminder.py"}
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/agent-model-gate.py"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/brief-reminder.py"
+          }
         ]
       },
       {
         "matcher": "Bash",
         "hooks": [
-          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/subagent-push-gate.py"}
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/subagent-push-gate.py"
+          }
+        ]
+      },
+      {
+        "matcher": "SendMessage",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/message-payload-gate.py"
+          }
         ]
       }
     ],
@@ -19,15 +37,24 @@
       {
         "matcher": "Agent|Task",
         "hooks": [
-          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/report-reminder.py"},
-          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/dispatch-log.py"}
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/report-reminder.py"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/dispatch-log.py"
+          }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/report-enforcer.py"}
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/report-enforcer.py"
+          }
         ]
       }
     ]

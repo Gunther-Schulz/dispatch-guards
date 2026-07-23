@@ -13,6 +13,7 @@ of a dispatch discipline.
 | `subagent-push-gate` | PreToolUse Bash | denies `git`/`gh` push in a subagent context — subagents commit unpushed, the dispatcher pushes after verification |
 | `report-reminder` | PostToolUse Agent\|Task | one line next to every dispatch result: check the closing report, verify claims in the artifact |
 | `report-enforcer` | SubagentStop | instructs a stopping subagent to actually SEND its closing report (background agents' final text reaches no one) |
+| `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher (cache-safety: large injections can force a full prompt-cache rewrite of the receiving session) — write a file, send the pointer; dispatcher→subagent stays free |
 | `dispatch-log` | PostToolUse Agent\|Task | appends one mechanical JSONL line per dispatch (`~/.local/share/claude/dispatch-log.jsonl`, `$CLAUDE_DISPATCH_LOG` override) |
 
 All guards fail open on hook-input parse errors and ship a `--test`
@@ -30,7 +31,8 @@ generic reminder wording). Site policy lives in
   "models": ["sonnet", "opus", "haiku", "fable"],
   "deny_models": ["haiku"],
   "ask_models": ["fable"],
-  "discipline_doc": "dispatch-discipline.md"
+  "discipline_doc": "dispatch-discipline.md",
+  "max_message_chars": 3000
 }
 ```
 
@@ -40,6 +42,8 @@ generic reminder wording). Site policy lives in
   permission dialog (one operator yes/no per dispatch, before it starts).
 - `discipline_doc` — when set, reminder texts cite it (`… §1`, `… §2`);
   unset, wording stays generic.
+- `max_message_chars` — payload-gate threshold for subagent→dispatcher
+  messages (default 3000).
 
 ## Install
 
