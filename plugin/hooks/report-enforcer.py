@@ -35,20 +35,36 @@ doctor (doctor.py globs hooks/*.py carrying "--test").
 from __future__ import annotations
 
 import json
+import os
 import sys
 
-INSTRUCTION = (
-    "Closing-report check: If you are a background/teammate agent (your "
-    "final text does NOT reach your dispatcher), send your closing report "
-    "NOW via SendMessage to your dispatcher — going idle without having "
-    "SENT it counts as no report. Keep it SHORT: key findings plus the "
-    "file path; write any large result to a FILE first (a big payload "
-    "pushed into the dispatcher's running session can force a full "
-    "prompt-cache rewrite there). If you are a synchronous subagent, your "
-    "final text IS the report — ensure it contains the full closing-report "
-    "form; do NOT call SendMessage. If you already sent/delivered the "
-    "report, stop — do not send it twice."
-)
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+from _dispatch_common import policy  # noqa: E402
+
+DEFAULT_MAX = 3000  # mirror of message-payload-gate.py, same policy key
+
+
+def max_chars() -> int:
+    v = policy().get("max_message_chars", DEFAULT_MAX)
+    return v if isinstance(v, int) and v > 0 else DEFAULT_MAX
+
+
+def instruction() -> str:
+    return (
+        "Closing-report check: If you are a background/teammate agent "
+        "(your final text does NOT reach your dispatcher), send your "
+        "closing report NOW via SendMessage to your dispatcher — going "
+        "idle without having SENT it counts as no report. BEFORE "
+        f"composing it: message max {max_chars()} chars — write any "
+        "larger result to a FILE first, then send key findings plus the "
+        "file path (an injected payload occupies the dispatcher's "
+        "context for the rest of its session; oversized sends are "
+        "denied by a gate, costing you a rewrite). If you are a "
+        "synchronous subagent, your final text IS the report — ensure "
+        "it contains the full closing-report form; do NOT call "
+        "SendMessage. If you already sent/delivered the report, stop — "
+        "do not send it twice."
+    )
 
 
 def check(payload: dict) -> str | None:
@@ -63,7 +79,7 @@ def check(payload: dict) -> str | None:
     """
     if payload.get("stop_hook_active"):
         return None
-    return INSTRUCTION
+    return instruction()
 
 
 def output_json(context: str) -> str:
@@ -91,7 +107,11 @@ if __name__ == "__main__":
     if "--test" in sys.argv:
         import contextlib
         import io
+        import tempfile
+        from _dispatch_common import _reset_policy_cache
 
+        os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+        _reset_policy_cache()
         # injects on a fresh SubagentStop payload (event is the gate)
         assert check({"agent_id": "a1", "hook_event_name": "SubagentStop"}) is not None
         assert check({}) is not None
@@ -103,6 +123,19 @@ if __name__ == "__main__":
         assert "sendmessage" in text.lower()          # names the real channel
         assert "final text is the report" in text.lower().replace("  ", " ")
         assert "do not send it twice" in text.lower() # idempotency clause
+        # payload clause: names the limit BEFORE composition, file+pointer
+        assert f"max {DEFAULT_MAX} chars" in text     # default threshold
+        assert "before" in text.lower()               # pre-composition timing
+        assert "file" in text.lower()                 # file+pointer remedy
+        # threshold follows the same policy key as message-payload-gate
+        with tempfile.NamedTemporaryFile("w", suffix=".json",
+                                         delete=False) as tf:
+            tf.write('{"max_message_chars": 1234}')
+            os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = tf.name
+        _reset_policy_cache()
+        assert "max 1234 chars" in check({})
+        os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+        _reset_policy_cache()
         # correct JSON emission format (SubagentStop additionalContext schema)
         out = json.loads(output_json("X"))
         assert out["hookSpecificOutput"]["hookEventName"] == "SubagentStop", out
