@@ -44,6 +44,39 @@ def reminder_text() -> str:
     )
 
 
+_CHANNEL_MARKERS = ("sendmessage", "send_message", "report channel",
+                    "final text is the report")
+
+
+def missing_channel(payload: dict) -> bool:
+    """True iff this is a BACKGROUND Agent dispatch whose prompt names
+    no report channel — the deliver-into-the-void class (JOURNAL
+    2026-07-27, epsilon-probe: agent finished, reported as final text,
+    reached no one). Background is the Agent tool's default, so only an
+    explicit run_in_background=False exempts. Fail-open on any doubt."""
+    if payload.get("tool_name") != "Agent":
+        return False  # Task tool has its own return path
+    tool_input = payload.get("tool_input") or {}
+    if tool_input.get("run_in_background") is False:
+        return False  # synchronous: final text IS the report
+    prompt = (tool_input.get("prompt") or "").lower()
+    if not prompt:
+        return False
+    return not any(m in prompt for m in _CHANNEL_MARKERS)
+
+
+def deny_text() -> str:
+    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
+    return (
+        "Blocked: background dispatch without a report channel. A "
+        "background agent's final text reaches no one — the brief "
+        "must instruct delivery (paste the tail block's channel "
+        f"line, {doc} §2: SendMessage to the dispatcher), or pass "
+        "run_in_background: false for a synchronous dispatch. "
+        "Fix the brief and retry."
+    )
+
+
 def check(payload: dict) -> str | None:
     """Return the reminder, or None (= stay silent)."""
     if payload.get("tool_name") not in ("Agent", "Task"):
@@ -56,6 +89,15 @@ def main() -> int:
         payload = json.load(sys.stdin)
     except (json.JSONDecodeError, ValueError):
         return 0  # never fail the workflow on a hook parse error
+    if missing_channel(payload):
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "deny",
+            },
+            "systemMessage": deny_text(),
+        }))
+        return 0
     reminder = check(payload)
     if reminder:
         print(json.dumps({
@@ -84,6 +126,26 @@ if __name__ == "__main__":
         assert "dispatch-discipline.md §1" in check({"tool_name": "Agent"})
         assert check({"tool_name": "Bash"}) is None
         assert check({}) is None
+        # Channel gate: background + no channel → deny
+        assert missing_channel({"tool_name": "Agent", "tool_input": {
+            "prompt": "Go read files and report your findings."}})
+        # Channel named (any marker) → allow
+        assert not missing_channel({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X. Deliver via SendMessage to main."}})
+        assert not missing_channel({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\nReport channel: your final text IS the "
+                      "report."}})
+        # Explicit synchronous → allow
+        assert not missing_channel({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X, answer inline.",
+            "run_in_background": False}})
+        # Task tool, empty prompt, non-dispatch tools → never deny
+        assert not missing_channel({"tool_name": "Task", "tool_input": {
+            "prompt": "no channel here"}})
+        assert not missing_channel({"tool_name": "Agent", "tool_input": {}})
+        assert not missing_channel({"tool_name": "Bash", "tool_input": {
+            "command": "ls"}})
+        assert "Blocked" in deny_text()
         print("brief-reminder: all tests passed")
         sys.exit(0)
     sys.exit(main())
