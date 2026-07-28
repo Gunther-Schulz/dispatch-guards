@@ -60,7 +60,7 @@ Scope, and why it cannot be general: hook input carries NO caller model
 (hooks reference: only SessionStart may receive `model`; there is no
 $CLAUDE_MODEL), so "above yourself" is NOT computable — only the
 ask-tier case is mechanically decidable, and the general rule stays
-prose (dispatch-discipline.md §6.2). Subagents dispatching sideways or
+prose (dispatch-discipline.md §4). Subagents dispatching sideways or
 down are untouched; nesting itself stays legal (3 layers by default).
 Binding as-of 2026-07-28: PreToolUse fires inside subagents and the
 input carries `agent_id` — CONFIRMED live (this gate and the push gate
@@ -170,7 +170,7 @@ def escalation_deny(payload: dict) -> str | None:
         "agent's. Return the question to your dispatcher (report the "
         "evidence and what you could not settle at your tier); it "
         "decides and dispatches. Basis: briefing your own reviewer "
-        f"inherits the blind spot it is meant to escape ({doc_ref('§6.2')}). "
+        f"inherits the blind spot it is meant to escape ({doc_ref('§4')}). "
         "Dispatching sideways or down is unaffected."
     )
 
