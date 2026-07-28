@@ -46,6 +46,25 @@ panel renders the NAME plus prompt text, never the description, so
 a title-only prefix is invisible exactly where the operator looks
 (observed: "draft-vet" showed no model). Names can't contain ": "
 (charset [A-Za-z0-9_-]), hence the hyphen form.
+
+Escalation lane (2026-07-28): an ask-tier dispatch FROM a subagent is
+DENIED, not asked — a subagent needing a tier above its own returns the
+question to its dispatcher, which decides and dispatches. Basis: the
+escalating agent would write the brief for its own reviewer, and it is
+the context least able to state that question fairly — could it see the
+flaw well enough to brief someone on it, it would mostly have caught it;
+escalation-from-below inherits the blind spot it means to escape. Deny
+rather than ask is deliberate: the operator's veto answers "is this
+dispatch worth it", never "should this agent be the one deciding".
+Scope, and why it cannot be general: hook input carries NO caller model
+(hooks reference: only SessionStart may receive `model`; there is no
+$CLAUDE_MODEL), so "above yourself" is NOT computable — only the
+ask-tier case is mechanically decidable, and the general rule stays
+prose (dispatch-discipline.md §6.2). Subagents dispatching sideways or
+down are untouched; nesting itself stays legal (3 layers by default).
+Binding as-of 2026-07-28: PreToolUse fires inside subagents and the
+input carries `agent_id` — CONFIRMED live (this gate and the push gate
+both observed biting from a subagent context, not merely bite-tested).
 """
 import json
 import os
@@ -53,7 +72,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import ask, doc_ref, policy  # noqa: E402
+from _dispatch_common import ask, deny, doc_ref, is_subagent, policy  # noqa: E402
 
 # Generic types with no model pinning in their definition: here the choice
 # MUST be in the call. A missing subagent_type defaults to general-purpose.
@@ -131,6 +150,31 @@ def needs_model_ask(tool_input: dict) -> bool:
             and tool_input.get("model") in policy()["ask_models"])
 
 
+def escalation_deny(payload: dict) -> str | None:
+    """Deny reason when a SUBAGENT dispatches an ask-tier agent, else None.
+
+    Escalation is the dispatcher's call (see docstring): the subagent
+    returns the question, it does not spawn the answer. Unlike
+    needs_model_ask this ignores ENFORCED_TYPES — a pinned agent type
+    that pins an ask-tier model is the same spend from the same context,
+    and here no title/name convention is needed to recognize it."""
+    if not is_subagent(payload):
+        return None
+    tool_input = payload.get("tool_input") or {}
+    model = tool_input.get("model")
+    if model not in policy()["ask_models"]:
+        return None
+    return (
+        f"Escalation gate: a subagent may not dispatch `{model}` — "
+        "escalation is the DISPATCHER's decision, not the escalating "
+        "agent's. Return the question to your dispatcher (report the "
+        "evidence and what you could not settle at your tier); it "
+        "decides and dispatches. Basis: briefing your own reviewer "
+        f"inherits the blind spot it is meant to escape ({doc_ref('§6.2')}). "
+        "Dispatching sideways or down is unaffected."
+    )
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -153,6 +197,8 @@ def main() -> int:
     if error:
         print(error, file=sys.stderr)
         return 2  # blocking; stderr goes back as feedback to the main agent
+    if grund := escalation_deny(payload):
+        deny(grund)  # before the ask: a subagent gets the deny, not the dialog
     if needs_model_ask(tool_input):
         desc = (tool_input.get("description") or "").strip()
         ask(  # exits 0 with permissionDecision "ask"
@@ -230,6 +276,34 @@ if __name__ == "__main__":
         assert needs_workflow_ask({"tool_name": "Workflow"})
         assert not needs_workflow_ask({"tool_name": "Agent"})
         assert not needs_workflow_ask({})
+        # ── Escalation lane (2026-07-28): subagent may not spawn ask-tier ──
+        sub = {"agent_id": "a1", "tool_name": "Agent"}
+        esk = escalation_deny({**sub, "tool_input": {
+            "model": "fable", "description": "fable: Vet edit"}})
+        assert esk is not None and "dispatcher" in esk
+        # main session unaffected: it still ASKS, it is not denied
+        assert escalation_deny({"tool_name": "Agent", "tool_input": {
+            "model": "fable", "description": "fable: Vet edit"}}) is None
+        # sideways/down from a subagent: untouched
+        assert escalation_deny({**sub, "tool_input": {
+            "model": "sonnet", "description": "sonnet: Scan"}}) is None
+        assert escalation_deny({**sub, "tool_input": {
+            "model": "opus", "description": "opus: Grind"}}) is None
+        # pinned agent types bypass ENFORCED_TYPES but NOT this lane:
+        # same spend from the same context (docstring rationale)
+        assert escalation_deny({**sub, "tool_input": {
+            "subagent_type": "plugin-dev:agent-creator",
+            "model": "fable"}}) is not None
+        assert escalation_deny({**sub, "tool_input": {}}) is None
+        assert escalation_deny({**sub}) is None  # no tool_input at all
+        # ORDER (the load-bearing wiring): a subagent's ask-tier dispatch
+        # must hit deny, never the dialog — main() calls escalation_deny
+        # BEFORE needs_model_ask. Pinned by source inspection, because
+        # both paths exit the process.
+        import inspect
+        _src = inspect.getsource(main)
+        assert _src.index("escalation_deny") < _src.index("needs_model_ask"), \
+            "escalation deny must precede the fable ask in main()"
         print("agent-model-gate: all tests passed")
         sys.exit(0)
     sys.exit(main())

@@ -5,7 +5,15 @@ Purpose: the model-routing table (CLAUDE.md) and dispatch-discipline.md
 call for accumulated dispatch evidence; this hook is the mechanical
 collector. It records ONLY mechanical facts (never judgments — outcome/
 class/verification live with whoever dispatched, e.g. the PBS journal):
-ts, session, cwd, tool, agent name, model, subagent type, truncated title.
+ts, session, cwd, tool, agent name, model, subagent type, truncated title,
+and the DISPATCHING context (`von_agent`: the spawning subagent's agent_id,
+null in the main session).
+
+Why von_agent (2026-07-28): the log recorded session_id only, so "did this
+dispatch come from a subagent?" was not answerable from the record — the
+question was unobservable, not unasked. The escalation lane in
+agent-model-gate denies the expensive case; this field is how its
+fire-rate (and any nesting at all) becomes visible at review time.
 
 Data home is OUTSIDE any git repo (log data never gets committed):
 $CLAUDE_DISPATCH_LOG > $XDG_DATA_HOME/claude/dispatch-log.jsonl >
@@ -47,6 +55,7 @@ def zeile(payload: dict) -> dict | None:
     return {
         "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "session_id": payload.get("session_id"),
+        "von_agent": payload.get("agent_id"),  # None = main session
         "cwd": payload.get("cwd"),
         "tool": payload.get("tool_name"),
         "name": ti.get("name"),
@@ -86,6 +95,14 @@ if __name__ == "__main__":
         })
         assert rec is not None and rec["name"] == "opus-test"
         assert rec["modell"] == "opus" and len(rec["titel"]) == _TITEL_MAX
+        assert rec["von_agent"] is None  # main session: field present, null
+        # Dispatching context (2026-07-28): a nested dispatch is only
+        # visible in the record if agent_id is carried over.
+        rec_sub = zeile({
+            "tool_name": "Agent", "session_id": "s1", "agent_id": "a1",
+            "tool_input": {"description": "sonnet: x", "model": "sonnet"},
+        })
+        assert rec_sub is not None and rec_sub["von_agent"] == "a1"
         with tempfile.TemporaryDirectory() as td:
             os.environ["CLAUDE_DISPATCH_LOG"] = td + "/sub/log.jsonl"
             import io
