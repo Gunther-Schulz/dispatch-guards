@@ -77,6 +77,72 @@ def deny_text() -> str:
     )
 
 
+_TAIL_ANCHOR = "never bridged with a guess"
+_SYNC_TAIL_MARKER = "final text is the report"
+_BACKGROUND_TAIL_MARKER = "final text reaches no one"
+
+
+def missing_tail(payload: dict) -> bool:
+    """True iff an Agent dispatch's prompt lacks the pasted §2 tail
+    block's anchor sentence ("never bridged with a guess") — the
+    free-composed-brief-drops-the-invariant-tail class named in §2.
+    Both dispatch modes (sync and background) require a pasted tail.
+    Fail-open on any parse doubt."""
+    if payload.get("tool_name") != "Agent":
+        return False
+    tool_input = payload.get("tool_input") or {}
+    prompt = (tool_input.get("prompt") or "").lower()
+    if not prompt:
+        return False
+    return _TAIL_ANCHOR not in prompt
+
+
+def missing_tail_deny_text() -> str:
+    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
+    return (
+        "Blocked: dispatch brief without the pasted §2 tail block. "
+        f"Paste the EXECUTION or READ-ONLY tail from {doc} §2 "
+        "verbatim — pick the channel line matching the dispatch mode "
+        "(background vs synchronous) — and retry."
+    )
+
+
+def tail_mode_mismatch(payload: dict) -> bool:
+    """True iff the pasted tail's channel line contradicts
+    run_in_background — the wrong tail variant pasted for the
+    dispatch mode (§2: background → SendMessage/'reaches no one';
+    synchronous → 'final text IS the report'). Fail-open on any parse
+    doubt."""
+    if payload.get("tool_name") != "Agent":
+        return False
+    tool_input = payload.get("tool_input") or {}
+    prompt = (tool_input.get("prompt") or "").lower()
+    if not prompt:
+        return False
+    is_background = tool_input.get("run_in_background") is not False
+    if is_background:
+        return _SYNC_TAIL_MARKER in prompt
+    return _BACKGROUND_TAIL_MARKER in prompt
+
+
+def tail_mode_mismatch_deny_text(payload: dict) -> str:
+    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
+    tool_input = payload.get("tool_input") or {}
+    is_background = tool_input.get("run_in_background") is not False
+    if is_background:
+        wrong = ('the synchronous channel line ("your final text IS '
+                 'the report") was pasted into a background dispatch')
+    else:
+        wrong = ('the background channel line ("your final text '
+                 'reaches no one") was pasted into a synchronous '
+                 'dispatch (run_in_background: false)')
+    return (
+        "Blocked: tail channel line contradicts the dispatch mode — "
+        f"{wrong}. Pick the channel line matching the actual mode "
+        f"({doc} §2) and retry."
+    )
+
+
 def check(payload: dict) -> str | None:
     """Return the reminder, or None (= stay silent)."""
     if payload.get("tool_name") not in ("Agent", "Task"):
@@ -96,6 +162,24 @@ def main() -> int:
                 "permissionDecision": "deny",
             },
             "systemMessage": deny_text(),
+        }))
+        return 0
+    if missing_tail(payload):
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "deny",
+            },
+            "systemMessage": missing_tail_deny_text(),
+        }))
+        return 0
+    if tail_mode_mismatch(payload):
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "deny",
+            },
+            "systemMessage": tail_mode_mismatch_deny_text(payload),
         }))
         return 0
     reminder = check(payload)
@@ -146,6 +230,106 @@ if __name__ == "__main__":
         assert not missing_channel({"tool_name": "Bash", "tool_input": {
             "command": "ls"}})
         assert "Blocked" in deny_text()
+
+        # ── Tail-presence lane (missing_tail) ──────────────────────
+        # Tails copied verbatim from dispatch-discipline.md §2 (cite:
+        # dispatch-discipline.md §2) — literals here, never referenced
+        # from the detection constants, so the test doesn't share
+        # parentage with what it's meant to catch.
+        EXECUTION_TAIL_BG = (
+            "Closing report (mandatory; the project's own report form "
+            "if it defines one, else the \xa72 form here — never "
+            "both; \"none\" is a valid slot answer, silence is not): "
+            "(a) items completed w/ evidence, (b) checks RUN w/ real "
+            "output, (c) gaps surfaced — incl. anything needing a "
+            "tier above yours, returned as a question with its "
+            "evidence, never settled at your tier, (d) deviations w/ "
+            "reason, (e) candidate lessons, (f) files touched + commit "
+            "hashes (unpushed), (g) what was NOT verified, (h) sources "
+            "actually read, of those the brief named.\n"
+            "Report channel: SendMessage to the dispatcher — your "
+            "final text reaches no one.\n"
+            "Message ≤3000 chars: full detail goes to a FILE, the "
+            "message carries key findings + the file path. A missing "
+            "decision, file, or value is surfaced as a gap, never "
+            "bridged with a guess.\n"
+            "Commits unpushed, targeted `git add <paths>` never `-A`, "
+            "trailer: `Co-Authored-By: Claude <model> "
+            "<noreply@anthropic.com>`.\n"
+            "After sending the report your write grant is over: a "
+            "defect you find later is REPORTED, never edited or "
+            "amended (source: \xa74 ownership rule)."
+        )
+        EXECUTION_TAIL_SYNC_LINE = EXECUTION_TAIL_BG.replace(
+            "Report channel: SendMessage to the dispatcher — your "
+            "final text reaches no one.",
+            "Report channel: your final text IS the report.",
+        )
+        READONLY_TAIL_SYNC = (
+            "Report channel: your final text IS the report.\n"
+            "Return your findings in ONE message (verifier: verdict + "
+            "basis; discovery: the N named facts, sources actually "
+            "read). A missing decision, file, or value is surfaced as "
+            "a gap, never bridged with a guess. No file writes, no "
+            "interim messages."
+        )
+        READONLY_TAIL_BG_LINE = READONLY_TAIL_SYNC.replace(
+            "Report channel: your final text IS the report.",
+            "Report channel: SendMessage to the dispatcher — your "
+            "final text reaches no one.",
+        )
+
+        # (i) tail-less Agent brief, both modes → missing_tail True
+        assert missing_tail({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X and report back."}})
+        assert missing_tail({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X and report back.",
+            "run_in_background": False}})
+
+        # (ii) each §2 tail verbatim, correct channel line for the
+        # mode used → missing_tail False, tail_mode_mismatch False
+        bg_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + EXECUTION_TAIL_BG}}
+        assert not missing_tail(bg_brief)
+        assert not tail_mode_mismatch(bg_brief)
+        sync_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + READONLY_TAIL_SYNC,
+            "run_in_background": False}}
+        assert not missing_tail(sync_brief)
+        assert not tail_mode_mismatch(sync_brief)
+
+        # (iii) wrong channel line for the mode → tail_mode_mismatch
+        # True, both directions
+        bg_with_sync_line = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + EXECUTION_TAIL_SYNC_LINE}}
+        assert not missing_tail(bg_with_sync_line)  # tail present
+        assert tail_mode_mismatch(bg_with_sync_line)
+        sync_with_bg_line = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + READONLY_TAIL_BG_LINE,
+            "run_in_background": False}}
+        assert not missing_tail(sync_with_bg_line)  # tail present
+        assert tail_mode_mismatch(sync_with_bg_line)
+
+        # (iv) matched mode+line → False (covered by (ii) above;
+        # explicit restatement for the background-default case)
+        assert not tail_mode_mismatch(bg_brief)
+
+        # (v) Task tool and parse-garbage payloads → never deny
+        assert not missing_tail({"tool_name": "Task", "tool_input": {
+            "prompt": "no tail here"}})
+        assert not missing_tail({"tool_name": "Agent", "tool_input": {}})
+        assert not missing_tail({"tool_name": "Bash", "tool_input": {
+            "command": "ls"}})
+        assert not missing_tail({})
+        assert not tail_mode_mismatch({"tool_name": "Task",
+                                        "tool_input": {"prompt": "x"}})
+        assert not tail_mode_mismatch({"tool_name": "Agent",
+                                        "tool_input": {}})
+        assert not tail_mode_mismatch({})
+
+        assert "Blocked" in missing_tail_deny_text()
+        assert "Blocked" in tail_mode_mismatch_deny_text(bg_with_sync_line)
+
         print("brief-reminder: all tests passed")
         sys.exit(0)
     sys.exit(main())
