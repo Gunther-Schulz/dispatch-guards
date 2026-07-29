@@ -143,6 +143,54 @@ def tail_mode_mismatch_deny_text(payload: dict) -> str:
     )
 
 
+_SECTIONS_ANCHOR = "closing report (mandatory"
+_GROUNDING_MARKER = "grounding"
+_WRITE_BOUNDARY_MARKER = "write boundar"
+
+
+def missing_sections(payload: dict) -> bool:
+    """True iff an Agent dispatch's prompt carries the EXECUTION tail
+    (identified by its "closing report (mandatory" signature, present
+    only in the execution tail and absent from the READ-ONLY tail) but
+    lacks one or both §1 mandatory execution-brief sections: a
+    grounding-basis section and a write-boundaries section. An
+    execution brief per dispatch-discipline.md §1 always carries a
+    grounding-basis section (what to read before building) and a
+    write-boundaries section (paths owned); verifier/discovery briefs
+    take the READ-ONLY tail and are exempt by that tail's absence of
+    the anchor. Fail-open on any parse doubt."""
+    if payload.get("tool_name") != "Agent":
+        return False
+    tool_input = payload.get("tool_input") or {}
+    prompt = (tool_input.get("prompt") or "").lower()
+    if not prompt:
+        return False
+    if _SECTIONS_ANCHOR not in prompt:
+        return False  # not an execution-tail brief; exempt
+    return not (_GROUNDING_MARKER in prompt
+                and _WRITE_BOUNDARY_MARKER in prompt)
+
+
+def missing_sections_deny_text(payload: dict) -> str:
+    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
+    tool_input = payload.get("tool_input") or {}
+    prompt = (tool_input.get("prompt") or "").lower()
+    missing = []
+    if _GROUNDING_MARKER not in prompt:
+        missing.append("a grounding-basis section")
+    if _WRITE_BOUNDARY_MARKER not in prompt:
+        missing.append("a write-boundaries section")
+    missing_text = " and ".join(missing)
+    return (
+        f"Blocked: execution brief missing mandatory {doc} §1 "
+        f"section(s) — {missing_text}. An execution brief always "
+        "carries a grounding-basis section (what to read before "
+        "building) and a write-boundaries section (paths owned, "
+        "targeted git add). Add the missing section(s) to the brief "
+        "and retry."
+    )
+
+
 def check(payload: dict) -> str | None:
     """Return the reminder, or None (= stay silent)."""
     if payload.get("tool_name") not in ("Agent", "Task"):
@@ -180,6 +228,15 @@ def main() -> int:
                 "permissionDecision": "deny",
             },
             "systemMessage": tail_mode_mismatch_deny_text(payload),
+        }))
+        return 0
+    if missing_sections(payload):
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "deny",
+            },
+            "systemMessage": missing_sections_deny_text(payload),
         }))
         return 0
     reminder = check(payload)
@@ -329,6 +386,58 @@ if __name__ == "__main__":
 
         assert "Blocked" in missing_tail_deny_text()
         assert "Blocked" in tail_mode_mismatch_deny_text(bg_with_sync_line)
+
+        # ── Section lane (missing_sections) ────────────────────────
+        # Section markers named in dispatch-discipline.md §1 ("Grounding
+        # basis as a mandatory section." / "Write boundaries.") —
+        # literals here, never the detection constants, so the test
+        # doesn't share parentage with what it's meant to catch.
+        GROUNDING_SECTION = (
+            "Grounding basis: read spec.md and the current module "
+            "before building.")
+        WRITE_BOUNDARIES_SECTION = (
+            "Write boundaries: you own src/foo.py only; targeted git "
+            "add, never -A.")
+
+        # (i) execution-tail brief carrying both markers → False
+        both_sections_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + GROUNDING_SECTION + "\n"
+                      + WRITE_BOUNDARIES_SECTION + "\n"
+                      + EXECUTION_TAIL_BG}}
+        assert not missing_sections(both_sections_brief)
+
+        # (ii) execution-tail brief missing "grounding" → True
+        missing_grounding_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + WRITE_BOUNDARIES_SECTION + "\n"
+                      + EXECUTION_TAIL_BG}}
+        assert missing_sections(missing_grounding_brief)
+
+        # (iii) execution-tail brief missing only "write boundar" → True
+        missing_write_boundaries_brief = {
+            "tool_name": "Agent", "tool_input": {
+                "prompt": "Do X.\n" + GROUNDING_SECTION + "\n"
+                          + EXECUTION_TAIL_BG}}
+        assert missing_sections(missing_write_boundaries_brief)
+
+        # (iv) READ-ONLY-tail brief with neither marker → False (exempt:
+        # no execution-tail anchor present)
+        readonly_neither_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + READONLY_TAIL_SYNC,
+            "run_in_background": False}}
+        assert not missing_sections(readonly_neither_brief)
+
+        # (v) Task tool and parse-garbage payloads → never deny
+        assert not missing_sections({"tool_name": "Task", "tool_input": {
+            "prompt": "Do X.\n" + WRITE_BOUNDARIES_SECTION + "\n"
+                      + EXECUTION_TAIL_BG}})
+        assert not missing_sections({"tool_name": "Agent",
+                                      "tool_input": {}})
+        assert not missing_sections({"tool_name": "Bash", "tool_input": {
+            "command": "ls"}})
+        assert not missing_sections({})
+
+        assert "Blocked" in missing_sections_deny_text(
+            missing_grounding_brief)
 
         print("brief-reminder: all tests passed")
         sys.exit(0)
