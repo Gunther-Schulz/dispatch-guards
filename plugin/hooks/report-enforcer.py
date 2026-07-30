@@ -51,7 +51,12 @@ def max_chars() -> int:
 
 def instruction() -> str:
     return (
-        "Closing-report check: If you are a background/teammate agent "
+        "Closing-report check: FIRST — if a backgrounded task of yours "
+        "(a long check, a replay) is still RUNNING, do not close on a "
+        "guess: AWAIT it via TaskOutput(block=true) and report its real "
+        "result, or send an INTERIM report that says so and names what "
+        "remains — ending your turn with it running orphans the work. "
+        "If you are a background/teammate agent "
         "(your final text does NOT reach your dispatcher), send your "
         "closing report NOW via SendMessage to your dispatcher — going "
         "idle without having SENT it counts as no report. BEFORE "
