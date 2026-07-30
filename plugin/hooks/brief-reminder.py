@@ -19,10 +19,24 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import policy  # noqa: E402
+from _dispatch_common import deny, policy  # noqa: E402
+
+_SOURCE = "dispatch-guards/brief-reminder"
+
+
+def _norm(text: str) -> str:
+    """Lowercase and collapse all whitespace runs to single spaces.
+
+    Every marker/anchor below is matched against THIS form. Basis
+    (live false-fire 2026-07-30): the §2 tails carry hard line wraps
+    in dispatch-discipline.md itself, so a tail pasted verbatim —
+    exactly what the deny text instructs — arrived as "never
+    bridged\\nwith a guess" and failed the single-line anchor."""
+    return re.sub(r"\s+", " ", text.lower())
 
 
 def reminder_text() -> str:
@@ -59,7 +73,7 @@ def missing_channel(payload: dict) -> bool:
     tool_input = payload.get("tool_input") or {}
     if tool_input.get("run_in_background") is False:
         return False  # synchronous: final text IS the report
-    prompt = (tool_input.get("prompt") or "").lower()
+    prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
     return not any(m in prompt for m in _CHANNEL_MARKERS)
@@ -91,7 +105,7 @@ def missing_tail(payload: dict) -> bool:
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
-    prompt = (tool_input.get("prompt") or "").lower()
+    prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
     return _TAIL_ANCHOR not in prompt
@@ -116,7 +130,7 @@ def tail_mode_mismatch(payload: dict) -> bool:
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
-    prompt = (tool_input.get("prompt") or "").lower()
+    prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
     is_background = tool_input.get("run_in_background") is not False
@@ -162,7 +176,7 @@ def missing_sections(payload: dict) -> bool:
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
-    prompt = (tool_input.get("prompt") or "").lower()
+    prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
     if _SECTIONS_ANCHOR not in prompt:
@@ -174,7 +188,7 @@ def missing_sections(payload: dict) -> bool:
 def missing_sections_deny_text(payload: dict) -> str:
     doc = policy().get("discipline_doc") or "dispatch-discipline.md"
     tool_input = payload.get("tool_input") or {}
-    prompt = (tool_input.get("prompt") or "").lower()
+    prompt = _norm(tool_input.get("prompt") or "")
     missing = []
     if _GROUNDING_MARKER not in prompt:
         missing.append("a grounding-basis section")
@@ -203,42 +217,19 @@ def main() -> int:
         payload = json.load(sys.stdin)
     except (json.JSONDecodeError, ValueError):
         return 0  # never fail the workflow on a hook parse error
+    # deny() emits BOTH permissionDecisionReason (reaches the model)
+    # and systemMessage (reaches the user), source-tagged. Basis
+    # (2026-07-30): a deny carrying only systemMessage left the model
+    # with the harness's bare "Hook PreToolUse:Agent denied this tool",
+    # which two sessions misattributed to a Claude Code permission bug.
     if missing_channel(payload):
-        print(json.dumps({
-            "hookSpecificOutput": {
-                "hookEventName": "PreToolUse",
-                "permissionDecision": "deny",
-            },
-            "systemMessage": deny_text(),
-        }))
-        return 0
+        deny(deny_text(), source=_SOURCE)
     if missing_tail(payload):
-        print(json.dumps({
-            "hookSpecificOutput": {
-                "hookEventName": "PreToolUse",
-                "permissionDecision": "deny",
-            },
-            "systemMessage": missing_tail_deny_text(),
-        }))
-        return 0
+        deny(missing_tail_deny_text(), source=_SOURCE)
     if tail_mode_mismatch(payload):
-        print(json.dumps({
-            "hookSpecificOutput": {
-                "hookEventName": "PreToolUse",
-                "permissionDecision": "deny",
-            },
-            "systemMessage": tail_mode_mismatch_deny_text(payload),
-        }))
-        return 0
+        deny(tail_mode_mismatch_deny_text(payload), source=_SOURCE)
     if missing_sections(payload):
-        print(json.dumps({
-            "hookSpecificOutput": {
-                "hookEventName": "PreToolUse",
-                "permissionDecision": "deny",
-            },
-            "systemMessage": missing_sections_deny_text(payload),
-        }))
-        return 0
+        deny(missing_sections_deny_text(payload), source=_SOURCE)
     reminder = check(payload)
     if reminder:
         print(json.dumps({
@@ -438,6 +429,52 @@ if __name__ == "__main__":
 
         assert "Blocked" in missing_sections_deny_text(
             missing_grounding_brief)
+
+        # ── Whitespace-normalization lane (false-fire 2026-07-30) ──
+        # The §2 tails carry hard line wraps in dispatch-discipline.md
+        # itself; a verbatim paste therefore wraps mid-anchor ("never
+        # bridged\nwith a guess"). Replayed live deny: hookinput-probe3,
+        # session 78b3e7fe (guard 0.1.7 went red on a conforming brief).
+        WRAPPED_READONLY_TAIL = (
+            "Report channel: your final text IS the report.\n"
+            "Return your findings in ONE message (verifier: verdict + "
+            "basis;\ndiscovery: the N named facts, sources actually "
+            "read). A missing\ndecision, file, or value is surfaced as "
+            "a gap, never bridged\nwith a guess. No file writes, no "
+            "interim messages."
+        )
+        wrapped_sync_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + WRAPPED_READONLY_TAIL,
+            "run_in_background": False}}
+        assert not missing_tail(wrapped_sync_brief)
+        assert not tail_mode_mismatch(wrapped_sync_brief)
+        # Channel line wrapped mid-marker ("Report\nchannel") still counts
+        assert not missing_channel({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X. Report\nchannel: SendMessage to the "
+                      "dispatcher — your final text reaches no one.\n"
+                      "A missing decision, file, or value is surfaced "
+                      "as a gap, never\nbridged with a guess."}})
+        # Section markers wrapped ("write\nboundaries") still count
+        wrapped_sections_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\nGrounding basis: read spec.md first.\n"
+                      "Write\nboundaries: you own src/foo.py only.\n"
+                      + EXECUTION_TAIL_BG}}
+        assert not missing_sections(wrapped_sections_brief)
+
+        # ── Deny payload shape (misattribution class 2026-07-30) ────
+        # Both audiences must get the reason: permissionDecisionReason
+        # reaches the model, systemMessage the user; source tag makes a
+        # guard fire self-identifying. Live defect: fresh-session deny
+        # (session 3741ed60) carried systemMessage only — the model saw
+        # the harness's bare denial line and misattributed it to CC.
+        from _dispatch_common import _deny_payload
+        dp = _deny_payload("Blocked: test reason", source=_SOURCE)
+        hso = dp["hookSpecificOutput"]
+        assert hso["permissionDecision"] == "deny"
+        assert hso["permissionDecisionReason"].startswith(
+            "[dispatch-guards/brief-reminder] ")
+        assert "Blocked: test reason" in hso["permissionDecisionReason"]
+        assert dp["systemMessage"] == hso["permissionDecisionReason"]
 
         print("brief-reminder: all tests passed")
         sys.exit(0)

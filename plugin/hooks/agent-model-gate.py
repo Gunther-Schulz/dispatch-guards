@@ -198,7 +198,7 @@ def main() -> int:
         print(error, file=sys.stderr)
         return 2  # blocking; stderr goes back as feedback to the main agent
     if grund := escalation_deny(payload):
-        deny(grund)  # before the ask: a subagent gets the deny, not the dialog
+        deny(grund, source="dispatch-guards/agent-model-gate")  # before the ask: a subagent gets the deny, not the dialog
     if needs_model_ask(tool_input):
         desc = (tool_input.get("description") or "").strip()
         ask(  # exits 0 with permissionDecision "ask"

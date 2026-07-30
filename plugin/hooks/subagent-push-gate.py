@@ -61,7 +61,7 @@ def main() -> int:
         return 0  # never fail the workflow on a hook parse error
     reason = check(payload)
     if reason:
-        deny(reason)  # prints exit-0 deny JSON and exits
+        deny(reason, source="dispatch-guards/subagent-push-gate")  # prints exit-0 deny JSON and exits
     return 0
 
 

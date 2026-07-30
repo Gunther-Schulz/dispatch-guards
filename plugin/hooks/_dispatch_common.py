@@ -21,15 +21,29 @@ def is_subagent(payload: dict) -> bool:
     return bool(payload.get("agent_id"))
 
 
-def deny(reason: str) -> None:
-    """Emit a clean PreToolUse deny (exit-0 JSON) and exit."""
-    print(json.dumps({
+def _deny_payload(reason: str, source: str = "dispatch-guards") -> dict:
+    """Build the deny JSON. Source-tagged and dual-field by design:
+    permissionDecisionReason reaches the MODEL, systemMessage the user's
+    UI — a deny carrying only one of them leaves the other audience with
+    the harness's bare "Hook PreToolUse:<tool> denied this tool", which
+    two sessions misattributed to a Claude Code permission bug (live
+    finding 2026-07-30; the transcript's toolDenialKind says
+    "permission-rule" even for hook denies, so the reason text is the
+    only self-identification a guard fire gets)."""
+    tagged = f"[{source}] {reason}"
+    return {
+        "systemMessage": tagged,
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "permissionDecision": "deny",
-            "permissionDecisionReason": reason,
-        }
-    }))
+            "permissionDecisionReason": tagged,
+        },
+    }
+
+
+def deny(reason: str, source: str = "dispatch-guards") -> None:
+    """Emit a clean PreToolUse deny (exit-0 JSON) and exit."""
+    print(json.dumps(_deny_payload(reason, source)))
     sys.exit(0)
 
 
