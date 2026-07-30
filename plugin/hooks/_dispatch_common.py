@@ -27,9 +27,16 @@ def _deny_payload(reason: str, source: str = "dispatch-guards") -> dict:
     UI — a deny carrying only one of them leaves the other audience with
     the harness's bare "Hook PreToolUse:<tool> denied this tool", which
     two sessions misattributed to a Claude Code permission bug (live
-    finding 2026-07-30; the transcript's toolDenialKind says
-    "permission-rule" even for hook denies, so the reason text is the
-    only self-identification a guard fire gets)."""
+    finding 2026-07-30).
+
+    Why the tag is load-bearing: CC builds the denial with the hook's
+    identity (decisionReason.hookName/hookSource) but does not persist it
+    to the transcript, so a guard fire is not attributable after the fact
+    unless the guard names itself. The transcript's toolDenialKind is NOT
+    the missing discriminator — the client documents "permission-rule" as
+    covering hooks (verified in the shipped binary, 2.1.220), so it is
+    working as designed. This tag is the only self-identification a guard
+    fire gets."""
     tagged = f"[{source}] {reason}"
     return {
         "systemMessage": tagged,
