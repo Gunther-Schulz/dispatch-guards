@@ -95,29 +95,73 @@ _TAIL_ANCHOR = "never bridged with a guess"
 _SYNC_TAIL_MARKER = "final text is the report"
 _BACKGROUND_TAIL_MARKER = "final text reaches no one"
 
+# The BRIEF is prompt + any brief files the prompt names (DD §2: the
+# tail reaches the executing agent inline OR in a referenced brief
+# file; inline is required only when no file brief exists). The
+# channel lanes above stay prompt-only by design — the channel line
+# is bound to run_in_background, decided at the call site, which a
+# static file cannot know.
+_MD_PATH_RE = re.compile(
+    r"(?:~|/|[A-Za-z0-9_.-]+/)[A-Za-z0-9_./~-]*\.md\b")
+_MAX_REFERENCED_FILES = 8
+_MAX_FILE_BYTES = 262144
+
+
+def _referenced_md_texts(payload: dict) -> list[str]:
+    """Contents of .md files the prompt references, best-effort.
+
+    Relative paths resolve against the hook input's cwd. Unreadable,
+    oversized, or missing files contribute nothing — only verified
+    content counts toward the tail/section checks (naming a file is
+    not evidence its tail exists)."""
+    tool_input = payload.get("tool_input") or {}
+    prompt = tool_input.get("prompt") or ""
+    cwd = payload.get("cwd") or ""
+    texts: list[str] = []
+    for match in _MD_PATH_RE.findall(prompt)[:_MAX_REFERENCED_FILES]:
+        path = os.path.expanduser(match)
+        if not os.path.isabs(path):
+            if not cwd:
+                continue
+            path = os.path.join(cwd, path)
+        path = os.path.normpath(path)
+        try:
+            if os.path.getsize(path) > _MAX_FILE_BYTES:
+                continue
+            with open(path, encoding="utf-8", errors="replace") as f:
+                texts.append(f.read())
+        except OSError:
+            continue
+    return texts
+
 
 def missing_tail(payload: dict) -> bool:
-    """True iff an Agent dispatch's prompt lacks the pasted §2 tail
-    block's anchor sentence ("never bridged with a guess") — the
-    free-composed-brief-drops-the-invariant-tail class named in §2.
-    Both dispatch modes (sync and background) require a pasted tail.
-    Fail-open on any parse doubt."""
+    """True iff an Agent dispatch's BRIEF — prompt plus any referenced
+    brief files — lacks the §2 tail block's anchor sentence ("never
+    bridged with a guess"): the free-composed-brief-drops-the-
+    invariant-tail class named in §2. Inline tail required only when
+    the prompt names no tail-bearing brief file. Fail-open on any
+    parse doubt."""
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
     prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
-    return _TAIL_ANCHOR not in prompt
+    if _TAIL_ANCHOR in prompt:
+        return False
+    return not any(_TAIL_ANCHOR in _norm(t)
+                   for t in _referenced_md_texts(payload))
 
 
 def missing_tail_deny_text() -> str:
     doc = policy().get("discipline_doc") or "dispatch-discipline.md"
     return (
-        "Blocked: dispatch brief without the pasted §2 tail block. "
-        f"Paste the EXECUTION or READ-ONLY tail from {doc} §2 "
-        "verbatim — pick the channel line matching the dispatch mode "
-        "(background vs synchronous) — and retry."
+        "Blocked: dispatch brief without the §2 tail block. Paste the "
+        f"EXECUTION or READ-ONLY tail from {doc} §2 into the prompt — "
+        "pick the channel line matching the dispatch mode (background "
+        "vs synchronous) — or point the prompt at a brief FILE that "
+        "carries the tail, and retry."
     )
 
 
@@ -172,23 +216,31 @@ def missing_sections(payload: dict) -> bool:
     grounding-basis section (what to read before building) and a
     write-boundaries section (paths owned); verifier/discovery briefs
     take the READ-ONLY tail and are exempt by that tail's absence of
-    the anchor. Fail-open on any parse doubt."""
+    the anchor. Reads the BRIEF — prompt plus referenced brief files
+    (see _referenced_md_texts). Fail-open on any parse doubt."""
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
-    prompt = _norm(tool_input.get("prompt") or "")
-    if not prompt:
+    if not (tool_input.get("prompt") or ""):
         return False
-    if _SECTIONS_ANCHOR not in prompt:
+    brief = _brief_text(payload)
+    if _SECTIONS_ANCHOR not in brief:
         return False  # not an execution-tail brief; exempt
-    return not (_GROUNDING_MARKER in prompt
-                and _WRITE_BOUNDARY_MARKER in prompt)
+    return not (_GROUNDING_MARKER in brief
+                and _WRITE_BOUNDARY_MARKER in brief)
+
+
+def _brief_text(payload: dict) -> str:
+    """The whole normalized brief: prompt + referenced brief files."""
+    tool_input = payload.get("tool_input") or {}
+    parts = [tool_input.get("prompt") or ""]
+    parts += _referenced_md_texts(payload)
+    return _norm(" ".join(parts))
 
 
 def missing_sections_deny_text(payload: dict) -> str:
     doc = policy().get("discipline_doc") or "dispatch-discipline.md"
-    tool_input = payload.get("tool_input") or {}
-    prompt = _norm(tool_input.get("prompt") or "")
+    prompt = _brief_text(payload)
     missing = []
     if _GROUNDING_MARKER not in prompt:
         missing.append("a grounding-basis section")
@@ -460,6 +512,57 @@ if __name__ == "__main__":
                       "Write\nboundaries: you own src/foo.py only.\n"
                       + EXECUTION_TAIL_BG}}
         assert not missing_sections(wrapped_sections_brief)
+
+        # ── File-carried briefs (DD §2: inline tail required only ──
+        # when no file brief) — the wave-2 false-positive class:
+        # four dispatches pointing at a tail-bearing brief file were
+        # denied as tail-less (2026-07-30, sessions 633915a8/78b3e7fe).
+        import tempfile as _tf
+        _tmpdir = _tf.mkdtemp()
+        _brief_with_tail = os.path.join(_tmpdir, "brief-with-tail.md")
+        with open(_brief_with_tail, "w") as f:
+            f.write("# Brief\nGrounding basis: read spec.md first.\n"
+                    "Write boundaries: you own src/foo.py only.\n"
+                    + EXECUTION_TAIL_BG)
+        _brief_no_tail = os.path.join(_tmpdir, "brief-no-tail.md")
+        with open(_brief_no_tail, "w") as f:
+            f.write("# Brief\nDo the thing, no tail here.\n")
+
+        _file_prompt = ("Execute the brief at " + _brief_with_tail
+                        + " — read it top to bottom first.\n"
+                        "Report channel: SendMessage to the dispatcher "
+                        "— your final text reaches no one.")
+        file_brief = {"tool_name": "Agent",
+                      "tool_input": {"prompt": _file_prompt}}
+        # (i) tail + sections live in the referenced file → allow
+        assert not missing_tail(file_brief)
+        assert not missing_sections(file_brief)
+        # (ii) referenced file lacks the tail → still deny
+        assert missing_tail({"tool_name": "Agent", "tool_input": {
+            "prompt": "Execute the brief at " + _brief_no_tail
+                      + "\nReport channel: SendMessage to the "
+                      "dispatcher — your final text reaches no one."}})
+        # (iii) nonexistent file contributes nothing → deny
+        assert missing_tail({"tool_name": "Agent", "tool_input": {
+            "prompt": "Execute " + os.path.join(_tmpdir, "gone.md")
+                      + "\nReport channel: SendMessage to the "
+                      "dispatcher — your final text reaches no one."}})
+        # (iv) relative path resolves against hook-input cwd
+        assert not missing_tail({"tool_name": "Agent",
+                                 "cwd": _tmpdir,
+                                 "tool_input": {"prompt":
+            "Execute the brief at docs/../brief-with-tail.md\n"
+            "Report channel: SendMessage to the dispatcher — your "
+            "final text reaches no one."}})
+        # (v) execution tail in file but sections missing → sections
+        # lane still fires on the combined brief
+        _brief_tail_only = os.path.join(_tmpdir, "brief-tail-only.md")
+        with open(_brief_tail_only, "w") as f:
+            f.write("# Brief\n" + EXECUTION_TAIL_BG)
+        assert missing_sections({"tool_name": "Agent", "tool_input": {
+            "prompt": "Execute the brief at " + _brief_tail_only
+                      + "\nReport channel: SendMessage to the "
+                      "dispatcher — your final text reaches no one."}})
 
         # ── Deny payload shape (misattribution class 2026-07-30) ────
         # Both audiences must get the reason: permissionDecisionReason
