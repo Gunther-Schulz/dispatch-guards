@@ -64,11 +64,16 @@ def instruction() -> str:
         "larger result to a FILE first, then send key findings plus the "
         "file path (an injected payload occupies the dispatcher's "
         "context for the rest of its session; oversized sends are "
-        "denied by a gate, costing you a rewrite). If you are a "
-        "synchronous subagent, your final text IS the report — ensure "
-        "it contains the full closing-report form; do NOT call "
-        "SendMessage. If you already sent/delivered the report, stop — "
-        "do not send it twice."
+        "denied by a gate, costing you a rewrite). Already SENT it via "
+        "SendMessage? Do not send twice — that idempotency applies to "
+        "SendMessage ONLY. If you are a synchronous subagent, your "
+        "final text IS the report, and only your LAST text block is "
+        "delivered: so if you already wrote the report above, RE-EMIT "
+        "IT IN FULL now. A bare acknowledgement ('already reported "
+        "above', 'nothing further needed') becomes your final text and "
+        "DELETES the report — the dispatcher receives the "
+        "acknowledgement instead. Re-emitting costs tokens; not "
+        "re-emitting costs the whole report. Do NOT call SendMessage."
     )
 
 
@@ -127,7 +132,22 @@ if __name__ == "__main__":
         # channel + idempotency phrasing must survive edits
         assert "sendmessage" in text.lower()          # names the real channel
         assert "final text is the report" in text.lower().replace("  ", " ")
-        assert "do not send it twice" in text.lower() # idempotency clause
+        assert "do not send twice" in text.lower()    # idempotency clause
+        # The idempotency clause MUST stay scoped to SendMessage. Unscoped, a
+        # resumed SYNCHRONOUS agent reads "already reported → stop", emits a
+        # bare acknowledgement, and that acknowledgement — being the LAST text
+        # block — replaces the report the dispatcher was meant to receive.
+        # The hook then destroys the artifact it exists to guarantee.
+        low = text.lower()
+        assert "sendmessage only" in low, "idempotency must name its channel"
+        idem = low.index("do not send twice")
+        scope = low.index("sendmessage only")
+        assert scope - idem < 90, "the scope must sit next to the clause"
+        # sync branch must demand RE-EMISSION, never a bare acknowledgement
+        assert "re-emit" in low, "sync branch must demand re-emission"
+        assert "in full" in low
+        assert "deletes the report" in low, "must name the consequence"
+        assert "last text block" in low, "must name the delivery mechanism"
         # payload clause: names the limit BEFORE composition, file+pointer
         assert f"max {DEFAULT_MAX} chars" in text     # default threshold
         assert "before" in text.lower()               # pre-composition timing
@@ -161,7 +181,7 @@ if __name__ == "__main__":
         assert rc == 0, rc
         emitted = json.loads(buf.getvalue())
         assert emitted["hookSpecificOutput"]["hookEventName"] == "SubagentStop"
-        assert "do not send it twice" in \
+        assert "re-emit it in full" in \
             emitted["hookSpecificOutput"]["additionalContext"].lower()
         # loop-breaker path: stop_hook_active=True → empty output, exit 0
         sys.stdin = io.StringIO(json.dumps({"agent_id": "a1",
