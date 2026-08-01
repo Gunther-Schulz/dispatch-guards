@@ -115,3 +115,41 @@ def doc_ref(section: str) -> str:
     doc = policy().get("discipline_doc")
     return f"{doc} {section}" if doc else "your dispatch discipline"
 
+
+# ── Push-command detection (shared: subagent-push-gate + push-claim-reminder) ──
+import re     # noqa: E402
+import shlex  # noqa: E402
+
+_GIT_RE = re.compile(r"\b(git|gh)\b")
+_PUSH_RE = re.compile(r"\bpush\b")
+_STASH_PUSH_RE = re.compile(r"\bstash\s+push\b")
+
+
+def is_push_command(cmd: str) -> bool:
+    """True iff the command actually invokes a push: a `git`/`gh` token
+    plus a standalone `push` (or `--push`) token, split with shlex so
+    QUOTED text — commit messages, quoted paths — never matches. The
+    2026-08-01 false-fire class: a standing commit-message line ("rides
+    the next code push") fired the reminder on every commit of a repo,
+    and the same substring match would false-DENY a subagent's commit —
+    a deny on legitimate work trains the override reflex. A `push` token
+    directly after `stash` is the purely-local `git stash push` —
+    exempt. Unparseable quoting falls back to the substring match
+    (fires; a guard unsure of what it reads stays loud, both consumers
+    are deny/remind). Accepted residue unchanged: unquoted standalone
+    `push` words (`git log --grep push`) still match; deliberate
+    obfuscation stays the session-cut check's net."""
+    try:
+        tokens = shlex.split(cmd)
+    except ValueError:
+        stripped = _STASH_PUSH_RE.sub("stash", cmd)
+        return bool(_GIT_RE.search(stripped) and _PUSH_RE.search(stripped))
+    if not any(t in ("git", "gh") for t in tokens):
+        return False
+    prev = ""
+    for t in tokens:
+        if (t == "push" and prev != "stash") or t == "--push":
+            return True
+        prev = t
+    return False
+

@@ -16,8 +16,10 @@ override reflex; the judgment stays with the dispatcher). Subagent
 context is excluded: subagent pushes are already DENIED outright by
 subagent-push-gate, and a reminder beside a denial is noise.
 
-Matching mirrors subagent-push-gate: a `git`/`gh` token plus a `push`
-token, with the purely-local `git stash push` normalized out first.
+Matching: the shared token matcher (_dispatch_common.is_push_command) —
+mirrors subagent-push-gate by construction (same function). Quoted text
+mentioning push (commit messages, paths) does not fire; `git stash
+push` (purely local) is exempt.
 
 Fail-open on parse errors (a broken guard must not brick every Bash
 call); the --test bite-test is the compensation, auto-discovered by
@@ -27,15 +29,10 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import doc_ref, is_subagent  # noqa: E402
-
-GIT_RE = re.compile(r"\b(git|gh)\b")
-PUSH_RE = re.compile(r"\bpush\b")
-STASH_PUSH_RE = re.compile(r"\bstash\s+push\b")
+from _dispatch_common import doc_ref, is_push_command, is_subagent  # noqa: E402
 
 
 def reminder_text() -> str:
@@ -55,8 +52,7 @@ def check(payload: dict) -> str | None:
     if is_subagent(payload):
         return None
     cmd = (payload.get("tool_input") or {}).get("command", "") or ""
-    cmd = STASH_PUSH_RE.sub("stash", cmd)
-    if GIT_RE.search(cmd) and PUSH_RE.search(cmd):
+    if is_push_command(cmd):
         return reminder_text()
     return None
 
@@ -95,6 +91,11 @@ if __name__ == "__main__":
         assert check({**main_s, "tool_input": {"command": "git stash push && git push"}}) is not None
         # documented accepted false positive: reading about pushes
         assert check({**main_s, "tool_input": {"command": "git log --grep push"}}) is not None
+        # regression (2026-08-01, red on the old substring matcher —
+        # confirmed live by probe): QUOTED text mentioning push must not
+        # fire; this repo's standing hold-line fired on every commit.
+        assert check({**main_s, "tool_input": {"command": 'git commit -m "held — rides the next code push"'}}) is None
+        assert check({**main_s, "tool_input": {"command": "chmod +x hooks/push-claim-reminder.py && git add hooks/push-claim-reminder.py && git commit -m x"}}) is None
         print("push-claim-reminder: all tests passed")
         sys.exit(0)
     sys.exit(main())
