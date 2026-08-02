@@ -202,8 +202,13 @@ def tail_mode_mismatch_deny_text(payload: dict) -> str:
 
 
 _SECTIONS_ANCHOR = "closing report (mandatory"
-_GROUNDING_MARKER = "grounding"
-_WRITE_BOUNDARY_MARKER = "write boundar"
+# Marker-Familien statt Einzel-Literale: Haus-Briefe folgen dem
+# DEV-RUNBOOK-Formular mit deutschen Feld-Etiketten (GROUNDING-BASIS,
+# SCHREIB-GRENZEN) — die Erkennung akzeptiert die Abschnitts-Etiketten
+# beider Sprachen; ein Treffer je Familie genügt.
+_GROUNDING_MARKERS = ("grounding", "grounding-basis")
+_WRITE_BOUNDARY_MARKERS = ("write boundar", "schreib-grenzen",
+                           "schreibgrenzen")
 
 
 def missing_sections(payload: dict) -> bool:
@@ -226,8 +231,8 @@ def missing_sections(payload: dict) -> bool:
     brief = _brief_text(payload)
     if _SECTIONS_ANCHOR not in brief:
         return False  # not an execution-tail brief; exempt
-    return not (_GROUNDING_MARKER in brief
-                and _WRITE_BOUNDARY_MARKER in brief)
+    return not (any(m in brief for m in _GROUNDING_MARKERS)
+                and any(m in brief for m in _WRITE_BOUNDARY_MARKERS))
 
 
 def _brief_text(payload: dict) -> str:
@@ -242,10 +247,12 @@ def missing_sections_deny_text(payload: dict) -> str:
     doc = policy().get("discipline_doc") or "dispatch-discipline.md"
     prompt = _brief_text(payload)
     missing = []
-    if _GROUNDING_MARKER not in prompt:
-        missing.append("a grounding-basis section")
-    if _WRITE_BOUNDARY_MARKER not in prompt:
-        missing.append("a write-boundaries section")
+    if not any(m in prompt for m in _GROUNDING_MARKERS):
+        missing.append("a grounding-basis section (label "
+                       "'Grounding' or 'GROUNDING-BASIS')")
+    if not any(m in prompt for m in _WRITE_BOUNDARY_MARKERS):
+        missing.append("a write-boundaries section (label "
+                       "'Write boundaries' or 'SCHREIB-GRENZEN')")
     missing_text = " and ".join(missing)
     return (
         f"Blocked: execution brief missing mandatory {doc} §1 "
@@ -461,6 +468,16 @@ if __name__ == "__main__":
                 "prompt": "Do X.\n" + GROUNDING_SECTION + "\n"
                           + EXECUTION_TAIL_BG}}
         assert missing_sections(missing_write_boundaries_brief)
+
+        # (iii-b) deutsche Abschnitts-Etiketten (DEV-RUNBOOK-Formular:
+        # GROUNDING-BASIS / SCHREIB-GRENZEN) → False — Literale, nie
+        # die Erkennungs-Konstanten (keine geteilte Elternschaft)
+        german_sections_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Baue X.\n"
+                      "GROUNDING-BASIS: lies spec.md vor dem Bau.\n"
+                      "SCHREIB-GRENZEN: nur src/foo.py; gezieltes "
+                      "git add, nie -A.\n" + EXECUTION_TAIL_BG}}
+        assert not missing_sections(german_sections_brief)
 
         # (iv) READ-ONLY-tail brief with neither marker → False (exempt:
         # no execution-tail anchor present)
