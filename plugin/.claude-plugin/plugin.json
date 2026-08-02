@@ -1,5 +1,5 @@
 {
   "name": "dispatch-guards",
-  "version": "0.1.15",
-  "description": "Mechanical guards for disciplined subagent dispatching: model gate (deny/ask tiers, escalation lane, title+name prefixes), subagent push gate, push-claim reminder, brief/report reminders, closing-report enforcer, dispatch log. Mechanism ships here; site policy lives in ~/.claude/dispatch-guards.json."
+  "version": "0.1.16",
+  "description": "Mechanical guards for disciplined subagent dispatching: model gate (deny/ask tiers, escalation lane, title+name prefixes), subagent push gate, push-claim reminder, amend gate (deny in subagent context, reminder in main session), brief/report reminders, closing-report enforcer, dispatch log. Mechanism ships here; site policy lives in ~/.claude/dispatch-guards.json."
 }
