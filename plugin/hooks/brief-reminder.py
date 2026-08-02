@@ -101,10 +101,24 @@ _BACKGROUND_TAIL_MARKER = "final text reaches no one"
 # channel lanes above stay prompt-only by design — the channel line
 # is bound to run_in_background, decided at the call site, which a
 # static file cannot know.
+#
+# Two alternatives, because a brief names a path in two forms and both
+# occur here: QUOTED (the only form that can carry spaces) and bare.
+# Neither may be restricted to ASCII — project trees carry directories
+# like "Planungsbüro …", and a character class that stops at the umlaut
+# does not fail loudly: it yields a TRUNCATED path, which resolves to
+# nothing and is indistinguishable from a brief file carrying no tail.
 _MD_PATH_RE = re.compile(
-    r"(?:~|/|[A-Za-z0-9_.-]+/)[A-Za-z0-9_./~-]*\.md\b")
+    r"""["']([^"'`\n]*\.md)["']"""
+    r"""|((?:~/|/|[^\s"'`()\[\]]*/)[^\s"'`()\[\]]*\.md)\b""")
 _MAX_REFERENCED_FILES = 8
 _MAX_FILE_BYTES = 262144
+
+
+def _md_paths(text: str) -> list[str]:
+    """Every .md path the text names, quoted span or bare token."""
+    return [m.group(1) if m.group(1) is not None else m.group(2)
+            for m in _MD_PATH_RE.finditer(text)]
 
 
 def _referenced_md_texts(payload: dict) -> list[str]:
@@ -118,7 +132,7 @@ def _referenced_md_texts(payload: dict) -> list[str]:
     prompt = tool_input.get("prompt") or ""
     cwd = payload.get("cwd") or ""
     texts: list[str] = []
-    for match in _MD_PATH_RE.findall(prompt)[:_MAX_REFERENCED_FILES]:
+    for match in _md_paths(prompt)[:_MAX_REFERENCED_FILES]:
         path = os.path.expanduser(match)
         if not os.path.isabs(path):
             if not cwd:
@@ -580,6 +594,71 @@ if __name__ == "__main__":
             "prompt": "Execute the brief at " + _brief_tail_only
                       + "\nReport channel: SendMessage to the "
                       "dispatcher — your final text reaches no one."}})
+
+        # ── Brief paths with spaces and non-ASCII letters ───────────
+        # Expectation derived from the rule, never from this hook's
+        # behavior — dispatch-discipline.md §2: "The tail reaches the
+        # executing agent pasted in the DISPATCH PROMPT or inside a
+        # brief FILE the prompt names — inline required only when no
+        # file brief exists." A prompt naming a tail-bearing brief file
+        # is therefore CONFORMING whatever characters its path carries,
+        # so the tail and section lanes must stay silent on it.
+        _umlaut_dir = os.path.join(_tmpdir, "Planungsbüro-Test")
+        os.makedirs(_umlaut_dir, exist_ok=True)
+        _umlaut_brief = os.path.join(_umlaut_dir, "brief.md")
+        _spaced_dir = os.path.join(_tmpdir, "Planungsbüro Projekte")
+        os.makedirs(_spaced_dir, exist_ok=True)
+        _spaced_brief = os.path.join(_spaced_dir, "mein brief.md")
+        for _p in (_umlaut_brief, _spaced_brief):
+            with open(_p, "w") as f:
+                f.write("# Brief\nGrounding basis: read spec.md first.\n"
+                        "Write boundaries: you own src/foo.py only.\n"
+                        + EXECUTION_TAIL_BG)
+        _channel = ("\nReport channel: SendMessage to the dispatcher "
+                    "— your final text reaches no one.")
+
+        # (i) bare path through an umlaut directory
+        umlaut_brief_call = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Execute the brief at " + _umlaut_brief + _channel}}
+        assert not missing_tail(umlaut_brief_call)
+        assert not missing_sections(umlaut_brief_call)
+
+        # (ii) quoted path carrying both a space and an umlaut, either
+        # quote style — a path with a space has no unquoted form
+        for _q in ('"', "'"):
+            spaced_brief_call = {"tool_name": "Agent", "tool_input": {
+                "prompt": "Execute the brief at " + _q + _spaced_brief
+                          + _q + _channel}}
+            assert not missing_tail(spaced_brief_call)
+            assert not missing_sections(spaced_brief_call)
+
+        # (ii-b) the sections lane reads the same file: a tail-only
+        # brief under an umlaut path must still be caught for its
+        # missing sections. Asserted in this direction because the
+        # conforming case above passes for either reason — an unread
+        # file leaves the brief without the execution-tail anchor,
+        # which exempts the lane instead of clearing it.
+        _umlaut_tail_only = os.path.join(_umlaut_dir, "nur-tail.md")
+        with open(_umlaut_tail_only, "w") as f:
+            f.write("# Brief\n" + EXECUTION_TAIL_BG)
+        assert missing_sections({"tool_name": "Agent", "tool_input": {
+            "prompt": "Execute " + _umlaut_tail_only + _channel}})
+
+        # (iii) the extracted path is the WHOLE path: a class that
+        # breaks at the first non-ASCII letter does not miss the
+        # reference, it returns a different, shorter one that resolves
+        # elsewhere — the failure the lanes above cannot see.
+        assert _md_paths("siehe " + _umlaut_brief) == [_umlaut_brief]
+        assert _md_paths('siehe "' + _spaced_brief + '"') == [_spaced_brief]
+        assert _md_paths("siehe '" + _spaced_brief + "'") == [_spaced_brief]
+        # (iv) a bare filename is not a path reference (unchanged):
+        # the token must carry a separator or start at ~/ or /
+        assert _md_paths("do X, see brief.md") == []
+        assert _md_paths("read ~/notes/brief.md") == ["~/notes/brief.md"]
+        # (v) a named-but-absent umlaut file still contributes nothing
+        assert missing_tail({"tool_name": "Agent", "tool_input": {
+            "prompt": "Execute " + os.path.join(_umlaut_dir, "weg.md")
+                      + _channel}})
 
         # ── Deny payload shape (misattribution class 2026-07-30) ────
         # Both audiences must get the reason: permissionDecisionReason
