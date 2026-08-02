@@ -47,6 +47,20 @@ a title-only prefix is invisible exactly where the operator looks
 (observed: "draft-vet" showed no model). Names can't contain ": "
 (charset [A-Za-z0-9_-]), hence the hyphen form.
 
+Title lane narrowed to the UNNAMED case (2026-08-02): since the panel
+never renders the description for a named dispatch, requiring BOTH
+prefixes there bought nothing and taxed the title — the model rides
+the surface the panel actually renders. So: `name` set → the name
+carries the model and the title prefix is optional; no `name` → the
+title prefix stays required (it is then the only visible carrier).
+When a title prefix IS present it must still mirror the model field;
+the mini-checksum is unchanged. Observed live: a named dispatch
+renders as "<name>  <prompt excerpt>" with the title absent entirely.
+Corpus homes: dispatch-discipline §1 + CLAUDE.md veto-gate
+conventions, amended the same day — this hook is their enforcement,
+and the amendment landing without it was the divergence that
+surfaced the lane.
+
 Escalation lane (2026-07-28): an ask-tier dispatch FROM a subagent is
 DENIED, not asked — a subagent needing a tier above its own returns the
 question to its dispatcher, which decides and dispatches. Basis: the
@@ -101,21 +115,6 @@ def check(tool_input: dict) -> str | None:
                 "(deny_models in the dispatch-guards config). Choose "
                 "another tier."
             )
-        desc = (tool_input.get("description") or "").strip()
-        match = _title_re().match(desc)
-        if not match:
-            return (
-                "Model gate: dispatch title must start with the strict "
-                'prefix `<model>: ` (e.g. "opus: Migrate YAML keys") '
-                "so every dispatch shows its model live in the UI "
-                f"({doc_ref('§5')}). Title seen: {desc!r}."
-            )
-        if match.group(1).lower() != model:
-            return (
-                f"Model gate: title prefix {match.group(1).lower()!r} "
-                f"diverges from model field {model!r} — the prefix is a "
-                "verified mirror of the field; make them match."
-            )
         name = (tool_input.get("name") or "").strip()
         if name and not name.lower().startswith(model + "-"):
             return (
@@ -123,6 +122,23 @@ def check(tool_input: dict) -> str | None:
                 f"`{model}-` — the teammate panel shows the NAME, not the "
                 "title, so the name carries the model too "
                 f'({doc_ref("§5")}). Example: "{model}-{name}".'
+            )
+        desc = (tool_input.get("description") or "").strip()
+        match = _title_re().match(desc)
+        if not match and not name:
+            return (
+                "Model gate: dispatch title must start with the strict "
+                'prefix `<model>: ` (e.g. "opus: Migrate YAML keys") '
+                "so every dispatch shows its model live in the UI "
+                f"({doc_ref('§5')}). Title seen: {desc!r}. (A dispatch "
+                "that sets `name` carries the model in the name instead — "
+                "the panel renders the name, never the title.)"
+            )
+        if match and match.group(1).lower() != model:
+            return (
+                f"Model gate: title prefix {match.group(1).lower()!r} "
+                f"diverges from model field {model!r} — the prefix is a "
+                "verified mirror of the field; make them match."
             )
         return None
     return (
@@ -252,6 +268,22 @@ if __name__ == "__main__":
         assert check({"model": "sonnet", "description": "sonnet: Scan",
                       "name": "opus-scanner"}) is not None    # wrong model in name
         assert check({"model": "opus", "description": "opus: Fix tests"}) is None  # no name: unchanged
+        # Title lane narrowed to the UNNAMED case (2026-08-02). A NAMED
+        # dispatch carries the model in the name; the panel never renders
+        # the title, so the title prefix is optional there.
+        assert check({"model": "opus", "name": "opus-mech-rerun",
+                      "description": "F-2 mechanical re-run"}) is None
+        assert check({"model": "opus", "name": "opus-mech-rerun",
+                      "description": ""}) is None          # no title at all
+        # …but an UNNAMED dispatch still requires it (only visible carrier)
+        assert check({"model": "opus",
+                      "description": "F-2 mechanical re-run"}) is not None
+        # …and a present prefix must still mirror the field, named or not
+        assert check({"model": "opus", "name": "opus-mech-rerun",
+                      "description": "sonnet: F-2 re-run"}) is not None
+        # …and a wrong name still fails even with a correct title prefix
+        assert check({"model": "opus", "name": "mech-rerun",
+                      "description": "opus: F-2 re-run"}) is not None
         # ── Site-Policy (Config): deny + ask greifen ──
         with tempfile.NamedTemporaryFile("w", suffix=".json",
                                          delete=False) as tf:
