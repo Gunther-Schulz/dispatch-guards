@@ -141,10 +141,13 @@ commits, no report files; enumeration dispatches substitute the
 data-file provision, §3b):
 
     <channel line>
-    Return your findings in ONE message (verifier: verdict + basis;
-    discovery: the N named facts, sources actually read). A missing
-    decision, file, or value is surfaced as a gap, never bridged
-    with a guess. No file writes, no interim messages.
+    Return your findings in ONE message where they fit (verifier:
+    verdict + basis; discovery: the N named facts, sources actually
+    read); past the message-size gate, labeled parts (1/N) — never
+    a report file. A missing decision, file, or value is surfaced
+    as a gap, never bridged with a guess. No repo writes, no report
+    files, no interim messages; transient probe scratch in your OWN
+    scratchpad is permitted and is not a report file.
 
 Verifier dispatches stay exempt from the rich §1 brief form but NOT
 from the read-only tail — artifact + question + that block (the
