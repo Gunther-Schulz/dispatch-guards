@@ -137,7 +137,8 @@ EXECUTION tail (any dispatch that writes):
     ownership rule).
 
 READ-ONLY tail (verifier and discovery dispatches — no writes, no
-commits, no report files):
+commits, no report files; enumeration dispatches substitute the
+data-file provision, §3b):
 
     <channel line>
     Return your findings in ONE message (verifier: verdict + basis;
@@ -196,5 +197,12 @@ enumeration.
                  tier. Under-bar enumeration is redone one tier up,
                  never iterated at the failing tier (SKILL.md §4).
 
-An enumeration dispatch is discovery-shaped: it takes the READ-ONLY
-tail (above) verbatim.
+An enumeration dispatch is discovery-shaped — no commits, no interim
+messages — but its output is a coverage artifact that outgrows the
+message channel by construction (exhaustive scope × per-item quotes),
+which the payload-vs-pointer rule (§2) forbids carrying in messages
+anyway. The brief therefore ASSIGNS a data file for the enumeration
+itself (data files pass the harness block that bounces report files —
+§2 binding), and the tail's ONE-message line is satisfied by a
+pointer: the file path + the per-class counts, zeros stated. The rest
+of the read-only tail applies verbatim.
