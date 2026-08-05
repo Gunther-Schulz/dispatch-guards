@@ -15,7 +15,7 @@ override there would be backwards.
 Occasion (evidence, 2026-07-11): an Explore dispatch "survey the B/C
 landscape" without an override unintentionally ran on Fable instead of Opus.
 
-Extension (2026-07-18, dispatch-discipline.md §5): the dispatch title
+Extension (2026-07-18): the dispatch title
 (`description`) must start with the strict prefix `<model>: ` (colon +
 space, free text after — operator-picked format) so every dispatch
 shows its model live in the UI, and the prefix must equal the `model`
@@ -56,10 +56,16 @@ title prefix stays required (it is then the only visible carrier).
 When a title prefix IS present it must still mirror the model field;
 the mini-checksum is unchanged. Observed live: a named dispatch
 renders as "<name>  <prompt excerpt>" with the title absent entirely.
-Corpus homes: dispatch-discipline §1 + CLAUDE.md veto-gate
+Corpus homes: the dispatch skill §1 + CLAUDE.md veto-gate
 conventions, amended the same day — this hook is their enforcement,
 and the amendment landing without it was the divergence that
 surfaced the lane.
+
+Accepted residue: agent types that pin their model in their
+definition bypass the gate entirely for the model/title checks
+(ENFORCED_TYPES scope; the escalation lane below still applies);
+and SendMessage RESUMES of an already-approved agent pass no Agent
+hook — one GO covers the spawn and its continuations.
 
 Escalation lane (2026-07-28): an ask-tier dispatch FROM a subagent is
 DENIED, not asked — a subagent needing a tier above its own returns the
@@ -74,7 +80,7 @@ Scope, and why it cannot be general: hook input carries NO caller model
 (hooks reference: only SessionStart may receive `model`; there is no
 $CLAUDE_MODEL), so "above yourself" is NOT computable — only the
 ask-tier case is mechanically decidable, and the general rule stays
-prose (dispatch-discipline.md §4). Subagents dispatching sideways or
+prose (dispatch skill §4). Subagents dispatching sideways or
 down are untouched; nesting itself stays legal (3 layers by default).
 Binding as-of 2026-07-28: PreToolUse fires inside subagents and the
 input carries `agent_id` — CONFIRMED live (this gate and the push gate
@@ -288,7 +294,7 @@ if __name__ == "__main__":
         with tempfile.NamedTemporaryFile("w", suffix=".json",
                                          delete=False) as tf:
             tf.write('{"deny_models": ["haiku"], "ask_models": ["fable"],'
-                     ' "discipline_doc": "dispatch-discipline.md"}')
+                     ' "discipline_doc": "dispatch skill"}')
             cfgp = tf.name
         os_mod.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = cfgp
         _reset_policy_cache()
@@ -301,7 +307,7 @@ if __name__ == "__main__":
                                     "description": "opus: Grind logs"})
         assert not needs_model_ask({"subagent_type": "plugin-dev:agent-creator",
                                     "model": "fable"})  # pinned type: bypass
-        assert "dispatch-discipline.md §5" in check(
+        assert "dispatch skill §5" in check(
             {"model": "opus", "description": "Fix tests"})  # doc_ref greift
         os_mod.unlink = None  # noqa: keep tempfile (test artifact)
         # Workflow lane (2026-07-19): every Workflow launch asks.

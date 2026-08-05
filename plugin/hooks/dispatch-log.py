@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PostToolUse(Agent|Task) logger: one JSONL line per subagent dispatch.
 
-Purpose: the model-routing table (CLAUDE.md) and dispatch-discipline.md
+Purpose: the model-routing table (CLAUDE.md) and the dispatch skill
 call for accumulated dispatch evidence; this hook is the mechanical
 collector. It records ONLY mechanical facts (never judgments — outcome/
 class/verification live with whoever dispatched, e.g. the PBS journal):
@@ -20,7 +20,7 @@ $CLAUDE_DISPATCH_LOG > $XDG_DATA_HOME/claude/dispatch-log.jsonl >
 ~/.local/share/claude/dispatch-log.jsonl.
 
 Consumers: (1) the model-table re-check ritual reads it as evidence
-(dispatch-discipline.md §5); (2) pbs-projekt check compares it against
+(this hook is canonical for its own lanes); (2) pbs-projekt check compares it against
 journal dispatch bookings (completeness edge: a dispatch without a
 booking surfaces loudly). Title is truncated to 80 chars — outside PBS
 a description may carry arbitrary text; the log stays lean by design.

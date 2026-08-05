@@ -1,13 +1,25 @@
 # dispatch-guards
 
-Mechanical guards for disciplined subagent dispatching in Claude Code.
-Prose rules are best-effort; hooks are not — this plugin is the hook side
-of a dispatch discipline.
+The dispatch discipline as a skill, plus the mechanical guards that
+enforce its computable slice. Prose rules are best-effort; hooks are
+not — this plugin carries both sides.
+
+## Skills
+
+- **`dispatch`** — the dispatch discipline itself: decision-complete
+  briefs (§1), the closing-report form and brief tails
+  (`references/forms.md`, §§2–3), dispatcher duties (§4),
+  tier-readiness register (§6), Codex routing
+  (`references/codex-routing.md`, §7). The `dispatch-skill-gate`
+  hook demands this skill be loaded before any dispatch.
+- **`worktree`** — portable git-worktree and git-hook mechanics for
+  isolating agents and wiring hooks safely.
 
 ## Guards
 
 | Guard | Event | What it enforces |
 |---|---|---|
+| `dispatch-skill-gate` | PreToolUse Agent\|Task\|Workflow | the `dispatch` skill must be loaded in the dispatching context's transcript (session-scoped) before any dispatch — replaces the old read-by-convention |
 | `agent-model-gate` | PreToolUse Agent\|Task\|Workflow | explicit `model` on generic agent types; strict `<model>: ` title prefix (verified mirror of the field); `<model>-` name prefix; per-policy deny/ask tiers; Workflow launches always ask; **escalation lane** — an ask-tier dispatch *from a subagent* is denied, not asked: escalation is the dispatcher's decision, the subagent returns the question |
 | `brief-reminder` | PreToolUse Agent\|Task | one reminder line before every dispatch: brief decision-complete? report channel named? |
 | `subagent-push-gate` | PreToolUse Bash | denies `git`/`gh` push in a subagent context — subagents commit unpushed, the dispatcher pushes after verification |
@@ -16,6 +28,7 @@ of a dispatch discipline.
 | `report-enforcer` | SubagentStop | instructs a stopping subagent to actually SEND its closing report (background agents' final text reaches no one) |
 | `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher — payload belongs in a file, the message carries the pointer: an injected payload occupies the dispatcher's context for the rest of the session (and has coincided with full prompt-cache rewrites); dispatcher→subagent stays free |
 | `dispatch-log` | PostToolUse Agent\|Task | appends one mechanical JSONL line per dispatch (`~/.local/share/claude/dispatch-log.jsonl`, `$CLAUDE_DISPATCH_LOG` override) |
+| `discovery-volume-reminder` | PostToolUse Bash\|Grep\|Glob | advisory line when a search result ≥ `discovery_volume_bytes` lands in main-session context — the discovery-dispatch routing rule may apply; measures the harness's `persistedOutputSize`, since the hook-visible body is truncated |
 
 All guards fail open on hook-input parse errors and ship a `--test`
 bite-test (`python3 hooks/<guard>.py --test`).
@@ -32,8 +45,9 @@ generic reminder wording). Site policy lives in
   "models": ["sonnet", "opus", "haiku", "fable"],
   "deny_models": ["haiku"],
   "ask_models": ["fable"],
-  "discipline_doc": "dispatch-discipline.md",
-  "max_message_chars": 3000
+  "discipline_doc": "dispatch skill",
+  "max_message_chars": 3000,
+  "discovery_volume_bytes": 50000
 }
 ```
 
@@ -50,6 +64,8 @@ generic reminder wording). Site policy lives in
   unset, wording stays generic.
 - `max_message_chars` — payload-gate threshold for subagent→dispatcher
   messages (default 3000).
+- `discovery_volume_bytes` — discovery-volume-reminder threshold for
+  main-session search results (default 50000).
 
 ## Install
 

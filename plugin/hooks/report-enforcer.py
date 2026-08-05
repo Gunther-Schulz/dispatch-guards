@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """SubagentStop enforcer: re-demand the closing report from the stopping agent.
 
-Root cause this closes (dispatch-discipline.md §2, "Channel rule"): a
+Root cause this closes (dispatch skill references/forms.md §2, "Channel rule"): a
 BACKGROUND/teammate dispatch's final text answer reaches NO ONE — the
 closing report only arrives if the agent SENDs it (SendMessage) to its
 dispatcher. The observed failure is a channel mismatch: the agent writes
@@ -9,6 +9,10 @@ its report as final text, goes idle, and the dispatcher never sees it.
 `report-reminder.py` nudges the DISPATCHER to demand the report; this hook
 closes the other side — it nudges the stopping SUBAGENT to SEND it before
 going idle, replacing the manual re-demand loop.
+
+Known soft spot: the background-vs-sync judgment is delegated to the
+stopping agent and has been misjudged once (agent-side; the channel
+line in the brief tail is the dispatcher-side cure — forms.md §2).
 
 Mechanism (verified against the Claude Code hooks reference, as-of
 2026-07-18): on SubagentStop, `hookSpecificOutput.additionalContext` is

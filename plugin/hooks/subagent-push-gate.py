@@ -2,7 +2,7 @@
 """PreToolUse(Bash) gate: subagents must not push.
 
 Enforces the integration rule mechanically (global CLAUDE.md
-"Dispatched work" / dispatch-discipline.md §1): subagents commit
+"Dispatched work" / dispatch skill §1): subagents commit
 unpushed; pushing is the dispatcher's act, after verification.
 
 Detection: subagent context = presence of `agent_id` in the hook input
@@ -31,7 +31,7 @@ from _dispatch_common import deny, is_push_command, is_subagent  # noqa: E402
 
 REASON = (
     "Push gate: subagents commit UNPUSHED — pushing is the dispatcher's "
-    "act after verification (dispatch-discipline.md §1). Commit your "
+    "act after verification (dispatch skill §1). Commit your "
     "work and report the hash; the main agent pushes."
 )
 

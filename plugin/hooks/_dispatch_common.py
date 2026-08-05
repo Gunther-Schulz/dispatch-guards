@@ -3,9 +3,23 @@
 Mirrors the _restrict_common.py pattern: small hooks per lifecycle
 event, shared logic here.
 
+Standing rules for every guard in this plugin (canonical home —
+formerly dispatch-discipline.md §5, merged here with the skill-ify
+move): each guard ships a `--test` self-check (bite-test),
+registered in the machine-bootstrap doctor (dotfiles
+bootstrap/doctor.py), so a harness change that silently breaks a
+guard fails loudly. Guards stay FAIL-OPEN on hook-input parse
+errors (verified per guard 2026-07-23: all share the parse-error →
+exit-0 path; a broken guard must not brick every call, and the
+enforced rules keep their non-hook safety nets) — the bite-tests
+are the load-bearing compensation. Harness-dependent fields are
+environment bindings, stamped with an as-of date where used.
+
 Environment binding (as-of 2026-07-18, Claude Code hooks): a subagent
 context is marked by the presence of a non-empty `agent_id` field in the
-hook input JSON; the main session has none. If a harness change removes
+hook input JSON; the main session has none — confirmed live in a
+subagent context as of 2026-07-28 (observed, not merely bite-tested).
+If a harness change removes
 the field, the guards silently treat everything as the main session
 (fail-open) — the --test bite-tests registered in the machine-bootstrap
 doctor are the tripwire for that.
@@ -83,6 +97,7 @@ _DEFAULTS: dict = {
     "ask_models": [],
     "discipline_doc": None,
     "max_message_chars": 3000,
+    "discovery_volume_bytes": 50000,
 }
 _POLICY_CACHE: dict | None = None
 

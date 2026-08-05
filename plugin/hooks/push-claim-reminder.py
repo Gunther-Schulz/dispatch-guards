@@ -2,7 +2,7 @@
 """PreToolUse(Bash) reminder: claim every outgoing commit before a push.
 
 Push-side counterpart to brief-reminder, mechanizing the reminder half
-of the §1 push-set rule (dispatch-discipline.md): the push set is the
+of the §1 push-set rule (dispatch skill): the push set is the
 branch, never "my commits" — on a working copy shared with any
 co-writer, `git push` publishes every local commit, including an
 agent's mid-verification work. The observed slip is a chained

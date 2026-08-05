@@ -6,8 +6,17 @@ the brief form had no mechanical consumer at dispatch time — a
 below-session-tier dispatch with an underspecified brief passed
 silently (only fable dispatches force the permission dialog). One
 line lands before the dispatch starts, reminding the dispatcher of
-the §1 brief checks and the §2 report channel (dispatch-discipline.md).
-The hook never judges the brief — judgment stays with the dispatcher.
+the §1 brief checks and the §2 report channel (dispatch skill,
+this plugin: skills/dispatch/SKILL.md + references/forms.md).
+The hook never judges the brief — judgment stays with the
+dispatcher: it reminds on the judgment half and DENIES on the
+computable slice of §§1-2. The enforced subset is THIS hook's,
+version-stamped with the plugin — the skill deliberately does not
+enumerate it (a prose copy of a mechanical lane list is a
+dependent that rots silently). On a deny, fix the brief against
+§§1-2, never against the error text alone; the relief valve for a
+false-fire class lands in §§1-2 rule text (forms.md / SKILL.md),
+never in softening a lane here.
 
 Environment binding (as-of 2026-07-19): PreToolUse `additionalContext`
 injection into the dispatching conversation — UNVERIFIED against a
@@ -28,14 +37,25 @@ from _dispatch_common import deny, policy  # noqa: E402
 _SOURCE = "dispatch-guards/brief-reminder"
 
 
+def _forms_path() -> str:
+    """The dispatch skill's forms reference (§2 tails + §3 roadmap),
+    resolved relative to this hook — valid in the source repo and in
+    the installed plugin cache alike. Denies point HERE so a bounce
+    carries the exact file the fix is pasted from."""
+    return os.path.normpath(os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..", "skills", "dispatch", "references", "forms.md"))
+
+
 def _norm(text: str) -> str:
     """Lowercase and collapse all whitespace runs to single spaces.
 
     Every marker/anchor below is matched against THIS form. Basis
     (live false-fire 2026-07-30): the §2 tails carry hard line wraps
-    in dispatch-discipline.md itself, so a tail pasted verbatim —
-    exactly what the deny text instructs — arrived as "never
-    bridged\\nwith a guess" and failed the single-line anchor."""
+    in their source file (now references/forms.md), so a tail pasted
+    verbatim — exactly what the deny text instructs — arrived as
+    "never bridged\\nwith a guess" and failed the single-line
+    anchor."""
     return re.sub(r"\s+", " ", text.lower())
 
 
@@ -80,12 +100,12 @@ def missing_channel(payload: dict) -> bool:
 
 
 def deny_text() -> str:
-    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
     return (
         "Blocked: background dispatch without a report channel. A "
         "background agent's final text reaches no one — the brief "
         "must instruct delivery (paste the tail block's channel "
-        f"line, {doc} §2: SendMessage to the dispatcher), or pass "
+        f"line from {_forms_path()} §2: SendMessage to the "
+        "dispatcher), or pass "
         "run_in_background: false for a synchronous dispatch. "
         "Fix the brief and retry."
     )
@@ -95,9 +115,9 @@ _TAIL_ANCHOR = "never bridged with a guess"
 _SYNC_TAIL_MARKER = "final text is the report"
 _BACKGROUND_TAIL_MARKER = "final text reaches no one"
 
-# The BRIEF is prompt + any brief files the prompt names (DD §2: the
-# tail reaches the executing agent inline OR in a referenced brief
-# file; inline is required only when no file brief exists). The
+# The BRIEF is prompt + any brief files the prompt names (forms.md
+# §2: the tail reaches the executing agent inline OR in a referenced
+# brief file; inline is required only when no file brief exists). The
 # channel lanes above stay prompt-only by design — the channel line
 # is bound to run_in_background, decided at the call site, which a
 # static file cannot know.
@@ -169,10 +189,10 @@ def missing_tail(payload: dict) -> bool:
 
 
 def missing_tail_deny_text() -> str:
-    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
     return (
         "Blocked: dispatch brief without the §2 tail block. Paste the "
-        f"EXECUTION or READ-ONLY tail from {doc} §2 into the prompt — "
+        f"EXECUTION or READ-ONLY tail verbatim from {_forms_path()} "
+        "into the prompt — "
         "pick the channel line matching the dispatch mode (background "
         "vs synchronous) — or point the prompt at a brief FILE that "
         "carries the tail, and retry."
@@ -198,7 +218,7 @@ def tail_mode_mismatch(payload: dict) -> bool:
 
 
 def tail_mode_mismatch_deny_text(payload: dict) -> str:
-    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
+    doc = policy().get("discipline_doc") or "the dispatch skill"
     tool_input = payload.get("tool_input") or {}
     is_background = tool_input.get("run_in_background") is not False
     if is_background:
@@ -231,7 +251,7 @@ def missing_sections(payload: dict) -> bool:
     only in the execution tail and absent from the READ-ONLY tail) but
     lacks one or both §1 mandatory execution-brief sections: a
     grounding-basis section and a write-boundaries section. An
-    execution brief per dispatch-discipline.md §1 always carries a
+    execution brief per the dispatch skill §1 always carries a
     grounding-basis section (what to read before building) and a
     write-boundaries section (paths owned); verifier/discovery briefs
     take the READ-ONLY tail and are exempt by that tail's absence of
@@ -258,7 +278,7 @@ def _brief_text(payload: dict) -> str:
 
 
 def missing_sections_deny_text(payload: dict) -> str:
-    doc = policy().get("discipline_doc") or "dispatch-discipline.md"
+    doc = policy().get("discipline_doc") or "the dispatch skill"
     prompt = _brief_text(payload)
     missing = []
     if not any(m in prompt for m in _GROUNDING_MARKERS):
@@ -325,10 +345,10 @@ if __name__ == "__main__":
         assert "brief check" in check({"tool_name": "Agent"})
         with tempfile.NamedTemporaryFile("w", suffix=".json",
                                          delete=False) as tf:
-            tf.write('{"discipline_doc": "dispatch-discipline.md"}')
+            tf.write('{"discipline_doc": "dispatch skill"}')
             os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = tf.name
         _reset_policy_cache()
-        assert "dispatch-discipline.md §1" in check({"tool_name": "Agent"})
+        assert "dispatch skill §1" in check({"tool_name": "Agent"})
         assert check({"tool_name": "Bash"}) is None
         assert check({}) is None
         # Channel gate: background + no channel → deny
@@ -353,10 +373,10 @@ if __name__ == "__main__":
         assert "Blocked" in deny_text()
 
         # ── Tail-presence lane (missing_tail) ──────────────────────
-        # Tails copied verbatim from dispatch-discipline.md §2 (cite:
-        # dispatch-discipline.md §2) — literals here, never referenced
-        # from the detection constants, so the test doesn't share
-        # parentage with what it's meant to catch.
+        # Tails copied verbatim from the §2 forms (cite: dispatch
+        # skill, references/forms.md §2) — literals here, never
+        # referenced from the detection constants, so the test
+        # doesn't share parentage with what it's meant to catch.
         EXECUTION_TAIL_BG = (
             "Closing report (mandatory; the project's own report form "
             "if it defines one, else the \xa72 form here — never "
@@ -452,7 +472,7 @@ if __name__ == "__main__":
         assert "Blocked" in tail_mode_mismatch_deny_text(bg_with_sync_line)
 
         # ── Section lane (missing_sections) ────────────────────────
-        # Section markers named in dispatch-discipline.md §1 ("Grounding
+        # Section markers named in the dispatch skill §1 ("Grounding
         # basis as a mandatory section." / "Write boundaries.") —
         # literals here, never the detection constants, so the test
         # doesn't share parentage with what it's meant to catch.
@@ -514,7 +534,7 @@ if __name__ == "__main__":
             missing_grounding_brief)
 
         # ── Whitespace-normalization lane (false-fire 2026-07-30) ──
-        # The §2 tails carry hard line wraps in dispatch-discipline.md
+        # The §2 tails carry hard line wraps in references/forms.md
         # itself; a verbatim paste therefore wraps mid-anchor ("never
         # bridged\nwith a guess"). Replayed live deny: hookinput-probe3,
         # session 78b3e7fe (guard 0.1.7 went red on a conforming brief).
@@ -544,7 +564,7 @@ if __name__ == "__main__":
                       + EXECUTION_TAIL_BG}}
         assert not missing_sections(wrapped_sections_brief)
 
-        # ── File-carried briefs (DD §2: inline tail required only ──
+        # ── File-carried briefs (forms.md §2: inline tail required ──
         # when no file brief) — the wave-2 false-positive class:
         # four dispatches pointing at a tail-bearing brief file were
         # denied as tail-less (2026-07-30, sessions 633915a8/78b3e7fe).
@@ -597,7 +617,7 @@ if __name__ == "__main__":
 
         # ── Brief paths with spaces and non-ASCII letters ───────────
         # Expectation derived from the rule, never from this hook's
-        # behavior — dispatch-discipline.md §2: "The tail reaches the
+        # behavior — the §2 forms (references/forms.md): "The tail reaches the
         # executing agent pasted in the DISPATCH PROMPT or inside a
         # brief FILE the prompt names — inline required only when no
         # file brief exists." A prompt naming a tail-bearing brief file

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PreToolUse(Bash) gate: git commit --amend on a shared working copy.
 
-Enforces dispatch-discipline.md §1's amend rule: amend is
+Enforces the dispatch skill §1's amend rule: amend is
 COMMIT-granular, not file-granular — file disjointness (targeted
 `git add <path>`) does not reach it. `git commit --amend` rewrites
 whatever commit sits at HEAD, and on a working copy shared between
@@ -19,7 +19,7 @@ per the brief):
 - Subagent context (`agent_id` present, the subagent-push-gate
   precedent): FLAT deny, no trailer comparison in the hook itself —
   hook input carries no caller identity to compare against
-  `%(trailers)` (documented gap, dispatch-discipline.md §5), and a
+  `%(trailers)` (documented gap; this docstring is its home), and a
   false fire lands on the rule's own preferred default anyway (a new
   commit costs nothing). Directs the agent to make a new commit.
 - Main-session context: never blocks — one-line additionalContext
