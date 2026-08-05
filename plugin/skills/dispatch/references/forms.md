@@ -130,9 +130,8 @@ EXECUTION tail (any dispatch that writes):
     an INTERIM report, says so, and names what remains.
     Commits unpushed, targeted `git add <paths>` never `-A`, trailer:
     `Co-Authored-By: Claude <model> <noreply@anthropic.com>`.
-    Amend only when `git log -1 --format=%(trailers)` shows YOUR
-    OWN trailer — amend rewrites HEAD, whoever owns it; else a new
-    commit.
+    Never amend — always a new commit: the amend-gate denies
+    subagent amends regardless of ownership.
     After sending the report your write grant is over: a defect you
     find later is REPORTED, never edited or amended (source: §4
     ownership rule).

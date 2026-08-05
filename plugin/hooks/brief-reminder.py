@@ -303,6 +303,40 @@ def check(payload: dict) -> str | None:
     return reminder_text()
 
 
+def worktree_advisory_text() -> str:
+    return (
+        "Worktree isolation — base advisory: harness-cut worktrees have "
+        "come from a snapshot OLDER than local HEAD (observed twice "
+        "2026-08-05, both cuts == origin/main while local main was "
+        "ahead; mechanism unverified). Three classes: (1) SESSION-repo "
+        "worktree cut stale — the brief must STATE the base commit and "
+        "carry the §1 sanctioned recovery (ff-only to that base over a "
+        "clean tree), else the executor halts on a guard doing its job; "
+        "(2) a brief naming a SIBLING repo — isolation cuts the session "
+        "repo regardless, so provision the working copy yourself and "
+        "name its path in the brief; (3) a sibling-repo brief run UNDER "
+        "isolation — the unused session worktree can be auto-reclaimed "
+        "mid-run, killing Bash outright: run sibling-repo dispatches "
+        "WITHOUT isolation."
+    )
+
+
+def worktree_advisory(payload: dict) -> str | None:
+    """Non-blocking advisory for `isolation: "worktree"` Agent calls.
+
+    Fires only on that call shape; every other dispatch is untouched.
+    Rides this ALREADY-WIRED hook entry deliberately: a hooks.json
+    entry new in an update stays dormant until a full restart, while
+    changed code behind a wired entry reloads (dotfiles CLAUDE.md,
+    probe 2026-08-05)."""
+    if payload.get("tool_name") != "Agent":
+        return None
+    tool_input = payload.get("tool_input") or {}
+    if tool_input.get("isolation") != "worktree":
+        return None
+    return worktree_advisory_text()
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -321,12 +355,14 @@ def main() -> int:
         deny(tail_mode_mismatch_deny_text(payload), source=_SOURCE)
     if missing_sections(payload):
         deny(missing_sections_deny_text(payload), source=_SOURCE)
-    reminder = check(payload)
-    if reminder:
+    # One additionalContext field per hook call: the advisory rides
+    # the reminder line rather than replacing it.
+    lines = [t for t in (check(payload), worktree_advisory(payload)) if t]
+    if lines:
         print(json.dumps({
             "hookSpecificOutput": {
                 "hookEventName": "PreToolUse",
-                "additionalContext": reminder,
+                "additionalContext": "\n".join(lines),
             }
         }))
     return 0
@@ -692,6 +728,39 @@ if __name__ == "__main__":
             "[dispatch-guards/brief-reminder] ")
         assert "Blocked: test reason" in hso["permissionDecisionReason"]
         assert dp["systemMessage"] == hso["permissionDecisionReason"]
+
+        # ── Worktree-base advisory lane ────────────────────────────
+        # Expectation derived from the observed incidents, not from
+        # this hook: a harness worktree cut from an older snapshot
+        # makes the executor's base check fail correctly, and the
+        # brief is where the stated base + ff-recovery must live.
+        # (i) fires on the isolation=worktree Agent call shape
+        wt_call = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.", "isolation": "worktree"}}
+        assert worktree_advisory(wt_call) is not None
+        assert "base commit" in worktree_advisory(wt_call)
+        assert "ff-only" in worktree_advisory(wt_call)
+        # all three classes named (the dispatcher's ruling: stale
+        # session-repo cut, sibling-repo provisioning, sibling-repo
+        # under isolation)
+        assert "SESSION-repo" in worktree_advisory_text()
+        assert "SIBLING repo" in worktree_advisory_text()
+        assert "WITHOUT isolation" in worktree_advisory_text()
+        # (ii) silent on every other call shape
+        assert worktree_advisory({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X."}}) is None
+        assert worktree_advisory({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.", "isolation": "remote"}}) is None
+        assert worktree_advisory({"tool_name": "Task", "tool_input": {
+            "isolation": "worktree"}}) is None
+        assert worktree_advisory({"tool_name": "Bash", "tool_input": {
+            "command": "git worktree add /tmp/wt"}}) is None
+        assert worktree_advisory({"tool_name": "Agent",
+                                  "tool_input": {}}) is None
+        assert worktree_advisory({}) is None
+        # (iii) the advisory never blocks and never displaces the
+        # existing reminder — both lanes answer on the same call
+        assert check(wt_call) is not None
 
         print("brief-reminder: all tests passed")
         sys.exit(0)

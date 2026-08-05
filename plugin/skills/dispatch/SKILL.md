@@ -106,9 +106,11 @@ Mandatory parts (execution briefs):
   `git status` clean (grep for known content found it; the reflog
   was the recovery). Amend only when `git log -1
   --format=%(trailers)` shows your own trailer; otherwise a new
-  commit. Dispatcher mirror at brief time: write "add a commit;
-  amend only if HEAD is yours" — "amend into <commit>" names an
-  operation git does not offer.
+  commit. Dispatcher mirror at brief time: write "never amend —
+  always a new commit"; the amend-gate denies subagent amends
+  regardless of ownership (a conditional amend grant in a brief is
+  dead text), and "amend into <commit>" names an operation git does
+  not offer.
   **Disjointness also covers untracked outputs:**
   parallel agents share the session-keyed scratchpad, so a tool's
   DEFAULT output filename there (a status file, a log) is a silent
