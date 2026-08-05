@@ -1,5 +1,5 @@
 {
   "name": "dispatch-guards",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "The dispatch discipline as a skill plus its mechanical guards. Skills: dispatch (decision-complete briefs, closing-report + roadmap forms, dispatcher duties, tier-readiness register, Codex routing \u2014 the operational corpus' dispatch half) and worktree (portable git-worktree/git-hook mechanics). Guards: dispatch-skill load gate, model gate (deny/ask tiers, escalation lane, title+name prefixes), subagent push gate, push-claim reminder, amend gate, brief/report reminders, closing-report enforcer, message-payload gate, discovery-volume reminder, dispatch log. Mechanism ships here; site policy lives in ~/.claude/dispatch-guards.json."
 }

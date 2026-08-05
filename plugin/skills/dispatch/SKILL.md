@@ -15,11 +15,12 @@ Load when delegating substantial work to another agent (builds,
 migrations, multi-file edits, research with consequences) —
 mandatory when the target tier is below the session model (§§1
 and 3 target that case; §§2, 4 and 5 apply to every dispatch; §6
-certifies RECURRING procedures for a cheaper tier once, via a
-per-project register — for the dotfiles repo the procedure text
-lives in the repo-root CLAUDE.md; §7 routes Codex work when that
-CLI is installed). The dispatch-skill-gate hook in this plugin
-demands this load before any dispatch.
+certifies RECURRING procedure classes for a cheaper tier once,
+globally, via the class register; §7 routes Codex work when that
+CLI is installed). The receiving side — how the executing session
+conducts itself — is the sibling `executor` skill; briefs to
+cheaper tiers name its load first (§1). The dispatch-skill-gate
+hook in this plugin demands this load before any dispatch.
 
 Citations reading "CLAUDE.md" name the operator's global corpus
 (`~/.claude/CLAUDE.md`), the layer every session loads; this
@@ -198,11 +199,16 @@ Mandatory parts (execution briefs):
   summaries have contradicted the raw doc at exactly the load-bearing
   line). Contradiction between summary
   and raw text → raw text wins, surface the discrepancy.
-- **For the cheapest viable tier, add idiom/convention lists** (house
-  style, micro-conventions) in the brief itself; the smarter tiers
-  infer them, the cheaper ones must be told.
-- **Recurring procedure → consult the readiness register (§6) before
-  choosing the tier.** The register's consult-moment is HERE, at
+- **Below the session model, the grounding basis names the executor
+  skill load FIRST** (`dispatch-guards:executor` — conduct of
+  execution, under-report principle, devbook form): the conduct
+  layer travels by skill, never restated per brief. Repo
+  idiom/convention lists (house style, micro-conventions) still
+  ride in the brief itself; the smarter tiers infer them, the
+  cheaper ones must be told.
+- **Recurring procedure → consult the readiness register (§6:
+  global class register + the repo's exclusions) before choosing
+  the tier.** The register's consult-moment is HERE, at
   brief-writing — §6 defines the machinery, but a consult-sentence
   living only there sits outside the path dispatch-time eyes travel
   (observed: dispatch runs with the register never opened).
@@ -221,6 +227,7 @@ satisfied by construction:
 
     ## Grounding basis — read before building; the report cites
     ## what was actually read
+    - the executor skill (dispatch-guards:executor) — load FIRST
     - <file> — <which part, and what it settles>
 
     ## Background (established; verify at the cited lines)
@@ -263,7 +270,12 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   catches slips, not judgment errors (verdicts have flipped only under
   a smarter or fresh reviewer; discovery shows no tier sensitivity),
   and redoing one tier up has been the cheap correction. (Source:
-  CLAUDE.md routing evidence.)
+  CLAUDE.md routing evidence.) A verdict that decomposes into
+  exhaustive mechanical enumeration plus judgment over the
+  enumeration routes the ENUMERATION to a cheaper tier — that half
+  is discovery — briefed with the enumeration-brief form
+  (references/forms.md §3b; its boundary clause names what never
+  decomposes); the grading half stays at tier ≥ producer.
 - **Escalation returns to the dispatcher; a subagent never spawns
   it.** An agent needing a tier above its own reports what it could
   not settle and returns the question; the dispatcher decides and
@@ -305,7 +317,7 @@ bite-test registered in the machine-bootstrap doctor,
 environment bindings stamped with as-of dates — live in
 `hooks/_dispatch_common.py`.
 
-## 6. Tier-readiness (standing procedures and the register)
+## 6. Tier-readiness (procedure classes and the register)
 
 §§1–5 govern single dispatches. This section makes a RECURRING
 procedure permanently runnable on a cheaper tier — certify once,
@@ -313,43 +325,63 @@ dispatch cheaply thereafter. Recurring procedures only: a one-off is
 dispatched per §1 and never registered (the pipeline's fixed cost
 doesn't amortize on n=1).
 
-A procedure is **tier-ready** for a cheaper tier when all four hold:
+**Certification is class-level and global.** The certified unit is
+a procedure CLASS (guard/checker builds, doc-cascade renders, …),
+not one repo's instance of it: target tier + the executor skill +
+a form-conforming devbook of the class (executor skill §3), proven
+once. The capability lives in the skill and the form, so the
+certification carries to every repo whose devbook conforms — never
+re-proven per repo; repos state only what is true about them
+(exclusions and deviations, below). A class is **tier-ready** when
+all four hold:
 
-1. **Documented decision-complete** in the roadmap form (§3) — a fresh
-   context on the target tier executes it without making any design or
-   placement decision.
+1. **Documented decision-complete** as a form-conforming devbook
+   (executor skill §3) — a fresh context on the target tier
+   executes it without making any design or placement decision;
+   the roadmap form (references/forms.md §3) is its per-dispatch
+   rendering.
 2. **Judgment points converted** — each one either mechanized into a
    guard/check, or named as an explicit STOP-and-escalate criterion
    (naming who decides: a higher tier or the operator). Escalating is
    returning the question, never spawning the higher tier (§4).
-3. **Probe evidence** — at least one real case executed on the target
-   tier, reviewed at tier ≥ producer (§4 for who the producer is),
-   evidence recorded in the register
-   entry. One probe certifies one procedure; full eval batteries are
-   for certifying a whole operating domain, not required here.
+3. **Probe evidence** — at least one real case of the class executed
+   on the target tier, reviewed at tier ≥ producer (§4 for who the
+   producer is), evidence recorded in the register entry. One probe
+   certifies the class; full eval batteries are for certifying a
+   whole operating domain, not required here.
 4. **Not in the exclusion class** — a procedure whose failure would be
    silent AND outward-facing is never register-eligible, however well
    documented: the ex-ante brief cannot cover the unforeseen gap, and
    a cheaper tier fills gaps silently. Explicit rule, not a judgment
    call per case.
 
-**The register** — per project, machine-readable (dotfiles instance:
-`claude/readiness.json`; consumer: bootstrap doctor incl. fingerprint
-invalidation): one entry per procedure with target tier,
-status (`ready` | `eval-open` | `excluded`), probe evidence (date +
-ref), and a fingerprint (hash or date) of the normative procedure
-text. No register without a consumer — a register nothing reads is
+**First-run-watched.** The first run of a certified class in a repo
+NEW to it gets its output graded — one sentence in the booking, no
+register entry. A failed grade books a deviation (below), never a
+silent pass-through.
+
+**The register** — machine-readable, two grains. The CLASS register
+is global: `~/.claude/readiness.json` — one entry per class with
+target tier, status (`ready` | `eval-open` | `excluded`), probe
+evidence (date + ref), and a fingerprint (hash or date) of the
+class devbook text; consumers: the §1 consult at brief-writing and
+the machine-bootstrap doctor's fingerprint check. Per-repo
+`READINESS.json` at repo root carries only EXCLUSIONS (this repo's
+silent-AND-outward procedures — per-repo forever, the repo knows
+its own outward surfaces) and DEVIATIONS (where this repo departs
+from a class certification); role line: operator corpus, file
+roles. No register without a consumer — a register nothing reads is
 dead weight, don't create it; the consult-moment lives in §1's brief
 parts (source label: the clause there is the one rule, this is its
 machinery).
 
-**Invalidation is part of the schema.** A change to the procedure text
-(fingerprint mismatch) or to the model lineup resets `ready` →
-`eval-open`. A register without invalidation decays into silent
-misinformation.
+**Invalidation is part of the schema.** A change to the class
+devbook text (fingerprint mismatch) or to the model lineup resets
+`ready` → `eval-open`. A register without invalidation decays into
+silent misinformation.
 
-**Scarcity corollary.** When the top tier is rationed, registered
-procedures run on their cheapest `ready` tier by default; the top tier
+**Scarcity corollary.** When the top tier is rationed, certified
+classes run on their cheapest `ready` tier by default; the top tier
 is reserved for design, rule-corpus work, eval grading, and the
 ambiguous multi-step tail where the tier gap is widest. (The session
 model remains the operator's choice — the register informs it; the

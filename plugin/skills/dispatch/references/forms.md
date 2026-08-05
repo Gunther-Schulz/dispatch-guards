@@ -161,3 +161,41 @@ filling it is instance work (passes eval), designing it is not:
     Steps:        1. … 2. … (numbered, each checkable)
     Limits:       <box: what the agent must NOT decide/touch>
     Verification: <the command/grep/render that proves each step>
+
+## 3b. The enumeration brief (the two-stage vet's cheap half)
+
+A verdict that decomposes into exhaustive mechanical enumeration plus
+judgment over the enumeration hands the ENUMERATION down with this
+form (SKILL.md §4, verdict routing); grading stays at tier ≥
+producer — the enumerator lists, the grader judges. The form is an
+application of the under-report principle (executor skill §2: shape
+the work so a cheaper tier cannot silently under-report); each rule
+below exists because its absence produced a silent hole in a real
+enumeration.
+
+    Scope:       <the exhaustive question — every X in Y against Z>.
+                 No materiality judgment: EVERY difference is listed;
+                 what matters is the grader's call, not yours.
+    Taxonomy:    closed difference classes; each item carries
+                 exactly one label: ABSENT / REWORDED / WEAKENED /
+                 RELOCATED / ADDITION / TAIL-DIFF.
+    Known noise: exclusions named and defined exactly (a pattern, not
+                 a vibe); excluded items are still LISTED separately,
+                 never silently dropped.
+    Coverage:    the report carries the coverage artifact — lines or
+                 items walked and per-class counts, zeros stated
+                 explicitly ("RELOCATED: 0").
+    Exactness:   where byte-exactness is the requirement, check it
+                 byte-exact (cmp/hash), never by reading.
+    Reference:   the frozen source copy is the immutable reference;
+                 declared deltas are claims-to-verify, not context.
+    Quotes:      each item carries both-side quotes (source text and
+                 render text).
+    Boundary:    NOT for work where the noticing itself needs
+                 judgment (design-fit, statistical grading,
+                 falsification rounds) — that stays at the verdict
+                 tier. Under-bar enumeration is redone one tier up,
+                 never iterated at the failing tier (SKILL.md §4).
+
+An enumeration dispatch is discovery-shaped: it takes the READ-ONLY
+tail (above) verbatim.
