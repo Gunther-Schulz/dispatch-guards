@@ -9,9 +9,10 @@ move): each guard ships a `--test` self-check (bite-test),
 registered in the machine-bootstrap doctor (dotfiles
 bootstrap/doctor.py), so a harness change that silently breaks a
 guard fails loudly. Guards stay FAIL-OPEN on hook-input parse
-errors (verified per guard 2026-07-23: all share the parse-error →
-exit-0 path; a broken guard must not brick every call, and the
-enforced rules keep their non-hook safety nets) — the bite-tests
+errors (verified per guard 2026-07-23 over the then-six guards;
+later guards join the invariant through their own --test
+parse-error bites; a broken guard must not brick every call, and
+the enforced rules keep their non-hook safety nets) — the bite-tests
 are the load-bearing compensation. Harness-dependent fields are
 environment bindings, stamped with an as-of date where used.
 

@@ -19,10 +19,11 @@ Data home is OUTSIDE any git repo (log data never gets committed):
 $CLAUDE_DISPATCH_LOG > $XDG_DATA_HOME/claude/dispatch-log.jsonl >
 ~/.local/share/claude/dispatch-log.jsonl.
 
-Consumers: (1) the model-table re-check ritual reads it as evidence
-(this hook is canonical for its own lanes); (2) pbs-projekt check compares it against
-journal dispatch bookings (completeness edge: a dispatch without a
-booking surfaces loudly). Title is truncated to 80 chars — outside PBS
+Consumers: (1) the model-table re-check ritual and the fire-rate
+review read it as accumulated dispatch evidence (counts replace the
+"still thin" anecdote); (2) project-side completeness edges compare
+it against their booking discipline (e.g. pbs-projekt check vs
+journal bookings: a dispatch without a booking surfaces loudly). Title is truncated to 80 chars — outside PBS
 a description may carry arbitrary text; the log stays lean by design.
 
 Fail-open on every error (a broken logger must never brick dispatches);

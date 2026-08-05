@@ -4,7 +4,10 @@
 Kills the forget-to-check failure (~10 idle-without-report cases/day
 observed): when a dispatch returns, one line lands next to the tool
 result reminding the dispatcher to verify the closing report before
-booking the outcome (dispatch skill references/forms.md §2, SKILL.md §4). The hook never
+booking the outcome (dispatch skill references/forms.md §2, SKILL.md §4):
+a missing or incomplete report is DEMANDED, never booked, and the
+report's claims are verified in the artifact before any
+push/merge/publish. The hook never
 judges the report — it can't; judgment stays with the dispatcher.
 
 Design decision (2026-07-18, verified against the Claude Code hooks

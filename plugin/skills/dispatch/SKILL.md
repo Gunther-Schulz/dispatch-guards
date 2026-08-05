@@ -211,9 +211,9 @@ Mandatory parts (execution briefs):
 checklist, not a shape: a free-composed brief satisfies them in
 SUBSTANCE and still misses the LABELS the mechanical lane reads, so
 the requirement is discovered by denial after the whole brief is
-written. Same medicine as the §2 tail one level up — paste the
-headings, fill them, and the computable lanes are satisfied by
-construction:
+written. Same medicine as the §2 tail (references/forms.md) —
+paste the headings, fill them, and the computable lanes are
+satisfied by construction:
 
     Title: <model>: <task>
     Working copy: <path>. Base check: <command + halt condition>.

@@ -12,15 +12,13 @@ The hook never judges the brief — judgment stays with the
 dispatcher: it reminds on the judgment half and DENIES on the
 computable slice of §§1-2. The enforced subset is THIS hook's,
 version-stamped with the plugin — the skill deliberately does not
-enumerate it (a prose copy of a mechanical lane list is a
-dependent that rots silently). On a deny, fix the brief against
-§§1-2, never against the error text alone; the relief valve for a
-false-fire class lands in §§1-2 rule text (forms.md / SKILL.md),
-never in softening a lane here.
+enumerate it. Deny-repair and relief-valve rules: SKILL.md §5
+(general form for every guard; source label, not restated here).
 
-Environment binding (as-of 2026-07-19): PreToolUse `additionalContext`
-injection into the dispatching conversation — UNVERIFIED against a
-live fire at mint time; first real dispatch confirms. Fail-open and
+Environment binding (as-of 2026-08-05): PreToolUse
+`additionalContext` injection into the dispatching conversation —
+CONFIRMED live, reminder line visible before each spawn (unverified
+only at mint time 2026-07-19). Fail-open and
 inert if the harness ignores it; --test covers the logic only
 (bootstrap doctor tripwire).
 """
