@@ -157,6 +157,86 @@ def check(tool_input: dict) -> str | None:
     )
 
 
+# Undelivered-text note (2026-08-05): text written in the SAME turn
+# before a gated call is not rendered — the ask dialog is all the
+# operator sees, so an explanation composed before the call is hidden
+# exactly at the approval moment (corpus: "text preceding a
+# permission-GATED call fails hardest", CLAUDE.md Recommending &
+# reporting). Probe-verified binding (as-of 2026-08-05): the current
+# turn's assistant text blocks are already flushed to the transcript
+# when PreToolUse fires, so the hook can measure them. The note rides
+# INSIDE an already-firing ask dialog — no new fire event, no
+# false-fire surface; below the threshold (route-line one-liners) it
+# stays silent.
+_UNDELIVERED_NOTE_MIN_CHARS = 300
+
+
+def _undelivered_text_chars(transcript_path: str) -> int:
+    """Chars of assistant text written since the last real operator
+    prompt (isMeta/tool-result/non-human-origin user events are not
+    prompts). Fail-soft: unreadable transcript or no boundary → 0."""
+    try:
+        events = []
+        with open(transcript_path, "r", encoding="utf-8",
+                  errors="replace") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    events.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    except OSError:
+        return 0
+    last = -1
+    for i, ev in enumerate(events):
+        msg = ev.get("message")
+        if not isinstance(msg, dict) or msg.get("role") != "user":
+            continue
+        if ev.get("isMeta") is True:
+            continue
+        origin = ev.get("origin")
+        if origin and not (isinstance(origin, dict)
+                           and origin.get("kind") == "human"):
+            continue
+        content = msg.get("content")
+        if isinstance(content, str) or (
+                isinstance(content, list)
+                and any(isinstance(b, dict) and b.get("type") == "text"
+                        for b in content)):
+            last = i
+    if last == -1:
+        return 0
+    total = 0
+    for ev in events[last + 1:]:
+        msg = ev.get("message")
+        if not isinstance(msg, dict) or msg.get("role") != "assistant":
+            continue
+        content = msg.get("content", [])
+        if not isinstance(content, list):
+            continue
+        for block in content:
+            if isinstance(block, dict) and block.get("type") == "text":
+                total += len(block.get("text") or "")
+    return total
+
+
+def undelivered_note(payload: dict) -> str:
+    """Appendix for an ask reason, or "" when this turn carries no
+    substantial pre-call text."""
+    n = _undelivered_text_chars(payload.get("transcript_path") or "")
+    if n < _UNDELIVERED_NOTE_MIN_CHARS:
+        return ""
+    return (
+        f" NB: ~{n} Zeichen Assistententext stehen in diesem Zug VOR "
+        "diesem Aufruf und sind noch NICHT gerendert — sie erscheinen "
+        "erst nach dem Dialog. Sollte erst eine Erklärung gelesen "
+        "werden: abbrechen (No), Text liefern lassen, dann erneut "
+        "dispatchen."
+    )
+
+
 def needs_workflow_ask(payload: dict) -> bool:
     """Workflow launches ask unconditionally (see docstring: their
     internal agent() spawns bypass this gate and inherit the session
@@ -210,7 +290,7 @@ def main() -> int:
             "passieren dieses Gate NICHT einzeln und erben ohne "
             "model-Override das Session-Modell — in einer Fable-Session "
             "ein ungegateter Fable-Fan-out. Vor dem GO: model-Overrides "
-            "im Script prüfen."
+            "im Script prüfen." + undelivered_note(payload)
         )
     if payload.get("tool_name") not in ("Agent", "Task"):
         return 0
@@ -228,6 +308,7 @@ def main() -> int:
             "komparativer Vorteil laut CLAUDE.md: Fresh-Context-Verdikt "
             "auf begrenztem Artefakt. Die Entscheidung ist getroffen — "
             "abbrechen, wenn der Einsatz sie nicht rechtfertigt."
+            + undelivered_note(payload)
         )
     return 0
 
@@ -342,6 +423,44 @@ if __name__ == "__main__":
         _src = inspect.getsource(main)
         assert _src.index("escalation_deny") < _src.index("needs_model_ask"), \
             "escalation deny must precede the fable ask in main()"
+
+        # ── Undelivered-text note (2026-08-05 lane) ────────────────
+        def _write_transcript(path, events):
+            with open(path, "w", encoding="utf-8") as f:
+                for ev in events:
+                    f.write(json.dumps(ev) + "\n")
+
+        def _prompt(text):
+            return {"message": {"role": "user", "content": text}}
+
+        def _atext(text):
+            return {"message": {"role": "assistant", "content": [
+                {"type": "text", "text": text}]}}
+
+        # mkdtemp, not TemporaryDirectory: the deny-lane test above
+        # sabotages os.unlink on purpose, which breaks cleanup — the
+        # dir dies with /tmp, same as that lane's own tempfile.
+        _d = tempfile.mkdtemp()
+        if True:
+            _t = os_mod.path.join(_d, "t.jsonl")
+            # (a) substantial pre-call text this turn → note fires,
+            # carries the char count.
+            _write_transcript(_t, [_prompt("go"), _atext("e" * 900)])
+            _note = undelivered_note({"transcript_path": _t})
+            assert "NICHT gerendert" in _note and "900" in _note
+            # (b) a bare route line stays under the threshold → silent.
+            _write_transcript(_t, [_prompt("go"),
+                                   _atext("dispatching to fable")])
+            assert undelivered_note({"transcript_path": _t}) == ""
+            # (c) text BEFORE the last prompt is delivered history, not
+            # this turn's undelivered text → silent (stale window).
+            _write_transcript(_t, [_atext("e" * 900), _prompt("go")])
+            assert undelivered_note({"transcript_path": _t}) == ""
+            # (d) fail-soft: missing transcript / no path → silent.
+            assert undelivered_note({"transcript_path":
+                                     _t + ".gone"}) == ""
+            assert undelivered_note({}) == ""
+
         print("agent-model-gate: all tests passed")
         sys.exit(0)
     sys.exit(main())
