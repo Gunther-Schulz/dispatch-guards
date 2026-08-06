@@ -7,10 +7,13 @@ of the session; every later turn carries it, and the long-context
 session is where tokens are scarcest. A file plus a short pointer
 keeps the full data on disk, selectively readable on demand.
 
-Secondary (hypothesis, n=2): large injections have coincided with
-full prompt-cache rewrites of the receiving session (Claude Code
-#27048 class). Cache-key-stabilizing proxies may mitigate that class
-upstream; they do not touch the context-economy point at all.
+Secondary (hypothesis, n=2, UNPROVEN — the evidence has one home:
+dev-notes/payload-cache-correlation.md, which also states what would
+settle it): large injections have coincided with full prompt-cache
+rewrites of the receiving session (Claude Code #27048 class).
+Cache-key-stabilizing proxies may mitigate that class upstream; they
+do not touch the context-economy point at all, and this lane rests on
+the primary rationale alone.
 
 The expensive direction is subagent → dispatcher (long main context);
 the reverse (dispatcher briefing a subagent) may be long — the

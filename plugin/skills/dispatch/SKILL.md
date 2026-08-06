@@ -5,11 +5,12 @@ description: Brief, report, and integration discipline for delegating work to su
 
 # Dispatch discipline — briefs, reports, and guards for delegated agent work
 
-_Editing this skill? It is OPERATIONAL CORPUS (together with the
-operator CLAUDE.md): read `CLAUDE-maintenance.md` (deployed at
-`~/.claude/CLAUDE-maintenance.md`) first — it governs every edit
-here; each edit lands with a JOURNAL line in the corpus repo
-(dotfiles), and the fire-rate review covers this skill._
+_Consumer: the dispatching session, any tier. Register follows each
+rule's action — evidence for judgment steering, directive for
+brief-form content and the dispatcher's own integration acts, a hook
+where the lane is computable (§5); must-hold prose still exists here,
+which is what §5's "best-effort" concedes. Maintenance and evolution:
+the closing section._
 
 Load when delegating substantial work to another agent (builds,
 migrations, multi-file edits, research with consequences) —
@@ -90,93 +91,96 @@ Mandatory parts (execution briefs):
   actually read.
 - **Write boundaries.** Which paths the agent owns (one writer per
   working copy; parallel dispatches need disjoint, brief-named path
-  sets — source: CLAUDE.md dispatched-work rule). Targeted
-  `git add <path>`, never `-A`. **Commit unpushed;
-  pushing is the dispatcher's act** after verification.
-  **Disjointness is per FILE, and commits serialize on shared
-  files:** staging is file-granular, so an agent committing its own
-  work in a shared file sweeps up a co-writer's uncommitted hunks —
-  a clean targeted `git add` absorbs them; edit discipline alone
-  cannot prevent it. **Amend is COMMIT-granular — file disjointness
-  does not reach it:** `git commit --amend` rewrites whatever commit
-  is at HEAD, and on a shared copy HEAD moves between working
-  rounds — an amend aimed at "my commit" has swallowed a co-writer's
-  commit under the amender's message, and a follow-up rewrite has
-  erased a co-writer's landed fix from HEAD and working tree with
-  `git status` clean (grep for known content found it; the reflog
-  was the recovery). Amend only when `git log -1
-  --format=%(trailers)` shows your own trailer; otherwise a new
-  commit. Dispatcher mirror at brief time: write "never amend —
-  always a new commit"; the amend-gate denies subagent amends
-  regardless of ownership (a conditional amend grant in a brief is
-  dead text), and "amend into <commit>" names an operation git does
-  not offer.
-  **Disjointness also covers untracked outputs:**
-  parallel agents share the session-keyed scratchpad, so a tool's
-  DEFAULT output filename there (a status file, a log) is a silent
-  last-writer-wins collision that later reads misattribute — the
-  brief assigns per-agent filenames for any output that defaults to
-  a shared path. **Disjointness resolves to realization surfaces:**
-  a write boundary of named paths is complete only once each
-  commissioned change is resolved to the file that REALIZES it — an
-  object defined elsewhere (a stored view or schema object → its
-  migration; a generated artifact → its template; a config key →
-  the shared settings file) collides with a walled-off lane the
-  design prose never names. Resolve at brief time — the design's
-  own citations point at the realizing file; an overlap found then
-  is serialized or explicitly carved out, never left to surface as
-  a mid-dispatch halt. **The push set is the branch, never "my
-  commits":** on a working copy shared with any co-writer (peer
-  session, agent, human), `git push` publishes every local commit,
-  including a co-writer's mid-verification work. Before pushing on a
-  shared copy, `git log origin/<branch>..<branch>` and claim each
-  commit; an unexpected commit halts the push — it is a question to
-  answer first, and a live push is never the diagnostic.
-  Escalation ladder for overlapping file sets — overlap counts any
-  agent's READ-OR-EXECUTE set against another's write set, not only
-  write against write: a probe executing a file a co-writer is
-  editing measures with an unstable instrument, and its findings
-  inherit the half-written state. For a read-only overlapper the
-  cheap resolution is isolating the READER in a worktree frozen at
-  dispatch — the freeze is the point for an instrument and wrong
-  for an agent that must see live state, so which one it is gets
-  decided per dispatch, never defaulted. A reader worktree is
-  REMOVED by the dispatcher at the booking of its findings: a
-  reader has no integration moment, so the writer recipe's
-  removal clause below never fires for it by construction (two
-  frozen probe readers sat registered for days after their
-  sessions ended, found 2026-08-01), and its registration lives
-  in .git/worktrees/ where no repo-level check looks. Ladder:
-  (1) same file, small overlap → serialize the edits (second agent
-  touches the shared file only after the first's commit lands,
-  ordering stated in the brief) or serialize the dispatches;
-  (2) real parallelism wanted despite overlap → per-agent git
-  WORKTREES. Portable git mechanics — shared-config hazards,
-  push-denial (per-worktree pushurl poison, never remote-remove),
-  the hook-env GIT_DIR redirection class, hooks-reach asymmetry,
-  provisioning probes, the config-hash integrity check — live in
-  this plugin's sibling `worktree` SKILL (single source; this
-  recipe carries only the dispatch-specific binding and must not
-  grow a second copy).
-  Recipe: create outside the main tree
-  (`git worktree add /tmp/wt-<task>-<agent> -b wt/<task>/<agent>
-  <main-HEAD>`); apply the skill's push denial to EVERY remote —
-  a fork's `upstream` is a live push path too, and the worse one;
-  brief only cwd-relative paths; snapshot main HEAD before dispatch
-  and re-check after return (mismatch = the agent escaped its
-  worktree — halt, don't integrate); integrate by `cherry-pick
-  <worktree-commit>` onto main after verification, never merge;
-  remove the worktree after integration. Harness note: where the
-  agent runner offers native worktree isolation, prefer it over the
-  manual recipe — same guarantees, less plumbing. Either flavor cuts
-  its base from SPAWN-TIME state, so the brief STATES the required
-  base commit and the executor's first act verifies it
-  (`git merge-base --is-ancestor <base> HEAD`) — the one sanctioned
-  recovery on a stale base is a fast-forward to the stated base over
-  a clean tree; anything else halts as a gap, never a silent rebase
-  or a base discovered by guesswork. Worktrees cost
-  setup + integration and only pay where overlap is genuine —
-  disjoint file sets in one working copy stay the default.
+  sets — source: CLAUDE.md dispatched-work rule). Targeted `git add
+  <path>`, never `-A`. **Commit unpushed; pushing is the dispatcher's
+  act** after verification.
+  - **Disjointness is per FILE, and commits serialize on shared
+    files:** staging is file-granular, so an agent committing its own
+    work in a shared file sweeps up a co-writer's uncommitted hunks —
+    a clean targeted `git add` absorbs them; edit discipline alone
+    cannot prevent it.
+  - **Amend is COMMIT-granular — file disjointness does not reach
+    it:** `git commit --amend` rewrites whatever commit is at HEAD,
+    and on a shared copy HEAD moves between working rounds — an amend
+    aimed at "my commit" has swallowed a co-writer's commit under the
+    amender's message, and a follow-up rewrite has erased a
+    co-writer's landed fix from HEAD and working tree with `git
+    status` clean (grep for known content found it; the reflog was
+    the recovery). Amend only when `git log -1 --format=%(trailers)`
+    shows your own trailer; otherwise a new commit. Dispatcher mirror
+    at brief time: write "never amend — always a new commit"; the
+    amend-gate denies subagent amends regardless of ownership (a
+    conditional amend grant in a brief is dead text), and "amend into
+    <commit>" names an operation git does not offer.
+  - **Disjointness also covers untracked outputs:** parallel agents
+    share the session-keyed scratchpad, so a tool's DEFAULT output
+    filename there (a status file, a log) is a silent
+    last-writer-wins collision that later reads misattribute — the
+    brief assigns per-agent filenames for any output that defaults to
+    a shared path.
+  - **Disjointness resolves to realization surfaces:** a write
+    boundary of named paths is complete only once each commissioned
+    change is resolved to the file that REALIZES it — an object
+    defined elsewhere (a stored view or schema object → its
+    migration; a generated artifact → its template; a config key →
+    the shared settings file) collides with a walled-off lane the
+    design prose never names. Resolve at brief time — the design's
+    own citations point at the realizing file; an overlap found then
+    is serialized or explicitly carved out, never left to surface as
+    a mid-dispatch halt.
+  - **The push set is the branch, never "my commits":** on a working
+    copy shared with any co-writer (peer session, agent, human), `git
+    push` publishes every local commit, including a co-writer's
+    mid-verification work. Before pushing on a shared copy, `git log
+    origin/<branch>..<branch>` and claim each commit; an unexpected
+    commit halts the push — it is a question to answer first, and a
+    live push is never the diagnostic.
+  - **Escalation ladder for overlapping file sets** — overlap counts
+    any agent's READ-OR-EXECUTE set against another's write set, not
+    only write against write: a probe executing a file a co-writer is
+    editing measures with an unstable instrument, and its findings
+    inherit the half-written state. For a read-only overlapper the
+    cheap resolution is isolating the READER in a worktree frozen at
+    dispatch — the freeze is the point for an instrument and wrong
+    for an agent that must see live state, so which one it is gets
+    decided per dispatch, never defaulted. A reader worktree is
+    REMOVED by the dispatcher at the booking of its findings: a
+    reader has no integration moment, so the writer recipe's removal
+    clause below never fires for it by construction (frozen probe
+    readers have sat registered long after their sessions ended), and
+    its registration lives in .git/worktrees/ where no repo-level
+    check looks. Ladder: (1) same file, small overlap → serialize the
+    edits (second agent touches the shared file only after the
+    first's commit lands, ordering stated in the brief) or serialize
+    the dispatches; (2) real parallelism wanted despite overlap →
+    per-agent git WORKTREES. Portable git mechanics — shared-config
+    hazards, push-denial (per-worktree pushurl poison, never
+    remote-remove), the hook-env GIT_DIR redirection class,
+    hooks-reach asymmetry, provisioning probes, the config-hash
+    integrity check — live in this plugin's sibling `worktree` SKILL
+    (single source; this recipe carries only the dispatch-specific
+    binding and must not grow a second copy).
+  - **Worktree recipe (the ladder's rung 2).** Create outside the
+    main tree (`git worktree add /tmp/wt-<task>-<agent> -b
+    wt/<task>/<agent> <main-HEAD>`); apply the skill's push denial to
+    EVERY remote — a fork's `upstream` is a live push path too, and
+    the worse one; brief only cwd-relative paths; snapshot main HEAD
+    before dispatch and re-check after return (mismatch = the agent
+    escaped its worktree — halt, don't integrate); integrate by
+    `cherry-pick <worktree-commit>` onto main after verification,
+    never merge; remove the worktree after integration. Harness note:
+    where the agent runner offers native worktree isolation, prefer
+    it over the manual recipe — same guarantees, less plumbing.
+    Worktrees cost setup + integration and only pay where overlap is
+    genuine — disjoint file sets in one working copy stay the
+    default.
+  - **The base commit is STATED in the brief, never discovered.**
+    Either flavor cuts its base from SPAWN-TIME state, so the brief
+    states the required base commit and the executor's first act
+    verifies it (`git merge-base --is-ancestor <base> HEAD`) — the
+    one sanctioned recovery on a stale base is a fast-forward to the
+    stated base over a clean tree; anything else halts as a gap,
+    never a silent rebase or a base discovered by guesswork.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
@@ -388,3 +392,18 @@ is reserved for design, rule-corpus work, eval grading, and the
 ambiguous multi-step tail where the tier gap is widest. (The session
 model remains the operator's choice — the register informs it; the
 CLAUDE.md model table governs dispatch defaults.)
+
+## Evolution and maintenance
+
+On a gap noticed in use — a dispatch failure this discipline should
+have prevented, or a rule it states wrongly — write the observation
+to `dev-notes/dispatch-OBSERVATIONS.md` in the plugin's source repo
+(github.com/Gunther-Schulz/dispatch-guards) and propose the rule
+change; BACKLOG.md there carries work items. Guard fires land in the
+fire log (README, "Fire log, guard modes, and the replay bench"),
+which is what makes fire rates countable rather than remembered.
+
+Where this skill is deployed as the operator's corpus half, it is
+OPERATIONAL CORPUS with the operator CLAUDE.md:
+`~/.claude/CLAUDE-maintenance.md` governs every edit, and each edit
+lands with a JOURNAL line in the corpus repo.

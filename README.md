@@ -12,8 +12,17 @@ not — this plugin carries both sides.
   tier-readiness register (§6), Codex routing
   (`references/codex-routing.md`, §7). The `dispatch-skill-gate`
   hook demands this skill be loaded before any dispatch.
+- **`executor`** — the receiving side: conduct of execution for a
+  session running a brief or a repo devbook (§1 — grounding
+  literalism, "done" is the check's own output, gaps surface never
+  bridge, escalation returns the question), the under-report
+  principle (§2), and the devbook form (§3) with its mechanical
+  checker (`plugin/skills/executor/scripts/check_devbook_form.py`).
 - **`worktree`** — portable git-worktree and git-hook mechanics for
   isolating agents and wiring hooks safely.
+
+All three are model-invoked — they trigger from their descriptions;
+`dispatch` is additionally hook-demanded before any dispatch call.
 
 ## Guards
 
@@ -23,10 +32,11 @@ not — this plugin carries both sides.
 | `agent-model-gate` | PreToolUse Agent\|Task\|Workflow | explicit `model` on generic agent types; strict `<model>: ` title prefix (verified mirror of the field); `<model>-` name prefix; per-policy deny/ask tiers; Workflow launches always ask; **escalation lane** — an ask-tier dispatch *from a subagent* is denied, not asked: escalation is the dispatcher's decision, the subagent returns the question |
 | `brief-reminder` | PreToolUse Agent\|Task | one reminder line before every dispatch: brief decision-complete? report channel named? |
 | `subagent-push-gate` | PreToolUse Bash | denies `git`/`gh` push in a subagent context — subagents commit unpushed, the dispatcher pushes after verification |
+| `push-claim-reminder` | PreToolUse Bash | main-session push lanes: **denies a fused push** — one sharing its invocation with `git commit` or `git log`, since the read-then-decide seam only exists across separate invocations — and otherwise reminds to claim each outgoing commit (`git log origin/<branch>..<branch>`); subagent context excluded, `subagent-push-gate` already denies it |
 | `amend-gate` | PreToolUse Bash | `git commit --amend` on a shared working copy: denies it flatly in a subagent context (amend is COMMIT-granular — it can swallow a co-writer's landed commit at HEAD; make a new commit instead), reminds in the main session (check `git log -1 --format=%(trailers)` shows your own trailer before amending) |
 | `report-reminder` | PostToolUse Agent\|Task | one line next to every dispatch result: check the closing report, verify claims in the artifact |
 | `report-enforcer` | SubagentStop | instructs a stopping subagent to actually SEND its closing report (background agents' final text reaches no one) |
-| `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher — payload belongs in a file, the message carries the pointer: an injected payload occupies the dispatcher's context for the rest of the session (and has coincided with full prompt-cache rewrites); dispatcher→subagent stays free |
+| `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher — payload belongs in a file, the message carries the pointer: an injected payload occupies the dispatcher's context for the rest of the session (it has also coincided with full prompt-cache rewrites — correlation recorded but unproven, `dev-notes/payload-cache-correlation.md`; the lane rests on context economy alone); dispatcher→subagent stays free |
 | `dispatch-log` | PostToolUse Agent\|Task | appends one mechanical JSONL line per dispatch (`~/.local/share/claude/dispatch-log.jsonl`, `$CLAUDE_DISPATCH_LOG` override) |
 | `discovery-volume-reminder` | PostToolUse Bash\|Grep\|Glob | advisory line when a search result ≥ `discovery_volume_bytes` lands in main-session context — the discovery-dispatch routing rule may apply; measures the harness's `persistedOutputSize`, since the hook-visible body is truncated |
 | `report-form-gate` | PreToolUse SendMessage | **staged, default-warn** — a report-shaped subagent message (≥4 distinct `(a)`–`(h)` slot markers) missing required §2 slots a–g fires naming them; read-only (verifier/discovery) returns carry no markers and pass untouched |

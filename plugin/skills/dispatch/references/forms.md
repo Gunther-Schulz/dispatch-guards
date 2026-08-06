@@ -11,8 +11,8 @@ The brief prescribes this closing report; a dispatch without it is not
 done. **Precedence:** a project that defines its own report form (e.g. a
 project runbook's lettered sections) uses THAT form — this one is the
 default for projects without one, never a second form to fill in
-parallel. Every slot must appear — "none" is a valid
-answer, silence is not:
+parallel. Every slot (a)–(g) must appear — "none" is a valid
+answer, silence is not; (h) rides the EXECUTION tail only:
 
   (a) items completed, with per-item evidence (file:line, test name)
   (b) checks/tests actually RUN, with their real output
@@ -23,6 +23,8 @@ answer, silence is not:
   (e) findings worth turning into a rule/test (candidate lessons)
   (f) files touched + commit hashes (unpushed)
   (g) what was NOT verified (honest residue)
+  (h) sources actually read, of those the brief named (execution
+      tail only)
 
 An idle agent without a report gets the report demanded (SendMessage),
 never booked as success — the missing report is an observed failure
@@ -47,17 +49,14 @@ via SendMessage — a final text answer reaches no one; the brief names
 this channel explicitly, and going idle without having SENT the report
 counts as no report. **Payload vs. pointer:** the channel carries the
 short signal; anything beyond the report form's slots — roughly more
-than a screen — goes in a FILE, and the message points to it. Primary
-basis, context economy: an injected payload occupies the dispatcher's
+than a screen — goes in a FILE, and the message points to it. Basis,
+context economy: an injected payload occupies the dispatcher's
 context for the rest of its session, re-carried on every later turn.
-Secondary, unproven: payload injections have coincided with full
-prompt-cache rewrites (Claude Code #27048 class, upstream), but the
-forensic sample shows no single-field correlation yet
-(claude-worktime `docs/cachebust-runbook.md`) — coincidence recorded,
-cause not established; the gate stands on context economy alone. The
+A suspected prompt-cache-rewrite correlation stands recorded but
+unproven — `dev-notes/payload-cache-correlation.md` in the source
+repo; the gate rests on context economy alone. The
 `message-payload-gate` guard enforces the rule mechanically for the
-expensive direction (subagent → dispatcher). Rewrites are visible via
-claude-worktime's ❄ / `--cold`.
+expensive direction (subagent → dispatcher).
 
 **Brief-tail boilerplate.** The brief's dispatch-invariant tail is
 PASTED, not recalled — free-composed briefs drop invariant clauses

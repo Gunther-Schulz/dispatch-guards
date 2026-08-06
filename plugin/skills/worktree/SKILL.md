@@ -5,12 +5,16 @@ description: Portable git-worktree and git-hook mechanics — shared-config and 
 
 # Worktree regiment
 
-Mechanics that hold on any machine and any repo. One root fact drives
-everything below: **a worktree shares the repository's config, refs,
-remotes, and stash; only its checkout, index, HEAD, and
-`.git/worktrees/<name>/` are private.** Damage done "in a worktree"
-therefore usually lands in the shared repository, where every checkout
-sees it.
+Mechanics that hold on any machine and any repo. Consumer: any
+session working in a worktree or wiring git hooks, at any tier — the
+mechanics are tier-insensitive, so each rule states its mechanism and
+its measured failure shape rather than gating a sequence.
+
+One root fact drives everything below: **a worktree shares the
+repository's config, refs, remotes, and stash; only its checkout,
+index, HEAD, and `.git/worktrees/<name>/` are private.** Damage done
+"in a worktree" therefore usually lands in the shared repository,
+where every checkout sees it.
 
 ## Config writes from a worktree hit the shared config
 

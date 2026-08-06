@@ -1,0 +1,97 @@
+# dispatch-guards — working discipline
+
+A Claude Code plugin: three skills (`dispatch`, `executor`,
+`worktree`) plus the mechanical guards that enforce the computable
+slice of the dispatch discipline. Prose rules are best-effort; hooks
+are not — this repo carries both sides, and the split is the design.
+
+## Discipline
+
+- **Skill edits run skill-craft.** Any change under `plugin/skills/`
+  invokes the `skill-craft` skill and works its
+  `references/review-checklist.md`, findings stated per item with
+  file:line. A pre-edit hook enforces the invocation per turn.
+- **`plugin/skills/dispatch/` and `plugin/skills/executor/` are
+  operational corpus** where this plugin is deployed as the
+  operator's corpus half: their SKILL.md and `references/` are
+  additionally governed by `~/.claude/CLAUDE-maintenance.md`
+  (composition rule, Pareto, amendment-over-addition,
+  provenance/de-particularization), and a structural restructure
+  there lands first, then takes a fresh-context vet before push.
+  They are the sending and receiving sides of one discipline and
+  share its brief-facing forms, so a rule amended in either is
+  audited across both. `worktree` is not corpus — portable git
+  mechanics, governed by skill-craft alone.
+- **Wrap corpus markdown at 69 columns.** Enforced by a hook on the
+  operator's machine; the verify block below re-checks it anywhere.
+- **Hook docstrings are canonical** for their own lanes, bindings,
+  and accepted residue. The skills deliberately do not restate a
+  lane list — a prose copy of a mechanical contract rots silently.
+  Amending a lane means amending its docstring, and auditing every
+  other home that states it (README table, skill prose).
+- **New guard lanes ship default-warn** and earn `deny` through the
+  fire-rate review against the fire log, never by assertion.
+- **Releases go through `skill-craft:release-plugin`** — version
+  bump in `plugin/.claude-plugin/plugin.json`, marketplace pin,
+  operator `/reload-plugins` handoff. Editing a skill and leaving it
+  unreleased puts source and served version out of step.
+
+## Role files
+
+- `BACKLOG.md` — parked items (each with its named missing evidence)
+  and ready items (decision-complete, dispatchable).
+- `dev-notes/` — the maintenance layer, never loaded by operational
+  files: per-skill observation journals
+  (`dispatch-OBSERVATIONS.md`, `executor-OBSERVATIONS.md`,
+  `worktree-OBSERVATIONS.md`), harvest records, and evidence homes
+  for claims the skills cite but do not rest on
+  (`payload-cache-correlation.md`, `permission-request-seam.md`).
+- `tools/` — repo-owned checks: `replay-bench.py` plus its curated
+  payload corpus.
+- `README.md` — humans deciding whether to install; the guard roster
+  and the site-policy schema live there.
+- **Declared deviation:** no `LEDGER.md`. Decisions land in commit
+  messages and `dev-notes/`; the work is single-repo and
+  short-horizon, so a separate ledger would duplicate the backlog.
+  Revisit if multi-session work here starts re-deriving settled
+  ground.
+
+## Verify
+
+These four commands are what make work in this repo trustworthy. Run
+them before any commit that touches hooks, skills, or the corpus.
+
+```bash
+# 1. Guards, end-to-end through the real scripts (stdin → stdout JSON).
+#    Fails on any missed catch or false fire, including the historical
+#    false-fire regressions.
+python3 tools/replay-bench.py
+
+# 2. Per-guard bite-tests — the function-arm net, and the only net for
+#    the six guards the bench does not cover.
+for h in plugin/hooks/*.py; do
+  [ "$(basename $h)" = "_dispatch_common.py" ] && continue
+  python3 "$h" --test || echo "FAILED: $h"
+done
+
+# 3. The devbook-form detector's own tests.
+python3 plugin/skills/executor/scripts/check_devbook_form.py --test
+
+# 4. Manifests parse, and corpus markdown stays inside 69 columns.
+python3 -c "import json;[json.load(open(f)) for f in \
+  ['plugin/.claude-plugin/plugin.json','.claude-plugin/marketplace.json']]"
+python3 -c "
+import subprocess,sys
+d=subprocess.run(['git','diff','-U0','HEAD','--',
+                  'plugin/skills/dispatch','plugin/skills/executor'],
+                 capture_output=True,text=True).stdout
+bad=[l[1:] for l in d.split(chr(10))
+     if l.startswith('+') and not l.startswith('+++')
+     and len(l)-1>69 and not l[1:].lstrip().startswith('description:')]
+print(*bad,sep=chr(10)) if bad else print('wrap: clean')
+sys.exit(1 if bad else 0)"
+```
+
+A guard change additionally extends `tools/corpus/guards.jsonl` — the
+bench scores only the cases the corpus enumerates, so an unextended
+corpus reports clean on an untested lane.

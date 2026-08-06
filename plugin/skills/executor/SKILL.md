@@ -5,12 +5,10 @@ description: Conduct-of-execution discipline for a session running briefed or de
 
 # Executor discipline — conduct, under-report principle, devbook form
 
-_Editing this skill? It is OPERATIONAL CORPUS (with the operator
-CLAUDE.md and the sibling dispatch skill): read
-`CLAUDE-maintenance.md` (deployed at
-`~/.claude/CLAUDE-maintenance.md`)
-first; each edit lands with a JOURNAL line in the corpus repo
-(dotfiles), and the fire-rate review covers this skill._
+_Consumer: the executing session — commonly a tier below the
+dispatcher, which is why §1 runs as numbered directives and §2
+demands visible artifacts rather than principles alone. Maintenance
+and evolution: the closing section._
 
 Load when executing work someone else designed: a dispatch brief, a
 repo devbook or runbook procedure, a certified recurring procedure
@@ -132,3 +130,16 @@ per-repo `READINESS.json` carries only exclusions and deviations, and
 the first run in a new repo gets its output graded (one sentence, no
 register entry). Mechanics and register: dispatch skill §6 — cite,
 never duplicate.
+
+## Evolution and maintenance
+
+On a gap noticed in use — an execution failure this conduct layer
+should have prevented, or a rule it states wrongly — write the
+observation to `dev-notes/executor-OBSERVATIONS.md` in the plugin's
+source repo (github.com/Gunther-Schulz/dispatch-guards) and propose
+the rule change; BACKLOG.md there carries work items.
+
+Where this skill is deployed as the operator's corpus half, it is
+OPERATIONAL CORPUS with the operator CLAUDE.md and the sibling
+dispatch skill: `~/.claude/CLAUDE-maintenance.md` governs every edit,
+and each edit lands with a JOURNAL line in the corpus repo.
