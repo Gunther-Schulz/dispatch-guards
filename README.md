@@ -43,7 +43,11 @@ All three are model-invoked — they trigger from their descriptions;
 | `writer-claims-gate` | PreToolUse+PostToolUse Write\|Edit | **staged, default-warn** — PostToolUse records subagent write claims (TTL `write_claim_ttl_hours`); PreToolUse fires on a cross-agent same-file write, and reminds (never denies) the main session when a live subagent claimed the file (§4 mirror duty). Claims store: `~/.local/share/claude/write-claims.jsonl` (`$CLAUDE_DISPATCH_GUARDS_CLAIMS` override) |
 
 All guards fail open on hook-input parse errors and ship a `--test`
-bite-test (`python3 hooks/<guard>.py --test`).
+bite-test (`python3 hooks/<guard>.py --test`). Fail-open means a
+broken guard goes quiet rather than bricking every call, so the
+bite-tests are the compensation that matters — run them somewhere
+that fails loudly (CI, a pre-push hook, or whatever health check you
+already run on this machine).
 
 ## Fire log, guard modes, and the replay bench
 
@@ -109,6 +113,86 @@ generic reminder wording). Site policy lives in
   writer-claims lanes).
 - `write_claim_ttl_hours` — writer-claims freshness window
   (default 6).
+
+## What this does not ship
+
+This plugin is the mechanical half of a larger operating discipline;
+the rest lives in its author's global instruction corpus and is
+deliberately not bundled. None of it blocks use — the guards run on
+their shipped defaults with no config file at all (verified: full
+replay bench green under an empty policy path and a bare `HOME`, no
+tier denied, no tier forced to ask). But two things the skills cite
+have no local counterpart:
+
+- **The model-routing table** — which tier gets which work. The
+  `dispatch` skill deliberately does not decide *whether* to
+  delegate; it disciplines the handover once you have decided. That
+  table is a measured, dated fact about one person's model lineup, so
+  shipping the numbers as defaults would hand you someone else's
+  stale cache. The shape travels, the numbers do not: rank the tiers
+  you actually use on the axes that decide your dispatches — how hard
+  a problem the tier handles unsupervised, output quality where taste
+  matters, and what it costs you — then stamp it with a date and name
+  what invalidates it (a lineup change, a pricing change). Keep it
+  wherever your sessions already load instructions from.
+- **`~/.claude/readiness.json`**, the tier-readiness register behind
+  skill §6. The plugin never creates it, by §6's own rule: a register
+  nothing reads is dead weight. Ignore §6 until some recurring
+  procedure actually earns certification, then create the file at
+  that moment.
+
+Citations reading "CLAUDE.md" inside the skills are provenance
+labels — they mark where a rule came from, while the rule itself is
+stated in full on the page. Without that corpus you lose the
+footnote, not the rule.
+
+### A starter corpus — real, and dated
+
+Rather than describe the missing layer abstractly, here is the
+author's actual one, so the machinery is legible from a working
+instance. Copy it and then correct it; do not adopt it unchanged.
+**The numbers date fast** — they describe one model lineup on one
+payment model, and the day either moves this table is wrong while
+still reading as authoritative. That is the whole reason it is not a
+shipped default.
+
+Routing table, 1–10, higher is better. Lineup as of 2026-07-31;
+rankings as of 2026-07-18, unchanged pending operation evidence.
+
+| model    | intelligence | taste |
+|----------|--------------|-------|
+| fable-5  | 9            | 9     |
+| opus-5   | 7            | 8     |
+| sonnet-5 | 5            | 7     |
+
+*intelligence* = how hard a problem the tier handles unsupervised.
+*taste* = code quality, API design, UI/UX, copy. **Cost is
+deliberately not a column**: on a subscription the top tier may draw
+from a separately capped pool, so cross-tier token comparisons are
+the wrong currency — price your tiers by whichever budget runs out
+first for you.
+
+The rules the skills cite by name, in the shortest form that still
+works. Your corpus can word them however it likes:
+
+- **Dispatched work** — one writer per working copy; parallel
+  writers need disjoint, brief-named ownership, and overlap means
+  serialize. Integration (merge, push, publish) stays with the
+  dispatcher, after verifying in the artifact itself. An agent's
+  "done" is a claim; silence is never success.
+- **Fresh-context verification** — a verifier receives the artifact
+  and the question, never the dispatcher's reasoning, which would
+  hand it the blind spot it exists to escape.
+- **Done is the check's own output** — a completion claim carries
+  the verifier's verbatim output, never a summary of it and never a
+  launcher's exit status, which reports that a run happened rather
+  than what it found.
+- **Paraphrase drift** — a summary is a label over its body; book
+  findings from the body, never from the label.
+- **Whether to dispatch** — work whose design is already settled
+  defaults to a dispatch, since the settled design is the brief
+  already written; open judgment favours staying inline. This is the
+  decision `dispatch` deliberately does not make for you.
 
 ## Install
 
