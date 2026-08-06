@@ -121,6 +121,7 @@ def fire_log(source: str, mode: str, reason: str,
             "session_id": payload.get("session_id"),
             "agent_id": payload.get("agent_id"),
             "tool_name": payload.get("tool_name"),
+            "shape": command_shape(payload),
             "reason": reason[:_REASON_MAX],
         }
         pfad = fire_log_path()
@@ -219,9 +220,93 @@ def doc_ref(section: str) -> str:
     return f"{doc} {section}" if doc else "your dispatch discipline"
 
 
-# ── Push-command detection (shared: subagent-push-gate + push-claim-reminder) ──
+# ── Command shape + push detection ───────────────────────────────────────
 import re     # noqa: E402
 import shlex  # noqa: E402
+
+_SHAPE_MAX = 120
+# A safe word: lowercase verb-ish, no separators, no case mixing. Values
+# and secrets (URLs, tokens, paths, messages) fail it by construction.
+_SHAPE_WORD = re.compile(r"^[a-z][a-z0-9-]*$")
+_SHAPE_LONG_FLAG = re.compile(r"^--[a-z][a-z0-9-]*$")
+_SHAPE_SEPS = frozenset({"&&", "||", ";", "|", "&", "(", ")", "{", "}"})
+
+
+def command_shape(payload: dict) -> str | None:
+    """A secret-free discriminator for WHAT a guard fired on.
+
+    The fire log's `reason` is CONSTANT per lane, so a reviewer
+    counting fires cannot separate a false fire from a true one. The
+    `--push` false fire (a `git remote set-url --push` config write
+    denied as a push) logged identically to a real push from the day
+    its arm was minted, and was found by accident rather than from the
+    log — the instrument for the warn→deny promotion criterion could
+    not answer the question the criterion asks. This field is the
+    missing half.
+
+    Operands carry the secrets — tokens in URLs, `-p<password>`,
+    commit messages, paths — so the shape keeps only VERBS and FLAGS.
+    Per command-position invocation: the command's basename, up to two
+    following subcommand words, and its flags — long flags with any
+    `=value` stripped, short flags reduced to their letter, because a
+    short flag can carry its value attached (`-p<password>`) in a form
+    that passes any looks-like-a-flag pattern. Words stop at the first
+    flag, since what follows a flag is its value. Anything failing the
+    safe-word pattern degrades to `?` rather than being emitted. So
+    `git remote set-url --push origin https://tok@host/r.git` reduces
+    to `git remote set-url --push`, `git commit -m "<message>"` to
+    `git commit -m`, and `SECRET=x curl -H "<auth>" <url>` to
+    `? curl -H`.
+
+    Dispatch tools report their routing fields instead (both
+    non-secret and the discriminator that matters for a model gate).
+    Every other tool returns None: adding a shape for Write/Edit or
+    SendMessage means deciding what of a path or a message body is
+    safe, which no evidence yet demands.
+    """
+    tool = payload.get("tool_name")
+    tool_input = payload.get("tool_input") or {}
+    if tool in ("Agent", "Task", "Workflow"):
+        bits = [str(tool_input.get(k)) for k in ("subagent_type", "model")
+                if tool_input.get(k)]
+        return " ".join(bits)[:_SHAPE_MAX] or None
+    if tool != "Bash":
+        return None
+    try:
+        tokens = shlex.split(tool_input.get("command", "") or "")
+    except ValueError:
+        return None
+
+    shape: list = []
+    at_cmd, words = True, 0
+    for t in tokens:
+        if t in _SHAPE_SEPS or t.endswith(";"):
+            shape.append(";")
+            at_cmd, words = True, 0
+            continue
+        if at_cmd:
+            name = os.path.basename(t)
+            shape.append(name if _SHAPE_WORD.match(name) else "?")
+            at_cmd, words = False, 0
+            continue
+        if t.startswith("--"):
+            flag = t.split("=", 1)[0]
+            shape.append(flag if _SHAPE_LONG_FLAG.match(flag) else "--?")
+            words = 99          # what follows a flag is its VALUE
+        elif t.startswith("-"):
+            # A SHORT flag can carry its value attached and unseparated
+            # (`-p<password>`, `-uroot`), and that form passes any
+            # "looks like a flag" pattern — the leak this keeps out.
+            # Only the letter survives; one character cannot be a secret.
+            shape.append(f"-{t[1]}" if t[1:2].isalnum() else "-?")
+            words = 99
+        elif words < 2 and _SHAPE_WORD.match(t):
+            shape.append(t)
+            words += 1
+        else:
+            words = 99          # first operand ends the subcommand run
+    return " ".join(shape)[:_SHAPE_MAX] or None
+
 
 _GIT_RE = re.compile(r"\b(git|gh)\b")
 _PUSH_RE = re.compile(r"\bpush\b")
@@ -370,6 +455,82 @@ if __name__ == "__main__" and "--test" in sys.argv:
         del os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"]
         os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
         _reset_policy_cache()
+
+    # ── command_shape: the discriminator, and the secrets it must not
+    # carry. Expectations derived from what the fire-rate review needs
+    # to ANSWER (which arm fired) and from what the log must never
+    # become (a plaintext secret store) — not from the implementation.
+    def S(cmd, tool="Bash"):
+        return command_shape({"tool_name": tool,
+                              "tool_input": {"command": cmd}})
+
+    # (i) THE motivating case: the two records that were identical
+    poison = "git remote set-url --push origin https://tok@host/r.git"
+    assert S(poison) == "git remote set-url --push", S(poison)
+    assert S("git push origin main") != S(poison)
+    assert S("gh pr create --push") == "gh pr create --push"
+    # (ii) operands dropped, flags kept, `=value` stripped
+    assert S("git commit -m 'a long secret message'") == "git commit -m"
+    assert S("git config --unset-all remote.origin.pushurl") == \
+        "git config --unset-all"
+    assert S("curl --header=Authorization:Bearer-xyz https://h/p") == \
+        "curl --header"
+    # (iii) SECRETS NEVER SURVIVE — the load-bearing claim, one case
+    # per carrier shape. Each string below must be absent from the
+    # shape entirely.
+    for cmd, secret in [
+        (poison, "tok"),
+        ("git commit -m 'password is hunter2'", "hunter2"),
+        ("mysql -phunter2 -u root", "hunter2"),
+        ("curl -H 'Authorization: Bearer sk-abc123' https://h", "sk-abc123"),
+        ("curl https://user:pw@host/path", "pw"),
+        ("SECRET=abc123 git push", "abc123"),
+        ("aws s3 cp /home/g/private/keys.txt s3://b", "keys"),
+        ("git clone https://x-token:ghp_AAA@github.com/o/r", "ghp_AAA"),
+        ("echo 'ssh-rsa AAAAB3Nza' >> ~/.ssh/authorized_keys", "AAAAB3Nza"),
+    ]:
+        got = S(cmd) or ""
+        assert secret not in got, f"LEAK: {secret!r} survived in {got!r}"
+    # (iii-b) PROPERTY, stronger than any case list: every emitted
+    # token is a separator, a degraded marker, a safe word, or a
+    # normalized flag. A secret can therefore only survive by BEING
+    # one of those — which the case list above pins separately.
+    _ok = {";", "?", "-?", "--?"}
+    for cmd in [
+        poison, "mysql -phunter2 -u root", "SECRET=abc123 git push",
+        "curl -H 'Bearer sk-AAA' https://u:pw@h/p?t=SEKRET#frag",
+        "psql 'postgres://u:p@h:5432/db' -c 'SELECT 1'",
+        "docker run -e API_KEY=sk-XYZ img:tag /bin/sh -c 'echo $X'",
+        "ssh -i ~/.ssh/id_ed25519 deploy@10.0.0.1 'sudo rm -rf /srv'",
+        "openssl enc -aes-256-cbc -k Passw0rd! -in a -out b",
+        "git -c http.extraHeader='Authorization: Basic QUJD' push",
+        "find / -name '*.pem' -exec cat {} \\;",
+        "printf '%s' \"$TOKEN\" | gh auth login --with-token",
+    ]:
+        for tok in (S(cmd) or "").split():
+            assert (tok in _ok or _SHAPE_WORD.match(tok)
+                    or _SHAPE_LONG_FLAG.match(tok)
+                    or (len(tok) == 2 and tok[0] == "-"
+                        and tok[1].isalnum())), \
+                f"unconstrained token {tok!r} from {cmd!r}"
+    # (iv) command position hardened: env prefixes and paths
+    assert S("SECRET=abc123 git push").startswith("?")
+    assert S("/usr/local/bin/git push") == "git push"      # basename
+    # (v) sequencing preserved, so a fused command stays readable
+    assert S("git commit -m x && git push") == "git commit -m ; git push"
+    # (vi) non-Bash: dispatch tools report routing, others nothing
+    assert command_shape({"tool_name": "Agent", "tool_input": {
+        "subagent_type": "general-purpose", "model": "fable"}}) == \
+        "general-purpose fable"
+    assert command_shape({"tool_name": "Write",
+                          "tool_input": {"file_path": "/secret/x"}}) is None
+    assert command_shape({"tool_name": "SendMessage"}) is None
+    # (vii) degenerate input never raises
+    assert S("") is None
+    assert S("git config --get x 'unterminated") is None   # unparseable
+    assert command_shape({}) is None
+    assert len(S("git " + " ".join(f"--flag{i}" for i in range(60))) or "") \
+        <= _SHAPE_MAX
 
     print("_dispatch_common: all tests passed")
     sys.exit(0)

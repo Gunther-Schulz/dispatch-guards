@@ -7,40 +7,6 @@ are dropped with a one-line reason.
 
 ## Open
 
-- **PARKED 2026-08-06 — the fire log cannot answer the question the
-  fire-rate review asks it.** `_dispatch_common.fire_log` records
-  `ts, guard, mode, session_id, agent_id, tool_name, reason` — and
-  `reason` is a CONSTANT string per guard lane (verified against a
-  live fire: every push-claim-reminder record carries the same
-  sentence). So the log proves a lane fired and never what it fired
-  ON. A reviewer asking "is this lane firing on legitimate work?" —
-  the promotion criterion for every staged lane, and the standing
-  false-fire check for shipped ones — cannot compute it from the
-  log; they can only count.
-
-  *Grounding.* Today's `--push` false fire (`git remote set-url
-  --push` denied as a push) had been live since the `--push` arm was
-  minted. The fire log had been recording those fires the whole
-  time, and could not have surfaced them: every record read
-  identically to a legitimate push. It was found by accident, when
-  probe commands in an unrelated session tripped the hook and the
-  reason text did not match the command that caused it.
-
-  *Candidate fix.* Add a truncated triggering command (or the
-  tool_input digest) to the record — one field, `_REASON_MAX`-style
-  cap, same fail-open write path.
-
-  *NAMED MISSING DECISION — this is why it is parked, not ready.*
-  Bash commands routinely carry secrets (tokens in URLs, `env`
-  assignments, here-doc bodies) and the log is a plaintext file
-  outside any repo. Recording commands changes what that file is.
-  Three exits, operator's call: (a) log the command truncated and
-  accept the exposure; (b) log only a shape digest — the matched
-  arm plus the git subcommand — enough to separate false fires
-  without carrying payload; (c) leave it and accept that false-fire
-  rates are found by accident. (b) is the recommendation: it answers
-  the review's actual question and carries no secret material.
-
 - **PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a
   missing dependency tree (hang, not error).** The skill already has
   the section this belongs to — `plugin/skills/worktree/SKILL.md:87`,
@@ -108,4 +74,15 @@ are dropped with a one-line reason.
 
 ## Done
 
-_(none yet)_
+- **DONE 2026-08-06 — fire-log blindness: the `shape` field.**
+  Parked on the secrets-vs-usefulness decision; operator chose (b),
+  the shape digest. `_dispatch_common.command_shape` now records a
+  secret-free discriminator on every fire — verbs and flags only,
+  operands dropped. The absence claim is pinned two ways: a case
+  list per secret-carrier shape, and a property that constrains the
+  OUTPUT ALPHABET (every emitted token is a separator, a degraded
+  marker, a safe word, or a normalized flag), so a secret can only
+  survive by being one of those. Both went red first — the case
+  list caught `mysql -phunter2`, where the attached short-flag
+  value passes any looks-like-a-flag pattern.
+

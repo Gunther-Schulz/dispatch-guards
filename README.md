@@ -55,9 +55,19 @@ already run on this machine).
 Every guard fire — deny, ask, warn, block — appends one JSONL line
 to `~/.local/share/claude/dispatch-guards-fires.jsonl`
 (`$CLAUDE_DISPATCH_GUARDS_FIRELOG` override): ts, guard, mode,
-session/agent, truncated reason. Consumers: the fire-rate review
-(fire rates become countable instead of remembered) and warn→deny
-promotion decisions.
+session/agent, shape, truncated reason. Consumers: the fire-rate
+review (fire rates become countable instead of remembered) and
+warn→deny promotion decisions.
+
+`shape` is what makes a fire *separable*: `reason` is constant per
+lane, so counting fires never distinguished a false one from a true
+one. It is a secret-free digest — verbs and flags only, operands
+dropped, long flags stripped of any `=value` and short flags reduced
+to their letter (a short flag can carry its value attached). So
+`git remote set-url --push origin https://tok@host/r.git` logs as
+`git remote set-url --push`, and `mysql -phunter2 -u root` as
+`mysql -p -u`. Dispatch tools log their routing fields instead;
+Write/Edit and SendMessage log no shape.
 
 Per-guard modes via the `guard_modes` config key
 (`{"<guard>": "deny"|"warn"|"off"}`): a lane in `warn` emits a
