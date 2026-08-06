@@ -77,6 +77,12 @@ done
 # 3. The devbook-form detector's own tests.
 python3 plugin/skills/executor/scripts/check_devbook_form.py --test
 
+# 3b. Doc-vs-mechanism drift: the guard roster, the shipped skills,
+#     the §2 report slots and the policy schema are each stated in
+#     both prose and a mechanism. Proven red on the two real
+#     omissions the 2026-08-06 review found by reading.
+python3 tools/check-doc-drift.py
+
 # 4. Manifests parse, and corpus markdown stays inside 69 columns.
 python3 -c "import json;[json.load(open(f)) for f in \
   ['plugin/.claude-plugin/plugin.json','.claude-plugin/marketplace.json']]"

@@ -240,7 +240,11 @@ satisfied by construction:
     <facts the executor may trust, each with its basis>
 
     ## The settled design — implement exactly this, do not redesign
-    <every decision already made, incl. placement and naming>
+    <every decision already made, incl. placement and naming —
+    enumerated from the round that settled them, none carried in
+    memory: a decision the dispatcher recalls but never writes is
+    not in the brief, and the executor cannot miss what it never
+    received>
 
     ## Verifier (in order; real output pasted in the report)
     1. <red-first bite>  2. <suites>  3. <live or corpus check>
