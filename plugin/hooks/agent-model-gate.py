@@ -290,13 +290,16 @@ def main() -> int:
             "passieren dieses Gate NICHT einzeln und erben ohne "
             "model-Override das Session-Modell — in einer Fable-Session "
             "ein ungegateter Fable-Fan-out. Vor dem GO: model-Overrides "
-            "im Script prüfen." + undelivered_note(payload)
+            "im Script prüfen." + undelivered_note(payload),
+            source="dispatch-guards/agent-model-gate", payload=payload,
         )
     if payload.get("tool_name") not in ("Agent", "Task"):
         return 0
     tool_input = payload.get("tool_input") or {}
     error = check(tool_input)
     if error:
+        from _dispatch_common import fire_log
+        fire_log("dispatch-guards/agent-model-gate", "block", error, payload)
         print(error, file=sys.stderr)
         return 2  # blocking; stderr goes back as feedback to the main agent
     if grund := escalation_deny(payload):
@@ -308,7 +311,8 @@ def main() -> int:
             "komparativer Vorteil laut CLAUDE.md: Fresh-Context-Verdikt "
             "auf begrenztem Artefakt. Die Entscheidung ist getroffen — "
             "abbrechen, wenn der Einsatz sie nicht rechtfertigt."
-            + undelivered_note(payload)
+            + undelivered_note(payload),
+            source="dispatch-guards/agent-model-gate", payload=payload,
         )
     return 0
 
