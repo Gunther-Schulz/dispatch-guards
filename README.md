@@ -29,9 +29,34 @@ not — this plugin carries both sides.
 | `message-payload-gate` | PreToolUse SendMessage | denies oversized string messages from a subagent to its dispatcher — payload belongs in a file, the message carries the pointer: an injected payload occupies the dispatcher's context for the rest of the session (and has coincided with full prompt-cache rewrites); dispatcher→subagent stays free |
 | `dispatch-log` | PostToolUse Agent\|Task | appends one mechanical JSONL line per dispatch (`~/.local/share/claude/dispatch-log.jsonl`, `$CLAUDE_DISPATCH_LOG` override) |
 | `discovery-volume-reminder` | PostToolUse Bash\|Grep\|Glob | advisory line when a search result ≥ `discovery_volume_bytes` lands in main-session context — the discovery-dispatch routing rule may apply; measures the harness's `persistedOutputSize`, since the hook-visible body is truncated |
+| `report-form-gate` | PreToolUse SendMessage | **staged, default-warn** — a report-shaped subagent message (≥4 distinct `(a)`–`(h)` slot markers) missing required §2 slots a–g fires naming them; read-only (verifier/discovery) returns carry no markers and pass untouched |
+| `writer-claims-gate` | PreToolUse+PostToolUse Write\|Edit | **staged, default-warn** — PostToolUse records subagent write claims (TTL `write_claim_ttl_hours`); PreToolUse fires on a cross-agent same-file write, and reminds (never denies) the main session when a live subagent claimed the file (§4 mirror duty). Claims store: `~/.local/share/claude/write-claims.jsonl` (`$CLAUDE_DISPATCH_GUARDS_CLAIMS` override) |
 
 All guards fail open on hook-input parse errors and ship a `--test`
 bite-test (`python3 hooks/<guard>.py --test`).
+
+## Fire log, guard modes, and the replay bench
+
+Every guard fire — deny, ask, warn, block — appends one JSONL line
+to `~/.local/share/claude/dispatch-guards-fires.jsonl`
+(`$CLAUDE_DISPATCH_GUARDS_FIRELOG` override): ts, guard, mode,
+session/agent, truncated reason. Consumers: the fire-rate review
+(fire rates become countable instead of remembered) and warn→deny
+promotion decisions.
+
+Per-guard modes via the `guard_modes` config key
+(`{"<guard>": "deny"|"warn"|"off"}`): a lane in `warn` emits a
+visible "would DENY" additionalContext line and logs, but does not
+block — new speculative lanes ship default-warn and earn `deny`
+through the fire-rate review against the log.
+
+`tools/replay-bench.py` replays a curated corpus
+(`tools/corpus/guards.jsonl`) of hook-input payloads through the
+real guard scripts end-to-end (stdin → stdout JSON) and fails on
+any missed catch or false fire — including the historical
+false-fire regressions. It is both the deny-arm regression net and
+the catch-rate/false-fire measurement; stateful guards
+(writer-claims) carry their e2e inside their own `--test` instead.
 
 ## Mechanism vs. policy
 
@@ -47,7 +72,9 @@ generic reminder wording). Site policy lives in
   "ask_models": ["fable"],
   "discipline_doc": "dispatch skill",
   "max_message_chars": 3000,
-  "discovery_volume_bytes": 50000
+  "discovery_volume_bytes": 50000,
+  "guard_modes": {"writer-claims-gate": "warn"},
+  "write_claim_ttl_hours": 6
 }
 ```
 
@@ -66,6 +93,12 @@ generic reminder wording). Site policy lives in
   messages (default 3000).
 - `discovery_volume_bytes` — discovery-volume-reminder threshold for
   main-session search results (default 50000).
+- `guard_modes` — per-guard deny-lane mode (`deny`/`warn`/`off`);
+  unset guards keep their shipped default (`deny` for the
+  established gates, `warn` for the staged report-form and
+  writer-claims lanes).
+- `write_claim_ttl_hours` — writer-claims freshness window
+  (default 6).
 
 ## Install
 
