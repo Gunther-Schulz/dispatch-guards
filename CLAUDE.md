@@ -38,6 +38,14 @@ are not — this repo carries both sides, and the split is the design.
 
 ## Role files
 
+- `LEDGER.md` — the on-disk ledger: one entry per line, append-only,
+  chronological; facts with basis, decisions with their why, open
+  questions. Read its tail before re-deriving anything that may be
+  settled; append there rather than leaving a rationale only in a
+  commit message. Added 2026-08-06, reversing this file's former
+  "no `LEDGER.md`" deviation — that deviation's own revisit condition
+  ("if multi-session work here starts re-deriving settled ground")
+  fired when multi-session corpus work began running in this repo.
 - `BACKLOG.md` — parked items (each with its named missing evidence)
   and ready items (decision-complete, dispatchable).
 - `dev-notes/` — the maintenance layer, never loaded by operational
@@ -50,11 +58,6 @@ are not — this repo carries both sides, and the split is the design.
   payload corpus.
 - `README.md` — humans deciding whether to install; the guard roster
   and the site-policy schema live there.
-- **Declared deviation:** no `LEDGER.md`. Decisions land in commit
-  messages and `dev-notes/`; the work is single-repo and
-  short-horizon, so a separate ledger would duplicate the backlog.
-  Revisit if multi-session work here starts re-deriving settled
-  ground.
 
 ## Verify
 
