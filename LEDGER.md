@@ -56,7 +56,7 @@ before that date is deliberately sparse rather than complete.
   already suspects what to look for, which is exactly what a
   re-deriving session does not have.
 
-- **2026-08-06 — OPEN QUESTION: `EXECUTION_TAIL_BG` (brief-reminder.py
+- **2026-08-06 — RULED (was OPEN; see the closing clause): `EXECUTION_TAIL_BG` (brief-reminder.py
   :414) and the EXECUTION tail in `plugin/skills/dispatch/references/`
   `forms.md:108` have really diverged, and the commissioned drift
   detector was HALTED rather than shipped.** Measured under the
@@ -72,3 +72,20 @@ before that date is deliberately sparse rather than complete.
   the whole block (what `brief-reminder._norm` does, and why); and how
   the placeholder line maps. Both files sit outside the halted
   dispatch's write boundary, so the drift itself is also unrepaired.
+  RULED 2026-08-06, same day, by the dispatching session: the
+  whole-block whitespace-insensitive comparison, with the documented
+  background channel line substituted for `<channel line>` — but in
+  repair-first order, because the baseline is currently red for real
+  reasons: sync the literal to the shipped tail (keeping the
+  deliberate independent-copy design), THEN build the detector, THEN
+  red-proof by mutation against a now-green baseline, and give
+  `tools/check-doc-drift.py`'s `main()` the could-not-verify third
+  outcome it lacks. Carrier of the full ruling and its grounding:
+  `dotfiles claude/BACKLOG.md`, commit `6889d12` — a sibling repo a
+  fresh context here does not load, which is why the ruling is
+  restated on this entry rather than pointed at. Severity correction
+  belonging with it: `EXECUTION_TAIL_BG` sits inside
+  `if __name__ == "__main__"` (brief-reminder.py:371), so it is a TEST
+  FIXTURE and was never emitted to an agent — the consequence is that
+  this guard's bite-tests pass against a tail shape the form no longer
+  produces, which is the frozen-fixture class, not misinstruction.

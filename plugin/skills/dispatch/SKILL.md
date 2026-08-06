@@ -137,8 +137,8 @@ Mandatory parts (execution briefs):
     live push is never the diagnostic. The claim log is its own
     invocation, never chained with the push: a read-then-decide
     seam collapses when the decision is pre-committed in the same
-    compound command (the push-composition guard denies the fused
-    form; this rule covers the variants it cannot see).
+    compound command (push-claim-reminder's FUSED-PUSH DENY lane
+    denies that form; this rule covers the variants it cannot see).
   - **Escalation ladder for overlapping file sets** — overlap counts
     any agent's READ-OR-EXECUTE set against another's write set, not
     only write against write: a probe executing a file a co-writer is
@@ -181,13 +181,19 @@ Mandatory parts (execution briefs):
   - **The base commit is STATED in the brief, never discovered.**
     Either flavor cuts its base from SPAWN-TIME state, so the brief
     states the required base commit and the executor's first act
-    verifies it (`git merge-base --is-ancestor <base> HEAD`).
-    Divergence has two directions, and they are different states:
-    HEAD BEHIND the stated base over a clean tree takes the one
-    sanctioned recovery, a fast-forward to the base; HEAD AHEAD of
-    or forked from it means foreign work is present — halt and
-    report the foreign commits as a gap, never a silent rebase or
-    a base discovered by guesswork.
+    verifies it — with TWO reads, because one does not separate the
+    states: `git merge-base --is-ancestor <base> HEAD` (does HEAD
+    contain the base?) and `git log --oneline <base>..HEAD` (what
+    landed on top?). Three states, not two: base contained and
+    nothing on top is the clean start; base NOT contained means
+    behind or forked, and a clean tree there takes the one
+    sanctioned recovery, a fast-forward to the base; base contained
+    WITH commits on top means foreign work is present — halt and
+    report those commits as a gap. The ancestor check alone returns
+    SUCCESS for that last state, which is the one most worth
+    catching. Any other state — a dirty tree over a stale base,
+    anything unlisted — halts as a gap too: never a silent rebase,
+    never a base discovered by guesswork.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
@@ -205,10 +211,12 @@ Mandatory parts (execution briefs):
   plausible guess — a gap filled silently is designed at the executing
   tier, the exact failure the tier choice was meant to avoid
   (source: CLAUDE.md).
-- **Checker briefs map absence by RULE, not enumeration.** A brief
-  commissioning a checker states how absence maps ("any list
-  defect is could-not-verify") as one rule; an enumeration of
-  foreseen defect cases leaves every unforeseen absence to be
+- **A commissioned instrument maps absence by RULE, not
+  enumeration.** A brief commissioning anything that returns a
+  verdict — a check, a review, a survey — states how absence maps
+  as ONE rule ("whatever the instrument cannot read is
+  could-not-verify"); an enumeration of the absences the
+  dispatcher happened to foresee leaves every other one to be
   re-judged at the executing tier — the same judgment, remade
   without the design context.
 - **Guarded write paths pre-name their gate.** Where the brief's
@@ -298,20 +306,21 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   disposition-ID set difference empty before the table closes:
   anneal-framework development-process.md practice 11; source
   label.)
-- **Verdict stages route to tier ≥ producer; under-bar output redoes
-  one tier up.** Producer = the highest tier whose judgment is in the
+- **Verdict stages route to tier ≥ producer, capped at the operator's
+  reviewer default; under-bar output redoes one tier up.**
+  Producer = the highest tier whose judgment is in the
   artifact, not the tier that executed it — a brief authored at tier N
   makes N the producer, whoever implemented it. Same-tier review
   catches slips, not judgment errors (verdicts have flipped only under
   a smarter or fresh reviewer; discovery shows no tier sensitivity),
   and redoing one tier up has been the cheap correction. (Source:
-  CLAUDE.md routing evidence.) The ≥ rule caps at the operator's
-  reviewer default: fresh-context review runs at the operator-named
-  default reviewer tier even over artifacts authored ABOVE it — a
-  fresh context removes self-blindness, not the judgment ceiling,
-  and review above the default is an operator-named exception,
-  never a tier-rule inference (source: CLAUDE.md model routing,
-  which names the current default). A verdict that decomposes into
+  CLAUDE.md routing evidence.) The cap: fresh-context review runs at
+  the operator-named default reviewer tier even over artifacts
+  authored ABOVE it — a fresh context removes self-blindness, not the
+  judgment ceiling, and review above the default is an operator-named
+  exception, never a tier-rule inference (source: CLAUDE.md model
+  routing, which names the current default). A verdict that
+  decomposes into
   exhaustive mechanical enumeration plus judgment over the
   enumeration routes the ENUMERATION to a cheaper tier — that half
   is discovery — briefed with the enumeration-brief form
