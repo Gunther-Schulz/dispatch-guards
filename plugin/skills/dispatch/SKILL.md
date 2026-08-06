@@ -154,8 +154,8 @@ Mandatory parts (execution briefs):
     first's commit lands, ordering stated in the brief) or serialize
     the dispatches; (2) real parallelism wanted despite overlap →
     per-agent git WORKTREES. Portable git mechanics — shared-config
-    hazards, push-denial (per-worktree pushurl poison, never
-    remote-remove), the hook-env GIT_DIR redirection class,
+    hazards, push-denial (per-worktree pushurl poison, never the
+    `git remote` porcelain), the hook-env GIT_DIR redirection class,
     hooks-reach asymmetry, provisioning probes, the config-hash
     integrity check — live in this plugin's sibling `worktree` SKILL
     (single source; this recipe carries only the dispatch-specific

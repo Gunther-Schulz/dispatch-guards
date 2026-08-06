@@ -235,11 +235,25 @@ def is_push_command(cmd: str) -> bool:
     2026-08-01 false-fire class: a standing commit-message line ("rides
     the next code push") fired the reminder on every commit of a repo,
     and the same substring match would false-DENY a subagent's commit —
-    a deny on legitimate work trains the override reflex. A `push` token
-    directly after `stash` is the purely-local `git stash push` —
-    exempt. Unparseable quoting falls back to the substring match
-    (fires; a guard unsure of what it reads stays loud, both consumers
-    are deny/remind). Accepted residue unchanged: unquoted standalone
+    a deny on legitimate work trains the override reflex.
+
+    Two exemptions, each a token that reads as a push and is not one:
+
+    - a `push` directly after `stash` — the purely-local `git stash push`.
+    - a `--push` anywhere after a `remote` token — `git remote set-url
+      --push` is a CONFIG WRITE, not a push. The `--push` arm exists for
+      `gh pr create --push`; its only other real git referent is that
+      set-url form, so before the exemption the arm denied a subagent's
+      config write with a push-discipline message, and reminded the main
+      session of a claim check for a command that publishes nothing.
+      (What that command DOES warrant — it rewrites the shared config
+      from a worktree — is worktree-config-gate's lane.) Scoped to the
+      token, not the command: `git remote set-url --push … && git push`
+      still matches on the later bare `push`.
+
+    Unparseable quoting falls back to the substring match (fires; a
+    guard unsure of what it reads stays loud, both consumers are
+    deny/remind). Accepted residue unchanged: unquoted standalone
     `push` words (`git log --grep push`) still match; deliberate
     obfuscation stays the session-cut check's net."""
     try:
@@ -250,8 +264,13 @@ def is_push_command(cmd: str) -> bool:
     if not any(t in ("git", "gh") for t in tokens):
         return False
     prev = ""
+    seen_remote = False
     for t in tokens:
-        if (t == "push" and prev != "stash") or t == "--push":
+        if t == "remote":
+            seen_remote = True
+        if t == "push" and prev != "stash":
+            return True
+        if t == "--push" and not seen_remote:
             return True
         prev = t
     return False

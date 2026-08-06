@@ -86,6 +86,14 @@ if __name__ == "__main__":
         # mentions push must not be denied — a false deny on legitimate
         # work trains the override reflex.
         assert check({**sub, "tool_input": {"command": 'git commit -m "unpushed, dispatcher will push"'}}) is None
+        # regression: `git remote set-url --push` is a CONFIG WRITE, not
+        # a push. Denying it here answered a worktree shared-config
+        # hazard with a push-discipline message; worktree-config-gate
+        # owns that lane now. Red on the pre-exemption matcher.
+        assert check({**sub, "tool_input": {"command": "git remote set-url --push origin file:///dev/null/nowhere"}}) is None
+        assert check({**sub, "tool_input": {"command": "git remote add upstream https://example.invalid/r.git"}}) is None
+        # but the exemption is token-scoped, not command-scoped
+        assert check({**sub, "tool_input": {"command": "git remote set-url --push origin /dev/null && git push"}}) is not None
         print("subagent-push-gate: all tests passed")
         sys.exit(0)
     sys.exit(main())

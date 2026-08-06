@@ -167,6 +167,12 @@ if __name__ == "__main__":
         # fire; this repo's standing hold-line fired on every commit.
         assert check({**main_s, "tool_input": {"command": 'git commit -m "held — rides the next code push"'}}) is None
         assert check({**main_s, "tool_input": {"command": "chmod +x hooks/push-claim-reminder.py && git add hooks/push-claim-reminder.py && git commit -m x"}}) is None
+        # regression: `git remote set-url --push` publishes nothing, so a
+        # claim check is the wrong prompt for it (its real hazard —
+        # rewriting shared config from a worktree — is
+        # worktree-config-gate's). Red on the pre-exemption matcher.
+        assert check({**main_s, "tool_input": {"command": "git remote set-url --push origin file:///dev/null/nowhere"}}) is None
+        assert check({**main_s, "tool_input": {"command": "git remote set-url --push origin /dev/null && git push"}}) is not None
 
         # ── Fused-push deny lane (claim-check-degradation class) ────
         # Expectation derived from the rule, not from this hook: the

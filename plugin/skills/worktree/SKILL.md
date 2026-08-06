@@ -27,16 +27,21 @@ git config extensions.worktreeConfig true   # once per repository
 git -C <worktree> config --worktree <key> <value>
 ```
 
-`git remote remove` in a worktree removes the remote from the whole
-repository — remotes are shared. For push denial on an isolated
-worktree, poison per-worktree instead, for every remote the repo
-declares:
+`git remote` has no `--worktree` form: every subcommand writes the
+shared config, so any of them run in a worktree reconfigures the
+whole repository — `remove` strips the remote from every checkout,
+`set-url --push` redirects the main clone's own pushes. For push
+denial on an isolated worktree, poison per-worktree instead, for
+every remote the repo declares:
 
 ```sh
 git -C <worktree> config --worktree remote.<name>.pushurl file:///dev/null/nowhere
 ```
 
 Worktree pushes then fail while the main checkout pushes untouched.
+Repair, once a `git remote` write has already escaped — from the
+main checkout: `git config --unset-all remote.<name>.pushurl`, then
+confirm with `git remote get-url --push <name>`.
 
 ## The hook environment redirects child git processes
 

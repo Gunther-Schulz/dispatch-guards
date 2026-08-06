@@ -36,6 +36,38 @@ enforcement structure. No capability patches as of minting.
   reboot ("already used by worktree"); a native-isolation probe found
   five stale worktree branches holding un-integrated commits. →
   "Hooks-reach" chaining pattern + "Cleanup and litter".
+- 2026-08-06 — SECOND instance of the 2026-07-30 shared-remote class,
+  a different verb: `git remote set-url --push <remote> <dev-null>`,
+  reached for in a worktree as the obvious way to deny push there,
+  wrote `remote.<name>.pushurl` to the shared config and redirected
+  the MAIN clone's pushes. Measured in a scratch repo: `git remote`
+  has no `--worktree` form (`unknown option 'worktree'`), every
+  subcommand writes shared config; the prescribed
+  `config --worktree remote.<name>.pushurl` lands in
+  `.git/worktrees/<name>/config.worktree` and leaves main untouched;
+  `git config --unset-all remote.<name>.pushurl` repairs. Diagnosis:
+  the rule was LOADED-BUT-INERT in the enumerated direction — the
+  section named `remote remove` as the instance, so a reader who knew
+  the right recipe still had no rule covering the sibling verb. Fix
+  was to WIDEN to the porcelain (`git remote` has no `--worktree`
+  form; `remove` and `set-url --push` demoted to examples), not to
+  extend a list — plus the repair line, which the incident session
+  needed and the section did not carry. → "Config writes" section;
+  the compressed restatement in the dispatch skill's worktree pointer
+  ("never remote-remove" → "never the `git remote` porcelain") was
+  audited and widened in the same pass.
+- 2026-08-06 — guard-side finding from the same incident, found by
+  accident when probe commands tripped this repo's own hooks: the
+  shared `is_push_command` matched `git remote set-url --push` on its
+  `--push` arm (minted for `gh pr create --push`). So a config write
+  was DENIED to subagents with a push-discipline message, while
+  `git remote remove` — the genuinely destructive shared-state write
+  of the founding incident — passed silently. Fires on a non-defect
+  and misses the defect, in one matcher. → `--push` arm exempted
+  after a `remote` token (token-scoped, so a real push later in the
+  same invocation still matches), and the vacated lane replaced by
+  `worktree-config-gate` (default-warn), which fires on the
+  config-write SHAPE only when git itself reports a linked worktree.
 - Exoneration method that closed the config-corruption attribution:
   config md5 before/after around each suspect mechanism — one command,
   decisive per suspect. → "Integrity check" section.
