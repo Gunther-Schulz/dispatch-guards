@@ -15,6 +15,13 @@ question was unobservable, not unasked. The escalation lane in
 agent-model-gate denies the expensive case; this field is how its
 fire-rate (and any nesting at all) becomes visible at review time.
 
+Why work_repo (2026-08-06): `cwd` is the DISPATCHING session's
+directory, not the work's — a dispatch into a sibling repo records
+the dispatcher's cwd, so "which repo was this work in?" was not
+answerable from the log. The field carries the working-copy path the
+brief names (§1 skeleton's `Working copy:` line), or null when the
+prompt does not name one — never a guess.
+
 Data home is OUTSIDE any git repo (log data never gets committed):
 $CLAUDE_DISPATCH_LOG > $XDG_DATA_HOME/claude/dispatch-log.jsonl >
 ~/.local/share/claude/dispatch-log.jsonl.
@@ -38,6 +45,33 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 _TITEL_MAX = 80
+_WORK_REPO_MARKER = "Working copy:"
+_WORK_REPO_CUT = " Base check:"
+
+
+def arbeits_repo(prompt: object) -> str | None:
+    """The working-copy path the dispatch prompt names, or None.
+
+    Sliced, never matched against a character class: a class that stops
+    at an unexpected byte (umlaut, space) yields a TRUNCATED path whose
+    negative verdict is indistinguishable from a legitimate finding
+    (_dispatch_common extraction standard). Failure to extract maps to
+    None (JSON null) — never a guess, never a partial path."""
+    if not isinstance(prompt, str):
+        return None
+    for zeile_text in prompt.splitlines():
+        stripped = zeile_text.strip()
+        if not stripped.startswith(_WORK_REPO_MARKER):
+            continue
+        rest = stripped[len(_WORK_REPO_MARKER):]
+        schnitt = rest.find(_WORK_REPO_CUT)
+        if schnitt != -1:
+            rest = rest[:schnitt]
+        rest = rest.strip()
+        if rest.endswith("."):
+            rest = rest[:-1]
+        return rest or None
+    return None
 
 
 def log_pfad() -> Path:
@@ -58,6 +92,7 @@ def zeile(payload: dict) -> dict | None:
         "session_id": payload.get("session_id"),
         "von_agent": payload.get("agent_id"),  # None = main session
         "cwd": payload.get("cwd"),
+        "work_repo": arbeits_repo(ti.get("prompt")),
         "tool": payload.get("tool_name"),
         "name": ti.get("name"),
         "modell": ti.get("model"),
@@ -104,6 +139,39 @@ if __name__ == "__main__":
             "tool_input": {"description": "sonnet: x", "model": "sonnet"},
         })
         assert rec_sub is not None and rec_sub["von_agent"] == "a1"
+        # Work repo (2026-08-06): cwd is the DISPATCHER's directory, so
+        # the work's repo is only in the record if the brief's
+        # `Working copy:` line is extracted. Expectations derived from
+        # the dispatch skill §1 brief skeleton, not from this code.
+        rec_wr = zeile({
+            "tool_name": "Agent", "session_id": "s1", "cwd": "/elsewhere",
+            "tool_input": {"description": "d", "prompt":
+                           "Title: t\nWorking copy: /home/g/dev/"
+                           "Gunther-Schulz/dispatch-guards. Base check: "
+                           "git merge-base --is-ancestor 7ee9b35 HEAD\n"
+                           "Scratch: own scratchpad."},
+        })
+        assert rec_wr is not None
+        assert rec_wr["work_repo"] == ("/home/g/dev/Gunther-Schulz/"
+                                       "dispatch-guards"), rec_wr
+        # No such line → null, never a guess.
+        rec_nowr = zeile({
+            "tool_name": "Agent", "session_id": "s1", "cwd": "/elsewhere",
+            "tool_input": {"description": "d", "prompt": "Just do X."},
+        })
+        assert rec_nowr is not None and rec_nowr["work_repo"] is None
+        # Umlaut + space: the FULL path, asserted whole — a class-based
+        # extractor truncating at the first non-ASCII byte fails HERE,
+        # and its shorter value would resolve elsewhere silently.
+        rec_uml = zeile({
+            "tool_name": "Agent", "session_id": "s1", "cwd": "/elsewhere",
+            "tool_input": {"description": "d", "prompt":
+                           "Working copy: /home/g/dev/Öffentlich "
+                           "Planungsbüro/repo. Base check: x"},
+        })
+        assert rec_uml is not None
+        assert rec_uml["work_repo"] == ("/home/g/dev/Öffentlich "
+                                        "Planungsbüro/repo"), rec_uml
         with tempfile.TemporaryDirectory() as td:
             os.environ["CLAUDE_DISPATCH_LOG"] = td + "/sub/log.jsonl"
             import io
