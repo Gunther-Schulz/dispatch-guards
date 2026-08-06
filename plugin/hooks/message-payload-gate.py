@@ -27,7 +27,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny, is_subagent, policy  # noqa: E402
+from _dispatch_common import fire, is_subagent, policy  # noqa: E402
 
 DEFAULT_MAX = 3000
 
@@ -65,7 +65,9 @@ def main() -> int:
         return 0  # never fail the workflow on a hook parse error
     reason = check(payload)
     if reason:
-        deny(reason, source="dispatch-guards/message-payload-gate")
+        # mode-aware deny: logged, warn-stageable via guard_modes
+        fire(reason, source="dispatch-guards/message-payload-gate",
+             payload=payload)
     return 0
 
 

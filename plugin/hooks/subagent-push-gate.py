@@ -27,7 +27,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny, is_push_command, is_subagent  # noqa: E402
+from _dispatch_common import fire, is_push_command, is_subagent  # noqa: E402
 
 REASON = (
     "Push gate: subagents commit UNPUSHED — pushing is the dispatcher's "
@@ -55,7 +55,10 @@ def main() -> int:
         return 0  # never fail the workflow on a hook parse error
     reason = check(payload)
     if reason:
-        deny(reason, source="dispatch-guards/subagent-push-gate")  # prints exit-0 deny JSON and exits
+        # mode-aware deny: logged to the fire log, warn-stageable via
+        # guard_modes (harvest 2026-08-06)
+        fire(reason, source="dispatch-guards/subagent-push-gate",
+             payload=payload)
     return 0
 
 

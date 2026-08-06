@@ -48,7 +48,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny  # noqa: E402
+from _dispatch_common import fire  # noqa: E402
 
 _SOURCE = "dispatch-guards/dispatch-skill-gate"
 
@@ -159,7 +159,8 @@ def main() -> int:
     scan_path = resolve_scan_transcript(transcript_path,
                                         payload.get("agent_id", ""))
     if not skill_loaded(scan_path):
-        deny(deny_text(), source=_SOURCE)
+        # mode-aware deny: logged, warn-stageable via guard_modes
+        fire(deny_text(), source=_SOURCE, payload=payload)
     return 0
 
 
@@ -179,6 +180,9 @@ if __name__ == "__main__":
                 {"type": "tool_use", "name": name, "input": inp}]}}
 
         with tempfile.TemporaryDirectory() as d:
+            # keep the deny-path e2e runs below out of the REAL fire log
+            os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = \
+                os.path.join(d, "fires.jsonl")
             t = os.path.join(d, "session.jsonl")
 
             # RED: transcript without a skill load → not loaded.

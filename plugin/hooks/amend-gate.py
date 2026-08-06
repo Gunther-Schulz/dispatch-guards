@@ -60,7 +60,7 @@ import shlex
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny, doc_ref, is_subagent  # noqa: E402
+from _dispatch_common import doc_ref, fire, is_subagent  # noqa: E402
 
 
 def is_amend_command(cmd: str) -> bool:
@@ -130,7 +130,8 @@ def main() -> int:
         return 0  # never fail the workflow on a hook parse error
     reason = deny_check(payload)
     if reason:
-        deny(reason, source="dispatch-guards/amend-gate")  # prints exit-0 deny JSON and exits
+        # mode-aware deny: logged, warn-stageable via guard_modes
+        fire(reason, source="dispatch-guards/amend-gate", payload=payload)
     reminder = reminder_check(payload)
     if reminder:
         print(json.dumps({
