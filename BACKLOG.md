@@ -63,6 +63,15 @@ are dropped with a one-line reason.
   new heading), the ecosystem question is resolved by (a) or (b) with
   the choice stated, and the plugin is released and reload-verified.
 
+- **PARKED 2026-08-06 — harvest deferred list: two §2/§4 corpus
+  candidates** (status enum `DONE | DONE_WITH_CONCERNS | BLOCKED |
+  NEEDS_CONTEXT` for the closing report; bounded fix-loop with
+  breaker for dispatcher conduct). Full rationale + sources:
+  `dev-notes/harvest-2026-08-06.md`, "Deferred". Named trigger:
+  these are operational-corpus edits (forms.md §2 / SKILL.md §4)
+  and go through the anneal-dev protocol with an operator GO —
+  parked until that pass is convened, never folded in casually.
+
 ## Done
 
 _(none yet)_
