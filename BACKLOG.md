@@ -7,6 +7,40 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **PARKED 2026-08-06 — the fire log cannot answer the question the
+  fire-rate review asks it.** `_dispatch_common.fire_log` records
+  `ts, guard, mode, session_id, agent_id, tool_name, reason` — and
+  `reason` is a CONSTANT string per guard lane (verified against a
+  live fire: every push-claim-reminder record carries the same
+  sentence). So the log proves a lane fired and never what it fired
+  ON. A reviewer asking "is this lane firing on legitimate work?" —
+  the promotion criterion for every staged lane, and the standing
+  false-fire check for shipped ones — cannot compute it from the
+  log; they can only count.
+
+  *Grounding.* Today's `--push` false fire (`git remote set-url
+  --push` denied as a push) had been live since the `--push` arm was
+  minted. The fire log had been recording those fires the whole
+  time, and could not have surfaced them: every record read
+  identically to a legitimate push. It was found by accident, when
+  probe commands in an unrelated session tripped the hook and the
+  reason text did not match the command that caused it.
+
+  *Candidate fix.* Add a truncated triggering command (or the
+  tool_input digest) to the record — one field, `_REASON_MAX`-style
+  cap, same fail-open write path.
+
+  *NAMED MISSING DECISION — this is why it is parked, not ready.*
+  Bash commands routinely carry secrets (tokens in URLs, `env`
+  assignments, here-doc bodies) and the log is a plaintext file
+  outside any repo. Recording commands changes what that file is.
+  Three exits, operator's call: (a) log the command truncated and
+  accept the exposure; (b) log only a shape digest — the matched
+  arm plus the git subcommand — enough to separate false fires
+  without carrying payload; (c) leave it and accept that false-fire
+  rates are found by accident. (b) is the recommendation: it answers
+  the review's actual question and carries no secret material.
+
 - **PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a
   missing dependency tree (hang, not error).** The skill already has
   the section this belongs to — `plugin/skills/worktree/SKILL.md:87`,
