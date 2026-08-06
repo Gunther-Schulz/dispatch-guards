@@ -39,11 +39,11 @@ Section map — §§1, 4, 5, 6 are below; the rest load on demand:
 - §7 Codex / gpt-5.5 routing: `references/codex-routing.md` —
   only when `command -v codex` succeeds.
 
-Core finding (trial-day evidence 2026-07-17, operator-confirmed
-in operation 2026-07-23, restamped 2026-08-02: dispatch-log
-counts 183 dispatches over six days, verified green builds across
-tiers, every recorded failure traces to a brief defect, none to
-tier capacity; the log keeps accumulating for future restamps):
+Core finding (measured in operation, restamped 2026-08-02:
+dispatch-log counts 183 dispatches over six days, verified green
+builds across tiers, every recorded failure traces to a brief
+defect, none to tier capacity; the log keeps accumulating for
+future restamps):
 **template/roadmap-filling PASSES, free design FAILS** — the
 dispatcher's job is to remove design freedom, not to write longer
 prompts.
@@ -134,7 +134,11 @@ Mandatory parts (execution briefs):
     mid-verification work. Before pushing on a shared copy, `git log
     origin/<branch>..<branch>` and claim each commit; an unexpected
     commit halts the push — it is a question to answer first, and a
-    live push is never the diagnostic.
+    live push is never the diagnostic. The claim log is its own
+    invocation, never chained with the push: a read-then-decide
+    seam collapses when the decision is pre-committed in the same
+    compound command (the push-composition guard denies the fused
+    form; this rule covers the variants it cannot see).
   - **Escalation ladder for overlapping file sets** — overlap counts
     any agent's READ-OR-EXECUTE set against another's write set, not
     only write against write: a probe executing a file a co-writer is
@@ -177,10 +181,13 @@ Mandatory parts (execution briefs):
   - **The base commit is STATED in the brief, never discovered.**
     Either flavor cuts its base from SPAWN-TIME state, so the brief
     states the required base commit and the executor's first act
-    verifies it (`git merge-base --is-ancestor <base> HEAD`) — the
-    one sanctioned recovery on a stale base is a fast-forward to the
-    stated base over a clean tree; anything else halts as a gap,
-    never a silent rebase or a base discovered by guesswork.
+    verifies it (`git merge-base --is-ancestor <base> HEAD`).
+    Divergence has two directions, and they are different states:
+    HEAD BEHIND the stated base over a clean tree takes the one
+    sanctioned recovery, a fast-forward to the base; HEAD AHEAD of
+    or forked from it means foreign work is present — halt and
+    report the foreign commits as a gap, never a silent rebase or
+    a base discovered by guesswork.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
@@ -198,6 +205,17 @@ Mandatory parts (execution briefs):
   plausible guess — a gap filled silently is designed at the executing
   tier, the exact failure the tier choice was meant to avoid
   (source: CLAUDE.md).
+- **Checker briefs map absence by RULE, not enumeration.** A brief
+  commissioning a checker states how absence maps ("any list
+  defect is could-not-verify") as one rule; an enumeration of
+  foreseen defect cases leaves every unforeseen absence to be
+  re-judged at the executing tier — the same judgment, remade
+  without the design context.
+- **Guarded write paths pre-name their gate.** Where the brief's
+  write set crosses a mechanical gate (a rule-corpus path
+  demanding a same-turn skill invocation, a protected config), the
+  brief names the gate and how to satisfy it — an unwarned
+  executor meets the deny mid-dispatch and pays the remedy there.
 - **Schema-bearing external facts: raw source text only.** When the
   build depends on an external contract (API/hook schemas, wire
   formats, config semantics), the brief requires grounding on the RAW
@@ -217,7 +235,9 @@ Mandatory parts (execution briefs):
   the tier.** The register's consult-moment is HERE, at
   brief-writing — §6 defines the machinery, but a consult-sentence
   living only there sits outside the path dispatch-time eyes travel
-  (observed: dispatch runs with the register never opened).
+  (observed: dispatch runs with the register never opened). The
+  consult keys on the procedure CLASS of the work in the TARGET
+  repo, never on the dispatching session's cwd.
 
 **Brief skeleton (pasted, then filled).** The parts above are a
 checklist, not a shape: a free-composed brief satisfies them in
@@ -260,6 +280,11 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
 
 ## 4. Dispatcher duties (integration never delegates)
 
+- **A background dispatch carries an expected-return horizon,**
+  stated in the dispatching turn's final message, where its
+  passing is checkable. Silence past the horizon is a finding —
+  inspect or stop the agent, never more waiting. (Source:
+  CLAUDE.md dispatched-work rule.)
 - **Verify in the artifact, then integrate.** Run the tests, greps,
   renders YOURSELF before push/merge/publish. An agent's "done" is a
   claim, not a fact. (Source: CLAUDE.md dispatched-work rule.)
@@ -280,7 +305,13 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   catches slips, not judgment errors (verdicts have flipped only under
   a smarter or fresh reviewer; discovery shows no tier sensitivity),
   and redoing one tier up has been the cheap correction. (Source:
-  CLAUDE.md routing evidence.) A verdict that decomposes into
+  CLAUDE.md routing evidence.) The ≥ rule caps at the operator's
+  reviewer default: fresh-context review runs at the operator-named
+  default reviewer tier even over artifacts authored ABOVE it — a
+  fresh context removes self-blindness, not the judgment ceiling,
+  and review above the default is an operator-named exception,
+  never a tier-rule inference (source: CLAUDE.md model routing,
+  which names the current default). A verdict that decomposes into
   exhaustive mechanical enumeration plus judgment over the
   enumeration routes the ENUMERATION to a cheaper tier — that half
   is discovery — briefed with the enumeration-brief form

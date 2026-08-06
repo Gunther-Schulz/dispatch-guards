@@ -14,7 +14,14 @@ later guards join the invariant through their own --test
 parse-error bites; a broken guard must not brick every call, and
 the enforced rules keep their non-hook safety nets) — the bite-tests
 are the load-bearing compensation. Harness-dependent fields are
-environment bindings, stamped with an as-of date where used.
+environment bindings, stamped with an as-of date where used. A
+guard that EXTRACTS a value from its input (a path, an identifier)
+distinguishes "could not extract" from "extracted, and clean": a
+character class that silently truncates at an unexpected byte
+(umlauts, spaces) yields a value whose negative verdict is
+indistinguishable from a legitimate clean finding — extraction
+failure maps to could-not-verify (fail-open or WARN per the
+guard's error direction), never to a pass.
 
 Environment binding (as-of 2026-07-18, Claude Code hooks): a subagent
 context is marked by the presence of a non-empty `agent_id` field in the
