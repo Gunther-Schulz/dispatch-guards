@@ -156,6 +156,10 @@ payment model, and the day either moves this table is wrong while
 still reading as authoritative. That is the whole reason it is not a
 shipped default.
 
+The idea of scoring the tiers in a table like this comes from Theo
+(<https://t3.gg>); the axes, the numbers, and the use made of them
+here are this repo's own.
+
 Routing table, 1–10, higher is better. Lineup as of 2026-07-31;
 rankings as of 2026-07-18, unchanged pending operation evidence.
 
