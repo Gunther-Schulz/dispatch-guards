@@ -34,7 +34,13 @@ message just sent to that agent — its summary then shows PRE-message
 state, not current state: a minimal ping resumes the agent either way
 and disambiguates at the cost of one message; never re-send the full
 brief on a race, and never book the raced summary as where the agent
-actually is. Stalls, watchdog kills, and mid-stream API cuts take a
+actually is. The race's mirror sits at the lane's END: the
+lane-close message (§4's mirror duty) itself RESUMES the agent,
+which re-idles with nothing to do — that terminal idle is a closed
+lane's expected shape, not a signal: it books nothing and gets no
+reply, since each reply re-resumes the agent into another idle (a
+politeness loop; observed twice in one session, both after booked
+reports). Stalls, watchdog kills, and mid-stream API cuts take a
 STAGED path: peek at the task state, then RESUME the agent with a
 narrowed close-out instruction ("finish with the evidence you have")
 — kill-and-redispatch only after a resume fails, because a resume

@@ -82,3 +82,18 @@ planted control, since a byte-identical diff is a non-event a dead comparison
 also produces); the other flagged that one of its mutations had survived,
 meaning the bite file had a hole, rather than quietly adding the case. Neither
 would have surfaced in a free-composed report.
+
+## 2026-08-07 — mint: terminal-idle-after-lane-close gets no reply (forms.md §2, race clause widened)
+
+Live incident, twice in one session (statiker meta desk): the §4
+mirror duty ("book the report AND tell it the lane is closed")
+itself resumes the completed agent, which re-idles; the dispatcher
+answered the first terminal idle with another courtesy message,
+which resumed it into a second idle — a politeness loop the
+existing race clause (demand-direction only) did not cover. The
+widened clause names the terminal idle as a closed lane's expected
+shape: books nothing, gets no reply. Placement basis: grep "idle
+notification can RACE" (one home, forms.md §2); "lane is closed"
+(one hit, SKILL.md §4 — the duty that creates the case, cross-ref
+kept). Not mechanizable at this layer: incoming teammate
+notifications have no hook surface to suppress on.
