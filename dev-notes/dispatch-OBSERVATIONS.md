@@ -97,3 +97,32 @@ notification can RACE" (one home, forms.md §2); "lane is closed"
 (one hit, SKILL.md §4 — the duty that creates the case, cross-ref
 kept). Not mechanizable at this layer: incoming teammate
 notifications have no hook surface to suppress on.
+
+## 2026-08-07 — over-fire: the push gate matches "push" as a SUBSTRING of commit-message text
+
+Live incident, cache-fix fork (leak-gate lane). An agent's `git commit`
+was denied by the push guard because its heredoc MESSAGE contained the
+word "push" — the commit was about a push hook, so the word was
+unavoidable subject matter. The agent worked around it by moving the
+message to a file and using `git commit -F`, which is a correct local
+workaround and precisely the wrong training: the guard taught message
+rewording rather than catching a fused push.
+
+Why it matters more than its nuisance value: this is the
+fires-on-a-non-defect shape the corpus names, on a guard whose whole
+purpose is the one boundary before unerasable history. A reader who
+learns to reword around it is a reader who will reword around a real
+fire. The dispatcher hit the same class separately — a compound
+`git push … | tail` plus a `git log` claim check in one command — where
+the gate was RIGHT; the two are hard to tell apart from the deny text
+alone.
+
+Proposed: the lane should key on the command's VERB position (an
+argv-level `git push`), not on the token appearing anywhere in the
+command string including quoted message bodies. Naming the distinction
+in the deny text would also help — "a git push in this command" vs
+"the word push inside a message" are different findings.
+
+Not fixed here: this is an observation from a consuming repo, and the
+lane's own docstring is canonical for its predicate. Reported per the
+skill's evolution rule rather than patched from outside.
