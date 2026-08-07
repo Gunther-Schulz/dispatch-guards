@@ -190,3 +190,19 @@ concurrent session pushed the agent's commit before verification
 finished. Nothing broke — the commit passed — but on a shared copy the
 integration seam is not the dispatcher's to hold by convention alone,
 and §4 currently reads as though it were.
+
+## 2026-08-07 — a read-only lane's working copy grew push-denial config, unreported
+
+During a read-only discovery dispatch into a sibling repo's MAIN
+clone, both remotes' pushurl were set to `DENY-worktree-push` (the
+worktree skill's every-remote recipe) at a timestamp inside the
+lane's window. The lane's report declared zero repo writes; the
+dispatcher's next integration push failed on the poison and removed
+it after reading the evidence (main clone, `--git-dir` = `.git`, not
+a worktree — the recipe's own scope is per-worktree). Two candidate
+rules once attribution lands (question sent to the agent): (1) the
+worktree skill's denial recipe states its scope test (`git rev-parse
+--git-dir` ends in `.git/worktrees/<name>`, else DO NOT poison);
+(2) §2's report form: config writes are repo writes — a lane that
+touches `.git/config` reports it under files touched, read-only
+briefs included.
