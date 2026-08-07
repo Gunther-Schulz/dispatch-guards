@@ -7,6 +7,58 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-07 — `brief-reminder.py`'s background predicate
+  contradicts the binding its own skill documents, so a NAMED dispatch
+  is exempt from the channel check while being background in fact.**
+  Two predicates, one wrong test:
+  `missing_channel` (`plugin/hooks/brief-reminder.py:92`) —
+  `if tool_input.get("run_in_background") is False: return False`,
+  with a docstring stating "only an explicit run_in_background=False
+  exempts"; and `tail_mode_mismatch` (`:212`, and `:221` in its deny
+  text) — `is_background = tool_input.get("run_in_background") is not
+  False`.
+  **What falsifies both is written in the skill they enforce.**
+  `plugin/skills/dispatch/references/forms.md` §2, binding as of
+  2026-07-30: "setting `name` on a dispatch forces background mode —
+  `run_in_background: false` is silently overridden (probe-confirmed,
+  same-model controlled pair)." So `name` set + `run_in_background:
+  false` is a background dispatch that both predicates read as
+  synchronous.
+  **Two failure directions, and the second is the worse one.**
+  (1) `missing_channel` exempts it — a named dispatch with no channel
+  line passes, and its report reaches no one. (2) `tail_mode_mismatch`
+  reads it as sync, so pasting the CORRECT background line ("your
+  final text reaches no one") is BLOCKED as a mismatch, with deny text
+  instructing the author to paste the sync line instead — the guard
+  manufacturing the defect it exists to prevent. That is the
+  check-that-fires-on-a-non-defect class, in the direction that trains
+  the override reflex.
+  **Measured 2026-08-07, direction (1) live.** A verifier dispatch was
+  spawned with `name` set and `run_in_background: false`; no guard
+  fired; the agent completed and its report reached no one; the loss
+  surfaced only when three later dispatches — same session, `name`
+  set, flag omitted — were correctly blocked and the deny text
+  explained the mechanism. Direction (2) is NOT yet observed live,
+  because nobody has pasted the right line into that shape; it is read
+  off the source above, not measured.
+  Design: one shared predicate, used by both call sites —
+  `is_background = tool_input.get("run_in_background") is not False or
+  bool(tool_input.get("name"))`. Computable from the same
+  `tool_input`, no new inputs, near-zero false-fire surface: it can
+  only differ from today's answer on dispatches carrying a `name`,
+  which the binding says are background without exception.
+  Verifier, red-first, three bites in `--test`: a payload with
+  `{name: "x-agent", run_in_background: false}` and no channel line
+  must DENY (today it passes — that is the red); the same payload
+  carrying the background channel line must PASS `tail_mode_mismatch`
+  (today it denies — the second red); and an unnamed payload with
+  `run_in_background: false` plus the sync line must still PASS
+  unchanged, which is the guard against widening into a fire on every
+  synchronous dispatch.
+  Done when: all three bites go red against the current
+  implementation and green after, and the fire log shows no new fires
+  on unnamed synchronous dispatches over the following week.
+
 - **PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a
   missing dependency tree (hang, not error).** The skill already has
   the section this belongs to — `plugin/skills/worktree/SKILL.md:87`,
