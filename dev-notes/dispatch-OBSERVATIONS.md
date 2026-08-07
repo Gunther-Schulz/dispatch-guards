@@ -227,3 +227,25 @@ does not see worktrees — the co-writer census before integrating in
 any clone is `git worktree list` + status, and a scratch-path
 worktree with a FOREIGN session id is a live co-writer whatever the
 tree says.
+
+## 2026-08-07 — dispositions-as-brief graduated; two §1 note candidates
+
+The pre-registered statiker experiment (criterion recorded before the
+arm ran) graded SUCCESS on all three clauses: nine repair dispositions
+dispatched as a brief landed red-first with zero desk correction
+passes and held clean under the following attack round, while the same
+lap's desk-implemented repairs took all three of that round's
+blockers. The corpus's brief-family bullet gained the fourth member
+same session (dotfiles 415e3bb). Two §1 candidates from the measured
+lap:
+1. A repair lap's recorded dispositions are a brief SHAPE — the brief
+   section that carries them states each disposition's red-first
+   arrangement as the executor's first act per item.
+2. Criteria stated as OUTCOMES out-reach criteria stated as edit
+   sites: the arm's "identical verdicts from three cwds" criterion
+   found a call site the brief's site list missed, and the next
+   attack round's bites on the arm's files all traced to
+   edit-shaped site enumerations in the brief ("these three
+   sites") rather than to the arm's execution. Candidate wording
+   for §1's settled-design part: name the observable the change
+   must produce, then the known sites — never the sites alone.
