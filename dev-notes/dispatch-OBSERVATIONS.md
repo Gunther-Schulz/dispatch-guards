@@ -126,3 +126,24 @@ in the deny text would also help — "a git push in this command" vs
 Not fixed here: this is an observation from a consuming repo, and the
 lane's own docstring is canonical for its predicate. Reported per the
 skill's evolution rule rather than patched from outside.
+
+## 2026-08-07 — a brief cut from a ranked-list head inherits the list's staleness
+
+Dispatched (statiker meta session): implement cache-fix BACKLOG Tier B
+item 17. The executing agent's first read found the entry body already
+grade-marked "(DONE — f2ab6d0)" — landed by another session 70 minutes
+before the dispatch — and correctly halted with zero writes. The
+dispatcher had read the ranked head (which still listed the item) and
+two body windows that straddled the grade header without covering it;
+the brief's "Background" section then shipped the stale state as fact
+("4 of 85 captures failing"), which the executor had to overturn.
+Cost: one full opus dispatch spent verifying landed state.
+
+Candidate rule (§1, near the base-commit clause): a brief cut from a
+backlog/ranked-list entry states the entry's GRADE LINE as read at
+cut time — the one-line body read is the staleness probe, and a head
+or index line is never the basis (the corpus paraphrase-drift rule,
+applied at brief-cut). Secondary find, same root, reported to the
+target repo's own round: the repo's order/lint checkers both pass over
+a DONE-graded bullet still holding a rank anchor, so the ranked head
+can never notice its own staleness mechanically.
