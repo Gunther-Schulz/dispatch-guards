@@ -147,3 +147,46 @@ applied at brief-cut). Secondary find, same root, reported to the
 target repo's own round: the repo's order/lint checkers both pass over
 a DONE-graded bullet still holding a rank anchor, so the ranked head
 can never notice its own staleness mechanically.
+
+## 2026-08-07 — the base-check halt rule has nothing to say about commits that land DURING the dispatch
+
+Dispatched (dotfiles): migrate this repo's own hook state out of
+`~/.claude/` to XDG. The brief carried the §1 base check verbatim —
+both reads, three states — and the executor ran it cleanly: base
+contained, nothing on top. The dispatcher had verified the same state
+independently a minute earlier.
+
+Then a concurrent session in the same working copy landed four commits
+mid-dispatch, three of them touching `claude/hooks/**`. The brief had
+added a repo-specific clause — "if any touches `claude/hooks/**`, HALT
+and report" — written for the START state, where it sits next to the
+base check. Read at commit time it appeared to fire, and the executor
+surfaced it as a decision rather than acting on it: none of those three
+files was in its write set, and it judged that leaving five files (one
+untracked) in a copy another session was actively committing in was the
+more dangerous state. It committed and escalated the question. That
+judgment was right — the dispatcher confirmed zero file overlap and
+ruled no reversal — but it cost a round trip, and a cheaper tier would
+plausibly have halted with the work stranded.
+
+The gap: §1's three-state base rule is entirely about SPAWN-TIME state.
+It is the right shape for that and says nothing about a co-writer
+committing while the dispatch runs, which is a normal condition on a
+shared working copy — the same copy the disjointness rules already
+anticipate for WRITES.
+
+Candidate rule (§1, appended to the base-commit clause): the base check
+governs the START state and says so explicitly; commits landing
+afterwards are judged by WRITE-SET OVERLAP, not by directory or path
+shape. Overlap halts, disjoint proceeds and is reported. A brief adding
+its own halt predicate states which of the two moments it binds — a
+path-shaped predicate written beside the base check reads as start-state
+to the writer and as continuous to the executor, and those differ
+exactly when a co-writer is live.
+
+Secondary observation, same dispatch: the dispatcher's "verify, then
+integrate" duty assumes the dispatcher controls the push. Here the
+concurrent session pushed the agent's commit before verification
+finished. Nothing broke — the commit passed — but on a shared copy the
+integration seam is not the dispatcher's to hold by convention alone,
+and §4 currently reads as though it were.
