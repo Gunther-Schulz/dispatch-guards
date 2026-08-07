@@ -7,6 +7,33 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-07 — a data-file report names the file's PROSE field
+  names, and the dispatcher then queries the wrong keys.** The §3b
+  enumeration brief assigns a data file and the tail returns a pointer
+  to it. Nothing requires the report to carry the file's ACTUAL key
+  set, so the agent describes its schema in prose — and prose drifts
+  from the bytes it describes.
+  Measured 2026-08-07, twice in one round: an agent reported a JSONL
+  field as `command_truncated_400` where the file writes
+  `command_verbatim_truncated_to_400_chars`, and a second reported
+  `question_or_null` for `the_question_it_appears_to_answer_quoted_
+  from_surrounding_text_or_null`. The dispatcher queried the reported
+  names, got null on every row, and read the nulls as a DEFECT IN THE
+  DATA — a wrong finding about the agent's work, caused by the report
+  form. Caught only because 100% null looked implausible.
+  This is the corpus paraphrase-drift rule (a label over its own body)
+  landing on a schema instead of a status header, and the fix is the
+  same one the corpus prescribes: carry the body, not the label.
+  Design: the §3b data-file provision gains one clause — the returning
+  message quotes the file's real key set, taken from the file
+  (`jq -r 'keys_unsorted|@csv' <file> | head -1` for JSONL), never
+  retyped from memory. One line in the brief, one line in the report.
+  Verifier, red-first: replay tonight's two reports against the clause
+  — both fail it as written (neither carries a key set); a report
+  carrying the jq output passes. And a negative: a dispatch assigned
+  NO data file must not be asked for a key set, so the clause fires
+  only where a data file was assigned.
+
 - **READY 2026-08-07 — `brief-reminder.py`'s background predicate
   contradicts the binding its own skill documents, so a NAMED dispatch
   is exempt from the channel check while being background in fact.**
