@@ -206,3 +206,24 @@ worktree skill's denial recipe states its scope test (`git rev-parse
 (2) §2's report form: config writes are repo writes — a lane that
 touches `.git/config` reports it under files touched, read-only
 briefs included.
+
+RESOLVED same day — the lane is EXONERATED (its denial carries
+checkable corroboration: no `git config` invocation, git-less probe
+copies, timeline closed by the dispatcher's own unset explaining the
+second mtime). The writer was a CONCURRENT SESSION's worktree lane:
+`git worktree list` on the clone shows a scratch worktree belonging to
+another session id, and worktrees SHARE `.git/config`, so that lane's
+every-remote pushurl denial (the recipe followed faithfully) landed
+repo-wide — the worktree skill's shared-config hazard playing out
+across two sessions, each individually disciplined. The dispatcher
+restored the denial after its own push (the other session's
+established state stands). Rule candidates replace the earlier two:
+(1) worktree skill: the pushurl-poison step states that in a SHARED
+config it denies the whole clone — per-worktree scope needs
+`extensions.worktreeConfig`; a lane on a shared clone poisons at
+dispatch and REMOVES at integration, or the dispatcher owns the
+toggle. (2) dispatch skill §4, the one-writer check: `git status`
+does not see worktrees — the co-writer census before integrating in
+any clone is `git worktree list` + status, and a scratch-path
+worktree with a FOREIGN session id is a live co-writer whatever the
+tree says.
