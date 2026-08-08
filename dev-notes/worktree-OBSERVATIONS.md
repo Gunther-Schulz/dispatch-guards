@@ -75,3 +75,90 @@ enforcement structure. No capability patches as of minting.
 ## Firing log
 
 (append dated lines when a rule catches a real issue)
+
+## 2026-08-08 — LIFECYCLE: nobody removes worktrees, and the sweep that does has no ownership predicate
+
+Two halves of one system, both measured the same afternoon in
+`Gunther-Schulz/claude-code-cache-fix`. Neither is a binding to git
+semantics — this is the first CAPABILITY-PATCH-shaped entry here, so it
+is fire-checked rather than staleness-checked, and the fire rate is the
+whole argument.
+
+**Half 1 — removal is prose, so it does not happen.** The repo held
+**16 extra registered worktrees**, accumulated over roughly a week by
+several different sessions, every one of which had committed its work
+and left. Both the dispatch skill's worktree recipe and that repo's
+`docs/dev-loop.md` say the dispatcher removes the worktree after
+integration. A rule stated in two places, followed by nobody, for a
+week. A stale worktree is silent — it costs disk, makes `git worktree
+list` unreadable, pins branches against pruning, and presents a large
+undifferentiated cleanup target. The harness-cut `.claude/worktrees/
+agent-*` ones behaved as documented (auto-clean only when UNCHANGED;
+both carried commits, so both stayed) — the 15 hand-cut ones had no
+owner at all.
+
+**Half 2 — the cleanup that happens is unsafe.** A dispatcher session
+intending to remove its OWN four lanes' worktrees ran
+
+    for w in $(git worktree list --porcelain | awk '/^worktree/{print $2}' \
+              | grep -v "^$(pwd)$"); do git worktree remove --force "$w"; done
+
+and destroyed all 16, including one in a different session's scratchpad.
+Committed work survived (branches are untouched by worktree removal; all
+28 remained). **Uncommitted work in those directories is unrecoverable**,
+and the path→branch mapping died with `git worktree prune` — nothing in
+`.git` retains it afterwards.
+
+**The two facts a fix has to hold together.** `--force` is the entire
+difference between this and a no-op: plain `git worktree remove` already
+refuses a dirty worktree, and that refusal is a feature. And the loop had
+no OWNERSHIP predicate — it could not tell this session's lanes from a
+week of other people's, because nothing marks ownership at create time.
+
+**Why they are one problem:** accumulation creates the mess, the mess
+invites a blunt sweep, and the sweep is destructive because ownership is
+unmarked. Fixing either half alone leaves the other running.
+
+**Evidence limit, stated because it is load-bearing:** the population
+that would have shown whether this generalises was destroyed by the
+incident. A scan of every repo under `~/dev` immediately afterwards
+returned ZERO extra worktrees anywhere — which proves nothing, since the
+only known population had just been deleted. Treat "16 in one repo over a
+week" as the single datapoint it is; whether other repos accumulate is
+UNMEASURED and has to be established prospectively. Equally: nobody knows
+whether any of the 16 held uncommitted work and nobody can now find out,
+so the honest statement is "all committed work survived; uncommitted work,
+if any, is unrecoverable and its existence is unknown" — never "no work
+was lost".
+
+**Proposed rule changes (design NOT settled — the open questions are the
+deliverable):**
+1. Ownership is MARKED at create time by the creator, in a form that
+   survives the creating session's death. Any predicate keyed on a NAMING
+   convention re-creates the pattern-blind-spot class and is rejected on
+   that ground alone.
+2. Nothing force-removes a dirty worktree without an explicit
+   per-worktree decision; the plain-remove refusal is preserved, not
+   worked around.
+3. A sweep REPORTS before it acts — dry-run default, each target named
+   with why it qualifies. A reporting doctor verdict (three answers:
+   clean / stale-found / could-not-verify) is the safe first ship; the
+   automatic remover is the tempting version and is the one that just
+   went wrong.
+4. The retirement TRIGGER is open. Age alone is wrong (long-lived PR-slice
+   worktrees are legitimate, and their branches are deliberately unmerged
+   upstream slices, so "merged into main" fails too). Any candidate needs
+   a measured false-fire rate before it removes anything.
+5. Consider whether the dispatcher's integration step can carry removal
+   mechanically, and whether a lane's closing report must state its
+   worktree path so the dispatcher has the target in hand.
+
+**Red-first verifier for whatever ships**, in a throwaway clone: three
+worktrees — one clean+owned, one clean+foreign, one DIRTY. The mechanism
+must name all three in its report, act on only the owned clean one, refuse
+the dirty one loudly even when owned, and leave the foreign one untouched
+with a stated reason. **Arm three is the one this incident would have
+failed.**
+
+Do not delete branches as part of any worktree cleanup — branches are why
+the committed work survived; their retirement is a separate question.

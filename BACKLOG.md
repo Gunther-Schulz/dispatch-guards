@@ -7,6 +7,35 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **PARKED 2026-08-08 — worktree LIFECYCLE: nobody removes worktrees, and the
+  sweep that does has no ownership predicate. Named missing evidence: whether
+  this generalises beyond one repo, and a false-fire rate for any retirement
+  trigger before it removes anything.** Full incident, both halves, with the
+  evidence limits: `dev-notes/worktree-OBSERVATIONS.md`, section
+  "2026-08-08 — LIFECYCLE".
+  Measured: 16 extra registered worktrees in one repo over ~a week, every
+  creating session having committed and left, against a removal rule stated in
+  BOTH the dispatch recipe and that repo's dev-loop. Then a dispatcher session
+  intending to clear its own four force-removed all 16, including another
+  session's. Committed work survived (branches untouched); uncommitted work is
+  unrecoverable and its existence is now unknowable.
+  **Why PARKED and not READY, with the missing evidence named so this is a spec
+  rather than drift:** the two design questions are genuinely open — what marks
+  ownership durably (a naming convention is rejected up front: it re-creates the
+  pattern-blind-spot class), and what the retirement trigger is (age is wrong;
+  long-lived PR-slice worktrees are legitimate and their branches are
+  deliberately unmerged, so "merged into main" fails too). Shipping a remover
+  before either is answered is the incident again with a different regex.
+  What is decided and can ship without them: a REPORTING doctor verdict, three
+  answers (clean / stale-found / could-not-verify), dry-run by default, naming
+  each target and why it qualifies. That is the safe first ship and it also
+  produces the missing evidence.
+  Verifier, red-first, in a throwaway clone: three worktrees — clean+owned,
+  clean+foreign, DIRTY. Name all three; act on only the owned clean one; refuse
+  the dirty one loudly even when owned; leave the foreign one untouched with a
+  stated reason. Arm three is the one the incident would have failed.
+  Do not delete branches as part of any worktree cleanup.
+
 - **PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a
   missing dependency tree (hang, not error).** The skill already has
   the section this belongs to — `plugin/skills/worktree/SKILL.md:87`,
