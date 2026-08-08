@@ -61,6 +61,28 @@ conventions, amended the same day — this hook is their enforcement,
 and the amendment landing without it was the divergence that
 surfaced the lane.
 
+Name lane made mandatory (2026-08-08, operator decision): EVERY
+generic dispatch is NAMED `<model>-<slug>`, panel style
+`<model>-<slug>  <clean description>`. The name is the only model
+carrier: the panel renders it, the title stays clean prose. So a
+missing `name` now blocks, and the unnamed/title-prefix REQUIREMENT
+is retired — the 2026-07-18 title extension and the 2026-08-02
+narrowing are superseded (kept above as history). The mirror check
+survives: a title that DOES start `<model>: ` must still match the
+model field, and a matching prefix is tolerated rather than
+rejected — style prefers none, tolerance keeps the false-fire
+surface at zero.
+Why the title lane could retire: it existed for the SYNCHRONOUS
+dispatch, where no name is set and the title is the only carrier —
+and that shape was not observed. Two n=1 probes the same day
+(dispatcher's session, dev-notes/dispatch-OBSERVATIONS.md
+2026-08-08): an UNNAMED `general-purpose` dispatch with
+`run_in_background: false` launched ASYNC, and that async agent's
+final text WAS delivered to the dispatcher inside the completion
+task-notification. Both single observations on that day's harness
+version; they justify retiring the lane and nothing else — the §2
+channel rules stand pending a controlled re-probe.
+
 Accepted residue: agent types that pin their model in their
 definition bypass the gate entirely for the model/title checks
 (ENFORCED_TYPES scope; the escalation lane below still applies);
@@ -122,7 +144,16 @@ def check(tool_input: dict) -> str | None:
                 "another tier."
             )
         name = (tool_input.get("name") or "").strip()
-        if name and not name.lower().startswith(model + "-"):
+        if not name:
+            return (
+                "Model gate: every generic dispatch is NAMED "
+                f"`{model}-<slug>` — the teammate panel renders the NAME, "
+                "so the name is the model's carrier; the title stays "
+                "clean prose and is no longer a model carrier "
+                f"({doc_ref('§5')}). Add name: \"{model}-<slug>\" "
+                f'(panel style: "{model}-<slug>  <clean description>").'
+            )
+        if not name.lower().startswith(model + "-"):
             return (
                 f"Model gate: agent name {name!r} must start with "
                 f"`{model}-` — the teammate panel shows the NAME, not the "
@@ -131,15 +162,6 @@ def check(tool_input: dict) -> str | None:
             )
         desc = (tool_input.get("description") or "").strip()
         match = _title_re().match(desc)
-        if not match and not name:
-            return (
-                "Model gate: dispatch title must start with the strict "
-                'prefix `<model>: ` (e.g. "opus: Migrate YAML keys") '
-                "so every dispatch shows its model live in the UI "
-                f"({doc_ref('§5')}). Title seen: {desc!r}. (A dispatch "
-                "that sets `name` carries the model in the name instead — "
-                "the panel renders the name, never the title.)"
-            )
         if match and match.group(1).lower() != model:
             return (
                 f"Model gate: title prefix {match.group(1).lower()!r} "
@@ -328,51 +350,54 @@ if __name__ == "__main__":
         assert check({"subagent_type": "general-purpose"}) is not None
         assert check({}) is not None                          # default type, no model
         assert check({"subagent_type": "Explore", "model": "haiku",
-                      "description": "haiku: Scan"}) is None  # default: kein deny
+                      "name": "haiku-scan"}) is None      # default: kein deny
         assert not needs_model_ask({"model": "fable",
                                     "description": "fable: X"})  # default: kein ask
         assert check({"subagent_type": "statusline-setup"}) is None
         assert check({"subagent_type": "plugin-dev:agent-creator"}) is None
         assert check({"subagent_type": "claude", "model": "nonsense"}) is not None
-        # Title-prefix extension (2026-07-18, format `<model>: <title>`):
-        assert check({"model": "opus"}) is not None           # model ok, title missing
+        # Name lane made MANDATORY (2026-08-08): every generic dispatch is
+        # named `<model>-<slug>`; the title is no longer a model carrier.
+        # An UNNAMED dispatch blocks whatever its title says — including a
+        # title carrying the (now retired) `<model>: ` prefix, which the
+        # 2026-07-18 lane accepted. That flip is this lane's red case.
+        assert check({"model": "opus", "description": "opus: Fix tests"}) is not None
         assert check({"model": "opus", "description": "Fix tests"}) is not None
-        assert check({"model": "opus", "description": "opus-fix-tests"}) is not None  # old format
-        assert check({"model": "opus", "description": "opus: Fix tests"}) is None
-        assert check({"model": "opus", "description": "Opus: Fix tests"}) is None
-        assert check({"model": "opus", "description": "sonnet: Fix tests"}) is not None
+        assert check({"model": "opus"}) is not None           # no name, no title
+        assert check({"model": "opus", "description": "opus-fix-tests"}) is not None
         assert check({"subagent_type": "Explore", "model": "sonnet",
-                      "description": "sonnet: Scan repo"}) is None
-        assert check({"subagent_type": "Explore", "model": "fable",
-                      "description": "fable: Review architecture"}) is None
-        assert check({"model": "opus", "description": "opus:"}) is not None   # no title
-        assert check({"model": "opus", "description": "opus: "}) is not None  # blank title
-        # Name lane (2026-07-19): a given name must start `<model>-`.
-        assert check({"model": "opus", "description": "opus: Fix tests",
-                      "name": "fixer"}) is not None
-        assert check({"model": "fable", "description": "fable: Vet draft",
-                      "name": "draft-vet"}) is not None       # the observed gap
-        assert check({"model": "opus", "description": "opus: Fix tests",
+                      "description": "Scan repo"}) is not None
+        # A NAMED dispatch passes, whatever the title — clean prose, empty,
+        # or a degenerate leftover prefix: none of it is a carrier now.
+        assert check({"model": "opus", "description": "Fix tests",
                       "name": "opus-fixer"}) is None
-        assert check({"model": "opus", "description": "opus: Fix tests",
-                      "name": "Opus-Fixer"}) is None          # case-insensitive
-        assert check({"model": "sonnet", "description": "sonnet: Scan",
-                      "name": "opus-scanner"}) is not None    # wrong model in name
-        assert check({"model": "opus", "description": "opus: Fix tests"}) is None  # no name: unchanged
-        # Title lane narrowed to the UNNAMED case (2026-08-02). A NAMED
-        # dispatch carries the model in the name; the panel never renders
-        # the title, so the title prefix is optional there.
+        assert check({"model": "opus", "description": "",
+                      "name": "opus-fixer"}) is None          # no title at all
+        assert check({"model": "opus", "description": "opus:",
+                      "name": "opus-fixer"}) is None          # not a prefix match
         assert check({"model": "opus", "name": "opus-mech-rerun",
                       "description": "F-2 mechanical re-run"}) is None
-        assert check({"model": "opus", "name": "opus-mech-rerun",
-                      "description": ""}) is None          # no title at all
-        # …but an UNNAMED dispatch still requires it (only visible carrier)
-        assert check({"model": "opus",
-                      "description": "F-2 mechanical re-run"}) is not None
-        # …and a present prefix must still mirror the field, named or not
+        assert check({"subagent_type": "Explore", "model": "fable",
+                      "name": "fable-arch-review",
+                      "description": "Review architecture"}) is None
+        # The name must start `<model>-` (2026-07-19 lane, unchanged).
+        assert check({"model": "opus", "description": "Fix tests",
+                      "name": "fixer"}) is not None
+        assert check({"model": "fable", "description": "Vet draft",
+                      "name": "draft-vet"}) is not None       # the observed gap
+        assert check({"model": "opus", "description": "Fix tests",
+                      "name": "Opus-Fixer"}) is None          # case-insensitive
+        assert check({"model": "sonnet", "description": "Scan",
+                      "name": "opus-scanner"}) is not None    # wrong model in name
+        # Mirror check KEPT: a title that DOES carry `<model>: ` must match
+        # the model field — a matching prefix is tolerated, not required.
+        assert check({"model": "opus", "description": "opus: Fix tests",
+                      "name": "opus-fixer"}) is None          # tolerated
+        assert check({"model": "opus", "description": "sonnet: Fix tests",
+                      "name": "opus-fixer"}) is not None      # mismatch denies
         assert check({"model": "opus", "name": "opus-mech-rerun",
                       "description": "sonnet: F-2 re-run"}) is not None
-        # …and a wrong name still fails even with a correct title prefix
+        # …and a wrong name still fails even with a matching title prefix
         assert check({"model": "opus", "name": "mech-rerun",
                       "description": "opus: F-2 re-run"}) is not None
         # ── Site-Policy (Config): deny + ask greifen ──
