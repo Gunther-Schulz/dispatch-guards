@@ -227,14 +227,22 @@ Mandatory parts (execution briefs):
   plausible guess — a gap filled silently is designed at the executing
   tier, the exact failure the tier choice was meant to avoid
   (source: CLAUDE.md).
-- **A commissioned instrument maps absence by RULE, not
-  enumeration.** A brief commissioning anything that returns a
-  verdict — a check, a review, a survey — states how absence maps
-  as ONE rule ("whatever the instrument cannot read is
+- **A commissioned instrument's SEMANTICS are the dispatcher's to
+  state** — each one left implicit is re-decided at the executing
+  tier, the same judgment remade without the design context. A
+  brief commissioning anything that returns a verdict — a check, a
+  review, a survey — fixes at least these two. ABSENCE maps as ONE
+  rule ("whatever the instrument cannot read is
   could-not-verify"); an enumeration of the absences the
   dispatcher happened to foresee leaves every other one to be
-  re-judged at the executing tier — the same judgment, remade
-  without the design context.
+  re-judged. A COMPARISON names its GRAIN — what counts as a
+  difference — which the obvious phrasing hides: "compare the line
+  sequence" of two independently maintained copies commissions a
+  comparison of the WRAPPING, and once they wrap differently no
+  state of either text makes it green, so the brief has specced an
+  unprovable check. Grain is bytes, normalized text, or parsed
+  structure, named. (forms.md §3b's Exactness clause is this rule
+  inside the enumeration form.)
 - **Guarded write paths pre-name their gate.** Where the brief's
   write set crosses a mechanical gate (a rule-corpus path
   demanding a same-turn skill invocation, a protected config), the

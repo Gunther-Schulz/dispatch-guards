@@ -121,3 +121,24 @@ before that date is deliberately sparse rather than complete.
   fresh-context vet with its wrong hypothesis intact, because the vet
   checked the entry's reasoning and not the world. Both capability
   patches; fire-rate review judges them.
+
+- 2026-08-08 — SHARPEN §1 (build-first, operator GO), widening the
+  commissioned-instrument bullet upward: what a brief must fix is the
+  instrument's SEMANTICS, of which absence-mapping was only the first
+  instance. Second instance, the one that grounded the widening: a
+  COMPARISON names its GRAIN. Grounding — a brief of mine specced a
+  LINE-SEQUENCE comparison between brief-reminder.py's
+  EXECUTION_TAIL_BG literal and the forms.md EXECUTION tail; measured
+  under that exact normalization it is 5 literal lines against 27
+  forms.md lines, a WRAP difference rather than a content one, so no
+  state of the two files could make the check green. The dispatcher
+  specced an unprovable check — the class the corpus already names,
+  authored into a brief by the person who knows the class. Amendment
+  over addition: the bullet's trigger abstracted upward rather than
+  growing an "…or X" list; forms.md §3b's Exactness clause is
+  source-labelled from the new text as the same rule inside the
+  enumeration form, not re-stated. Executor side audited, no edit —
+  its gaps-surface-never-bridge conduct rule already covers an
+  instrument brief arriving with its grain unstated. Verify block all
+  four green (bench 40/40, bites, devbook form, doc-drift, wrap).
+  Durability: CAPABILITY PATCH; fire-rate review judges it.
