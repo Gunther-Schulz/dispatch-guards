@@ -403,3 +403,47 @@ Rule candidates for §1 (the Background/grounding part):
    step gets its cited line opened once, at that moment, because after
    it the claim is executed by someone who cannot tell inherited from
    verified.
+
+## writer-claims-gate WARNs on a claim whose work is already in HEAD
+
+Observed 2026-08-08, live, during a two-lane dispatch. A lane's first
+Edit to a file in a sibling repo fired `writer-claims-gate`: "written by
+another agent (<other-agent-id>) within the claim TTL". Guard fire logged
+in `dispatch-guards-fires.jsonl` at mode `warn`.
+
+The claim was spent. Reconstructed from timestamps the gate does not
+consult: the claiming agent's own guard fires are stamped ~2 h before the
+lane started; the commits carrying its work landed ~50 min after those
+fires; the claiming session's transcript went quiet ~1.5 h before the
+lane began. So the claimed work was fully committed and merged into HEAD
+while the claim went on warning.
+
+Why it matters more than a nuisance fire. The executing lane could not
+distinguish this from a live conflict using the evidence available to
+it. It checked HEAD (unchanged), `git diff --stat` (only its own edit),
+and `git status` (clean) — and reasoned "stale claim". That conclusion
+was correct and its basis did not reach it: a clean tree proves nothing
+was COMMITTED; it says nothing about a co-writer holding uncommitted
+work. The lane flagged it live rather than proceeding silently, which is
+the right conduct, and the question still had to be settled by the
+dispatcher running an out-of-band timing comparison the lane had no way
+to perform. A guard that fires on correct work and can only be cleared
+from outside trains the override reflex it exists to prevent — the
+check-that-fires-on-a-non-defect shape.
+
+Proposed change (not made): before firing, test whether the claimed
+work is reachable from HEAD — if the claiming agent's commits are
+already merged, the claim is spent and the gate stays silent. Cheaper
+variant if commit-attribution is unavailable: expire a claim when the
+working tree is clean at the claimed path.
+
+Red-first arrangement, both arms required, because this is a predicate
+change to a live guard: (1) a claim stamped before a commit that
+contains its work must NOT warn; (2) a claim with genuinely uncommitted
+changes at the claimed path MUST still warn. Arm (2) is the over-firing
+control that keeps the repair from silencing the gate — without it the
+fix is indistinguishable from disabling the check.
+
+Cross-reference: booked as a POINTER in the claude-code-cache-fix fork's
+BACKLOG.md, since that is where the incident was walked. This file is
+the carrier a fresh context in THIS repo reads.
