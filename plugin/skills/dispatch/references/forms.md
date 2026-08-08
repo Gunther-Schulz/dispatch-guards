@@ -227,3 +227,13 @@ itself (data files pass the harness block that bounces report files —
 §2 binding), and the tail's ONE-message line is satisfied by a
 pointer: the file path + the per-class counts, zeros stated. The rest
 of the read-only tail applies verbatim.
+
+Where a data file was assigned, the returning message also quotes
+the file's REAL key set, taken from the file itself
+(`jq -r 'keys_unsorted|@csv' <file> | head -1` for JSONL), never
+retyped from memory: a schema described in prose is a label over
+its own body, and a dispatcher querying prose-drifted key names
+gets all-null results that read as a defect in the DATA — a wrong
+finding about the agent's work, manufactured by the report form.
+One line in the brief, one line in the report; a dispatch assigned
+no data file is never asked for a key set.

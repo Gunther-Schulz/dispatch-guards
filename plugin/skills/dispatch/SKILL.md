@@ -94,6 +94,20 @@ Mandatory parts (execution briefs):
 - **Grounding basis as a mandatory section.** Name what the agent must
   read before building and require the final report to cite what was
   actually read.
+- **Background lines carry per-line provenance grades.**
+  "Established" is a per-line verification claim, never a
+  section-level tone: each cited line is either OPENED at
+  brief-write time or carried with its provenance and grade —
+  "from <source>, unverified" — so the executor can tell which
+  citations hold dispatcher weight and which are inherited (a
+  Background section with mixed provenance under one uniform
+  header is the label-over-body drift, and an ABSENT citation is
+  the lucky case: reading falsifies it; a merely STALE one reads
+  as a near-miss the executor plausibly "corrects" toward). The
+  brief boundary is where discovery testimony becomes instruction:
+  every audit finding turned into a build step gets its cited line
+  opened once, there — after it, the claim is executed by someone
+  who cannot tell inherited from verified.
 - **Write boundaries.** Which paths the agent owns (one writer per
   working copy; parallel dispatches need disjoint, brief-named path
   sets — source: CLAUDE.md dispatched-work rule). On a SHARED copy
@@ -215,6 +229,25 @@ Mandatory parts (execution briefs):
     catching. Any other state — a dirty tree over a stale base,
     anything unlisted — halts as a gap too: never a silent rebase,
     never a base discovered by guesswork.
+  - **The commit plan is ordered against the repo's guards.** In a
+    repo with a payload-version guard, the brief states where the
+    bump commit sits, sequenced from the guard's OWN comparison
+    basis (read it, not assumed): a guard that compares against
+    the release state clears later same-batch commits once the
+    bump is in — there, bump-first turns one shared gate into zero
+    bounces for every writer behind it. An item that must RECORD a
+    commit's ref cannot share that commit: order it into a later
+    commit or split the pathspec.
+  - **Pre-authorized repair classes (optional).** The write
+    boundaries may declare a repair class the executor applies
+    without a round trip — "if the commit plan collides with a
+    repo guard, reorder to satisfy the guard and report the
+    permutation as a deviation" — the declared-exemption shape the
+    corpus prescribes for guards, applied to briefs (measured: an
+    executor derived exactly that reorder with evidence, halted
+    per the box, and the round trip spent ratifying it changed
+    nothing). Novel deviations still halt; only the named class is
+    pre-authorized.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
@@ -234,6 +267,28 @@ Mandatory parts (execution briefs):
   plausible guess — a gap filled silently is designed at the executing
   tier, the exact failure the tier choice was meant to avoid
   (source: CLAUDE.md).
+- **Criteria state OUTCOMES first, sites second.** In the settled
+  design, name the observable the change must produce, then the
+  known sites — never the sites alone: a site list reaches exactly
+  what somebody enumerated, while the outcome carries its own
+  completeness check, and the clause has fired from both
+  directions (an outcome-criterion caught a call site the brief's
+  site list missed; a site-shaped brief left standing the very
+  defect its lane existed to close, at a site the audit's line
+  number happened not to name).
+- **Sweep-shaped work carries its two surfacing mechanisms** —
+  what makes the cheap-tier default safe on sweeps, instead of
+  buying tier as insurance against brief defects. (a) Post-sweep
+  accounting: the report dispositions EVERY hit — fixed /
+  already-correct / excluded / still-wrong — never a count or a
+  "class closed" claim (a class believed closed across repeated
+  sweeps returned dozens of live instances on its first full
+  accounting). (b) Instrument-positive: a brief commissioning a
+  pattern-scoped sweep names one member the pattern provably
+  catches, so a zero-hit result is distinguishable from a dead
+  pattern. Where the sweep is an enumeration dispatch, the
+  accounting rides §3b's coverage artifact — one home, not a
+  second form.
 - **A commissioned instrument's SEMANTICS are the dispatcher's to
   state** — each one left implicit is re-decided at the executing
   tier, the same judgment remade without the design context. A
@@ -296,7 +351,8 @@ satisfied by construction:
     - <file> — <which part, and what it settles>
 
     ## Background (established; verify at the cited lines)
-    <facts the executor may trust, each with its basis>
+    <facts the executor may trust — each OPENED at brief time, or
+    graded "from <source>, unverified">
 
     ## The settled design — implement exactly this, do not redesign
     <every decision already made, incl. placement and naming —

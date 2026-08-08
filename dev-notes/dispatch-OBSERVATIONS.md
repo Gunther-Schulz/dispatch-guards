@@ -241,7 +241,10 @@ lap:
 1. A repair lap's recorded dispositions are a brief SHAPE — the brief
    section that carries them states each disposition's red-first
    arrangement as the executor's first act per item.
-2. Criteria stated as OUTCOMES out-reach criteria stated as edit
+2. GRADUATED to §1 ("Criteria state OUTCOMES first, sites second"),
+   2026-08-08, after the second firing below — consulted where it
+   lived, not where briefs are written, so relocation was the fix.
+   Original text: criteria stated as OUTCOMES out-reach criteria stated as edit
    sites: the arm's "identical verdicts from three cwds" criterion
    found a call site the brief's site list missed, and the next
    attack round's bites on the arm's files all traced to
