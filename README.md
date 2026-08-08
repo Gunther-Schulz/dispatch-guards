@@ -135,17 +135,24 @@ replay bench green under an empty policy path and a bare `HOME`, no
 tier denied, no tier forced to ask). But two things the skills cite
 have no local counterpart:
 
-- **The model-routing table** — which tier gets which work. The
-  `dispatch` skill deliberately does not decide *whether* to
-  delegate; it disciplines the handover once you have decided. That
-  table is a measured, dated fact about one person's model lineup, so
-  shipping the numbers as defaults would hand you someone else's
-  stale cache. The shape travels, the numbers do not: rank the tiers
-  you actually use on the axes that decide your dispatches — how hard
-  a problem the tier handles unsupervised, output quality where taste
-  matters, and what it costs you — then stamp it with a date and name
-  what invalidates it (a lineup change, a pricing change). Keep it
-  wherever your sessions already load instructions from.
+- **The model-routing table** — the concrete lineup. As of 0.7.0 the
+  portable tier-choice RULES ship in the skill
+  (`references/routing.md`, stated over tier roles: residual
+  judgment, discovery's tier-insensitivity, review limits, the
+  redo-one-tier-up correction); what still cannot ship is your
+  overlay. The table is a measured, dated fact about one person's
+  model lineup, so shipping the numbers as defaults would hand you
+  someone else's stale cache. The shape travels, the numbers do not:
+  rank the tiers you actually use on the axes that decide your
+  dispatches — how hard a problem the tier handles unsupervised,
+  output quality where taste matters, and what it costs you — then
+  stamp it with a date and name what invalidates it (a lineup
+  change, a pricing change). Add your standing decisions (review
+  default, exceptions, denied tiers) and the always-loaded seam
+  conventions routing.md's tail names, and keep all of it wherever
+  your sessions already load instructions from. The `dispatch` skill
+  still does not decide *whether* to delegate — that seam fires
+  before any skill loads.
 - **`~/.claude/readiness.json`**, the tier-readiness register behind
   skill §6. The plugin never creates it, by §6's own rule: a register
   nothing reads is dead weight. Ignore §6 until some recurring

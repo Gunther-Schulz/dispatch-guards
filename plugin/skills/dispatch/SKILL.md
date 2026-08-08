@@ -36,6 +36,10 @@ Section map — §§1, 4, 5, 6 are below; the rest load on demand:
   BEFORE composing any brief (the tails are pasted, never
   recalled).
 - §3 roadmap form: `references/forms.md` (same file).
+- Tier-choice evidence (WHICH model a dispatch takes):
+  `references/routing.md` — the portable rules over tier roles;
+  a site corpus's routing section overlays it with the concrete
+  lineup and standing decisions, and wins on conflict.
 - §7 Codex / gpt-5.5 routing: `references/codex-routing.md` —
   only when `command -v codex` succeeds.
 
