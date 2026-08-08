@@ -118,7 +118,22 @@ def missing_channel(payload: dict) -> bool:
     return not any(m in prompt for m in _CHANNEL_MARKERS)
 
 
-def deny_text() -> str:
+def deny_text(payload: dict) -> str:
+    """Deny text for missing_channel — it must name a repair that
+    clears on retry: for a NAMED dispatch the sync flag is not one
+    (name forces background, is_background above)."""
+    tool_input = payload.get("tool_input") or {}
+    if tool_input.get("name"):
+        return (
+            "Blocked: background dispatch without a report channel. "
+            "This dispatch is NAMED, and a name forces background "
+            "mode — `run_in_background: false` is silently overridden, "
+            "so a sync retry denies identically. The brief must "
+            "instruct delivery: paste the tail block's background "
+            f"channel line from {_forms_path()} §2 (SendMessage to the "
+            "dispatcher — your final text reaches no one). Fix the "
+            "brief and retry."
+        )
     return (
         "Blocked: background dispatch without a report channel. A "
         "background agent's final text reaches no one — the brief "
@@ -367,7 +382,7 @@ def main() -> int:
     # with the harness's bare "Hook PreToolUse:Agent denied this tool",
     # which two sessions misattributed to a Claude Code permission bug.
     if missing_channel(payload):
-        deny(deny_text(), source=_SOURCE)
+        deny(deny_text(payload), source=_SOURCE)
     if missing_tail(payload):
         deny(missing_tail_deny_text(), source=_SOURCE)
     if tail_mode_mismatch(payload):
@@ -423,7 +438,15 @@ if __name__ == "__main__":
         assert not missing_channel({"tool_name": "Agent", "tool_input": {}})
         assert not missing_channel({"tool_name": "Bash", "tool_input": {
             "command": "ls"}})
-        assert "Blocked" in deny_text()
+        _named = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x", "run_in_background": False,
+            "prompt": "do the thing"}}
+        _unnamed = {"tool_name": "Agent", "tool_input": {
+            "prompt": "do the thing"}}
+        assert "Blocked" in deny_text(_unnamed)
+        assert "for a synchronous dispatch" in deny_text(_unnamed)
+        assert "name forces background" in deny_text(_named)
+        assert "synchronous" not in deny_text(_named)  # the un-followable advice is gone for named dispatches
 
         # ── Named dispatch is BACKGROUND in fact (BACKLOG 2026-08-07) ─
         # Expectation derived from forms.md §2's binding ("setting
