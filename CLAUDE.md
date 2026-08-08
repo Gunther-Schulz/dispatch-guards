@@ -88,6 +88,12 @@ done
 # 3. The devbook-form detector's own tests.
 python3 plugin/skills/executor/scripts/check_devbook_form.py --test
 
+# 3a. The worktree doctor's own tests — pure verdict aggregation plus a
+#     real-git three-arm fixture (clean+owned / clean+undeclared / DIRTY).
+#     Red-proven against the incident's own sweep loop, which destroys
+#     all three arms including the dirty one.
+python3 plugin/skills/worktree/scripts/worktree_doctor.py --test
+
 # 3b. Doc-vs-mechanism drift: the guard roster, the shipped skills,
 #     the §2 report slots and the policy schema are each stated in
 #     both prose and a mechanism. Proven red on the two real

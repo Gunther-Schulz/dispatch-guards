@@ -1,6 +1,6 @@
 ---
 name: worktree
-description: Portable git-worktree and git-hook mechanics — shared-config and hook-environment hazards, hooks-reach asymmetry, per-worktree push denial, provisioning probes, cleanup — each rule from a measured incident. Use when creating or working in a git worktree, isolating an agent or task in a worktree, wiring or debugging git hooks (pre-push, pre-commit) that run tests or tools, running a test suite from a git hook, or diagnosing a corrupted repo config, wrong-author commits, or hooks that don't fire in worktrees. Not for Claude Code harness hooks (settings.json) or ordinary single-checkout git work.
+description: Portable git-worktree and git-hook mechanics — shared-config and hook-environment hazards, hooks-reach asymmetry, per-worktree push denial, provisioning probes, cleanup — each rule from a measured incident. Use when creating or working in a git worktree, isolating an agent or task in a worktree, cleaning up or removing worktrees, wiring or debugging git hooks (pre-push, pre-commit) that run tests or tools, running a test suite from a git hook, or diagnosing a corrupted repo config, wrong-author commits, or hooks that don't fire in worktrees. Not for Claude Code harness hooks (settings.json) or ordinary single-checkout git work.
 ---
 
 # Worktree regiment
@@ -122,14 +122,34 @@ hashes; the writer is the one that moves it.
 
 ## Cleanup and litter
 
+- **`git worktree list` is shared repository state.** It enumerates
+  every checkout anyone registered — other sessions', other agents',
+  long-lived ones deliberately left open — and carries no ownership
+  dimension: nothing in `.git` records who created a worktree. A
+  sweep written over the whole list is a sweep over other people's
+  work. Scope a cleanup to the paths THIS session created, held from
+  create time. Measured failure shape: a session clearing its own
+  four looped over the full list and removed sixteen, one of them
+  another session's.
+- **`git worktree remove` refuses a worktree holding modified or
+  untracked files, and that refusal is the mechanism, not an
+  obstacle.** `--force` is the entire difference between a cleanup
+  and unrecoverable loss, so it never rides in a loop — a dirty
+  worktree is a per-worktree decision, taken by looking. Removal
+  spares committed work only because branches are untouched;
+  uncommitted work does not survive, and `git worktree prune` then
+  drops the path→branch mapping from `.git`, so afterwards nobody
+  can establish what was in there.
 - A worktree directory under `/tmp` dies with the reboot but stays
   registered; the next `git worktree add` for that branch fails
   "already used by worktree". `git worktree prune` first.
-- A worktree's branch outlives the worktree. Un-integrated branches
-  accumulate silently as litter, each holding real commits nobody
-  surfaces. At integration or cleanup, enumerate `git worktree list`
-  and the branches created for worktrees, and dispose of each by
-  merge, cherry-pick, or an explicit drop.
+- A worktree's branch outlives the worktree — that survival is what
+  keeps removal recoverable, so branch retirement is its own
+  decision on its own trigger, never a step inside worktree cleanup.
+  Un-integrated branches still accumulate silently as litter, each
+  holding real commits nobody surfaces: at integration, enumerate
+  the branches created for worktrees and dispose of each by merge,
+  cherry-pick, or an explicit drop.
 - Remove reader/probe worktrees at the booking of their findings;
   they have no integration moment.
 
