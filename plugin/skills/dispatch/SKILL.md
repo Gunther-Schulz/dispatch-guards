@@ -56,9 +56,9 @@ model routing).
 
 **Exception — verifier dispatches:** a fresh-context verifier gets the
 artifact and the question ONLY, never your reasoning (source:
-CLAUDE.md fresh-context rule); the rich brief form below is for EXECUTION
-dispatches — applying it to a verifier contaminates the independence
-that is its point.
+CLAUDE.md fresh-context rule); the rich brief form below is for
+EXECUTION dispatches — applying it to a verifier contaminates the
+independence that is its point.
 
 **Exception — discovery dispatches** (lookups, sweeps, extraction —
 no writes): the brief names the N facts to return and the pointers
