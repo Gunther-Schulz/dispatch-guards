@@ -37,9 +37,10 @@ Section map — §§1, 4, 5, 6 are below; the rest load on demand:
   recalled).
 - §3 roadmap form: `references/forms.md` (same file).
 - Tier-choice evidence (WHICH model a dispatch takes):
-  `references/routing.md` — the portable rules over tier roles;
-  a site corpus's routing section overlays it with the concrete
-  lineup and standing decisions, and wins on conflict.
+  `references/routing.md` — load it BEFORE choosing a dispatch's
+  model. The portable rules over tier roles; a site corpus's
+  routing section overlays it with the concrete lineup and
+  standing decisions, and wins on conflict.
 - §7 Codex / gpt-5.5 routing: `references/codex-routing.md` —
   only when `command -v codex` succeeds.
 
@@ -345,7 +346,7 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   catches slips, not judgment errors (verdicts have flipped only under
   a smarter or fresh reviewer; discovery shows no tier sensitivity),
   and redoing one tier up has been the cheap correction. (Source:
-  CLAUDE.md routing evidence.) The cap: fresh-context review runs at
+  references/routing.md.) The cap: fresh-context review runs at
   the operator-named default reviewer tier even over artifacts
   authored ABOVE it — a fresh context removes self-blindness, not the
   judgment ceiling, and review above the default is an operator-named
@@ -466,7 +467,8 @@ classes run on their cheapest `ready` tier by default; the top tier
 is reserved for design, rule-corpus work, eval grading, and the
 ambiguous multi-step tail where the tier gap is widest. (The session
 model remains the operator's choice — the register informs it; the
-CLAUDE.md model table governs dispatch defaults.)
+site model table governs the lineup, references/routing.md the
+dispatch defaults.)
 
 ## Evolution and maintenance
 

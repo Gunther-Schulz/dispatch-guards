@@ -2,7 +2,9 @@
 
 Reference of the `dispatch` skill (operational corpus — see
 SKILL.md's governance header). Consumer: the dispatching session,
-any tier, at the moment a dispatch's MODEL is chosen. This file
+any tier, at the moment a dispatch's MODEL is chosen — and, for
+the final bullet, when weighing whether a fresh-context review is
+worth its spend. This file
 carries the portable evidence; it deliberately names tier ROLES,
 not models. A site's own corpus overlays it with the concrete
 lineup — a ranked model table, pool and cost bindings, and standing
@@ -19,6 +21,12 @@ Three roles, defined by function:
   reviewer default.
 - **Top tier** — the most capable model available; typically the
   scarcest.
+
+Axes used below (the third is a site binding): **intelligence** =
+how hard a problem the tier handles unsupervised; **taste** =
+output quality where craft matters, in any medium; **cost** = what
+the operator actually pays — pools, caps, and prices are site
+facts, slotted at the tail.
 
 The evidence:
 
@@ -48,8 +56,7 @@ The evidence:
 - **Under-bar output redone one tier up is the cheap correction;
   iterating at the failing tier is not.** Judge the output, never
   the price tag — and never pre-emptively up-tier on price fear:
-  the redo path is what makes the cheap default low-risk wherever
-  the output has a checker.
+  the redo path is what makes the cheap default low-risk.
 - **A top-tier subagent has less context than the dispatching
   session and costs the most; its comparative advantage is the
   fresh-context verdict on a bounded artifact.** Fan-outs multiply
@@ -57,14 +64,14 @@ The evidence:
   level, workflow) is a default someone else chose, not a judgment
   about this task.
 - **What a fresh reviewer buys is independence, not verification
-  effort.** Current top models self-verify their own work well; a
-  builder still cannot see a defect that lives outside its briefed
-  scope or inside its own premises, because the blind spot is in
-  the context doing the checking. Scope fresh-context review to
-  self-blindness risks (completeness claims, surfaces whose
-  wrongness is silent, a session's own booked verdicts); run
-  mechanical verifiers anywhere, and skip instructed
-  "double-check yourself" prose everywhere.
+  effort.** However well a builder verifies its own work, it cannot
+  see a defect that lives outside its briefed scope or inside its
+  own premises — the blind spot is in the context doing the
+  checking. Scope fresh-context review to self-blindness risks
+  (completeness claims, surfaces whose wrongness is silent,
+  statistical findings — briefed to refute — and a session's own
+  booked verdicts); run mechanical verifiers anywhere, and skip
+  instructed "double-check yourself" prose everywhere.
 
 Site-overlay slots this file expects but cannot fill: the ranked
 model table with its staleness stamp; which model each role names;
