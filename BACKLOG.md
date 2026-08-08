@@ -7,44 +7,6 @@ are dropped with a one-line reason.
 
 ## Open
 
-- **READY 2026-08-08 — the 0.6.x release shipped with the repo's own
-  verify block RED: replay-bench 2 mismatches, both agent-model-gate;
-  fix the corpus case, then settle the escalation-ordering half.**
-  Found by a fresh opus review post-release (the releasing session ran
-  the hook batteries but never bench command #1 — the lesson is booked
-  in the dotfiles record rank-probe-2026-08-08.md). Two halves:
-  (a) LANDED d2fdfdb (2026-08-08, sonnet dispatch, verified by the
-  dispatcher's own bench run): guards.jsonl:31 flipped to `block` +
-  lane-change note. Bench now 39/40, false fires 0 — the item's
-  "40/40 green" presumed (b) settled; the sole remaining mismatch is
-  (b)'s line 33, red until the ordering decision below lands.
-  (b) CARRIES A DESIGN DECISION: guards.jsonl:33 (subagent + fable +
-  UNNAMED, expect escalation deny) now hits the mandatory-name block
-  first — main() consults check() before escalation_deny(), so an
-  escalating subagent's first bounce teaches "add a name" instead of
-  "return the question to your dispatcher"; the named retry does
-  reach the escalation deny (no leak, one wasted round). Decide:
-  reorder so escalation_deny precedes the name block for subagent
-  ask-tier payloads, or accept the two-bounce path and update the
-  corpus case to expect the name block. Either way, add battery
-  coverage for the check-vs-escalation ordering (the existing
-  ordering assert pins escalation-vs-ask only).
-
-- **READY 2026-08-08 — brief-reminder's missing_channel deny_text
-  names a repair that cannot clear the newly-caught named shape.**
-  Converging evidence from two independent arms of the rank probe:
-  the deny text ends "…or pass run_in_background: false for a
-  synchronous dispatch", but for a NAMED dispatch the flag is already
-  overridden by the name (is_background reads the name alone), so the
-  advised retry denies identically — repair-loop / override-reflex
-  class. Design: deny_text() gains the payload parameter its sibling
-  tail_mode_mismatch_deny_text already takes and, when a name is
-  present, states the real repair ("a named dispatch is background —
-  paste the background channel line"). Verifier, red-first: probe
-  {name, run_in_background:false, no channel} and assert the deny
-  text names a repair that actually clears on retry; current text
-  fails that assert.
-
 - **READY 2026-08-08 — briefs to cheaper tiers lack the two surfacing
   mechanisms that make the cheap-tier default safe, so the tier gets
   bought as insurance against brief defects instead.** Grounding: an
