@@ -317,6 +317,8 @@ def main() -> int:
         )
     if payload.get("tool_name") not in ("Agent", "Task"):
         return 0
+    if grund := escalation_deny(payload):
+        deny(grund, source="dispatch-guards/agent-model-gate")  # before the name check and the ask: an escalating subagent gets the return-the-question rule, not a name lesson or the dialog
     tool_input = payload.get("tool_input") or {}
     error = check(tool_input)
     if error:
@@ -324,8 +326,6 @@ def main() -> int:
         fire_log("dispatch-guards/agent-model-gate", "block", error, payload)
         print(error, file=sys.stderr)
         return 2  # blocking; stderr goes back as feedback to the main agent
-    if grund := escalation_deny(payload):
-        deny(grund, source="dispatch-guards/agent-model-gate")  # before the ask: a subagent gets the deny, not the dialog
     if needs_model_ask(tool_input):
         desc = (tool_input.get("description") or "").strip()
         ask(  # exits 0 with permissionDecision "ask"
@@ -452,6 +452,8 @@ if __name__ == "__main__":
         _src = inspect.getsource(main)
         assert _src.index("escalation_deny") < _src.index("needs_model_ask"), \
             "escalation deny must precede the fable ask in main()"
+        assert _src.index("escalation_deny") < _src.index("error = check"), \
+            "escalation deny must precede the name/model check in main()"
 
         # ── Undelivered-text note (2026-08-05 lane) ────────────────
         def _write_transcript(path, events):
