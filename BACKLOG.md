@@ -26,15 +26,46 @@ are dropped with a one-line reason.
   long-lived PR-slice worktrees are legitimate and their branches are
   deliberately unmerged, so "merged into main" fails too). Shipping a remover
   before either is answered is the incident again with a different regex.
-  What is decided and can ship without them: a REPORTING doctor verdict, three
-  answers (clean / stale-found / could-not-verify), dry-run by default, naming
-  each target and why it qualifies. That is the safe first ship and it also
-  produces the missing evidence.
-  Verifier, red-first, in a throwaway clone: three worktrees — clean+owned,
-  clean+foreign, DIRTY. Name all three; act on only the owned clean one; refuse
-  the dirty one loudly even when owned; leave the foreign one untouched with a
-  stated reason. Arm three is the one the incident would have failed.
+  **The doctor slice SHIPPED by ff7f9b5** —
+  `plugin/skills/worktree/scripts/worktree_doctor.py`, reporting only, no
+  removal code path at any flag; three verdicts (clean / stale-found /
+  could-not-verify) with matching exit codes; per-worktree DIRTY / REMOVABLE /
+  UNKNOWN / UNREADABLE each carrying its evidence string; recommendations
+  printed as unforced `git worktree remove` TEXT, never executed; no branch
+  command at any path. Red-first proof ran the incident's own loop against an
+  independently built three-arm fixture (it destroys all three including the
+  dirty arm) and the doctor against the same shape (refuses the dirty arm,
+  recommends only the declared-clean one, mutates no registration); the
+  falsifiability probe — cleaning the dirty arm and watching DIRTY flip to
+  REMOVABLE and back — is what distinguishes the refusal from an always-red
+  constant. Registered in CLAUDE.md's verify block as step 3a.
+  **Design decision taken at dispatch time, filling a gap this entry left
+  open:** ownership is DECLARED (`--owned <path>`, repeatable), never inferred
+  — undeclared reads UNKNOWN, never FOREIGN, because the tool cannot know. Any
+  predicate over path shape, name prefix, directory component, branch name, or
+  commit trailer is rejected: that is this entry's own naming-convention
+  rejection, and left unstated it would have been re-created inside the tool
+  built to prevent it. A future durable mark simply auto-populates the flag.
+  **What stays PARKED, with the missing evidence unchanged:** the remover
+  itself, the durable ownership mark, and the retirement trigger. The doctor is
+  now the mechanism that produces the missing evidence — run it across repos
+  over time; whether accumulation generalises past one repo remains UNMEASURED,
+  and the post-incident zero-scan still proves nothing.
   Do not delete branches as part of any worktree cleanup.
+
+- **READY 2026-08-08 — skill-lint's dead-cite check fires on tool names in
+  parentheses, blocking every dispatch-guards release.** `skill_lint.py`
+  reports `forms.md:29: dead-cite: (SendMessage) matches no heading here`;
+  the text is a tool name in prose, not a section citation, and the finding is
+  pre-existing (proven by linting the unmodified HEAD copy). Exit 1 makes it
+  blocking, so every release must hand-disposition a false fire — the override
+  habit the corpus warns about. Fix belongs in skill-craft's `tools/
+  skill_lint.py` (sibling repo), not in rewording correct prose: exclude
+  known tool/function names, or require a cite to look like a section
+  reference (`§`, "see", a heading-shaped token) before flagging. Verifier:
+  the linter goes red on a genuinely dead section cite and silent on
+  `(SendMessage)`, both in one run. Done when dispatch-guards releases at
+  lint exit 0 with no hand-disposition.
 
 - **PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a
   missing dependency tree (hang, not error).** The skill already has
