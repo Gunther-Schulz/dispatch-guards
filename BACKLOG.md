@@ -7,6 +7,84 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-08 — briefs to cheaper tiers lack the two surfacing
+  mechanisms that make the cheap-tier default safe, so the tier gets
+  bought as insurance against brief defects instead.** Grounding: an
+  operator-relayed opus-desk retrospective graded 4 of its 7 opus
+  dispatches as needed-only-because-the-brief-was-defective, and named
+  the two mechanisms that would have made the sweep-shaped lanes
+  sonnet-safe; the operator corpus's residual-judgment rule now rests
+  on briefs carrying them. Design: §1 (or §3b where sweep-specific)
+  gains two clauses — (a) post-sweep accounting: after any sweep or
+  multi-site change, the report dispositions EVERY hit as fixed /
+  correct / excluded / still-wrong (first real run returned 65
+  instances after three sweeps each believed the class closed); (b)
+  instrument-positive: a brief commissioning a pattern-scoped sweep
+  names one member the pattern provably catches, so a zero-hit result
+  is distinguishable from a dead pattern. Verifier: skill-craft
+  authoring checks on the final render + replay of the motivating
+  case against the clause text (the 65-instance accounting run and
+  the four-of-five site miss must both fail a clause-less brief and
+  pass a compliant one, on paper). Done: clauses landed in the skill,
+  JOURNAL line in the corpus repo.
+
+- **READY 2026-08-08 — graduate the outcomes-vs-sites candidate from
+  dev-notes into §1's settled-design part.** It has now fired twice
+  from opposite directions (2026-08-07: an outcome-criterion found a
+  call site the brief's site list missed; 2026-08-08: a site-shaped
+  brief left a defect the outcome would have caught), and the second
+  firing was briefed by a session that had READ the candidate in
+  dev-notes hours earlier — evidence the clause is consulted where it
+  lives, not where briefs are written, so the fix is relocation into
+  §1, not sharper wording. Design: one clause in §1's settled-design
+  part — criteria stated as OUTCOMES out-reach criteria stated as
+  edit sites; name the observable the change must produce, then the
+  known sites, never the sites alone. Verifier: skill-craft render
+  checks; the two firing cases both satisfied by the clause as
+  written. Done: clause in §1, dev-notes candidate marked graduated,
+  JOURNAL line in the corpus repo.
+
+- **READY 2026-08-08 — §1 gains the two commit-plan clauses the
+  name-lane build halted on.** Both from executor escalations in one
+  dispatch, both spec defects a brief-form clause prevents: (a) in a
+  repo with a payload-version guard, a brief-prescribed commit
+  sequence orders the version-bump commit FIRST (the dotfiles
+  pre-commit `unbumped_plugins` guard reads the staged manifest and
+  tolerates later same-batch commits by comparing against origin);
+  (b) an item that must record a commit's ref cannot share that
+  commit — the brief either orders it into a LATER commit or splits
+  the pathspec. Verifier: replay the halted dispatch's two gaps
+  against the clause text — both must be prevented as written.
+  Done: clauses in §1's write-boundaries part, JOURNAL line in the
+  corpus repo.
+
+- **READY 2026-08-08 — §1 gains a declared-exemption repair lane so a
+  halt-worthy gap with an executor-derived fix does not cost a full
+  round trip.** Grounding: the name-lane build's executor derived the
+  exact commit-reorder fix with evidence, halted per the box, and the
+  dispatcher approved it unchanged — a round trip spent ratifying a
+  repair already reasoned out. Design: the brief skeleton's
+  write-boundaries part gains an optional pre-authorized repair
+  class — "if the commit plan collides with a repo guard, reorder to
+  satisfy the guard and report the permutation as a deviation" — the
+  same declared-exemption shape the corpus prescribes for guards,
+  applied to briefs; novel deviations still halt. Verifier: replay
+  the name-lane halt against the clause — GAP 1 resolves without a
+  round trip, GAP 2 (self-referential ref, not a pre-named class)
+  still halts. Done: clause in §1, JOURNAL line in the corpus repo.
+
+- **READY 2026-08-08 — §1's Background part gains per-line provenance
+  grades, closing the citation pass-through.** Grounding: the
+  2026-08-08 observation "a Background section claimed dispatcher
+  verification over a citation the dispatcher never opened" — its two
+  rule candidates are the design, decision-complete as written there
+  (per-line OPENED-or-carried-with-provenance; audit findings
+  verified at the brief boundary where testimony becomes
+  instruction). Verifier: replay the phantom-citation case — the
+  unopened line must be un-writable as "established" under the
+  clause. Done: clauses in §1's Background part, JOURNAL line in the
+  corpus repo.
+
 - **READY 2026-08-07 — a data-file report names the file's PROSE field
   names, and the dispatcher then queries the wrong keys.** The §3b
   enumeration brief assigns a data file and the tail returns a pointer

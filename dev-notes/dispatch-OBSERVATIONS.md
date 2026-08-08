@@ -304,3 +304,102 @@ Two probes from a fable desk session (dotfiles cwd), same day:
 (1) an UNNAMED `general-purpose` dispatch with `run_in_background: false` launched ASYNC ("Async agent launched successfully"), contradicting the sync-on-request behavior the title-prefix lane was built for (forms.md §2, binding as of 2026-07-30).
 (2) that agent's final text WAS delivered to the dispatcher, in full, inside the completion task-notification — "final text reaches no one" did not hold for this shape.
 Both n=1, that day's harness version. Consequence taken now: the agent-model-gate's unnamed/title-prefix lane is retired (name-always, operator decision 2026-08-08). NOT taken: any change to the §2 channel rules — they stand pending a controlled re-probe (named/unnamed × run_in_background true/false, recording launch mode and whether the final text reaches the dispatcher). See the PARKED backlog item of the same date.
+
+(The two entries below were authored by a peer opus desk session and
+relayed by the operator; appended verbatim by the integrating
+session. Their bases are the authoring session's transcript and
+executed commands, as each entry states.)
+
+## 2026-08-08 — the outcomes-vs-sites candidate re-fires, and the
+## second firing was briefed by a session that had just read it
+
+A brief closing the "installer must yield to externally-managed
+symlinks" lane named its edit sites: install.sh:132, :142, and
+uninstall.sh:41. uninstall.sh has TWO writes to $SETTINGS — the
+hooks-removal jq at :38 and the statusline-removal jq at :41 — and the
+brief named only the second, because the dispatcher took the line
+number from the audit that found the defect rather than enumerating the
+write sites. The executor fixed :41 exactly as briefed, then flagged
+:38 as a likely scope oversight and correctly declined to fix it
+unbriefed. The defect the lane existed to close therefore survived its
+own repair: uninstalling would still have replaced a symlinked
+settings.json with a regular file.
+
+The outcome-shaped statement reaches all of them where the site list
+reached three of four, and it is one command:
+`grep -n '> "$SETTINGS"' install.sh uninstall.sh` returns five writes —
+four requiring the cp-through-symlink form, plus the `echo '{}'`
+bootstrap at install.sh:99 which is correct as-is. Stated as an
+observable ("no write to $SETTINGS may replace the link"), the brief
+would have carried its own completeness check; stated as sites, it
+carried a list.
+
+Red-first on the missed site ran the REAL previous script rather than a
+model of it — `git show HEAD:uninstall.sh` against a sandbox CLAUDE_DIR
+whose settings.json is a symlink: old left a regular file (link
+destroyed), new left the link intact with the target emptied to `{}`.
+Same fixture both sides, old is HEAD, new is the working tree.
+
+What makes this worth recording is not the miss but its provenance.
+This re-fires candidate 2 of the 2026-08-07 entry ("dispositions-as-
+brief graduated; two §1 note candidates"), which reads: criteria stated
+as OUTCOMES out-reach criteria stated as edit sites — name the
+observable the change must produce, then the known sites, never the
+sites alone. That candidate was already in this file, and the
+dispatching session had READ it — the tail of this file, including that
+paragraph — earlier in the same session, while appending the
+base-commit entry above. It still did not reach the brief-writing
+moment two dispatches later. A candidate in dev-notes is consulted by
+whoever is editing dev-notes; §1 is consulted by whoever is writing a
+brief. Same session, same day, same rule, wrong shelf.
+
+Two independent lanes now, from opposite directions: the 2026-08-07
+case where an outcome-shaped criterion found a call site the brief's
+site list missed, and this one where a site-shaped brief left a defect
+the outcome would have caught. Second firing, different failure
+direction, same clause.
+
+## 2026-08-08 — a Background section claimed dispatcher verification
+## over a citation the dispatcher never opened
+
+The same brief carried a part (3): uninstall.sh:22 removes
+~/.claude/cachebust-runbook.md, so guard that removal with `[ -L ]` and
+leave an externally-managed symlink alone. No such code exists.
+uninstall.sh:22 is `rm "$BIN_DIR/claude-worktime"` — the binary — and
+`grep -n 'runbook\|cachebust' uninstall.sh` returns nothing at all: the
+uninstaller never touches the runbook anywhere. The citation came from
+the audit that had swept the two repos, and the dispatcher passed it
+into the brief without opening the file.
+
+The brief's Background header read "established and verified by the
+dispatcher; re-verify at the cited lines, report a mismatch as a gap".
+The first half of that sentence is a verification CLAIM, made over
+every line the section carries, and it was false for one of them. The
+second half is what saved it: the executor read the whole file, hit the
+listed STOP signal ("any cited line that no longer says what this brief
+quotes"), built nothing for part (3), and returned it as a question
+with its own grep as evidence.
+
+The machinery worked, but note what it depended on. This citation was
+ABSENT, so reading falsified it immediately. A citation that was merely
+STALE — right file, right shape, wrong line after drift — reads as a
+near-miss the executor plausibly "corrects" toward, and the same
+Background sentence would have vouched for it just as strongly. The
+failure mode this caught cheaply is the one it handles best.
+
+Rule candidates for §1 (the Background/grounding part):
+1. "Established by the dispatcher" is a per-line verification claim,
+   not a section-level tone. A cited line is either OPENED at
+   brief-write time, or it is carried with its provenance and its
+   grade — "from <source>, unverified" — so the executor knows which
+   citations hold dispatcher weight and which are inherited. A
+   Background section whose lines have mixed provenance and one
+   uniform header is the drift; the header is the label, the lines are
+   the body.
+2. Corollary for audit-sourced briefs specifically: findings arriving
+   from a discovery dispatch are testimony, and a brief is where that
+   testimony becomes an instruction. The transition is the natural
+   verification point — every finding the brief turns into a build
+   step gets its cited line opened once, at that moment, because after
+   it the claim is executed by someone who cannot tell inherited from
+   verified.
