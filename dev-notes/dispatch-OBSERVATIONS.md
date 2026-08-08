@@ -297,3 +297,10 @@ Rule candidates for §1 (base-commit clause):
    brief it did not write. Halt-and-ask cost one message; the
    alternative is an executor exercising exactly the judgment the
    tier choice was meant to keep at the desk.
+
+## 2026-08-08 — harness bindings: sync lane unobserved; async final text delivered
+
+Two probes from a fable desk session (dotfiles cwd), same day:
+(1) an UNNAMED `general-purpose` dispatch with `run_in_background: false` launched ASYNC ("Async agent launched successfully"), contradicting the sync-on-request behavior the title-prefix lane was built for (forms.md §2, binding as of 2026-07-30).
+(2) that agent's final text WAS delivered to the dispatcher, in full, inside the completion task-notification — "final text reaches no one" did not hold for this shape.
+Both n=1, that day's harness version. Consequence taken now: the agent-model-gate's unnamed/title-prefix lane is retired (name-always, operator decision 2026-08-08). NOT taken: any change to the §2 channel rules — they stand pending a controlled re-probe (named/unnamed × run_in_background true/false, recording launch mode and whether the final text reaches the dispatcher). See the PARKED backlog item of the same date.
