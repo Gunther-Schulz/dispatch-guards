@@ -68,9 +68,13 @@ judgment on honest reporting, not on redesign.
    INDEX is shared on a shared working copy, so a co-writer
    staging between your `git status` and your commit rides out
    under your message whatever paths you added; pathspec ignores
-   the index for everything else. Pushing, merging, and
-   publishing are the dispatcher's acts. No writes outside the
-   named write boundaries.
+   the index for everything else. A NEW file is invisible to a
+   pathspec commit until `git add -N <path>` registers it
+   (intent-to-add: zero content staged, full body still
+   committed) — the one sanctioned `add`, and not a licence to
+   stage anything else (source: dispatch skill §1). Pushing,
+   merging, and publishing are the dispatcher's acts. No writes
+   outside the named write boundaries.
    Nothing outward-facing (sends, posts, deployments, deletions of
    truth sources) without an explicit grant in the brief. A devbook's
    own limits section binds verbatim on top of this. (Source:

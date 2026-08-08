@@ -112,8 +112,17 @@ Mandatory parts (execution briefs):
   working copy; parallel dispatches need disjoint, brief-named path
   sets — source: CLAUDE.md dispatched-work rule). On a SHARED copy
   commit by pathspec — `git commit -- <paths>`, not `git add` then
-  `git commit`; `-A` is wrong everywhere. **Commit unpushed; pushing
-  is the dispatcher's act** after verification.
+  `git commit`; `-A` is wrong everywhere. A path git does not yet
+  TRACK is invisible to a pathspec commit ("did not match any
+  file(s) known to git"), so a brief whose deliverable is a NEW
+  file states the one addition that closes it: `git add -N <path>`
+  first — intent-to-add registers the path against the empty blob,
+  staging zero content, so the commit still carries the file's full
+  body while a co-writer's staged work stays staged and
+  uncommitted. Unstated, the rule is unsatisfiable for file
+  creation and the executor either bridges it or halts.
+  **Commit unpushed; pushing is the dispatcher's act** after
+  verification.
   - **Disjointness is per FILE, and commits serialize on shared
     files:** staging is file-granular, so an agent committing its own
     work in a shared file sweeps up a co-writer's uncommitted hunks —

@@ -146,7 +146,10 @@ EXECUTION tail (any dispatch that writes):
     Commits unpushed, by pathspec — `git commit -- <paths>`, never
     `git add` then `git commit` and never `-A`: the index is shared,
     so a co-writer staging between your `git status` and your commit
-    rides out under your message whatever you added. Trailer:
+    rides out under your message whatever you added. A NEW file is
+    invisible to a pathspec commit until `git add -N <path>`
+    registers it (intent-to-add: zero content staged, full body
+    still committed). Trailer:
     `Co-Authored-By: Claude <model> <noreply@anthropic.com>`.
     Never amend — always a new commit: the amend-gate denies
     subagent amends regardless of ownership.
