@@ -133,7 +133,10 @@ EXECUTION tail (any dispatch that writes):
     report (TaskOutput block=true on its task id) — ending your
     turn orphans it; a report sent with a check still running is
     an INTERIM report, says so, and names what remains.
-    Commits unpushed, targeted `git add <paths>` never `-A`, trailer:
+    Commits unpushed, by pathspec — `git commit -- <paths>`, never
+    `git add` then `git commit` and never `-A`: the index is shared,
+    so a co-writer staging between your `git status` and your commit
+    rides out under your message whatever you added. Trailer:
     `Co-Authored-By: Claude <model> <noreply@anthropic.com>`.
     Never amend — always a new commit: the amend-gate denies
     subagent amends regardless of ownership.

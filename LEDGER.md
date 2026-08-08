@@ -89,3 +89,35 @@ before that date is deliberately sparse rather than complete.
   FIXTURE and was never emitted to an agent — the consequence is that
   this guard's bite-tests pass against a tail shape the form no longer
   produces, which is the frozen-fixture class, not misinstruction.
+
+- 2026-08-08 SHARED-INDEX SHARPEN + STORED-BRIEF STALENESS (build-first,
+  operator GO "lest fix dispatch from here now"). Two amendments, both
+  in place, both from one parallel dispatch on a shared working copy.
+  (1) `git add <paths>` does not isolate a shared copy — the INDEX is
+  shared, so a co-writer staging between an agent's `git status` and
+  its commit rides out under that agent's message whatever paths it
+  added. Observed: a five-file commit under a three-file message,
+  carrying the co-writer's in-flight work. `git commit -- <paths>`
+  isolates because it ignores the index for everything else. The
+  existing clause already NAMED the hazard ("a clean targeted git add
+  absorbs them") and prescribed the very form that cannot prevent it —
+  a rule that diagnosed correctly and then recommended the disease.
+  Generalised in the same edit: in a shared repo any state read is
+  stale by the next command, so check and act belong in ONE command or
+  in a form that cannot act on the wrong object — pathspec for a
+  commit, an explicit hash for a reset, never `HEAD~1` (observed: a
+  `reset --soft HEAD~1` aimed at the mixed commit un-committed a
+  co-writer's newer one instead). Audited across all four homes that
+  prescribed `git add`: dispatch §1 + its brief skeleton, the §2
+  EXECUTION tail in references/forms.md (the one pasted into every
+  brief, so the highest-leverage), and executor §6 "the box".
+  (2) CLAUDE.md's brief-family clause: a STORED brief is a label over
+  a body written at a past date, and its grade records
+  decision-completeness AS OF then. Grounding: of six backlog items
+  audited, two were stale — one whose diagnosis was refuted by a
+  different investigation ("rotation rewrites the live file" had cause
+  and effect inverted) and one whose evidence proved a badly-written
+  probe rather than a missing feature. The refuted one had SURVIVED a
+  fresh-context vet with its wrong hypothesis intact, because the vet
+  checked the entry's reasoning and not the world. Both capability
+  patches; fire-rate review judges them.

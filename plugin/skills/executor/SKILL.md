@@ -63,9 +63,14 @@ judgment on honest reporting, not on redesign.
    location + the decision question + a path per outcome. Never spawn
    a higher tier yourself — the dispatcher holds the design context
    and decides (dispatch skill §4).
-6. **The box.** Commit unpushed with targeted `git add <path>`
-   (never `-A`); pushing, merging, and publishing are the
-   dispatcher's acts. No writes outside the named write boundaries.
+6. **The box.** Commit unpushed by pathspec — `git commit --
+   <paths>`, never `git add` then `git commit`, never `-A`: the
+   INDEX is shared on a shared working copy, so a co-writer
+   staging between your `git status` and your commit rides out
+   under your message whatever paths you added; pathspec ignores
+   the index for everything else. Pushing, merging, and
+   publishing are the dispatcher's acts. No writes outside the
+   named write boundaries.
    Nothing outward-facing (sends, posts, deployments, deletions of
    truth sources) without an explicit grant in the brief. A devbook's
    own limits section binds verbatim on top of this. (Source:

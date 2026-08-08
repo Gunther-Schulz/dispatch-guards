@@ -91,14 +91,30 @@ Mandatory parts (execution briefs):
   actually read.
 - **Write boundaries.** Which paths the agent owns (one writer per
   working copy; parallel dispatches need disjoint, brief-named path
-  sets — source: CLAUDE.md dispatched-work rule). Targeted `git add
-  <path>`, never `-A`. **Commit unpushed; pushing is the dispatcher's
-  act** after verification.
+  sets — source: CLAUDE.md dispatched-work rule). On a SHARED copy
+  commit by pathspec — `git commit -- <paths>`, not `git add` then
+  `git commit`; `-A` is wrong everywhere. **Commit unpushed; pushing
+  is the dispatcher's act** after verification.
   - **Disjointness is per FILE, and commits serialize on shared
     files:** staging is file-granular, so an agent committing its own
     work in a shared file sweeps up a co-writer's uncommitted hunks —
     a clean targeted `git add` absorbs them; edit discipline alone
-    cannot prevent it.
+    cannot prevent it. The INDEX is shared too, which is what makes
+    `git add <paths>` insufficient rather than merely imperfect: a
+    co-writer staging between your `git status` and your commit
+    rides out under YOUR message, whatever paths you named, and
+    adding your own never unstages theirs. `git commit -- <paths>`
+    ignores the index for everything else, so it isolates where
+    `add` cannot (observed: a five-file commit under a three-file
+    message, carrying a co-writer's in-flight work).
+    General form, covering the repair as well as the commit: in a
+    shared repo any state read is stale by the next command, so the
+    check and the act belong in ONE command, or in a form that
+    cannot act on the wrong object — pathspec for a commit, an
+    explicit hash for a reset, never `HEAD~1` (observed: a `reset
+    --soft HEAD~1` aimed at that mixed commit un-committed a
+    co-writer's newer one instead; recoverable only because
+    `--soft` moves the branch pointer alone).
   - **Amend is COMMIT-granular — file disjointness does not reach
     it:** `git commit --amend` rewrites whatever commit is at HEAD,
     and on a shared copy HEAD moves between working rounds — an amend
@@ -278,7 +294,8 @@ satisfied by construction:
     1. <red-first bite>  2. <suites>  3. <live or corpus check>
 
     ## Write boundaries
-    <paths owned; targeted `git add`; what NOT to touch; whether the
+    <paths owned; `git commit -- <paths>`; what NOT to touch;
+    whether the
     change is deployment-coupled; commit style; the amend rule>
 
     <§2 tail block from references/forms.md, pasted verbatim>
