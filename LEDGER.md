@@ -142,3 +142,4 @@ before that date is deliberately sparse rather than complete.
   instrument brief arriving with its grain unstated. Verify block all
   four green (bench 40/40, bites, devbook form, doc-drift, wrap).
   Durability: CAPABILITY PATCH; fire-rate review judges it.
+2026-08-08 NAME-LANE STAGING BYPASS RATIFIED (operator decision, decision round item 3; parked item leaves by this commit): the mandatory-name lane keeps deny-from-day-one — check()'s exit-2 path structurally precedes guard_mode(), the repair is compose-time and mechanical (add the `<model>-` name), which is the false-fire profile staging exists to protect against; rework of check() through fire()/guard_mode() DECLINED (generality no current lane needs). Declared exception recorded beside the staging rule in CLAUDE.md; future lanes earn the same exemption only by their own operator decision.

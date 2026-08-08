@@ -45,15 +45,6 @@ are dropped with a one-line reason.
   text names a repair that actually clears on retry; current text
   fails that assert.
 
-- **PARKED 2026-08-08 — the mandatory-name lane blocks from day one,
-  bypassing the guard_modes staging that CLAUDE.md says new lanes
-  earn deny through.** check()'s exit-2 path calls fire_log directly
-  and never consults guard_mode(), so warn-staging cannot reach it
-  (pre-existing structure, inherited by the new lane). Missing:
-  the operator's decision — ratify deny-from-day-one for this lane
-  (it is a compose-time convention with a cheap retry), or rework
-  check() to route through fire()/guard_mode() so staging applies.
-
 - **READY 2026-08-08 — briefs to cheaper tiers lack the two surfacing
   mechanisms that make the cheap-tier default safe, so the tier gets
   bought as insurance against brief defects instead.** Grounding: an

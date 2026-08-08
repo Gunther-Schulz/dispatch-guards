@@ -31,6 +31,14 @@ are not — this repo carries both sides, and the split is the design.
   other home that states it (README table, skill prose).
 - **New guard lanes ship default-warn** and earn `deny` through the
   fire-rate review against the fire log, never by assertion.
+  Declared exception (operator decision 2026-08-08): the
+  mandatory-name lane in agent-model-gate's check() blocks from day
+  one — check()'s exit-2 path structurally precedes guard_mode(),
+  and the lane's repair is compose-time and mechanical (add the
+  `<model>-` name), the false-fire profile staging exists to
+  protect against. A future lane wanting the same exemption earns
+  it by its own operator decision, never by inheriting the
+  structure.
 - **Releases go through `skill-craft:release-plugin`** — version
   bump in `plugin/.claude-plugin/plugin.json`, marketplace pin,
   operator `/reload-plugins` handoff. Editing a skill and leaving it
