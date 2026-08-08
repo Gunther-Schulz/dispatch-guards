@@ -80,16 +80,37 @@ _CHANNEL_MARKERS = ("sendmessage", "send_message", "report channel",
                     "final text is the report")
 
 
+def is_background(tool_input: dict) -> bool:
+    """True iff the dispatch runs in background FACT, not just by flag.
+
+    Background is the Agent tool's default, so an explicit
+    run_in_background=False is the only flag-side exemption — but
+    setting `name` forces background mode and silently overrides that
+    flag (forms.md §2, binding as of 2026-07-30, probe-confirmed
+    same-model controlled pair). A named dispatch is therefore
+    background whatever the flag says.
+
+    One predicate for both call sites below: reading the flag alone
+    made `missing_channel` exempt a named sync-flagged dispatch (its
+    report reached no one, measured 2026-08-07) while
+    `tail_mode_mismatch` blocked the CORRECT background channel line
+    on that same shape — the guard manufacturing the defect it exists
+    to prevent (BACKLOG READY 2026-08-07)."""
+    return (tool_input.get("run_in_background") is not False
+            or bool(tool_input.get("name")))
+
+
 def missing_channel(payload: dict) -> bool:
     """True iff this is a BACKGROUND Agent dispatch whose prompt names
     no report channel — the deliver-into-the-void class (JOURNAL
     2026-07-27, epsilon-probe: agent finished, reported as final text,
-    reached no one). Background is the Agent tool's default, so only an
-    explicit run_in_background=False exempts. Fail-open on any doubt."""
+    reached no one). Background is decided by is_background() above:
+    the run_in_background flag, overridden by a `name`. Fail-open on
+    any doubt."""
     if payload.get("tool_name") != "Agent":
         return False  # Task tool has its own return path
     tool_input = payload.get("tool_input") or {}
-    if tool_input.get("run_in_background") is False:
+    if not is_background(tool_input):
         return False  # synchronous: final text IS the report
     prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
@@ -209,8 +230,7 @@ def tail_mode_mismatch(payload: dict) -> bool:
     prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
-    is_background = tool_input.get("run_in_background") is not False
-    if is_background:
+    if is_background(tool_input):
         return _SYNC_TAIL_MARKER in prompt
     return _BACKGROUND_TAIL_MARKER in prompt
 
@@ -218,8 +238,7 @@ def tail_mode_mismatch(payload: dict) -> bool:
 def tail_mode_mismatch_deny_text(payload: dict) -> str:
     doc = policy().get("discipline_doc") or "the dispatch skill"
     tool_input = payload.get("tool_input") or {}
-    is_background = tool_input.get("run_in_background") is not False
-    if is_background:
+    if is_background(tool_input):
         wrong = ('the synchronous channel line ("your final text IS '
                  'the report") was pasted into a background dispatch')
     else:
@@ -405,6 +424,42 @@ if __name__ == "__main__":
         assert not missing_channel({"tool_name": "Bash", "tool_input": {
             "command": "ls"}})
         assert "Blocked" in deny_text()
+
+        # ── Named dispatch is BACKGROUND in fact (BACKLOG 2026-08-07) ─
+        # Expectation derived from forms.md §2's binding ("setting
+        # `name` forces background mode — run_in_background: false is
+        # silently overridden"), never from this hook's behavior: the
+        # flag-only predicate agreed with itself in both directions.
+        # (i) named + sync flag + no channel line → DENY. Measured
+        # live 2026-08-07: this shape passed, the agent finished, its
+        # report reached no one.
+        assert missing_channel({"tool_name": "Agent", "tool_input": {
+            "name": "x-agent", "run_in_background": False,
+            "prompt": "Do the thing and report back."}})
+        # (ii) same shape carrying the CORRECT background channel line
+        # → tail_mode_mismatch must stay silent. The flag-only
+        # predicate read it as sync and blocked it, instructing the
+        # author to paste the sync line — the guard manufacturing the
+        # defect it exists to prevent.
+        assert not tail_mode_mismatch({"tool_name": "Agent", "tool_input": {
+            "name": "x-agent", "run_in_background": False,
+            "prompt": "Do the thing.\nReport channel: SendMessage to "
+                      "the dispatcher — your final text reaches no "
+                      "one."}})
+        # (iii) the negative that bounds the widening: an UNNAMED
+        # synchronous dispatch with the sync line is unchanged — no
+        # channel deny, no mode mismatch.
+        _unnamed_sync = {"tool_name": "Agent", "tool_input": {
+            "run_in_background": False,
+            "prompt": "Do the thing.\nReport channel: your final text "
+                      "IS the report."}}
+        assert not missing_channel(_unnamed_sync)
+        assert not tail_mode_mismatch(_unnamed_sync)
+        # the predicate itself, both differing inputs and the agreeing one
+        assert is_background({"name": "x-agent", "run_in_background": False})
+        assert not is_background({"run_in_background": False})
+        assert is_background({})
+        assert is_background({"name": "x-agent"})
 
         # ── Tail-presence lane (missing_tail) ──────────────────────
         # Tails copied verbatim from the §2 forms (cite: dispatch
