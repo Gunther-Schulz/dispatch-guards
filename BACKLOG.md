@@ -13,12 +13,11 @@ are dropped with a one-line reason.
   Found by a fresh opus review post-release (the releasing session ran
   the hook batteries but never bench command #1 — the lesson is booked
   in the dotfiles record rank-probe-2026-08-08.md). Two halves:
-  (a) DECISION-COMPLETE: tools/corpus/guards.jsonl:31 (unnamed opus +
-  title prefix, expect silent) encodes the retired lane — flip its
-  expectation to `block` (deliberate lane change, name-always), which
-  also cleans the false-fire statistic the fire-rate review reads.
-  Verifier: replay-bench 40/40 green, red-first = bench red before
-  the flip (it is, verified at HEAD).
+  (a) LANDED d2fdfdb (2026-08-08, sonnet dispatch, verified by the
+  dispatcher's own bench run): guards.jsonl:31 flipped to `block` +
+  lane-change note. Bench now 39/40, false fires 0 — the item's
+  "40/40 green" presumed (b) settled; the sole remaining mismatch is
+  (b)'s line 33, red until the ordering decision below lands.
   (b) CARRIES A DESIGN DECISION: guards.jsonl:33 (subagent + fable +
   UNNAMED, expect escalation deny) now hits the mandatory-name block
   first — main() consults check() before escalation_deny(), so an
