@@ -29,7 +29,7 @@ All three are model-invoked — they trigger from their descriptions;
 | Guard | Event | What it enforces |
 |---|---|---|
 | `dispatch-skill-gate` | PreToolUse Agent\|Task\|Workflow | the `dispatch` skill must be loaded in the dispatching context's transcript (session-scoped) before any dispatch — replaces the old read-by-convention |
-| `agent-model-gate` | PreToolUse Agent\|Task\|Workflow | explicit `model` on generic agent types; strict `<model>: ` title prefix (verified mirror of the field); `<model>-` name prefix; per-policy deny/ask tiers; Workflow launches always ask; **escalation lane** — an ask-tier dispatch *from a subagent* is denied, not asked: escalation is the dispatcher's decision, the subagent returns the question |
+| `agent-model-gate` | PreToolUse Agent\|Task\|Workflow | explicit `model` on generic agent types; mandatory `<model>-` NAME prefix on every generic dispatch (the panel renders the name; a legacy `<model>: ` title prefix, if present, must mirror the field); per-policy deny/ask tiers; Workflow launches always ask; **escalation lane** — an ask-tier dispatch *from a subagent* is denied, not asked: escalation is the dispatcher's decision, the subagent returns the question |
 | `brief-reminder` | PreToolUse Agent\|Task | **denies on the computable slice of §§1-2**, reminds on the judgment half. Four deny lanes, all `Agent`-only: a BACKGROUND dispatch whose prompt names no report channel (a background agent's final text reaches no one); a brief lacking the §2 tail block — searched in the prompt *and* in any brief FILE the prompt names; a pasted tail whose channel line contradicts `run_in_background`, either direction; an execution-tail brief missing its §1 grounding-basis or write-boundaries section. Otherwise one reminder line before every dispatch (brief decision-complete? report channel named?), plus a non-blocking base advisory on `isolation: "worktree"` calls |
 | `subagent-push-gate` | PreToolUse Bash | denies `git`/`gh` push in a subagent context — subagents commit unpushed, the dispatcher pushes after verification |
 | `push-claim-reminder` | PreToolUse Bash | main-session push lanes: **denies a fused push** — one sharing its invocation with `git commit` or `git log`, since the read-then-decide seam only exists across separate invocations — and otherwise reminds to claim each outgoing commit (`git log origin/<branch>..<branch>`); subagent context excluded, `subagent-push-gate` already denies it |
@@ -103,7 +103,7 @@ generic reminder wording). Site policy lives in
 }
 ```
 
-- `models` — allowed lineup; drives the title/name prefix check.
+- `models` — allowed lineup; drives the name-prefix check and the legacy title-prefix mirror.
 - `deny_models` — dispatches to these tiers are refused with feedback.
 - `ask_models` — every generic-type dispatch to these tiers forces the
   permission dialog (one operator yes/no per dispatch, before it starts).

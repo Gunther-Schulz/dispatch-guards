@@ -80,24 +80,34 @@ background-vs-sync call is the dispatcher's, made at paste time,
 never left to the agent (it has been misjudged agent-side; the
 report-enforcer hook's docstring, soft-spot note).
 
-Channel line (both tails; paste exactly one):
+Channel line (paste exactly one). A GENERIC dispatch is named and
+therefore background (bindings below) — it always takes the
+background line; the synchronous line remains only for pinned-type
+agents, which the model gate exempts from the name mandate:
 - background/teammate agent: `Report channel: SendMessage to the
   dispatcher — your final text reaches no one.`
-- synchronous agent: `Report channel: your final text IS the
-  report.`
+- synchronous agent (pinned types only): `Report channel: your
+  final text IS the report.`
 
 Binding (as of 2026-07-30): setting `name` on a dispatch forces
 background mode — `run_in_background: false` is silently overridden
-(probe-confirmed, same-model controlled pair). A sync dispatch sets
-no `name`; model visibility rides the title prefix, and the
-agent-model-gate's name lane applies only where a name exists.
+(probe-confirmed, same-model controlled pair). Follow-up bindings
+(as of 2026-08-08): the agent-model-gate requires a `<model>-` name
+on every generic dispatch (0.6.0), so generic dispatches are
+background by construction; and an UNNAMED dispatch with
+`run_in_background: false` was also observed launching async, its
+final text delivered in the completion task-notification (n=1 each
+— the sync lane may be gone from the harness entirely; the
+controlled re-probe is a PARKED backlog item, and the deeper
+channel-rule rework waits on it).
 
-The call's criteria: background suits work the session talks
-across — long builds, parallel fan-outs, teammates. A short
-dispatch whose result the current turn depends on (probe, verifier,
-single pipeline stage) runs sync — the inline return carries the
-report and the usage metadata, and skips the mailbox plumbing
-(measured 2026-07-30, dedup-corrected same day: ~1.3×
+The call's criteria, now scoped to PINNED-TYPE dispatches (the only
+place a sync form remains reachable): background suits work the
+session talks across — long builds, parallel fan-outs, teammates. A
+short dispatch whose result the current turn depends on (probe,
+verifier, single pipeline stage) runs sync — the inline return
+carries the report and the usage metadata, and skips the mailbox
+plumbing (measured 2026-07-30, dedup-corrected same day: ~1.3×
 cost-weighted, ~2.2× raw on a trivial task; roughly fixed per
 dispatch, so it shrinks on large ones. Transcript usage entries are
 per-stream snapshots — dedupe by API-call id before summing, and the

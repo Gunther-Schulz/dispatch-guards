@@ -213,14 +213,16 @@ Mandatory parts (execution briefs):
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
-- **The model rides the surface the panel renders.** A named
-  (background) dispatch carries it in the name — `<model>-…` — and
-  the title then DROPS the `<model>: ` prefix (the panel renders the
-  name; a doubled prefix is noise). An unnamed (sync) dispatch keeps
-  `<model>: ` in the title — a name would force background mode.
-  Fan-outs state count × tier before dispatching, and the chosen
-  model is named in the turn's final message (source: CLAUDE.md
-  veto-gate conventions) — details and enforcement: the
+- **The model rides the NAME.** Every generic dispatch is NAMED
+  `<model>-<slug>` — the panel renders the name, so the model is
+  visible live in the UI and the title stays clean prose (no
+  `<model>: ` prefix; a legacy prefix, if present, must mirror the
+  model field). A name forces background mode (§2 forms, binding),
+  so generic dispatches are background by construction; only
+  pinned-type agents, which the gate exempts, still run unnamed or
+  synchronous. Fan-outs state count × tier before dispatching, and
+  the chosen model is named in the turn's final message (source:
+  CLAUDE.md veto-gate conventions) — details and enforcement: the
   agent-model-gate hook (§5).
 - **Gaps: surface, don't fill.** Instruct explicitly: a missing
   decision, file, or value is reported as a gap, never bridged with a
