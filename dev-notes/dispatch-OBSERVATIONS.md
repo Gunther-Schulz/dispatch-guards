@@ -447,3 +447,17 @@ fix is indistinguishable from disabling the check.
 Cross-reference: booked as a POINTER in the claude-code-cache-fix fork's
 BACKLOG.md, since that is where the incident was walked. This file is
 the carrier a fresh context in THIS repo reads.
+
+- 2026-08-08 (0.7.1 batch, two parallel sonnet dispatches in one
+  plugin): §1's "guarded write paths pre-name their gate" was
+  loaded but inert at brief-writing — BOTH briefs omitted the
+  unbumped_plugins pre-commit gate, and both executors halted on it
+  independently at commit time (correct conduct, one wasted bounce
+  each). The variant the rule's examples don't surface: parallel
+  same-plugin writers share ONE version gate, so the bump is
+  structurally the dispatcher's (bump-first commit; the gate's
+  release-state comparison then clears the per-author follow-ups).
+  Candidate sharpen: the §1 brief skeleton's Write-boundaries slot
+  gains a "gates on this path:" prompt line, and the parallel-
+  siblings case names the shared version gate + bump-first
+  sequencing. Consumer: the next dispatch-skill amendment pass.
