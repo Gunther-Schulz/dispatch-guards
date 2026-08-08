@@ -249,3 +249,51 @@ lap:
    sites") rather than to the arm's execution. Candidate wording
    for §1's settled-design part: name the observable the change
    must produce, then the known sites — never the sites alone.
+
+## 2026-08-08 — a stated base can be stale: §1's base clause says
+## STATED, never that the statement is a fresh read
+
+A dispatch into `dotfiles` carried base `3014043`, taken from the
+dispatcher's own orientation read several turns earlier. By compose
+time three commits had landed there from a CONCURRENT SESSION
+(`b8fe3d4`, `40390ce`, `9cae041`, the newest ~2 minutes before the
+dispatch). The executor ran the two prescribed reads, hit the
+second disjunct — base contained, commits on top — and halted with
+no files touched, which is the rule working exactly as written.
+
+The gap is on the DISPATCHER's side and §1 does not currently close
+it. The base-commit clause reads "STATED in the brief, never
+discovered", aimed at an executor guessing its own base; it says
+nothing about where the dispatcher's stated value comes from. A hash
+recalled from an earlier read satisfies the clause literally while
+being exactly the paraphrase-drift shape the operator corpus warns
+about — a label over a body that moved. The cost was one round trip;
+it would have been a mis-scoped edit had the three commits touched
+the executor's five files instead of being orthogonal to them (the
+executor checked, and reported the check, before asking).
+
+Note the asymmetry that makes this easy to miss: the executor's
+check is prescribed as an ACT ("first act, two reads"), so it cannot
+go stale; the dispatcher's is a VALUE, and a value has no
+freshness. Every other write-boundary decision in §1 is derived at
+compose time from files the dispatcher is reading anyway; the base
+hash is the one input habitually carried in memory.
+
+Rule candidates for §1 (base-commit clause):
+1. The stated base is READ at compose time, in the same reply that
+   composes the brief — `git -C <copy> rev-parse --short HEAD`, its
+   output pasted into the brief. A hash recalled from earlier in the
+   session is not a stated base, it is a remembered one.
+2. Where the target copy has any co-writer (peer session, agent,
+   human), the base read and the dispatch are ADJACENT — nothing
+   between them that could take a turn. The one-writer census that
+   §4 already prescribes before integrating belongs here too, at
+   compose time: `git worktree list` + `git log -1 --format=%cr`,
+   since "committed 2 minutes ago" is what distinguishes a quiet
+   copy from a live one.
+3. No softening of the executor-side halt. The three-state rule
+   fired on commits that turned out orthogonal, and it was still
+   right to stop: the executor cannot grade orthogonality against a
+   brief it did not write. Halt-and-ask cost one message; the
+   alternative is an executor exercising exactly the judgment the
+   tier choice was meant to keep at the desk.
