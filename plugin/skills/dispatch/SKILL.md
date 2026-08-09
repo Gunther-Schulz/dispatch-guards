@@ -55,9 +55,12 @@ prompts.
 
 ## 1. The brief (decision-complete, or don't dispatch)
 
-A brief is decision-complete only when a fresh context could execute it
-without making any design or placement decision (source: CLAUDE.md
-model routing).
+A brief is decision-complete only when a fresh context could execute
+it without making any design or placement decision — system
+placement (which rules apply, where the work belongs) is itself a
+decision, pre-filled so the dispatch verifies rather than derives
+it. (Canonical here; the operator corpus routing module points to
+this section.)
 
 **Exception — verifier dispatches:** a fresh-context verifier gets the
 artifact and the question ONLY, never your reasoning (source:
@@ -268,14 +271,14 @@ Mandatory parts (execution briefs):
   so generic dispatches are background by construction; only
   pinned-type agents, which the gate exempts, still run unnamed or
   synchronous. Fan-outs state count × tier before dispatching, and
-  the chosen model is named in the turn's final message (source:
-  CLAUDE.md veto-gate conventions) — details and enforcement: the
-  agent-model-gate hook (§5).
+  the chosen model is named in the turn's final message (canonical
+  here; the corpus routing module keeps the veto principle and
+  points here) — details and enforcement: the agent-model-gate
+  hook (§5).
 - **Gaps: surface, don't fill.** Instruct explicitly: a missing
   decision, file, or value is reported as a gap, never bridged with a
   plausible guess — a gap filled silently is designed at the executing
-  tier, the exact failure the tier choice was meant to avoid
-  (source: CLAUDE.md).
+  tier, the exact failure the tier choice was meant to avoid.
 - **Criteria state OUTCOMES first, sites second.** In the settled
   design, name the observable the change must produce, then the
   known sites — never the sites alone: a site list reaches exactly
@@ -458,7 +461,10 @@ this skill deliberately does not restate them: a prose copy of a
 mechanical lane list is a dependent that rots silently. On a
 guard deny, fix the brief against §§1–2, never against the error
 text alone; a relief valve for a false-fire class lands in §§1–2
-rule text, never in softening a lane. Standing rules for every
+rule text, never in softening a lane. A gate receives a decision
+already made and stated — deferring the decision to the gate's
+dialog is the failure; the pause exists for the operator's veto,
+not for the dispatcher's choice. Standing rules for every
 guard — fail-open on hook-input parse errors, a `--test`
 bite-test registered in the machine-bootstrap doctor,
 environment bindings stamped with as-of dates — live in

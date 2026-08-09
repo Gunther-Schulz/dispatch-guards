@@ -162,7 +162,13 @@ have no local counterpart:
 Citations reading "CLAUDE.md" inside the skills are provenance
 labels — they mark where a rule came from, while the rule itself is
 stated in full on the page. Without that corpus you lose the
-footnote, not the rule.
+footnote, not the rule. Two rules flipped direction in 0.10.0 and
+are canonical HERE: the decision-complete bar (skill §1, with the
+system-placement clause) and the veto-cheap naming conventions
+(§1, the model rides the NAME). The author's corpus now points at
+this skill for both; a site corpus keeps only the seam conventions
+that fire before any skill loads (route line, intake gauge,
+brief-family dispatch default) and the veto principle.
 
 ### A starter corpus — real, and dated
 

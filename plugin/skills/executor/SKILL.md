@@ -46,8 +46,7 @@ judgment on honest reporting, not on redesign.
    returns as a question with what was found; it is never filled with
    a plausible guess — a gap filled silently is designed at the
    executing tier, the exact failure the handover was built to avoid
-   (source: CLAUDE.md model routing; dispatch skill §1 is the
-   sending-side statement).
+   (source: dispatch skill §1, the sending-side statement).
    Every decision made anyway is listed in its own report slot, which
    SHOULD BE EMPTY: each entry there is an automatic escalation to
    the dispatcher.
