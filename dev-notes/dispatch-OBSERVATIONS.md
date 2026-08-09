@@ -464,3 +464,22 @@ the carrier a fresh context in THIS repo reads.
   gains a "gates on this path:" prompt line, and the parallel-
   siblings case names the shared version gate + bump-first
   sequencing. Consumer: the next dispatch-skill amendment pass.
+
+## 2026-08-09 — fire-log path may not match the README's XDG_DATA_HOME claim
+
+Observed during dotfiles doctor hardening (dotfiles b4914c5), not
+explained there: a full dotfiles doctor run appended 2 lines per run
+to ~/.local/share/claude/dispatch-guards-fires.jsonl (via the replay
+bench exec'ing the real guard scripts). After doctor started passing
+an isolated XDG_STATE_HOME — data home untouched — to those
+subprocesses, the plugin fire log stopped receiving those lines
+(646→648 pre-fix, +0 post-fix, same command). If the installed
+guards resolved the fire log under XDG_DATA_HOME as the README
+documents, a state-home redirect should not have silenced them.
+Hypothesis, unverified: the installed resolver follows
+XDG_STATE_HOME (or a shared state-root helper), and the README's
+XDG_DATA_HOME claim is stale — the label-over-body class. Live
+logging in real sessions is unaffected (doctor's child env only;
+normal-env writes confirmed). To settle: read the installed
+_dispatch_common path resolution and either fix the README or the
+resolver. Consumer: the next dispatch-guards maintenance pass.
