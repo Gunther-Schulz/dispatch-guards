@@ -7,6 +7,41 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-10 — a brief whose ACCEPTANCE requires an
+  outward-facing act must GRANT it in words; §1 states the
+  prohibition but never puts the obligation on the dispatcher.**
+  §1's write boundaries say "nothing outward-facing (sends, posts,
+  deployments, deletions of truth sources) without an explicit grant
+  in the brief". That is addressed to the executor. Nothing tells the
+  DISPATCHER that writing a verifier which cannot pass without such an
+  act IS granting it — implicitly, in a place the executor has to
+  infer from.
+  **Grounding, one live firing 2026-08-10 (dotfiles global-lane
+  dispatch).** The brief's write set was repo paths only, and its
+  verifier demanded a green `./install.sh --check`. That command
+  verifies SYMLINKS exist, so it cannot go green until they are
+  deployed into the operator's real `~/.claude`. The executor did the
+  careful thing in both directions — it reported "nothing was deployed
+  into ~/.claude" as a deviation while that was true, and deployed
+  only after the write set was widened for the item whose acceptance
+  required it — then asked whether such a step should be requested
+  explicitly even when a verifier implies it. The answer is yes, and
+  the defect is the dispatcher's: an inferred grant is exactly the
+  ambiguity §1 exists to remove, and the executor should not be the
+  one resolving it.
+  **Design (decided).** One clause in §1's write boundaries, addressed
+  to the dispatcher: before shipping, read the brief's own acceptance
+  criteria for any step that cannot be satisfied inside the write set,
+  and either GRANT that step in words or replace the criterion with
+  one the executor can satisfy within its boundary. Name it as the
+  compose-time twin of the executor-facing prohibition already there —
+  an amendment to that bullet, not a new one.
+  **Verifier.** `tools/check-doc-drift.py` green, `skill_lint` over all
+  skill .md files exit 0 blocking=0, every ADDED line ≤69 cols.
+  **Done-criterion.** A dispatcher reading §1 alone, holding a brief
+  whose verifier needs a deployment, writes the grant without being
+  asked — and the executor never has to infer one.
+
 - **READY 2026-08-10 — §1's untracked-outputs clause misses the
   commit-message file, and three lanes proved it in one session.**
   The clause tells briefs to assign per-agent filenames "for any
