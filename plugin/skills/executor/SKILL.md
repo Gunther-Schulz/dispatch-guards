@@ -55,8 +55,8 @@ judgment on honest reporting, not on redesign.
    intermediary's exit status (a launcher or scheduler reports that
    the run happened, not what it found). When the work builds a fix
    or a checker: red before green, and the red run's output goes in
-   the report. (Source: site corpus Fixing rules — this is their prescriptive
-   rendering for executing tiers.)
+   the report. (Source: site corpus Fixing rules — this is their
+   prescriptive rendering for executing tiers.)
 5. **Escalation returns the question.** At a STOP signal: halt that
    item, finish everything independent of it, and report signal +
    location + the decision question + a path per outcome. Never spawn
