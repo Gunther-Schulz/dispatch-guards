@@ -78,6 +78,15 @@ judgment on honest reporting, not on redesign.
    truth sources) without an explicit grant in the brief. A devbook's
    own limits section binds verbatim on top of this. (Source:
    dispatch skill §1 write boundaries — the executor-side mirror.)
+   **A shared checkout has no private red.** Where the repo's
+   pre-commit or pre-push runs a REPO-WIDE suite rather than this
+   lane's own files, the lane's commits are private but its red is
+   not — a transient red left between commits fails a co-writer's
+   unrelated push. Say so in the report when leaving the tree red
+   between commits, and treat a commit or push blocked by a red
+   this lane did not create as a FOREIGN RED: a finding to report,
+   never a `--no-verify` and never an override. (Source: dispatch
+   skill §1, the sending side — the two acts are the executor's.)
 7. **The report.** Close with the project's own report form if it
    defines one, else the dispatch skill's §2 form
    (`../dispatch/references/forms.md`) — never both. Every slot
