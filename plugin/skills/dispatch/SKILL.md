@@ -91,7 +91,11 @@ Mandatory parts (execution briefs):
   anywhere trips the harness's sensitive-path protection, which keys
   on shape, not location; where a tool hardcodes home paths, the
   brief names the tool's env override (CLAUDE_CONFIG_DIR-class)
-  instead of a fakehome mirror.
+  instead of a fakehome mirror. Source: the shape-keyed protection
+  fact is canonical in the operator corpus (CLAUDE.md, Shell and
+  privilege, the config-directory binding); this clause is its
+  subagent-scratch application — amending either home means auditing
+  the other.
 - **Files to read, listed — never paraphrased.** Bind the source files
   (specs, decision docs, the code to change); a paraphrase carried in
   the brief drifts and the agent can't detect it.
@@ -185,10 +189,12 @@ Mandatory parts (execution briefs):
     own citations point at the realizing file; an overlap found then
     is serialized or explicitly carved out, never left to surface as
     a mid-dispatch halt.
-  - **The push set is the branch, never "my commits":** on a working
-    copy shared with any co-writer (peer session, agent, human), `git
-    push` publishes every local commit, including a co-writer's
-    mid-verification work. Before pushing on a shared copy, `git log
+  - **The push set is the branch, never "my commits"** (a §4
+    dispatcher duty, stated here because it elaborates the
+    unpushed-commit rule above): on a working copy shared with any
+    co-writer (peer session, agent, human), `git push` publishes
+    every local commit, including a co-writer's mid-verification
+    work. Before pushing on a shared copy, `git log
     origin/<branch>..<branch>` and claim each commit; an unexpected
     commit halts the push — it is a question to answer first, and a
     live push is never the diagnostic. The claim log is its own
@@ -374,7 +380,11 @@ satisfied by construction:
 
     ## Background (established; verify at the cited lines)
     <facts the executor may trust — each OPENED at brief time, or
-    graded "from <source>, unverified">
+    graded "from <source>, unverified"; a claim about the target
+    repo's CURRENT state is grepped by the DISPATCHER before the
+    brief ships — the executor's arrival check run one round trip
+    earlier: the decision record says what should happen, only the
+    repo says what already did>
 
     ## The settled design — implement exactly this, do not redesign
     <every decision already made, incl. placement and naming —
