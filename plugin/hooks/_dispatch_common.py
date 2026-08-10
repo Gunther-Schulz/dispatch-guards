@@ -22,6 +22,16 @@ character class that silently truncates at an unexpected byte
 indistinguishable from a legitimate clean finding — extraction
 failure maps to could-not-verify (fail-open or WARN per the
 guard's error direction), never to a pass.
+A guard that shells out to git against a working copy uses
+`--no-optional-locks`: a plain `git status` REWRITES the index
+(measured 2026-08-10), so an unflagged read-shaped call takes
+index.lock and mutates shared state on every evaluation — the same
+shared-index hazard that forbids `git add` for dispatched writers,
+arriving through a command that reads as read-only. And a guard
+`--test` fixture that runs `git commit` pins
+`-c core.hooksPath=/nonexistent` (plus `--no-verify`): fixture repos
+inherit the machine's GLOBAL core.hooksPath, so an unpinned fixture
+silently runs the operator's real hook battery inside the tempdir.
 
 Environment binding (as-of 2026-07-18, Claude Code hooks): a subagent
 context is marked by the presence of a non-empty `agent_id` field in the

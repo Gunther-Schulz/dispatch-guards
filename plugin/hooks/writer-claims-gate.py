@@ -144,11 +144,16 @@ def no_uncommitted_work(path: str) -> bool:
     firing. `--no-optional-locks` keeps the read side-effect-free: a
     plain `git status` rewrites the index, and this runs against a
     working copy whose index is shared with the very co-writers the gate
-    exists for."""
+    exists for. `--ignored=matching` closes the ignored-path hole: a
+    GITIGNORED file reports empty under plain status even with live
+    in-flight content, so without the flag the predicate would relieve
+    exactly where evidence is absent (measured 2026-08-10, executor
+    escalation); with it, ignored paths report `!!` and their claims
+    stay live — permanently TTL-governed, the conservative direction."""
     try:
         r = subprocess.run(
             ["git", "-C", os.path.dirname(path) or ".", "--no-optional-locks",
-             "status", "--porcelain", "--", path],
+             "status", "--porcelain", "--ignored=matching", "--", path],
             capture_output=True, text=True, timeout=_GIT_TIMEOUT)
     except (OSError, ValueError, subprocess.SubprocessError):
         return False
@@ -359,6 +364,24 @@ if __name__ == "__main__":
             assert not no_uncommitted_work(untracked)
             assert check(pl("PreToolUse", "Edit", "b2",
                             path=untracked))[0] == "fire"
+            # …GITIGNORED file with live content → fires. Plain status
+            # reports nothing for an ignored path, so without
+            # --ignored=matching this was the one hole where relief fired
+            # WITHOUT evidence (measured 2026-08-10); ignored-path claims
+            # stay TTL-governed forever, the conservative direction.
+            Path(repo + "/.gitignore").write_text("ignored.py\n")
+            git_fx("add", "--", repo + "/.gitignore", cwd=repo)
+            assert git_fx("commit", "-q", "--no-verify", "-m", "i",
+                          cwd=repo).returncode == 0
+            ignored = repo + "/ignored.py"
+            Path(ignored).write_text("in_flight = True\n")
+            record_claim(pl("PostToolUse", "Write", "a1", path=ignored))
+            assert not no_uncommitted_work(ignored)
+            assert check(pl("PreToolUse", "Edit", "b2",
+                            path=ignored))[0] == "fire"
+            # …and the flag does not over-fire: committed-clean relief
+            # above must still hold with .gitignore present
+            assert no_uncommitted_work(landed)
             # …outside any repo, or under a missing dir → could-not-verify,
             # which is not relief: relief takes positive evidence
             outside = os.path.realpath(td) + "/outside.py"
