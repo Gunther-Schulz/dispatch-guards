@@ -39,10 +39,24 @@ full shell grammar). Quoted text (a commit message mentioning
 "amend", or `--amend` embedded inside a single quoted argument to
 `bash -c '...'`) does NOT match — shlex folds a quoted string into
 one token, so `--amend` only fires as its own standalone token.
+
+Unparseable quoting does NOT change the verdict class. An unbalanced
+apostrophe makes shlex raise, and the command is then re-tokenized on
+WHITESPACE and put through the SAME token predicate. It is never
+substring matched: the old fallback asked only whether the characters
+appeared anywhere in the line, so a commit whose message mentioned an
+amend-flavoured word was DENIED with the flag never present as a
+token — the false-deny class its push sibling was repaired for on
+2026-08-10.
+
 Accepted residue (documented, same shape as subagent-push-gate's):
 deliberate obfuscation via `bash -c "git commit --amend"` or an alias
 is NOT caught here — the session-cut unpushed/ahead-repos check and
-human review remain the outer net for that.
+human review remain the outer net for that. On the parse-failure path
+a message carrying the bare flag as its own whitespace-separated word
+still matches, unchanged and accepted: whitespace tokens keep their
+quote characters attached, so a quoted word matches only where it
+would have matched bare.
 
 Fail-open on hook-input parse errors (a broken guard must not brick
 every Bash call); the --test bite-test is the compensation and is
@@ -55,12 +69,21 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import shlex
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 from _dispatch_common import doc_ref, fire, is_subagent  # noqa: E402
+
+
+def _amend_in_tokens(tokens: list) -> bool:
+    """The token predicate, in ONE home: a `git` token, a `commit`
+    token and a standalone `--amend` token, in any order. Both callers
+    — the shlex path and the parse-failure path — share this scan, so
+    the rule cannot grow two copies that drift apart. Contract is on
+    ARGV POSITION, so it holds for any tokenizer yielding argv-shaped
+    words."""
+    return "git" in tokens and "commit" in tokens and "--amend" in tokens
 
 
 def is_amend_command(cmd: str) -> bool:
@@ -69,11 +92,11 @@ def is_amend_command(cmd: str) -> bool:
     try:
         tokens = shlex.split(cmd)
     except ValueError:
-        # Unparseable quoting: conservative substring fallback (fires;
-        # mirrors is_push_command's unsure-stays-loud fallback).
-        return bool(re.search(r"\bgit\b", cmd) and "--amend" in cmd
-                    and re.search(r"\bcommit\b", cmd))
-    return "git" in tokens and "commit" in tokens and "--amend" in tokens
+        # Unparseable quoting: re-tokenize on whitespace and apply the
+        # SAME predicate — a parse failure must not swap in a weaker
+        # matcher (the class is_push_command was repaired for).
+        tokens = cmd.split()
+    return _amend_in_tokens(tokens)
 
 
 def deny_reason() -> str:
@@ -168,8 +191,26 @@ if __name__ == "__main__":
         assert not is_amend_command(
             "bash -c 'git commit --amend'")  # accepted residue, documented
         assert not is_amend_command("echo 'please amend this'")
-        # garbage/unparseable quoting → conservative fallback fires
+        # garbage/unparseable quoting → the whitespace path, same
+        # predicate: the flag IS a token here, so it still fires
         assert is_amend_command("git commit --amend 'unterminated")
+        # ── Parse failure must not move the verdict CLASS (2026-08-10,
+        # the class is_push_command was repaired for the same day).
+        # THE PAIR, and both halves are needed — the first alone is
+        # satisfied by a predicate that allows everything.
+        # (a) legitimate: the apostrophe makes shlex raise, and the
+        # flag exists only INSIDE a longer word. The old substring
+        # fallback denied this commit.
+        assert not is_amend_command(
+            "git commit -m 'jane's rule: never use --amend-style rewrites'")
+        # (b) a GENUINE amend wearing the same unbalanced apostrophe
+        # must still deny.
+        assert is_amend_command("git commit --amend -m 'jane's fix'")
+        # residue, unchanged and accepted: a BARE flag word outside
+        # quotes still matches on the whitespace path.
+        assert is_amend_command("git commit -m 'it's fine' # never --amend")
+        # and an apostrophe cannot manufacture the git/commit tokens
+        assert not is_amend_command("echo 'it's --amend time'")
 
         # ── Subagent lane: flat deny ──
         assert deny_check({**sub, "tool_input": {"command": "git commit --amend"}}) is not None
