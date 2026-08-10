@@ -334,9 +334,26 @@ def command_shape(payload: dict) -> str | None:
     return " ".join(shape)[:_SHAPE_MAX] or None
 
 
-_GIT_RE = re.compile(r"\b(git|gh)\b")
-_PUSH_RE = re.compile(r"\bpush\b")
-_STASH_PUSH_RE = re.compile(r"\bstash\s+push\b")
+def _push_in_tokens(tokens: list) -> bool:
+    """The argv-position predicate, in ONE home: a `git`/`gh` token plus
+    a standalone `push` (or `--push`) token, minus the two exemptions.
+    Both callers of it — the shlex path and the parse-failure path —
+    share this scan so the token rule cannot grow two copies that drift
+    apart. Contract is on ARGV POSITION, so it holds for any tokenizer
+    that yields argv-shaped words."""
+    if not any(t in ("git", "gh") for t in tokens):
+        return False
+    prev = ""
+    seen_remote = False
+    for t in tokens:
+        if t == "remote":
+            seen_remote = True
+        if t == "push" and prev != "stash":
+            return True
+        if t == "--push" and not seen_remote:
+            return True
+        prev = t
+    return False
 
 
 def is_push_command(cmd: str) -> bool:
@@ -362,29 +379,29 @@ def is_push_command(cmd: str) -> bool:
       token, not the command: `git remote set-url --push … && git push`
       still matches on the later bare `push`.
 
-    Unparseable quoting falls back to the substring match (fires; a
-    guard unsure of what it reads stays loud, both consumers are
-    deny/remind). Accepted residue unchanged: unquoted standalone
-    `push` words (`git log --grep push`) still match; deliberate
+    Unparseable quoting does NOT change the verdict class. An
+    unbalanced apostrophe — in a commit message, in a heredoc body —
+    makes shlex raise, and the command is then re-tokenized on
+    WHITESPACE and put through the SAME argv-position predicate
+    (_push_in_tokens), exemptions included. It is never substring
+    matched: the old fallback turned a parse failure into a weaker
+    matcher whose false fires were invisible to author and subject
+    alike. The 2026-08-10 class it closes: `git commit -F -` with a
+    heredoc body carrying both an apostrophe and the word pre-push was
+    DENIED, because the apostrophe raised and the substring fallback
+    then matched the literal pre-push (a hyphen is a word boundary to
+    the regex, but is not a token break). Whitespace tokens keep their
+    quote characters attached, so on that path a quoted word matches
+    only when it would have matched bare.
+
+    Accepted residue unchanged: unquoted standalone `push` words
+    (`git log --grep push`) still match on both paths; deliberate
     obfuscation stays the session-cut check's net."""
     try:
         tokens = shlex.split(cmd)
     except ValueError:
-        stripped = _STASH_PUSH_RE.sub("stash", cmd)
-        return bool(_GIT_RE.search(stripped) and _PUSH_RE.search(stripped))
-    if not any(t in ("git", "gh") for t in tokens):
-        return False
-    prev = ""
-    seen_remote = False
-    for t in tokens:
-        if t == "remote":
-            seen_remote = True
-        if t == "push" and prev != "stash":
-            return True
-        if t == "--push" and not seen_remote:
-            return True
-        prev = t
-    return False
+        tokens = cmd.split()
+    return _push_in_tokens(tokens)
 
 
 # ── Git working-copy reads (shared; one home for the flags) ──────────────
@@ -617,6 +634,39 @@ if __name__ == "__main__" and "--test" in sys.argv:
     assert command_shape({}) is None
     assert len(S("git " + " ".join(f"--flag{i}" for i in range(60))) or "") \
         <= _SHAPE_MAX
+
+    # ── is_push_command: the verdict CLASS must not move with
+    # PARSEABILITY. Expectations derived from what the guard's
+    # consumers mean (does this command publish?), not from either
+    # tokenizer: adding an apostrophe to a command changes how it
+    # parses and must not change whether it is a push.
+    P = is_push_command
+    # (i) THE motivating case (2026-08-10): a commit whose heredoc body
+    # carries an apostrophe AND the word pre-push. shlex raises on the
+    # apostrophe; the old substring fallback then matched the literal
+    # pre-push and DENIED a legitimate commit. Second line is the same
+    # command minus the apostrophe — it parses, and was already False,
+    # so the pair isolates the fallback as the cause.
+    denied = "git commit -F - <<'EOF'\npre-push: the guard's fallback\nEOF"
+    twin = "git commit -F - <<'EOF'\npre-push: the guard fallback\nEOF"
+    assert not P(denied)
+    assert not P(twin)
+    assert not P("git commit -m 'the gate's false fire'")
+    # (ii) the half that forbids answering a bare False on ValueError:
+    # a GENUINE push wearing the same unbalanced apostrophe must still
+    # be caught, or the guard opens a hole where it is load-bearing.
+    assert P("echo 'it's fine' && git push")
+    assert P("git push origin main # the lane's push")
+    # (iii) ONE predicate, so both exemptions hold on the parse-failure
+    # path exactly as on the parsed one — including the second red the
+    # motivating case exposed: the old fallback's \bpush\b matched the
+    # `--push` of a remote config write once an apostrophe was present.
+    assert not P("git stash push -m 'wip's draft'")
+    assert P("git stash push && git push # jane's")
+    assert not P("git remote set-url --push origin /x # jane's")
+    assert P("git remote set-url --push origin /x && git push # jane's")
+    # (iv) an apostrophe cannot manufacture the git/gh token either
+    assert not P("echo 'it's push time'")
 
     # ── git_status_lines: the shared working-copy read, against REAL
     # git. Expectations derived from what each CALLER's question means
