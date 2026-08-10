@@ -143,6 +143,49 @@ are dropped with a one-line reason.
   the channel-line rationale, and brief-reminder's mode logic.
   Entry: dev-notes/dispatch-OBSERVATIONS.md 2026-08-08.
 
+- READY 2026-08-09 — RESTORE §2/§3 HEADINGS OR RENUMBER (corpus-vet
+  nit n6, pre-existing): dispatch SKILL.md has headings for §§1, 4,
+  5, 6 only, while §2 (report form) and §3 (roadmap) live in
+  references/forms.md — yet SKILL.md:271, the operator corpus
+  (insurance module), and briefs cite "§2"/"§3". Design: keep the
+  numbering, add one line at the section map stating that §§2-3
+  are the forms file's headings (they exist there as "## 2." and
+  "## 3."), and verify every "§2"/"§3" citation resolves. Verifier:
+  grep of citations + doc-drift check green. Done: a reader can
+  resolve every § citation without guessing.
+
+- **READY 2026-08-10 — the writer-claims gate fires on TTL residue of
+  LANDED commits: relieve a claim once the claimer's work is in the
+  base ancestry.** Fire rate, measured across two dotfiles waves
+  (LEDGER there, 2026-08-09/10): two escalation round-trips in wave 1
+  and one §4 mirror-duty note in wave 2 (manifest.py), every one on a
+  file whose claiming agent had already committed and had its report
+  booked — the claim outlived the lane by TTL alone.
+  Design (decided, from the wave-1 lesson as booked): a claim is
+  relieved when the claimer's LAST commit touching the claimed file is
+  contained in the base ancestry of the current branch tip — landed
+  work is no longer "in flight" whatever the TTL says. Explicitly NOT
+  relieved by claim-text or message content: un-landed claims stay
+  live regardless of what anyone wrote; git evidence is the only
+  relief.
+  Verifier, red-first: fixture with a claim + the claimer's commit
+  landed → gate silent (red today: it fires); claim + NO landed
+  commit → gate still fires (over-firing control, the case that keeps
+  the guard alive). Battery green.
+  Done: both fixture sides proven, the dotfiles false-fire shape
+  (yesterday's lane, today's desk write) reproduced and silent.
+
+- **PARKED 2026-08-10 — neutralize the `(Source: CLAUDE.md ...)`
+  labels for outside sharing.** The routing split is already clean
+  (references/routing.md carries portable role-based rules; the site
+  overlay wins on conflict), but the skill text still cites the
+  operator's PRIVATE corpus by name in several source labels; the
+  operative text is restated in-skill, so the labels dangle harmlessly
+  for a stranger — cosmetic, not functional. Trigger: an actual
+  decision to publish/share the plugin outside this farm; renaming
+  labels nobody external reads yet is churn.
+
+
 ## Done
 
 - **DONE 2026-08-06 — fire-log blindness: the `shape` field.**
@@ -156,4 +199,3 @@ are dropped with a one-line reason.
   survive by being one of those. Both went red first — the case
   list caught `mysql -phunter2`, where the attached short-flag
   value passes any looks-like-a-flag pattern.
-
