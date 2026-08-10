@@ -202,6 +202,14 @@ Mandatory parts (execution briefs):
     seam collapses when the decision is pre-committed in the same
     compound command (push-claim-reminder's FUSED-PUSH DENY lane
     denies that form; this rule covers the variants it cannot see).
+  - **A shared checkout has no private red.** Where a repo's
+    pre-push or pre-commit runs a REPO-WIDE suite rather than the
+    pushed lane's files, a lane's commits are private but its red is
+    not: a co-writer's half-finished state fails YOUR push, and your
+    own transient red blocks a dispatcher's unrelated one. The brief
+    states it where it applies, a lane leaving the tree red between
+    commits says so in its report, and a push blocked by a foreign
+    red is a finding to report — never a `--no-verify`.
   - **Escalation ladder for overlapping file sets** — overlap counts
     any agent's READ-OR-EXECUTE set against another's write set, not
     only write against write: a probe executing a file a co-writer is
@@ -257,6 +265,22 @@ Mandatory parts (execution briefs):
     catching. Any other state — a dirty tree over a stale base,
     anything unlisted — halts as a gap too: never a silent rebase,
     never a base discovered by guesswork.
+    A foreign commit on top does not always mean a stale build, and
+    the executor can answer that at its own end with no round trip:
+    `git diff --quiet <base> HEAD -- <its paths>` — an unchanged
+    write set is the fast path. It is NOT sufficient alone, because
+    a foreign commit can change something those files DEPEND on
+    without touching them, and an IMPORT LIST IS NOT THE DEPENDENCY
+    LIST — a file reading a config, a fixture or a sibling artifact
+    at runtime has dependencies no import shows. Complete predicate:
+    write set unchanged AND nothing in the changed set is a
+    dependency of it — the executor reports the changed-file list,
+    the dispatcher confirms the second half in one look. Where the
+    dependency set is not certain the HALT stands: the predicate is
+    a fast path for the clear case, never a licence to reason past a
+    foreign commit. Re-reading the tip just before composing only
+    NARROWS the window — a dispatcher cannot win a race against a
+    live co-writer by reading faster.
   - **The commit plan is ordered against the repo's guards.** In a
     repo with a payload-version guard, the brief states where the
     bump commit sits, sequenced from the guard's OWN comparison
@@ -276,6 +300,13 @@ Mandatory parts (execution briefs):
     per the box, and the round trip spent ratifying it changed
     nothing). Novel deviations still halt; only the named class is
     pre-authorized.
+  - **A verifier step that says REPOINT confirms the knob exists.**
+    Before writing "point <NAME> at a temp dir", establish that it
+    is a parameter or env var and not a module constant: a hardcoded
+    constant in a file outside the executor's write boundary makes
+    the step unexecutable as written, and the executor either
+    invents the in-process rebinding or halts. Either confirm the
+    knob, or state the rebinding form in the brief.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
