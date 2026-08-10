@@ -44,8 +44,15 @@ this invocation with a read or a commit?), which needs the shell
 operators the token view discards. `(?:^|[;&|]\\s*)git\\s+push\\b`
 for the push, the same anchoring for the `git commit` / `git log`
 companion, so a commit MESSAGE merely containing the word "push"
-cannot fire it. Accepted residue: text after a `;` or `&&` INSIDE a
-quoted string still reads as command position and can false-fire —
+cannot fire it. HEREDOC BODIES ARE STRIPPED BEFORE MATCHING: a
+`<<WORD … WORD` span is text being WRITTEN, not command position.
+The lane measurably false-fired on a commit message that quoted a
+fused form while describing an earlier, correct fire — and a guard
+firing on legitimate work fails as hard as one staying silent,
+because it trains the override reflex. Residue that remains, and
+is accepted: separator text inside a single-line quoted ARGUMENT
+(`git commit -m "x; git push"`) still reads as command position,
+and a `<<` inside a quoted argument can be misread as an opener —
 remedy cost is splitting the command, i.e. the very thing the deny
 asks for.
 
@@ -70,6 +77,50 @@ _SOURCE = "dispatch-guards/push-claim-reminder"
 _CMD_POS = r"(?:^|[;&|]\s*)"
 _FUSED_PUSH_RE = re.compile(_CMD_POS + r"git\s+push\b")
 _FUSED_COMPANION_RE = re.compile(_CMD_POS + r"git\s+(?:commit|log)\b")
+
+# Heredoc opener: `<<` (optionally `<<-`) then the delimiter word,
+# bare or single/double quoted. No space is allowed between the
+# operator and the word — `a << b` in an arithmetic expression must
+# not read as an opener and swallow the rest of the command.
+_HEREDOC_OPEN_RE = re.compile(
+    r"<<-?(?:'([^']*)'|\"([^\"]*)\"|([A-Za-z_][A-Za-z0-9_]*))")
+
+
+def strip_heredoc_bodies(cmd: str) -> str:
+    """Return `cmd` with every heredoc BODY removed, opener lines kept.
+
+    A `<<WORD … WORD` span is text being WRITTEN — a commit message,
+    a file — not command position, and the deny lane measurably
+    false-fired on one. The opener's own LINE stays: it is command
+    position, and a real fusion (`git commit -F - <<'EOF' && git
+    push`) lives there. The body runs from the end of the opener line
+    to a line whose stripped content equals the delimiter (which
+    subsumes `<<-`'s leading-tab stripping); an UNTERMINATED heredoc
+    strips to the end of the string. Several heredocs are handled
+    left to right. Accepted residue: a `<<` inside a quoted argument
+    can be misread as an opener."""
+    kept: list[str] = []
+    rest = cmd
+    while True:
+        m = _HEREDOC_OPEN_RE.search(rest)
+        if m is None:
+            kept.append(rest)
+            break
+        delim = next(g for g in m.groups() if g is not None)
+        nl = rest.find("\n", m.end())
+        if nl == -1:
+            kept.append(rest)  # opener with no body line after it
+            break
+        kept.append(rest[:nl + 1])
+        lines = rest[nl + 1:].split("\n")
+        rest = ""  # unterminated: the body runs to end of string
+        for i, line in enumerate(lines):
+            if line.strip() == delim:
+                rest = "\n".join(lines[i + 1:])
+                break
+        if not rest:
+            break
+    return "".join(kept)
 
 
 def is_fused_push(cmd: str) -> bool:
@@ -98,7 +149,7 @@ def deny_check(payload: dict) -> str | None:
     if is_subagent(payload):
         return None  # subagent-push-gate's lane
     cmd = (payload.get("tool_input") or {}).get("command", "") or ""
-    if is_fused_push(cmd):
+    if is_fused_push(strip_heredoc_bodies(cmd)):
         return deny_reason()
     return None
 
@@ -220,6 +271,32 @@ if __name__ == "__main__":
             "[dispatch-guards/push-claim-reminder] ")
         assert dp["systemMessage"] == hso["permissionDecisionReason"]
         assert "separate command" in deny_reason()
+        # (xi) heredoc BODIES are text being written, not command
+        # position. Measured false fire (2026-08-10): a commit message
+        # quoting a fused form denied a command holding no push at all.
+        _hd_false_fire = (
+            "git commit -F - <<'EOF'\n"
+            "guard note: the first fire was correct — I had run\n"
+            "`git log origin/main..main && git push` in one command.\n"
+            "EOF\n"
+        )
+        assert deny_check({**main_s, "tool_input": {"command": _hd_false_fire}}) is None
+        # the in-scope case in the SAME dirty fixture: a real fusion on
+        # the opener LINE still denies, heredoc body present
+        _hd_real_fusion = (
+            "git commit -F - <<'EOF' && git push origin main\n"
+            "a commit message body\n"
+            "EOF\n"
+        )
+        assert deny_check({**main_s, "tool_input": {"command": _hd_real_fusion}}) is not None
+        # unterminated heredoc (no closing delimiter line): the body
+        # runs to end of string, so the quoted fusion stays silent
+        _hd_unterminated = (
+            "git commit -F - <<'EOF'\n"
+            "guard note: the first fire was correct — I had run\n"
+            "`git log origin/main..main && git push` in one command.\n"
+        )
+        assert deny_check({**main_s, "tool_input": {"command": _hd_unterminated}}) is None
 
         print("push-claim-reminder: all tests passed")
         sys.exit(0)
