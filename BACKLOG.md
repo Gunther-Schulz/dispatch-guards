@@ -53,20 +53,6 @@ are dropped with a one-line reason.
   and the post-incident zero-scan still proves nothing.
   Do not delete branches as part of any worktree cleanup.
 
-- **READY 2026-08-08 — skill-lint's dead-cite check fires on tool names in
-  parentheses, blocking every dispatch-guards release.** `skill_lint.py`
-  reports `forms.md:29: dead-cite: (SendMessage) matches no heading here`;
-  the text is a tool name in prose, not a section citation, and the finding is
-  pre-existing (proven by linting the unmodified HEAD copy). Exit 1 makes it
-  blocking, so every release must hand-disposition a false fire — the override
-  habit the corpus warns about. Fix belongs in skill-craft's `tools/
-  skill_lint.py` (sibling repo), not in rewording correct prose: exclude
-  known tool/function names, or require a cite to look like a section
-  reference (`§`, "see", a heading-shaped token) before flagging. Verifier:
-  the linter goes red on a genuinely dead section cite and silent on
-  `(SendMessage)`, both in one run. Done when dispatch-guards releases at
-  lint exit 0 with no hand-disposition.
-
 - **PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a
   missing dependency tree (hang, not error).** The skill already has
   the section this belongs to — `plugin/skills/worktree/SKILL.md:87`,
