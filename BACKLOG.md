@@ -263,7 +263,24 @@ are dropped with a one-line reason.
   code exercised, zero writes to the real config dir. This is step 4's
   bite-proof clause seen from the other side — the injection proves
   the check can go red, the deploy shape proves it goes red on the
-  thing that actually ships. Trigger: the next devbook edit, whatever
+  thing that actually ships.
+  **FOURTH CLAUSE, added 2026-08-10 (writer-lock dispatch, measured):**
+  where a guard's predicate reads SHELL SYNTAX, the docstring
+  false-fire probe strips `'`, `"` and backticks before matching — or
+  it proves nothing while looking clean. Measured: the probe returned
+  SILENT, but only because an odd number of apostrophes made `shlex`
+  bail into the fail-open exit before any matching happened; the text
+  never reached the predicate. Stripped, the same probe found a real
+  match — a documentation paragraph containing `cd <elsewhere> && git
+  commit`, a CORRECT shell reading of prose — pinned by identity so a
+  second match goes red.
+  Its sibling observation is the clause's second half: the author then
+  wrote "this probe is vacuous" INTO the docstring, which balanced the
+  apostrophe count and made the docstring start parsing, so the
+  sentence was false the moment it was written. A claim about an
+  artifact, stated inside that artifact, can be falsified by the act of
+  stating it. Caught only because the bite-test asserted the vacuity
+  being documented. Trigger: the next devbook edit, whatever
   motivates it.
 
 - **PARKED 2026-08-10 — neutralize the remaining `CLAUDE.md`
