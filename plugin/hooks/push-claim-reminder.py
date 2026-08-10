@@ -44,16 +44,22 @@ this invocation with a read or a commit?), which needs the shell
 operators the token view discards. `(?:^|[;&|]\\s*)git\\s+push\\b`
 for the push, the same anchoring for the `git commit` / `git log`
 companion, so a commit MESSAGE merely containing the word "push"
-cannot fire it. HEREDOC BODIES ARE STRIPPED BEFORE MATCHING: a
+cannot fire it. HEREDOC BODIES ARE STRIPPED BEFORE MATCHING,
+for an opener whose delimiter is ATTACHED to the operator: a
 `<<WORD … WORD` span is text being WRITTEN, not command position.
 The lane measurably false-fired on a commit message that quoted a
 fused form while describing an earlier, correct fire — and a guard
 firing on legitimate work fails as hard as one staying silent,
 because it trains the override reflex. Residue that remains, and
 is accepted: separator text inside a single-line quoted ARGUMENT
-(`git commit -m "x; git push"`) still reads as command position,
-and a `<<` inside a quoted argument can be misread as an opener —
-remedy cost is splitting the command, i.e. the very thing the deny
+(`git commit -m "x; git push"`) still reads as command position; a
+`<<` inside a quoted argument can be misread as an opener; and a
+SPACED opener (`<< EOF`, POSIX-legal) is NOT recognised, so its body
+is not stripped and the old false-firing behaviour stands there. The
+space stays out of the opener pattern deliberately: admitting it lets
+`$((a << b))` read as an opener and swallow the rest of the command,
+weakening a deny gate to buy a narrower false-fire fix. Remedy cost
+in every case is splitting the command, i.e. the very thing the deny
 asks for.
 
 Fail-open on parse errors (a broken guard must not brick every Bash
