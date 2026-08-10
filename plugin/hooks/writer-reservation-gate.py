@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""PreToolUse(Bash) + PostToolUse(Write|Edit) + Stop: the
-writer-reservation lock — a WARN at `git commit` when ANOTHER writer
+"""PreToolUse(Bash) + PostToolUse(Write|Edit) + Stop/SubagentStop:
+the writer-reservation lock — a WARN at `git commit` when ANOTHER writer
 holds the target WORKING COPY's reservation.
 
 Design authority: dotfiles `docs/directives/writer-reservation-lock-
@@ -46,7 +46,44 @@ are complementary: same ancestor idea, disjoint firing conditions.
 - PreToolUse(Bash): a `git commit` against a copy whose reservation
   is held by a DIFFERENT writer and has not expired → WARN naming the
   holder, when it claimed, and what the commit will absorb.
-- Stop: RELEASE this writer's reservation on the session's cwd copy.
+- Stop / SubagentStop: RELEASE this writer's reservation on the
+  session's cwd copy — but only on GIT EVIDENCE that the copy has
+  nothing left to protect. See below.
+
+## Release is gated on git evidence, not on the stop event
+
+The release condition is not "stopped", it is "stopped AND has
+nothing to protect" (operator decision 2026-08-10). Ask what the WARN
+asserts: another writer holds this copy, and your commit may absorb
+their uncommitted hunks. If a writer stops having LEFT uncommitted
+work, that sentence is still true and the warning still earns its
+place — releasing there would drop protection at exactly the moment
+the work is most orphaned, with nobody actively minding it. If it
+stops CLEAN, the sentence is false, and every later commit in that
+copy eats a false fire for up to 90 minutes; on a fan-out that is
+constant, and a guard that fires on legitimate work trains the
+override reflex that kills it.
+
+So: clean copy → release. Dirty copy → keep, and let the TTL end it.
+Could not establish which → keep. Release takes POSITIVE evidence,
+the same direction writer-claims-gate's relief takes.
+
+This is load-bearing rather than a noise tweak, because `Stop` is not
+a session-end event: it fires at the end of each main-agent response
+(basis: the operator's own Stop wiring runs `claude-worktime log
+--response` and a mid-turn answer check, dotfiles
+`claude/settings.json`). An ungated release would therefore drop the
+reservation after every turn, leaving the lock alive only within a
+single response.
+
+The predicate is `_dispatch_common.git_status_lines`, SHARED rather
+than copied — writer-claims-gate's `no_uncommitted_work` answers the
+per-PATH question and cannot answer this per-COPY one as written: it
+runs `git -C dirname(path)`, so handed a copy's toplevel it shells
+into the repo's PARENT and git exits 128 (measured 2026-08-10 — it
+returns False there, the right answer for the wrong reason). The two
+questions also differ on ignored files, deliberately; the flag split
+and its measurement live in that helper's docstring.
 
 ## The record
 
@@ -101,7 +138,8 @@ Accepted residue, all of it UNDER-firing:
 - Only `git commit` is a lane. Other absorbing shapes (`git merge`,
   `git revert`, `git stash push`) are out of the spec's scope.
 - Release covers the copy at the session's cwd; a reservation taken
-  in some OTHER copy expires by TTL.
+  in some OTHER copy expires by TTL. A holder that stops dirty and
+  never returns also runs to TTL — deliberate, per the gate above.
 - Bash-mediated writes (`sed -i`, `tee`, heredocs) never reach the
   Write|Edit matcher, so they claim nothing.
 
@@ -133,7 +171,7 @@ import time
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import fire  # noqa: E402
+from _dispatch_common import fire, git_status_lines  # noqa: E402
 
 _SOURCE = "dispatch-guards/writer-reservation-gate"
 _RESERVATION = "writer-reservation.json"
@@ -338,10 +376,17 @@ def write_reservation(gitdir: str, payload: dict,
     return outcome
 
 
-def release_reservation(gitdir: str, payload: dict,
+def release_reservation(gitdir: str, payload: dict, worktree: str,
                         now: float | None = None) -> str:
-    """Drop the reservation IFF this writer holds it. Returns "released"
-    | "not-held" | "foreign" | "failed"."""
+    """Drop the reservation IFF this writer holds it AND the copy has
+    nothing left to protect. Returns "released" | "kept-dirty" |
+    "kept-unverified" | "not-held" | "foreign" | "failed".
+
+    The gate is the point (see the module docstring): stopping is not
+    the release condition, stopping with nothing uncommitted is.
+    Release takes POSITIVE evidence of a clean copy, so a status
+    question that could not be answered keeps the reservation.
+    """
     sid, aid = identity(payload)
     if not sid:
         return "not-held"
@@ -350,6 +395,13 @@ def release_reservation(gitdir: str, payload: dict,
         return "not-held"
     if holder(rec) != (sid, aid):
         return "foreign"              # never remove another writer's record
+    # include_ignored=False: `git commit` never stages an ignored file,
+    # so an ignored artifact is unabsorbable and must not block release.
+    lines = git_status_lines(worktree, include_ignored=False)
+    if lines is None:
+        return "kept-unverified"      # could not answer → do not act
+    if lines:
+        return "kept-dirty"           # still work to protect → TTL ends it
     try:
         os.unlink(reservation_path(gitdir))
     except OSError:
@@ -446,11 +498,13 @@ def on_write(payload: dict) -> str:
 
 
 def on_stop(payload: dict) -> str:
-    """Stop: release this writer's reservation on the session's copy."""
-    gd = git_dir(_base_dir(payload))
+    """Stop/SubagentStop: release this writer's reservation on the
+    session's copy, gated on the copy being clean."""
+    worktree = _base_dir(payload)
+    gd = git_dir(worktree)
     if gd is None:
         return "no-git-dir"
-    return release_reservation(gd, payload)
+    return release_reservation(gd, payload, worktree)
 
 
 def main() -> int:
@@ -462,7 +516,10 @@ def main() -> int:
     if event == "PostToolUse":
         on_write(payload)
         return 0
-    if event == "Stop":
+    if event in ("Stop", "SubagentStop"):
+        # Both, and for the same reason: a stopping SUBAGENT is a
+        # different writer from its parent session (the record carries
+        # agent_id), so its reservation is its own to release.
         on_stop(payload)
         return 0
     if check(payload):
@@ -711,16 +768,78 @@ if __name__ == "__main__":
             # recording cannot see
             assert "agent_id" not in W
 
-            # ── Release (Stop) ────────────────────────────────────────
+            # ── Release (Stop/SubagentStop), GATED ON GIT EVIDENCE ────
+            # Both directions in ONE fixture: a release test that only
+            # checks the clean case passes against a lane that always
+            # releases, which is exactly the injection below.
             S = {"hook_event_name": "Stop", "session_id": "s-a", "cwd": copy}
+            FOREIGN_COMMIT = {**MINE, "session_id": "s-other"}
+
+            # (i) holder stops with the copy DIRTY → reservation SURVIVES,
+            #     and a later foreign commit still warns.
+            open(tracked, "w").write("x = dirty\n")
+            assert git_status_lines(copy) == [" M f.py"]
+            os.unlink(reservation_path(gd))
+            assert on_write(W) == "claimed"          # s-a holds it
+            assert on_stop(S) == "kept-dirty"
+            assert os.path.exists(reservation_path(gd))
+            assert holder(read_reservation(gd)[1]) == ("s-a", None)
+            assert verdict(FOREIGN_COMMIT)[0] == "fire"   # protection intact
+
+            # (ii) …the SAME holder stops again once the copy is CLEAN →
+            #     reservation GONE, and the same commit goes silent.
+            open(tracked, "w").write("x = 1\n")      # == HEAD
+            assert git_status_lines(copy) == []
             assert on_stop(S) == "released"
             assert not os.path.exists(reservation_path(gd))
-            assert on_stop(S) == "not-held"
-            # another writer's reservation is never removed
-            on_write({**W, "session_id": "s-b"})
+            assert verdict(FOREIGN_COMMIT)[0] == "silent"
+
+            # (iii) IGNORED-only dirt counts as clean: a commit cannot
+            #     stage an ignored file, so it is unabsorbable. Without
+            #     this, "clean" is unreachable in any repo with a build
+            #     directory and the release path would be dead.
+            open(copy + "/.gitignore", "w").write("build/\n")
+            g("add", "--", copy + "/.gitignore")
+            assert g("commit", "-q", "--no-verify", "-m", "i").returncode == 0
+            os.makedirs(copy + "/build", exist_ok=True)
+            open(copy + "/build/out.o", "w").write("artifact\n")
+            assert on_write(W) == "claimed"
+            assert git_status_lines(copy) == []
+            assert git_status_lines(copy, include_ignored=True) == ["!! build/"]
+            assert on_stop(S) == "released"
+
+            # (iv) could-not-verify on release → KEEP, never drop
+            assert on_write(W) == "claimed"
+            assert on_stop({**S, "cwd": td}) == "no-git-dir"
+            assert os.path.exists(reservation_path(gd))
+            # a status question that cannot be answered keeps it too
+            assert release_reservation(gd, S, td + "/ghost") == \
+                "kept-unverified"
+            assert os.path.exists(reservation_path(gd))
+
+            # (v) another writer's reservation is never removed, and a
+            #     clean copy does not license stealing one either
+            assert git_status_lines(copy) == []
+            assert on_write({**W, "session_id": "s-b"}) == "foreign"
+            assert holder(read_reservation(gd)[1]) == ("s-a", None)
+            os.unlink(reservation_path(gd))
+            on_write({**W, "session_id": "s-b"})     # now s-b holds it
             assert on_stop(S) == "foreign"
             assert holder(read_reservation(gd)[1]) == ("s-b", None)
-            assert on_stop({**S, "cwd": td}) == "no-git-dir"
+            os.unlink(reservation_path(gd))
+
+            # (vi) a stopping SUBAGENT releases its OWN reservation, and
+            #     only its own — the parent session's Stop does not.
+            SUB_W = {**W, "session_id": "s-p", "agent_id": "a7"}
+            assert on_write(SUB_W) == "claimed"
+            assert holder(read_reservation(gd)[1]) == ("s-p", "a7")
+            parent_stop = {"hook_event_name": "Stop", "session_id": "s-p",
+                           "cwd": copy}
+            assert on_stop(parent_stop) == "foreign"     # not the parent's
+            sub_stop = {"hook_event_name": "SubagentStop", "session_id": "s-p",
+                        "agent_id": "a7", "cwd": copy}
+            assert on_stop(sub_stop) == "released"
+            assert not os.path.exists(reservation_path(gd))
 
             # ── e2e through main(): stdin JSON in, stdout JSON out ─────
             def run_main(raw):

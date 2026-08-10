@@ -387,6 +387,66 @@ def is_push_command(cmd: str) -> bool:
     return False
 
 
+# ── Git working-copy reads (shared; one home for the flags) ──────────────
+import subprocess  # noqa: E402
+
+_GIT_STATUS_TIMEOUT = 10.0
+
+
+def git_status_lines(directory: str, pathspec: str | None = None,
+                     include_ignored: bool = False,
+                     timeout: float = _GIT_STATUS_TIMEOUT) -> list | None:
+    """Porcelain status lines for a working copy, or None = COULD NOT
+    ANSWER. One home for the flags, because two guards now ask a
+    git-status question and the flags below each cost a fix to get right.
+
+    None is the third answer and never collapses into "clean": a path
+    outside any repo, a missing directory, git unrunnable, slow, or
+    exiting non-zero all return None. Each CALLER maps that to its own
+    conservative direction — relief and release both take POSITIVE
+    evidence, so both read None as "do not act".
+
+    `--no-optional-locks` is not optional: a plain `git status` REWRITES
+    the index (measured 2026-08-10), so an unflagged read-shaped call
+    takes index.lock and mutates state shared with the very co-writers
+    these guards exist for.
+
+    `include_ignored` is the caller's question, not a default, and the
+    two live callers genuinely differ (both measured 2026-08-10):
+
+    - PER-PATH, "is there in-flight content at this file?"
+      (writer-claims-gate's relief) needs include_ignored=True. A
+      GITIGNORED file reports empty under plain status even with live
+      content, so without it the predicate relieves exactly where
+      evidence is absent.
+    - PER-COPY, "could a commit here absorb someone's work?"
+      (writer-reservation-gate's release) needs include_ignored=False.
+      `git commit` never stages an ignored file, so an ignored artifact
+      is by definition unabsorbable; counting it would make "clean"
+      unreachable in any repo with a build directory — measured on a
+      copy where git itself reported "nothing to commit, working tree
+      clean" while `--ignored=matching` reported `!! build/`.
+
+    Passing a `pathspec` scopes the answer to one path; omitting it asks
+    about the whole copy. Note that the per-path form must be run with
+    `directory` INSIDE the repo — `git -C <parent-of-repo>` exits 128
+    and yields None, which is the honest answer, not a clean one.
+    """
+    cmd = ["git", "-C", directory, "--no-optional-locks", "status",
+           "--porcelain"]
+    if include_ignored:
+        cmd.append("--ignored=matching")
+    if pathspec is not None:
+        cmd += ["--", pathspec]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return None
+    if r.returncode != 0:
+        return None
+    return [ln for ln in r.stdout.splitlines() if ln.strip()]
+
+
 if __name__ == "__main__" and "--test" in sys.argv:
     # Bite-test for the shared machinery itself (fire log, guard modes,
     # fire() routing). The per-guard files test their own lanes; this
@@ -557,6 +617,67 @@ if __name__ == "__main__" and "--test" in sys.argv:
     assert command_shape({}) is None
     assert len(S("git " + " ".join(f"--flag{i}" for i in range(60))) or "") \
         <= _SHAPE_MAX
+
+    # ── git_status_lines: the shared working-copy read, against REAL
+    # git. Expectations derived from what each CALLER's question means
+    # (can a commit absorb this? is there content at this path?), not
+    # from this implementation.
+    import tempfile as _tf
+
+    with _tf.TemporaryDirectory() as _td:
+        _env = {**os.environ, "GIT_CONFIG_GLOBAL": _td + "/gc",
+                "GIT_CONFIG_SYSTEM": _td + "/gs"}
+        _copy = os.path.realpath(_td) + "/copy"
+        os.makedirs(_copy)
+
+        def _g(*a):
+            return subprocess.run(
+                ["git", "-C", _copy, "-c", "user.email=t@t",
+                 "-c", "user.name=t", "-c", "core.hooksPath=/nonexistent",
+                 *a], env=_env, capture_output=True, text=True)
+
+        _g("init", "-q", ".")
+        open(_copy + "/f.py", "w").write("x = 1\n")
+        open(_copy + "/.gitignore", "w").write("build/\n")
+        _g("add", "--", "f.py", ".gitignore")
+        assert _g("commit", "-q", "--no-verify", "-m", "b").returncode == 0
+
+        # committed-clean copy: no lines, and that is an ANSWER
+        assert git_status_lines(_copy) == []
+        # a modified tracked file shows up
+        open(_copy + "/f.py", "w").write("x = 2\n")
+        assert git_status_lines(_copy) == [" M f.py"]
+        # …and scoping by pathspec still sees it, from INSIDE the repo
+        assert git_status_lines(_copy, pathspec=_copy + "/f.py") == [" M f.py"]
+        open(_copy + "/f.py", "w").write("x = 1\n")
+        assert git_status_lines(_copy) == []
+
+        # THE FLAG SPLIT, measured: an ignored artifact is unabsorbable
+        # (git itself: "nothing to commit, working tree clean") but IS
+        # content at its path.
+        os.makedirs(_copy + "/build")
+        open(_copy + "/build/out.o", "w").write("artifact\n")
+        assert git_status_lines(_copy) == [], git_status_lines(_copy)
+        assert git_status_lines(_copy, include_ignored=True) == ["!! build/"]
+        assert "nothing to commit" in _g("commit", "--no-verify", "-m",
+                                         "x").stdout
+
+        # untracked, non-ignored work counts for BOTH questions
+        open(_copy + "/new.py", "w").write("y = 1\n")
+        assert git_status_lines(_copy) == ["?? new.py"]
+        os.unlink(_copy + "/new.py")
+
+        # ── COULD NOT ANSWER is None, never [] ────────────────────────
+        assert git_status_lines(_td + "/nodir") is None       # missing dir
+        os.environ["GIT_CEILING_DIRECTORIES"] = os.path.realpath(_td)
+        assert git_status_lines(_td) is None                  # not a repo
+        del os.environ["GIT_CEILING_DIRECTORIES"]
+        # the per-path form run from the repo's PARENT: git exits 128, so
+        # the honest answer is None — NOT an empty (clean-looking) list
+        assert git_status_lines(os.path.dirname(_copy),
+                                pathspec=_copy) is None
+        # a timeout that cannot complete is could-not-answer, not clean
+        assert git_status_lines(_copy, timeout=0.000001) is None
 
     print("_dispatch_common: all tests passed")
     sys.exit(0)
