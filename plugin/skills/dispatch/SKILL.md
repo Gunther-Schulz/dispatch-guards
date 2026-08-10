@@ -98,18 +98,27 @@ Mandatory parts (execution briefs):
 - **Grounding basis as a mandatory section.** Name what the agent must
   read before building and require the final report to cite what was
   actually read.
-- **Background lines carry per-line provenance grades.**
-  "Established" is a per-line verification claim, never a
-  section-level tone: each cited line is either OPENED at
+- **Every claim the brief asserts carries a per-line provenance
+  grade, and the grade follows the CLAIM, never the section
+  holding it.** "Established" is a per-line verification claim,
+  never a section-level tone: each cited line is either OPENED at
   brief-write time or carried with its provenance and grade —
   "from <source>, unverified" — so the executor can tell which
-  citations hold dispatcher weight and which are inherited (a
-  Background section with mixed provenance under one uniform
-  header is the label-over-body drift, and an ABSENT citation is
-  the lucky case: reading falsifies it; a merely STALE one reads
-  as a near-miss the executor plausibly "corrects" toward). The
-  brief boundary is where discovery testimony becomes instruction:
-  every audit finding turned into a build step gets its cited line
+  citations hold dispatcher weight and which are inherited (mixed
+  provenance under one uniform header is the label-over-body
+  drift, and an ABSENT citation is the lucky case: reading
+  falsifies it; a merely STALE one reads as a near-miss the
+  executor plausibly "corrects" toward). Opening a REFERENCE is
+  not opening its CONTENT: proving a ref, path or ticket RESOLVES
+  establishes nothing the brief rests on, and that existence check
+  is the one that feels like diligence. A section-scoped reading
+  of this rule fails first at an EXPECTED RESULT, which is also
+  the costliest line to inherit: the executor bends its work to
+  satisfy an expectation, so an unverified one is either forced to
+  fit — silently, by tuning the implementation until it matches —
+  or returned as a gap at the price of a round trip. The brief
+  boundary is where discovery testimony becomes instruction: every
+  audit finding turned into a build step gets its cited line
   opened once, there — after it, the claim is executed by someone
   who cannot tell inherited from verified.
 - **Write boundaries.** Which paths the agent owns (one writer per
@@ -376,6 +385,9 @@ satisfied by construction:
 
     ## Verifier (in order; real output pasted in the report)
     1. <red-first bite>  2. <suites>  3. <live or corpus check>
+    <an EXPECTED result quoted from a source is graded like a
+    Background line — opened at brief time, or "from <source>,
+    unverified">
 
     ## Write boundaries
     <paths owned; `git commit -- <paths>`; what NOT to touch;
