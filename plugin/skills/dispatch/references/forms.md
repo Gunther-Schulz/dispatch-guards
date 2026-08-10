@@ -29,7 +29,7 @@ answer, silence is not; (h) rides the EXECUTION tail only:
 An idle agent without a report gets the report demanded (SendMessage),
 never booked as success — the missing report is an observed failure
 mode of delegated work, and silence is never success (source:
-CLAUDE.md dispatched-work rule). An idle notification can RACE a
+site corpus dispatched-work rule). An idle notification can RACE a
 message just sent to that agent — its summary then shows PRE-message
 state, not current state: a minimal ping resumes the agent either way
 and disambiguates at the cost of one message; never re-send the full
@@ -172,7 +172,7 @@ data-file provision, §3b):
 
 Verifier dispatches stay exempt from the rich §1 brief form but NOT
 from the read-only tail — artifact + question + that block (the
-CLAUDE.md fresh-context rule's "nothing else" excludes dispatcher
+site corpus fresh-context rule's "nothing else" excludes dispatcher
 REASONING; the tail is plumbing, not reasoning). Discovery
 dispatches likewise take the read-only tail verbatim.
 

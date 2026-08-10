@@ -23,9 +23,10 @@ conducts itself — is the sibling `executor` skill; briefs to
 cheaper tiers name its load first (§1). The dispatch-skill-gate
 hook in this plugin demands this load before any dispatch.
 
-Citations reading "CLAUDE.md" name the operator's global corpus
-(`~/.claude/CLAUDE.md`), the layer every session loads; this
-skill is that corpus' dispatch half. Companion to the model table
+Citations reading "site corpus" name the operating site's
+always-loaded rule layer — here the operator's global corpus
+(`~/.claude/CLAUDE.md`); this skill is that corpus' dispatch
+half. Companion to the model table
 there ("Model routing for dispatches"). "Cheaper tier" means any
 tier below the session model, whatever the current lineup calls
 it.
@@ -64,7 +65,7 @@ this section.)
 
 **Exception — verifier dispatches:** a fresh-context verifier gets the
 artifact and the question ONLY, never your reasoning (source:
-CLAUDE.md fresh-context rule); the rich brief form below is for
+site corpus fresh-context rule); the rich brief form below is for
 EXECUTION dispatches — applying it to a verifier contaminates the
 independence that is its point.
 
@@ -113,7 +114,7 @@ Mandatory parts (execution briefs):
   who cannot tell inherited from verified.
 - **Write boundaries.** Which paths the agent owns (one writer per
   working copy; parallel dispatches need disjoint, brief-named path
-  sets — source: CLAUDE.md dispatched-work rule). On a SHARED copy
+  sets — source: site corpus dispatched-work rule). On a SHARED copy
   commit by pathspec — `git commit -- <paths>`, not `git add` then
   `git commit`; `-A` is wrong everywhere. A path git does not yet
   TRACK is invisible to a pathspec commit ("did not match any
@@ -392,13 +393,13 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   stated in the dispatching turn's final message, where its
   passing is checkable. Silence past the horizon is a finding —
   inspect or stop the agent, never more waiting. (Source:
-  CLAUDE.md dispatched-work rule.)
+  site corpus dispatched-work rule.)
 - **Verify in the artifact, then integrate.** Run the tests, greps,
   renders YOURSELF before push/merge/publish. An agent's "done" is a
-  claim, not a fact. (Source: CLAUDE.md dispatched-work rule.)
+  claim, not a fact. (Source: site corpus dispatched-work rule.)
   A SPLIT report — summary message + report file (§2
   payload-vs-pointer) — is booked from the FILE: the summary is a
-  label over its body (CLAUDE.md paraphrase-drift rule), and
+  label over its body (site corpus paraphrase-drift rule), and
   per-finding dispositions close only when their set reconciles
   against the body's own enumeration — a count the summary states
   that fails to reconcile against the rows is the drift announcing
@@ -418,7 +419,7 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   the operator-named default reviewer tier even over artifacts
   authored ABOVE it — a fresh context removes self-blindness, not the
   judgment ceiling, and review above the default is an operator-named
-  exception, never a tier-rule inference (source: CLAUDE.md model
+  exception, never a tier-rule inference (source: site corpus model
   routing, which names the current default). A verdict that
   decomposes into
   exhaustive mechanical enumeration plus judgment over the
@@ -430,7 +431,7 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   it.** An agent needing a tier above its own reports what it could
   not settle and returns the question; the dispatcher decides and
   dispatches. An escalating agent briefs its own reviewer, inheriting
-  the blind spot it means to escape (CLAUDE.md fresh-context rule),
+  the blind spot it means to escape (site corpus fresh-context rule),
   and it is the dispatcher that holds the design context and the spend
   view. Sideways and downward dispatches are unaffected. Enforced for
   the ask-tier only (agent-model-gate hook): hook input carries no

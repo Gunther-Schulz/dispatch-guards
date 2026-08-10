@@ -175,15 +175,18 @@ are dropped with a one-line reason.
   Done: both fixture sides proven, the dotfiles false-fire shape
   (yesterday's lane, today's desk write) reproduced and silent.
 
-- **PARKED 2026-08-10 — neutralize the `(Source: CLAUDE.md ...)`
-  labels for outside sharing.** The routing split is already clean
-  (references/routing.md carries portable role-based rules; the site
-  overlay wins on conflict), but the skill text still cites the
-  operator's PRIVATE corpus by name in several source labels; the
-  operative text is restated in-skill, so the labels dangle harmlessly
-  for a stranger — cosmetic, not functional. Trigger: an actual
-  decision to publish/share the plugin outside this farm; renaming
-  labels nobody external reads yet is churn.
+- **PARKED 2026-08-10 — neutralize the remaining `CLAUDE.md`
+  mentions in HOOK docstrings and one runtime string for outside
+  sharing.** The SKILL-text half is DONE (operator GO "yes fix",
+  this entry's commit: 11 citation sites across dispatch SKILL.md /
+  executor SKILL.md / forms.md renamed to the "site corpus"
+  vocabulary routing.md already uses; the two deployment-scoped
+  governance footers deliberately keep naming the operator corpus).
+  Remaining: 5 hook files cite CLAUDE.md in docstrings and
+  discovery-volume-reminder.py:85 in a runtime message — changing
+  deny/remind texts obligates battery re-verification, so this half
+  waits. Trigger unchanged: an actual decision to publish/share the
+  plugin outside this farm.
 
 
 ## Done
