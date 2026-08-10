@@ -7,6 +7,47 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-10 — §1's untracked-outputs clause misses the
+  commit-message file, and three lanes proved it in one session.**
+  The clause tells briefs to assign per-agent filenames "for any
+  output that defaults to a shared path". A commit-message file is
+  not a DEFAULT filename — the agent picks it — so the clause reads
+  as not applying, and on 2026-08-10 three parallel lanes
+  independently chose `msg.txt` in the session scratchpad, which is
+  keyed per SESSION, not per agent. Two collisions followed. Both
+  were near-misses only because each file had already been consumed
+  by its `git commit -F`; the writer-claims gate WARNed (staging
+  mode) AFTER each write landed, so it documented the overwrite
+  rather than preventing it.
+  **Design (decided).** Widen the existing untracked-outputs bullet
+  in dispatch SKILL.md §1 — amendment, not a new bullet — from
+  "a tool's DEFAULT output filename" to any file the agent writes
+  under a shared scratch root, naming the commit-message file as
+  the worked instance and stating the fix: the name carries the
+  agent or item slug. No new section, no forms.md change.
+  **Verifier.** `tools/check-doc-drift.py` green, `skill_lint` over
+  all skill .md files exit 0 blocking=0, every ADDED line ≤69 cols.
+  **Done-criterion.** A dispatcher composing a brief from §1 alone
+  assigns a distinct scratch filename without inventing the rule.
+
+- **PARKED 2026-08-10 — writer-claims-gate cannot see shell-redirect
+  writes, so its claims store has a hole of unknown size.** The gate
+  hooks Write/Edit; a `> file` redirect through Bash reaches the same
+  paths and fires nothing. Reported by the dg-corpus-bundle executor,
+  which created `lint.txt` and `SKILL.old.md` in the shared scratchpad
+  by redirect and could NOT determine whether either overwrote a peer's
+  file — the gate had no record either way. Same shape as the corpus
+  wrap guard's own PostToolUse blind spot, which the commit-time lane
+  was built to close (dotfiles 5e6fdde).
+  **Named missing evidence.** Whether the hole is reachable in a way
+  that matters: the gate's purpose is peer-overlap warning, so the
+  question is how often a redirect write lands on a path another lane
+  claimed. The fire log records Write/Edit fires only, so it cannot
+  answer this about itself — the measurement needs a second source
+  (a PreToolUse Bash lane recording redirect targets, itself a design
+  question). Until measured, the gate's coverage claim is scoped to
+  tool-mediated writes, and that scope belongs in its docstring.
+
 - **PARKED 2026-08-08 — worktree LIFECYCLE: nobody removes worktrees, and the
   sweep that does has no ownership predicate. Named missing evidence: whether
   this generalises beyond one repo, and a false-fire rate for any retirement
