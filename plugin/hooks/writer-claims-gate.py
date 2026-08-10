@@ -27,6 +27,13 @@ One file, two events (payload `hook_event_name` discriminates):
   background agent as a live writer"); main-session denies train the
   override reflex.
 
+Both PreToolUse lanes RELIEVE a claim whose file has no uncommitted
+work left (`no_uncommitted_work`) — the TTL-residue class this gate
+was measured false-firing on (three fires across two dotfiles waves,
+2026-08-09/10, every one on a file whose claimer had already
+committed and had its report booked: the claim outlived its lane by
+TTL alone).
+
 Store: JSONL, latest-record-per-file wins, at
 $CLAUDE_DISPATCH_GUARDS_CLAIMS > $XDG_DATA_HOME/claude/
 write-claims.jsonl (outside any repo, mirroring dispatch-log.py);
@@ -46,6 +53,7 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -56,6 +64,7 @@ from _dispatch_common import fire, fire_log, is_subagent, policy  # noqa: E402
 _SOURCE = "dispatch-guards/writer-claims-gate"
 _WRITE_TOOLS = ("Write", "Edit")
 _COMPACT_BYTES = 512 * 1024
+_GIT_TIMEOUT = 10.0
 
 
 def claims_path() -> Path:
@@ -117,6 +126,35 @@ def fresh_claim(path: str, now: float | None = None) -> dict | None:
     return rec if (now - ts) <= ttl_seconds() else None
 
 
+def no_uncommitted_work(path: str) -> bool:
+    """True iff git reports a CLEAN tree at `path` — nothing staged,
+    unstaged or untracked there. The relief predicate: a live claim on
+    such a file is dropped.
+
+    Why it relieves: this gate protects IN-FLIGHT uncommitted co-writer
+    work. A clean tree at the claimed file means no such work exists —
+    landed or reverted, there is nothing left to protect — whatever the
+    TTL still says. GIT EVIDENCE ONLY: a dirty file (modified, staged,
+    or untracked `??`) keeps every claim live regardless of the claim's
+    age or of any text in a claim, a brief, or a message.
+
+    Could-not-verify maps to NOT relieved, because relief takes positive
+    evidence: a path outside any git repo, a missing directory, git
+    unrunnable, slow, or exiting non-zero → False, and the gate keeps
+    firing. `--no-optional-locks` keeps the read side-effect-free: a
+    plain `git status` rewrites the index, and this runs against a
+    working copy whose index is shared with the very co-writers the gate
+    exists for."""
+    try:
+        r = subprocess.run(
+            ["git", "-C", os.path.dirname(path) or ".", "--no-optional-locks",
+             "status", "--porcelain", "--", path],
+            capture_output=True, text=True, timeout=_GIT_TIMEOUT)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return False
+    return r.returncode == 0 and not r.stdout.strip()
+
+
 def record_claim(payload: dict) -> None:
     """PostToolUse, subagent: append/refresh this agent's claim."""
     path = target_file(payload)
@@ -151,13 +189,16 @@ def _compact(p: Path) -> None:
 def check(payload: dict, now: float | None = None):
     """PreToolUse: (kind, text) — ("fire", reason) for a subagent
     cross-agent collision, ("remind", text) for the main session's
-    live-writer reminder, else None."""
+    live-writer reminder, else None. Both lanes stay silent on a
+    RELIEVED claim (no_uncommitted_work)."""
     path = target_file(payload)
     if not path:
         return None
     rec = fresh_claim(path, now=now)
     if not rec:
         return None
+    if no_uncommitted_work(path):
+        return None  # relieved: no in-flight work left at `path`
     owner = rec.get("agent_id")
     if is_subagent(payload):
         if owner == payload.get("agent_id"):
@@ -278,6 +319,60 @@ if __name__ == "__main__":
             _compact(p)
             after = load_claims()
             assert rp in after and (td + "/old.py") not in after
+
+            # ── relief: a claim whose file has NO uncommitted work ──
+            # The TTL-residue false-fire class (BACKLOG READY 2026-08-10):
+            # every measured fire sat on a file whose claimer had already
+            # committed. Relief is GIT EVIDENCE ONLY, so each control
+            # below keeps the claim live for a reason git can see.
+            def git_fx(*args, cwd):
+                return subprocess.run(
+                    ["git", "-c", "user.email=t@t", "-c", "user.name=t",
+                     "-c", "core.hooksPath=/nonexistent", *args],
+                    cwd=cwd, capture_output=True, text=True)
+
+            repo = os.path.realpath(td) + "/repo"
+            os.makedirs(repo)
+            git_fx("init", "-q", ".", cwd=repo)
+            landed = repo + "/landed.py"
+            Path(landed).write_text("x = 1\n")
+            git_fx("add", "--", landed, cwd=repo)
+            assert git_fx("commit", "-q", "--no-verify", "-m", "l",
+                          cwd=repo).returncode == 0
+            record_claim(pl("PostToolUse", "Write", "a1", path=landed))
+            assert fresh_claim(landed) is not None      # the claim IS live
+            # committed-clean → relieved, both lanes silent
+            assert no_uncommitted_work(landed)
+            assert check(pl("PreToolUse", "Edit", "b2", path=landed)) is None
+            assert check(pl("PreToolUse", "Write", path=landed)) is None
+            # …the same claim over a DIRTY file → both lanes fire again
+            Path(landed).write_text("x = 2\n")
+            assert not no_uncommitted_work(landed)
+            assert check(pl("PreToolUse", "Edit", "b2",
+                            path=landed))[0] == "fire"
+            assert check(pl("PreToolUse", "Write", path=landed))[0] == "remind"
+            Path(landed).write_text("x = 1\n")          # == HEAD: clean again
+            # …UNTRACKED file → fires; git sees `??`, nothing landed
+            untracked = repo + "/untracked.py"
+            Path(untracked).write_text("y = 1\n")
+            record_claim(pl("PostToolUse", "Write", "a1", path=untracked))
+            assert not no_uncommitted_work(untracked)
+            assert check(pl("PreToolUse", "Edit", "b2",
+                            path=untracked))[0] == "fire"
+            # …outside any repo, or under a missing dir → could-not-verify,
+            # which is not relief: relief takes positive evidence
+            outside = os.path.realpath(td) + "/outside.py"
+            Path(outside).write_text("z = 1\n")
+            record_claim(pl("PostToolUse", "Write", "a1", path=outside))
+            os.environ["GIT_CEILING_DIRECTORIES"] = os.path.realpath(td)
+            assert not no_uncommitted_work(outside)
+            assert check(pl("PreToolUse", "Edit", "b2",
+                            path=outside))[0] == "fire"
+            del os.environ["GIT_CEILING_DIRECTORIES"]
+            assert not no_uncommitted_work(td + "/nodir/ghost.py")
+            # …and relief never outranks the TTL: stale stays silent
+            assert check(pl("PreToolUse", "Edit", "b2", path=untracked),
+                         now=time.time() + ttl_seconds() + 60) is None
 
             # ── e2e through main(): warn JSON, reminder JSON, recording ──
             def run_main(raw):
