@@ -152,7 +152,8 @@ EXECUTION tail (any dispatch that writes):
     still committed). Trailer:
     `Co-Authored-By: Claude <model> <noreply@anthropic.com>`.
     Never amend — always a new commit: the amend-gate denies
-    subagent amends regardless of ownership.
+    subagent amends regardless of ownership (source: §1 amend
+    rule).
     After sending the report your write grant is over: a defect you
     find later is REPORTED, never edited or amended (source: §4
     ownership rule).

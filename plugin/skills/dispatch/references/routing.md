@@ -82,7 +82,8 @@ The evidence:
   (completeness claims, surfaces whose wrongness is silent,
   statistical findings — briefed to refute — and a session's own
   booked verdicts); run mechanical verifiers anywhere, and skip
-  instructed "double-check yourself" prose everywhere.
+  instructed "double-check yourself" prose everywhere (source: the
+  operator corpus' fresh-context verification rule, Insurance).
 
 Site-overlay slots this file expects but cannot fill: the ranked
 model table with its staleness stamp; which model each role names;
