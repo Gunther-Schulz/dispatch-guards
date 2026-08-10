@@ -435,6 +435,13 @@ satisfied by construction:
     whether the
     change is deployment-coupled; commit style; the amend rule>
 
+    ## Commit plan
+    <the target repo's commit-blocking guards, READ at compose
+    time, and where the bump or ordering commit sits — a
+    payload-version guard comparing against the RELEASE state
+    clears every later same-batch commit once the bump is in.
+    "none" (no such guard) is a valid filling; silence is not>
+
     <§2 tail block from references/forms.md, pasted verbatim>
 
 A verifier or discovery dispatch takes its own exception above and

@@ -30,7 +30,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny, policy  # noqa: E402
+from _dispatch_common import deny, fire, policy  # noqa: E402
 
 _SOURCE = "dispatch-guards/brief-reminder"
 
@@ -330,6 +330,51 @@ def missing_sections_deny_text(payload: dict) -> str:
     )
 
 
+# The §1 skeleton's `## Commit plan` heading. Two spellings, both
+# normalized: `_norm` collapses the hard wrap in a pasted skeleton
+# ("Commit\nplan") to the spaced form.
+_COMMIT_PLAN_MARKERS = ("commit plan", "commit-plan")
+
+
+def missing_commit_plan(payload: dict) -> bool:
+    """True iff an execution-tail Agent brief carries no commit-plan
+    section — the §1 skeleton slot where the dispatcher states the
+    target repo's commit-blocking guards, read at compose time, and
+    where the bump or ordering commit sits.
+
+    Scope is exactly missing_sections' above: Agent tool, execution
+    tail present, brief = prompt plus referenced brief files. What
+    this establishes is PRESENCE OF THE LABEL and nothing more — a
+    plan naming the wrong guard reads identical to a correct one
+    here, so this lane grades composition, never the plan. Staged: it
+    ships WARN and earns deny only through the fire-rate review
+    (repo CLAUDE.md), never by assertion. Fail-open on parse doubt."""
+    if payload.get("tool_name") != "Agent":
+        return False
+    tool_input = payload.get("tool_input") or {}
+    if not (tool_input.get("prompt") or ""):
+        return False
+    brief = _brief_text(payload)
+    if _SECTIONS_ANCHOR not in brief:
+        return False  # not an execution-tail brief; exempt
+    return not any(m in brief for m in _COMMIT_PLAN_MARKERS)
+
+
+def missing_commit_plan_warn_text() -> str:
+    doc = policy().get("discipline_doc") or "the dispatch skill"
+    return (
+        f"Execution brief without a commit-plan section ({doc} §1 "
+        "skeleton, '## Commit plan'). State the target repo's "
+        "commit-blocking guards READ at compose time and where the "
+        "bump or ordering commit sits: a payload-version guard "
+        "comparing against the RELEASE state clears every later "
+        "same-batch commit once the bump is in, so bump-first turns "
+        "one shared gate into zero bounces for every writer behind "
+        "it. 'none' (no such guard) is a valid filling; silence is "
+        "not."
+    )
+
+
 def check(payload: dict) -> str | None:
     """Return the reminder, or None (= stay silent)."""
     if payload.get("tool_name") not in ("Agent", "Task"):
@@ -389,6 +434,16 @@ def main() -> int:
         deny(tail_mode_mismatch_deny_text(payload), source=_SOURCE)
     if missing_sections(payload):
         deny(missing_sections_deny_text(payload), source=_SOURCE)
+    # Staged lane: ships warn, promotable to deny via guard_modes
+    # (key "brief-reminder" — the four deny lanes above call deny()
+    # directly, so that key reaches this lane alone). fire() exits in
+    # EVERY mode, so a warn here replaces the reminder line below for
+    # this one brief: the warn names the same §1 check more
+    # specifically, and every deny lane above already exits the same
+    # way.
+    if missing_commit_plan(payload):
+        fire(missing_commit_plan_warn_text(), source=_SOURCE,
+             payload=payload, default_mode="warn")
     # One additionalContext field per hook call: the advisory rides
     # the reminder line rather than replacing it.
     lines = [t for t in (check(payload), worktree_advisory(payload)) if t]
@@ -661,6 +716,74 @@ if __name__ == "__main__":
 
         assert "Blocked" in missing_sections_deny_text(
             missing_grounding_brief)
+
+        # ── Commit-plan lane (missing_commit_plan), STAGED WARN ────
+        # Slot named in the dispatch skill §1 skeleton ("## Commit
+        # plan") — literal here, never the detection constant, so the
+        # test doesn't share parentage with what it's meant to catch.
+        COMMIT_PLAN_SECTION = (
+            "Commit plan: the repo's payload-version gate compares "
+            "against the release state, so the bump commit lands "
+            "first; then the two payload commits by pathspec.")
+
+        # (i) the PAIR that grades this lane: one brief carrying the
+        # slot, one not. They must DIFFER — a pair both readings
+        # satisfy grades nothing. Red-proven against the pre-change
+        # module (a copy of the whole hooks dir at the parent commit),
+        # where the predicate did not exist at all.
+        commit_plan_absent_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + GROUNDING_SECTION + "\n"
+                      + WRITE_BOUNDARIES_SECTION + "\n"
+                      + EXECUTION_TAIL_BG}}
+        commit_plan_present_brief = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + GROUNDING_SECTION + "\n"
+                      + WRITE_BOUNDARIES_SECTION + "\n"
+                      + COMMIT_PLAN_SECTION + "\n"
+                      + EXECUTION_TAIL_BG}}
+        assert missing_commit_plan(commit_plan_absent_brief)
+        assert not missing_commit_plan(commit_plan_present_brief)
+        assert (missing_commit_plan(commit_plan_absent_brief)
+                != missing_commit_plan(commit_plan_present_brief))
+
+        # (ii) the pasted skeleton's own hard wrap ("Commit\nplan")
+        # still counts — the normalization lane, applied here.
+        assert not missing_commit_plan({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\nGrounding basis: read spec.md first.\n"
+                      "Write boundaries: src/foo.py only.\n"
+                      "## Commit\nplan: bump first, then the payloads.\n"
+                      + EXECUTION_TAIL_BG}})
+
+        # (iii) a real dispatcher brief states the plan as numbered
+        # prose, not as a `##` heading — the marker family is
+        # label-shaped, not heading-anchored, so that form counts too.
+        assert not missing_commit_plan({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + GROUNDING_SECTION + "\n"
+                      + WRITE_BOUNDARIES_SECTION + "\n"
+                      "1. COMMIT PLAN, ordered against this repo's "
+                      "payload-version gate — THREE commits.\n"
+                      + EXECUTION_TAIL_BG}})
+
+        # (iv) scope negatives: READ-ONLY tail (no execution anchor),
+        # Task tool, parse-garbage → never fires
+        assert not missing_commit_plan(readonly_neither_brief)
+        assert not missing_commit_plan({"tool_name": "Task", "tool_input": {
+            "prompt": "Do X.\n" + EXECUTION_TAIL_BG}})
+        assert not missing_commit_plan({"tool_name": "Agent",
+                                        "tool_input": {}})
+        assert not missing_commit_plan({"tool_name": "Bash", "tool_input": {
+            "command": "ls"}})
+        assert not missing_commit_plan({})
+
+        # (v) the lane's own docstring, wrapped in a real execution
+        # brief: in-domain adversarial text by the same author. This
+        # predicate fires on ABSENCE, so a self-matching docstring can
+        # only prove the silent direction — it bounds the true
+        # negative, it is NOT a false-fire proof for this lane.
+        assert not missing_commit_plan({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + (missing_commit_plan.__doc__ or "")
+                      + "\n" + EXECUTION_TAIL_BG}})
+
+        assert "commit-plan section" in missing_commit_plan_warn_text()
 
         # ── Whitespace-normalization lane (false-fire 2026-07-30) ──
         # The §2 tails carry hard line wraps in references/forms.md
