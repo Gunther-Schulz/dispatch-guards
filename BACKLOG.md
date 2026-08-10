@@ -226,6 +226,21 @@ are dropped with a one-line reason.
   per-guard exclusion the bench itself verifies. Until decided, the
   gate's own --test battery (8 relief/control cases, red-proven both
   directions) is the coverage.
+  **WIDENED 2026-08-10 — it is now TWO lanes, not one.**
+  `writer-reservation-gate` hits the same wall and harder: it needs a
+  real git fixture repo AND a reservation object inside that repo's
+  git dir, where writer-claims-gate needed a fixture plus a rebound
+  claims store. The bench's own docstring is the authority — "Boundary:
+  STATELESS guards only … The bench never seeds state" — so this is a
+  declared limit being reached twice, not a bug.
+  What the second lane adds to the DECISION: a stdin-only case for it
+  would be `silent` with no reservation anywhere, i.e. a test that
+  passes against a lane which ignores reservations entirely. So the
+  option "record a declared per-guard exclusion the bench verifies" is
+  not merely cheaper here — writing a case instead would manufacture a
+  vacuous green, which is worse than the gap it papers over. Weigh
+  that when the decision is taken.
+  Coverage for both meanwhile is their own `--test` batteries.
 
 - **PARKED 2026-08-10 — two probe-craft clauses for the class devbook,
   batched to spare the register fingerprint.** From the TTL-relief
