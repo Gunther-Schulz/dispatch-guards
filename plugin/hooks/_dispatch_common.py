@@ -32,6 +32,15 @@ arriving through a command that reads as read-only. And a guard
 `-c core.hooksPath=/nonexistent` (plus `--no-verify`): fixture repos
 inherit the machine's GLOBAL core.hooksPath, so an unpinned fixture
 silently runs the operator's real hook battery inside the tempdir.
+Pinning hooksPath controls ONE of the two paths: because
+core.hooksPath REPLACES `.git/hooks`, a dispatcher-style hook
+commonly CHAINS back into `.git/hooks/<name>` so repo-local hooks
+survive — so a fixture that swaps hook versions must clear that
+file too. Measured 2026-08-10: an old-vs-new proof left a copy of
+the NEW hook in `.git/hooks/pre-commit`, and the OLD side emitted
+the new lane's message — a vacuous green wearing a red costume,
+which is the harder direction to notice because the expected
+result had arrived.
 
 Environment binding (as-of 2026-07-18, Claude Code hooks): a subagent
 context is marked by the presence of a non-empty `agent_id` field in the
