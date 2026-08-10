@@ -201,7 +201,19 @@ are dropped with a one-line reason.
   for outside-any-repo). Both are devbook step-4/5 candidates; each
   devbook text change resets guard-checker-bau to eval-open, so they
   land TOGETHER with the next devbook amendment, not as two solo
-  fingerprint churns. Trigger: the next devbook edit, whatever
+  fingerprint churns.
+  **THIRD CLAUSE, added 2026-08-10 (dotfiles global-lane dispatch,
+  measured):** where a mechanism's correctness depends on a DEPLOY
+  PATH, the red-first probe runs against that path's SHAPE, not a
+  convenient stand-in. Measured: a roster battery green against a
+  fixture whose directory was a real directory, red against the
+  deployment's directory SYMLINK — and the failing lane was SILENT, so
+  the mechanism would have deployed, injected nothing and reported no
+  error. The cheap seam is rebinding HOME in a subprocess: production
+  code exercised, zero writes to the real config dir. This is step 4's
+  bite-proof clause seen from the other side — the injection proves
+  the check can go red, the deploy shape proves it goes red on the
+  thing that actually ships. Trigger: the next devbook edit, whatever
   motivates it.
 
 - **PARKED 2026-08-10 — neutralize the remaining `CLAUDE.md`
