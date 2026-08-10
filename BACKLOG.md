@@ -154,26 +154,28 @@ are dropped with a one-line reason.
   grep of citations + doc-drift check green. Done: a reader can
   resolve every § citation without guessing.
 
-- **READY 2026-08-10 — the writer-claims gate fires on TTL residue of
-  LANDED commits: relieve a claim once the claimer's work is in the
-  base ancestry.** Fire rate, measured across two dotfiles waves
-  (LEDGER there, 2026-08-09/10): two escalation round-trips in wave 1
-  and one §4 mirror-duty note in wave 2 (manifest.py), every one on a
-  file whose claiming agent had already committed and had its report
-  booked — the claim outlived the lane by TTL alone.
-  Design (decided, from the wave-1 lesson as booked): a claim is
-  relieved when the claimer's LAST commit touching the claimed file is
-  contained in the base ancestry of the current branch tip — landed
-  work is no longer "in flight" whatever the TTL says. Explicitly NOT
-  relieved by claim-text or message content: un-landed claims stay
-  live regardless of what anyone wrote; git evidence is the only
-  relief.
-  Verifier, red-first: fixture with a claim + the claimer's commit
-  landed → gate silent (red today: it fires); claim + NO landed
-  commit → gate still fires (over-firing control, the case that keeps
-  the guard alive). Battery green.
-  Done: both fixture sides proven, the dotfiles false-fire shape
-  (yesterday's lane, today's desk write) reproduced and silent.
+- **PARKED 2026-08-10 — replay-bench corpus does not cover
+  writer-claims-gate (0 cases), and relief may not be expressible
+  there at all.** Surfaced by the TTL-relief executor (its GAP 2):
+  the repo rule says a guard change extends tools/corpus/guards.jsonl,
+  but the bench feeds stdin payloads only, while relief needs a real
+  git fixture repo plus a rebound claims store. Named missing
+  decision: extend the bench's fixture model, or record a declared
+  per-guard exclusion the bench itself verifies. Until decided, the
+  gate's own --test battery (8 relief/control cases, red-proven both
+  directions) is the coverage.
+
+- **PARKED 2026-08-10 — two probe-craft clauses for the class devbook,
+  batched to spare the register fingerprint.** From the TTL-relief
+  build, measured: (1) a dead-predicate bite proves the assertion, not
+  the controls — forcing the predicate TRUE is what shows over-firing
+  controls can go red (the inverted injection); (2) a test condition
+  that "obviously holds" gets pinned, not assumed (GIT_CEILING_DIRECTORIES
+  for outside-any-repo). Both are devbook step-4/5 candidates; each
+  devbook text change resets guard-checker-bau to eval-open, so they
+  land TOGETHER with the next devbook amendment, not as two solo
+  fingerprint churns. Trigger: the next devbook edit, whatever
+  motivates it.
 
 - **PARKED 2026-08-10 — neutralize the remaining `CLAUDE.md`
   mentions in HOOK docstrings and one runtime string for outside
