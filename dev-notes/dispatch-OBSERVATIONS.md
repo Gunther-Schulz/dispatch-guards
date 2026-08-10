@@ -483,3 +483,25 @@ logging in real sessions is unaffected (doctor's child env only;
 normal-env writes confirmed). To settle: read the installed
 _dispatch_common path resolution and either fix the README or the
 resolver. Consumer: the next dispatch-guards maintenance pass.
+
+## 2026-08-10 — Brief-committed-first makes the stated base self-refuting
+
+Class: brief-form defect (§1 "base commit is STATED"), observed live.
+A brief committed to the SAME working copy the executor builds in
+moves HEAD past any base hash chosen before that commit — the brief
+named base 9c2bb9c, the brief's own commit (5ced046) plus a channel-line
+fix (98bf22e) sat on top at spawn, and the executor hit the brief's own
+"base contained + commits on top = STOP" lane by construction. One full
+round trip spent ratifying dispatcher-authored metadata commits. The
+executor behaved correctly (followed the literal box instead of judging
+the commits harmless — exactly what the box is for).
+Repair that worked, sent as the round-trip answer: a TARGET-PATH-scoped
+base tolerance — "valid base: <hash> OR any later HEAD whose extra
+commits leave the target paths untouched; check `git log <hash>..HEAD --
+<target paths>` → empty = proceed, else STOP". That is the
+pre-authorized-repair-class shape (§1) applied to the base check.
+Candidate §1 amendment: where the brief FILE is committed to the
+executor's working copy, the write-boundary bullet should prescribe the
+path-scoped tolerance clause (or name the brief's own commit as base)
+instead of a bare pre-brief hash. Consumer: the next dispatch-guards
+maintenance pass.
