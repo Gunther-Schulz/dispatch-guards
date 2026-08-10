@@ -59,7 +59,8 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import fire, fire_log, is_subagent, policy  # noqa: E402
+from _dispatch_common import (fire, fire_log, git_status_lines,  # noqa: E402
+                              is_subagent, policy)
 
 _SOURCE = "dispatch-guards/writer-claims-gate"
 _WRITE_TOOLS = ("Write", "Edit")
@@ -141,23 +142,16 @@ def no_uncommitted_work(path: str) -> bool:
     Could-not-verify maps to NOT relieved, because relief takes positive
     evidence: a path outside any git repo, a missing directory, git
     unrunnable, slow, or exiting non-zero → False, and the gate keeps
-    firing. `--no-optional-locks` keeps the read side-effect-free: a
-    plain `git status` rewrites the index, and this runs against a
-    working copy whose index is shared with the very co-writers the gate
-    exists for. `--ignored=matching` closes the ignored-path hole: a
-    GITIGNORED file reports empty under plain status even with live
-    in-flight content, so without the flag the predicate would relieve
-    exactly where evidence is absent (measured 2026-08-10, executor
-    escalation); with it, ignored paths report `!!` and their claims
-    stay live — permanently TTL-governed, the conservative direction."""
-    try:
-        r = subprocess.run(
-            ["git", "-C", os.path.dirname(path) or ".", "--no-optional-locks",
-             "status", "--porcelain", "--ignored=matching", "--", path],
-            capture_output=True, text=True, timeout=_GIT_TIMEOUT)
-    except (OSError, ValueError, subprocess.SubprocessError):
-        return False
-    return r.returncode == 0 and not r.stdout.strip()
+    firing.
+
+    The git-status call itself lives in `_dispatch_common.git_status_lines`
+    — one home, because two guards now ask this question and the flags
+    each cost a fix to get right. The flag rationale (including why THIS
+    caller passes include_ignored=True while the reservation lane passes
+    False) is documented there and must not be copied back here."""
+    lines = git_status_lines(os.path.dirname(path) or ".", pathspec=path,
+                             include_ignored=True, timeout=_GIT_TIMEOUT)
+    return lines is not None and not lines
 
 
 def record_claim(payload: dict) -> None:
