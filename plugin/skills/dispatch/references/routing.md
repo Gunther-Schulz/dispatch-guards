@@ -63,6 +63,17 @@ The evidence:
   cost by width — a harness's prescribed width (skill, effort
   level, workflow) is a default someone else chose, not a judgment
   about this task.
+- **A tier's refusal classifiers are a routing input, not an
+  accident.** Where a tier's safeguards decline the DOMAIN the work
+  sits in, it is the wrong tier for that work whatever its rank —
+  benign work adjacent to a restricted domain trips the same
+  classifier, and the loss is a whole reply, mid-turn. Two
+  consequences: the choice is made at SESSION START, not at the
+  dispatch seam, because the session model is what meets the
+  material; and since every turn re-sends the prefix, once flagged
+  material is IN the context the cure is a restart on another tier —
+  rephrasing the next message leaves the trigger in place. Which
+  tiers decline which domains is a site fact (site overlay).
 - **What a fresh reviewer buys is independence, not verification
   effort.** However well a builder verifies its own work, it cannot
   see a defect that lives outside its briefed scope or inside its

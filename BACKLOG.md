@@ -7,37 +7,6 @@ are dropped with a one-line reason.
 
 ## Open
 
-- **READY 2026-08-10 — the portable half of the classifier-routing
-  fact is missing from `references/routing.md`.** Operator question at
-  mint time ("why is this on local corpus and not dispatch-guards?")
-  and the answer holds only for the text AS WRITTEN: the site bullet
-  names a model, carries an as-of stamp, encodes a site decision
-  (which model is the desk tier for guard work), and fires when the
-  SESSION model is chosen — before this skill ever loads. All four are
-  declared site-overlay slots. But underneath sits role-shaped evidence
-  this file should carry and does not: a tier's refusal classifiers are
-  a routing input independent of its intelligence rank, and a flagged
-  prefix is not curable in place.
-  Design (decided) — one bullet, no model names, in the evidence list:
-  "**A tier's refusal classifiers are a routing input, not an
-  accident.** Where a tier's safeguards decline the DOMAIN the work
-  sits in, it is the wrong tier for that work whatever its rank —
-  benign work adjacent to a restricted domain trips the same
-  classifier, and the loss is a whole reply, mid-turn. Two
-  consequences: the choice is made at SESSION START, not at the
-  dispatch seam, because the session model is what meets the material;
-  and since every turn re-sends the prefix, once flagged material is in
-  the context the cure is a restart on another tier — rephrasing the
-  next message leaves the trigger in place. Which tiers decline which
-  domains is a site fact (site overlay)."
-  Verifier: `tools/check-doc-drift.py` green (prose and mechanism name
-  the same things), plugin patch bump + release, and the site bullet in
-  the operator corpus gains a source label pointing here (the
-  restated-in-two-homes rule, maintenance doc).
-  Done: the bullet is in references/routing.md naming no model, the
-  corpus bullet source-labels it, doc-drift green.
-
-
 - **PARKED 2026-08-08 — worktree LIFECYCLE: nobody removes worktrees, and the
   sweep that does has no ownership predicate. Named missing evidence: whether
   this generalises beyond one repo, and a false-fire rate for any retirement
