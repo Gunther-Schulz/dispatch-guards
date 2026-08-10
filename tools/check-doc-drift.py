@@ -13,7 +13,10 @@ This script is that reading, mechanized. It is the deliverable of
 that manual pass — the pass finds the drift once, this finds it at
 every run, without the reasoning that produced it.
 
-Run: python3 tools/check-doc-drift.py   (exit 1 on any drift)
+Run: python3 tools/check-doc-drift.py
+Exit codes: 0 clean, 1 drift found, 2 a check COULD NOT VERIFY (its
+input was missing, unreadable, or carried no anchor to compare — the
+third answer; a check that compared nothing never prints `[ok]`).
 Consumers: the repo CLAUDE.md verify block, and any release.
 
 NOT covered, deliberately: whether the prose is CORRECT, only whether
@@ -24,12 +27,23 @@ from __future__ import annotations
 
 import ast
 import glob
+import importlib.util
 import json
 import os
 import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
+
+class CouldNotVerify(Exception):
+    """A check could not READ what it compares.
+
+    Distinct from a finding: a finding says the two sides disagree, this
+    says nothing was compared. Both are non-zero exits, because "0
+    compared" printed as `[ok]` is the could-not-verify lie the
+    three-answers rule forbids — the check has to NAME what is missing.
+    """
 
 
 def _read(*parts: str) -> str:
@@ -136,18 +150,164 @@ def check_config_schema() -> list:
     return out
 
 
+_HOOK_REL = ("plugin", "hooks", "brief-reminder.py")
+_FORMS_REL = ("plugin", "skills", "dispatch", "references", "forms.md")
+_EXEC_TAIL_HEADING = "EXECUTION tail (any dispatch that writes):"
+_CHANNEL_PLACEHOLDER = "<channel line>"
+_BG_CHANNEL_RE = re.compile(r"^- background/teammate agent: `([^`]+)`",
+                            re.M)
+
+
+def _brief_reminder() -> object:
+    """brief-reminder.py imported by path (the hyphen rules out a plain
+    import). The check borrows the hook's OWN `_norm` rather than
+    copying it: a second copy of the normalization is precisely the
+    duplication this tool exists to catch."""
+    path = os.path.join(ROOT, *_HOOK_REL)
+    spec = importlib.util.spec_from_file_location("_brief_reminder", path)
+    if spec is None or spec.loader is None:
+        raise CouldNotVerify(f"{os.path.join(*_HOOK_REL)} is not importable")
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception as exc:                       # noqa: BLE001
+        raise CouldNotVerify(
+            f"{os.path.join(*_HOOK_REL)} failed to import: {exc}") from exc
+    if not hasattr(module, "_norm"):
+        raise CouldNotVerify(
+            f"{os.path.join(*_HOOK_REL)} no longer defines `_norm`, the "
+            f"normalization this comparison is defined in terms of")
+    return module
+
+
+def _string_literal(source: str, name: str, where: str) -> str:
+    """The value of a module-level-or-nested `<name> = "…"` assignment,
+    read with ast — the fixture lives inside `if __name__ ==
+    "__main__"`, so it cannot be reached by importing."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        raise CouldNotVerify(f"{where} does not parse: {exc}") from exc
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(isinstance(t, ast.Name) and t.id == name
+                   for t in node.targets):
+            continue
+        try:
+            value = ast.literal_eval(node.value)
+        except (ValueError, SyntaxError) as exc:
+            raise CouldNotVerify(
+                f"`{name}` in {where} is not a literal string: {exc}"
+            ) from exc
+        if not isinstance(value, str):
+            raise CouldNotVerify(f"`{name}` in {where} is not a string")
+        return value
+    raise CouldNotVerify(f"{where} contains no `{name}` assignment")
+
+
+def _forms_execution_tail(forms: str) -> str:
+    """The indented EXECUTION tail block from forms.md §2, dedented."""
+    if _EXEC_TAIL_HEADING not in forms:
+        raise CouldNotVerify(
+            f"forms.md carries no \"{_EXEC_TAIL_HEADING}\" heading — "
+            f"nothing was compared")
+    after = forms.split(_EXEC_TAIL_HEADING, 1)[1]
+    block: list[str] = []
+    for line in after.splitlines():
+        if not line.strip():
+            if block:
+                break
+            continue
+        if not line.startswith("    "):
+            break
+        block.append(line[4:])
+    if not block:
+        raise CouldNotVerify(
+            "the EXECUTION tail heading in forms.md is followed by no "
+            "indented block — nothing was compared")
+    return "\n".join(block)
+
+
+def check_execution_tail_fixture() -> list:
+    """brief-reminder's EXECUTION_TAIL_BG fixture still says what the §2
+    EXECUTION tail says.
+
+    The fixture is a deliberate INDEPENDENT COPY (so the hook's bites do
+    not share parentage with the constants they test), and an
+    independent copy of a moving text is a frozen fixture: on
+    2026-08-10 it had drifted four ways — it still promised a report
+    FILE the harness has blocked since 2026-08-01, lacked the
+    await-a-backgrounded-check and never-amend clauses, and taught
+    `git add <paths>`, the very form §2 now prohibits. Green bites
+    against a shape the real form no longer produces catch no tail
+    regression at all.
+
+    The grain is NORMALIZED TEXT — brief-reminder's own `_norm`, i.e.
+    whitespace-insensitive. Not a line comparison: the two copies are
+    independently wrapped (5 literal lines vs 33 in forms.md), so a
+    line-sequence check could never go green whatever either file
+    said, and the same normalization is what the hook itself matches
+    with (its 2026-07-30 hard-wrap false fire).
+    """
+    out = []
+    forms = _read(*_FORMS_REL)
+    tail = _forms_execution_tail(forms)
+    if _CHANNEL_PLACEHOLDER not in tail:
+        raise CouldNotVerify(
+            f"the EXECUTION tail in forms.md carries no "
+            f"`{_CHANNEL_PLACEHOLDER}` placeholder — the fixture's "
+            f"channel line has nothing to be compared against")
+    channel = _BG_CHANNEL_RE.search(forms)
+    if channel is None:
+        raise CouldNotVerify(
+            "forms.md §2 names no `- background/teammate agent:` "
+            "channel line — the substitution has no source")
+    expected = tail.replace(_CHANNEL_PLACEHOLDER, channel.group(1))
+    fixture = _string_literal(_read(*_HOOK_REL), "EXECUTION_TAIL_BG",
+                              os.path.join(*_HOOK_REL))
+    norm = _brief_reminder()._norm
+    want, got = norm(expected), norm(fixture)
+    if want != got:
+        i = len(os.path.commonprefix([want, got]))
+        out.append(
+            "brief-reminder's EXECUTION_TAIL_BG fixture no longer "
+            "matches the §2 EXECUTION tail in forms.md (background "
+            "channel line substituted); first divergence at "
+            f"normalized char {i}:\n"
+            f"       forms.md: …{want[max(0, i - 40):i + 60]!r}\n"
+            f"       fixture:  …{got[max(0, i - 40):i + 60]!r}")
+    return out
+
+
 CHECKS = (
     ("guard roster", check_guards),
     ("skills", check_skills),
     ("report-form slots", check_report_slots),
     ("config schema", check_config_schema),
+    ("EXECUTION tail fixture", check_execution_tail_fixture),
 )
 
 
 def main() -> int:
     failures = 0
+    unverified = 0
     for label, fn in CHECKS:
-        findings = fn()
+        # A check whose input is missing, unreadable, or anchorless
+        # compared NOTHING. That is neither a pass nor a drift, and it
+        # must never print like a clean run: it reports could-not-verify
+        # and names what is missing (exit 2).
+        try:
+            findings = fn()
+        except CouldNotVerify as exc:
+            unverified += 1
+            print(f"[?????] {label}: COULD NOT VERIFY — {exc}")
+            continue
+        except OSError as exc:
+            unverified += 1
+            print(f"[?????] {label}: COULD NOT VERIFY — unreadable input: "
+                  f"{exc}")
+            continue
         if findings:
             failures += len(findings)
             print(f"[DRIFT] {label}:")
@@ -155,10 +315,16 @@ def main() -> int:
                 print(f"   - {f}")
         else:
             print(f"[ok]    {label}")
+    if unverified:
+        print(f"\n{unverified} check(s) COULD NOT VERIFY — named above. A "
+              f"check that compared nothing is not a clean run; restore "
+              f"the missing input or repair the check.")
     if failures:
         print(f"\n{failures} drift(s). Doc and mechanism disagree; fix the "
               f"side that is wrong — both are shipped.")
         return 1
+    if unverified:
+        return 2
     print("\nno drift: prose and mechanism name the same things.")
     return 0
 
