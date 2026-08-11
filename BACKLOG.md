@@ -7,6 +7,87 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-11 — the §6 register consult has no mechanism at the
+  moment it is owed, and the skill already records that this fails.**
+  §1's brief parts say the consult-moment is at brief-writing, and the
+  section itself notes the observed failure: "dispatch runs with the
+  register never opened". It happened again on 2026-08-11 (PBS office
+  session, enumeration dispatch): the dispatcher chose sonnet from the
+  standing discovery default, wrote the brief, spawned — and opened
+  `~/.claude/readiness.json` only when the OPERATOR asked why not
+  haiku. The register confirmed the choice (the sweep needed live tool
+  runs and per-item judgment about what its "body" even is, so it sits
+  outside the certified `enumeration-fixed-schema` class, whose own
+  text excludes "work whose noticing needs judgment"). Confirmation
+  after the fact is not a consult: had the work BEEN a fixed-schema
+  enumeration, the default would have cost triple, and nothing in the
+  dispatch path would have said so.
+  The prose has now failed at least twice with the rule in force, which
+  is the §6-of-the-corpus condition for precipitating the computable
+  slice.
+  **Design.** `brief-reminder.py` already emits an allow-path
+  `additionalContext` on every `PreToolUse:Agent` ("Dispatch starting —
+  brief check (dispatch skill §1) …"). Append to it the register's own
+  rows, read from `~/.claude/readiness.json` at hook time: one line per
+  process — `id · tier · status · klasse` (the klasse one-liner
+  truncated to keep the block short). Informational only, never a deny,
+  no predicate over the brief text: the hook cannot know the work's
+  class, and a guess would be the false-fire class the corpus forbids.
+  It puts the certified classes in front of the dispatcher's eyes at
+  the one moment the choice is made, which is exactly what the prose
+  cannot do.
+  Absent or unreadable register → one line saying so, never silence:
+  a missing register that renders as nothing reads as "no certified
+  classes", the could-not-verify-as-verified failure.
+  **Verifier / red-first.** A bite with a fixture register carrying two
+  processes must show both rows in the emitted context, and the same
+  bite against the current hook must show none (that is the red). A
+  second bite with the register path pointing at a nonexistent file
+  must emit the explicit absence line, not an empty block. Add both to
+  the hook's `--test` bites so the doctor sweep carries them.
+  **Done-criterion.** A real dispatch in a live session shows the
+  register rows in its PreToolUse context.
+  **Write boundary.** `plugin/hooks/brief-reminder.py` + its bite
+  registration; no skill-text change — §1 already carries the rule, and
+  a second prose copy is the dependent that rots.
+
+- **READY 2026-08-11 — a Bash deny does not say that NOTHING in the
+  command ran, and the compound-command case bites.**
+  The corpus already carries the class ("a step that was BLOCKED left
+  the state its successor assumes was created, and the successor is
+  where the damage lands"), with a recorded incident where a denied
+  probe commit was followed by a reset that destroyed real work. Live
+  again on 2026-08-11, same shape, cheaper outcome: a command chained
+  `printf >> msg.txt && git commit && git push` was denied WHOLE by
+  push-claim-reminder's fused-push lane. The deny text explained the
+  push rule correctly and said nothing about the two earlier links —
+  so the session re-ran the commit believing the trailer had been
+  appended, and only the repo's own commit-msg hook caught it. One
+  bounce here; the same reasoning in front of a destructive link is the
+  recorded expensive case.
+  **Design.** In `_dispatch_common.py`, where a deny decision is
+  rendered, append one fixed sentence whenever the denied command
+  contains a chaining operator (`&&`, `||`, `;`, or a newline outside
+  quotes — a conservative scan; on any doubt, emit it): "Nothing in
+  this command ran — including any earlier links that chained into the
+  denied one. Re-check their effects before assuming them." Fixed text,
+  no per-hook wording, so every Bash gate inherits it at once. Where no
+  chaining operator is present the sentence is omitted, which keeps the
+  single-command case clean.
+  Rationale for putting it in the deny renderer rather than in each
+  hook: the failing reader is the same in every lane, and a per-hook
+  copy is five dependents that drift.
+  **Verifier / red-first.** A bite feeding a chained command to any
+  denying lane must show the sentence; the same lane with an unchained
+  command must NOT show it (the pair — a sentence that always appears
+  proves nothing about the scan). Against the current renderer both
+  bites show nothing: that is the red.
+  **Done-criterion.** Both bites in the doctor sweep, and the
+  2026-08-11 command shape reproduced against the fused-push lane emits
+  the sentence.
+  **Write boundary.** `plugin/hooks/_dispatch_common.py` + bite
+  registration. No lane's own predicate is touched.
+
 - **READY 2026-08-10 — a brief whose ACCEPTANCE requires an
   outward-facing act must GRANT it in words; §1 states the
   prohibition but never puts the obligation on the dispatcher.**
