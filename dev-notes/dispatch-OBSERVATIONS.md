@@ -505,3 +505,58 @@ executor's working copy, the write-boundary bullet should prescribe the
 path-scoped tolerance clause (or name the brief's own commit as base)
 instead of a bare pre-brief hash. Consumer: the next dispatch-guards
 maintenance pass.
+
+## 2026-08-11 — Shared config file across two parallel dispatches: the rule was right, the enforcement posture was not
+
+Class: dispatcher error against §1's per-FILE disjointness, plus a
+warn-only gate that would have caught it. Observed live, two agents.
+
+What happened: two parallel sonnet dispatches were each granted
+`config/models.py` ("ADD ONLY, touch no existing field") — one adding
+alarm knobs, one adding a truncation knob. Agent A committed by
+pathspec including that file; agent B's uncommitted hunk in the SAME
+file rode out under A's message. Content correct, present once,
+unpushed — but A's commit message no longer describes its contents.
+
+The rule was NOT wrong. §1 states it exactly ("Disjointness is per
+FILE... an agent committing its own work in a shared file sweeps up a
+co-writer's uncommitted hunks") and prescribes serializing on overlap.
+The dispatcher (opus, this session) violated it while believing an
+ADD-ONLY constraint made sharing safe. It does not: `git commit --
+<paths>` takes the whole WORKING-TREE state of every named path, so
+"we only add, never collide" is irrelevant to what the commit captures.
+Candidate §1 clarification, one sentence: an ADD-ONLY or
+non-overlapping-region grant on a shared file is NOT a disjointness
+exemption — the commit is file-granular regardless of where in the file
+the hunks sit.
+
+Two things the incident says about the guards themselves:
+
+1. `writer-reservation-gate` fired, correctly, with an accurate
+   explanation naming this exact failure — and blocked nothing, being
+   in staging/warn mode. Enforcing, it would have prevented this. Not a
+   rules gap; an enforcement-posture observation. Worth counting in the
+   fire log as a would-have-caught.
+
+2. A genuine limit the skill names but cannot cure for shared files.
+   §1 says "the check and the act belong in ONE command, or in a form
+   that cannot act on the wrong object", and prescribes pathspec as
+   that form. Pathspec isolates against OTHER FILES; it does not
+   isolate a co-writer's hunks INSIDE a named file, and no commit form
+   does. Agent A did read `git diff --stat`, saw only its own content,
+   and committed — B's hunk landed in the window. So for a shared file
+   the read-then-act race is uncloseable, which makes serialization the
+   only real remedy rather than a preferred one. The skill's wording
+   ("or in a form that cannot act on the wrong object") reads as though
+   a safe form always exists; for this case it does not.
+
+Also observed, same session, unrelated to the above: a sonnet-tier
+agent shell had NO docker daemon and NO usable sudo, so a brief step
+requiring "run this against a postgres:17 container" was unexecutable
+at that tier. The executor surfaced it as a gap rather than claiming
+verification (correct behaviour). Candidate §1 note: a verifier step
+requiring a container runtime states that as a tier/environment
+precondition, the same way the REPOINT clause requires confirming a
+knob exists before briefing it.
+
+Consumer: the next dispatch-guards maintenance pass.
