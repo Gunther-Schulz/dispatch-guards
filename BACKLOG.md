@@ -7,49 +7,6 @@ are dropped with a one-line reason.
 
 ## Open
 
-- **READY 2026-08-11 — plugin-payload briefs name plugin.json's
-  version-bump sequencing; the §1 commit-plan guidance names the
-  origin-basis push hazard.** Two incidents, one batch (statiker,
-  2026-08-11, both lanes independently surfaced the first half):
-  (1) two execution briefs named exact two-file write-sets for
-  plugin-payload work; both lanes hook-bounced on plugin.json —
-  the repo's version-bump-precedes-payload convention is invisible
-  from a write-boundary list. Both executors held correctly (no
-  --no-verify, no out-of-boundary write) and returned the gap.
-  (2) The dispatcher's own repair claim ("bump already committed,
-  your commits clear") was FALSE the second time because the guard
-  compares against the ORIGIN manifest and the dispatcher had
-  PUSHED mid-batch — the push moved the comparison basis and
-  consumed the bump's same-batch exemption (executor-side hook
-  read confirmed the semantics: exemption only while origin's
-  version lags HEAD's). Design, decided: §1's commit-plan bullet
-  gains two sentences — a plugin-payload brief states who bumps
-  the manifest and in which commit ("dispatcher sequences the bump
-  ahead of your lane" is the default filling), and the origin-basis
-  case is named: where the guard compares against origin, the
-  dispatcher does not push mid-batch — integration push only,
-  since a mid-batch push re-arms the guard for every lane still in
-  flight. Verifier: the brief-reminder staging lane's commit-plan
-  wording covers both fillings; done-criterion: next plugin-payload
-  fan-out composes both lines and no lane bounces.
-
-- **READY 2026-08-11 — message-crossing convention: reports and
-  directives carry the state token they were composed against.**
-  Incidents: three crossings in one statiker batch (dispatcher
-  directive vs in-flight report, three times), plus three
-  agent-idle crossings reported by a sibling session the same day —
-  every one resolved by a minimal ping, zero wrong actions, BECAUSE
-  each message happened to quote concrete state (a guard message
-  verbatim, a version, a sha) that let the receiver date it against
-  its own log. Design, decided: §2's report form and the
-  dispatcher-message guidance name the convention — a coordination
-  message states the sha/version/verdict it was composed against,
-  and a receiver that holds newer state answers with a minimal
-  ping naming its token, never a re-send of content. Verifier: the
-  §2 forms carry the token line; done-criterion: next crossing
-  resolves on one ping with no state ambiguity (the token, not
-  luck, dates the message).
-
 - **READY 2026-08-10 — a brief whose ACCEPTANCE requires an
   outward-facing act must GRANT it in words; §1 states the
   prohibition but never puts the obligation on the dispatcher.**
@@ -341,6 +298,14 @@ are dropped with a one-line reason.
 
 
 ## Done
+
+- 2026-08-11 — **commit-plan origin-basis + who-bumps, and the
+  state-token convention**: realized cfdbc6e (dispatch §1 bullet +
+  skeleton slot + brief-reminder warn text; forms.md §2 paragraph;
+  executor §1.7 — both sides audited per the corpus rule). Booked
+  and realized same day (504b2fc the booking); incident lineage in
+  the entry bodies at that ref.
+
 
 - **DONE 2026-08-06 — fire-log blindness: the `shape` field.**
   Parked on the secrets-vs-usefulness decision; operator chose (b),
