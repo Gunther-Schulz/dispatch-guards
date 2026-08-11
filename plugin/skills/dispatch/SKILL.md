@@ -287,9 +287,19 @@ Mandatory parts (execution briefs):
     basis (read it, not assumed): a guard that compares against
     the release state clears later same-batch commits once the
     bump is in — there, bump-first turns one shared gate into zero
-    bounces for every writer behind it. An item that must RECORD a
-    commit's ref cannot share that commit: order it into a later
-    commit or split the pathspec.
+    bounces for every writer behind it. Where that basis is the
+    ORIGIN manifest, the exemption holds only while origin lags
+    HEAD: a mid-batch push moves the basis and re-arms the guard
+    for every lane still in flight, so the dispatcher pushes at
+    integration only (measured: both lanes of a two-lane batch
+    bounced after a mid-batch push consumed the bump). A
+    plugin-payload brief also states WHO bumps the manifest and
+    in which commit — the manifest is invisible from a
+    write-boundary list, and both lanes of one batch returned
+    that gap independently; "the dispatcher sequences the bump
+    ahead of your lane" is the default filling. An item that must
+    RECORD a commit's ref cannot share that commit: order it into
+    a later commit or split the pathspec.
   - **Pre-authorized repair classes (optional).** The write
     boundaries may declare a repair class the executor applies
     without a round trip — "if the commit plan collides with a
@@ -439,8 +449,11 @@ satisfied by construction:
     <the target repo's commit-blocking guards, READ at compose
     time, and where the bump or ordering commit sits — a
     payload-version guard comparing against the RELEASE state
-    clears every later same-batch commit once the bump is in.
-    "none" (no such guard) is a valid filling; silence is not>
+    clears every later same-batch commit once the bump is in,
+    and where its basis is the origin manifest the dispatcher
+    pushes at integration only; a plugin-payload brief names who
+    bumps the manifest and in which commit. "none" (no such
+    guard) is a valid filling; silence is not>
 
     <§2 tail block from references/forms.md, pasted verbatim>
 

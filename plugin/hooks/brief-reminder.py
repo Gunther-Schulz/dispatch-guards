@@ -370,8 +370,10 @@ def missing_commit_plan_warn_text() -> str:
         "comparing against the RELEASE state clears every later "
         "same-batch commit once the bump is in, so bump-first turns "
         "one shared gate into zero bounces for every writer behind "
-        "it. 'none' (no such guard) is a valid filling; silence is "
-        "not."
+        "it — where its basis is the origin manifest, push at "
+        "integration only, and a plugin-payload brief names who "
+        "bumps the manifest. 'none' (no such guard) is a valid "
+        "filling; silence is not."
     )
 
 

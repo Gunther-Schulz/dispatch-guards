@@ -121,6 +121,20 @@ therefore travels in the SendMessage itself — split into labeled
 parts (1/N) when it exceeds one message — and briefs stop
 assigning report file paths; data-file assignments are unaffected.
 
+State tokens — crossings are inherent to the async channel: a
+directive and an in-flight report pass each other, and each
+side acts on a state the other has already moved past. Every
+coordination message — a report part, an addendum, a dispatcher
+directive or repair note — names the state it was composed
+against: a HEAD sha, a version, or the verdict line it answers.
+The token is what lets the receiver date a crossed message
+against its own log; the resolution is a minimal ping naming
+the newer token, never a content re-send (measured 2026-08-11:
+six crossings across two sessions in one day, each resolved at
+one ping with zero wrong actions — because each message
+happened to quote concrete state; the convention makes the
+accident a rule).
+
 EXECUTION tail (any dispatch that writes):
 
     Closing report (mandatory; the project's own report form if it

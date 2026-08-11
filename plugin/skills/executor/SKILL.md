@@ -90,7 +90,13 @@ judgment on honest reporting, not on redesign.
 7. **The report.** Close with the project's own report form if it
    defines one, else the dispatch skill's §2 form
    (`../dispatch/references/forms.md`) — never both. Every slot
-   appears; "none" is a valid answer, silence is not.
+   appears; "none" is a valid answer, silence is not. A report
+   part, addendum, or reply names the state it was composed
+   against — HEAD sha, version, or the verdict line it answers
+   (the §2 state-token convention: dispatcher directives cross
+   in-flight reports; a crossed directive your state already
+   supersedes is answered by a minimal ping naming your token,
+   never a re-send).
 
 ## 2. The under-report principle (single home; the forms cite it)
 
