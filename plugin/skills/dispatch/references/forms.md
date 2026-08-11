@@ -133,7 +133,14 @@ the newer token, never a content re-send (measured 2026-08-11:
 six crossings across two sessions in one day, each resolved at
 one ping with zero wrong actions — because each message
 happened to quote concrete state; the convention makes the
-accident a rule).
+accident a rule). One member of the class is avoidable, not
+just cheap: a non-urgent directive sent to a lane while its
+multi-part report is IN FLIGHT crosses the remaining parts by
+construction — hold it until the final part lands; only a
+directive that must STOP work (a killed premise, an abort)
+justifies interrupting a report mid-series (measured: the one
+same-session crossing that was not message-timing luck was a
+supplement sent between parts 2/3 and 3/3).
 
 EXECUTION tail (any dispatch that writes):
 
