@@ -636,3 +636,32 @@ pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
    guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
    — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
    setzt den Fingerprint zurück (eval-open).
+
+## 2026-08-12 — writer-claims: Claims einer GESCHLOSSENEN Lane feuern gegen die Nachfolge-Lane
+
+1. **Vorfall + Basis:** Sequentielle Dispatches in derselben Arbeitskopie
+   (pbs-abwaegung): Lane A (opus-abw-drei-waechter) sauber geschlossen —
+   Bericht gebucht, Commits vom Dispatcher integriert+gepusht,
+   Lane-Close-Nachricht gesendet. Lane B (opus-abw-sichtweite-austrag)
+   editierte danach dieselbe Testdatei; der writer-claims-Hook meldete
+   WARN („this lane would DENY") gegen den Claim der TOTEN Lane A
+   (Claim-TTL überlebt die Lane-Schließung). Lane B verlor einen
+   INTERIM-Bogen auf die Abklärung eines Phantom-Co-Writers; der Baum
+   trug nachweislich nur ihre eigenen Änderungen (HEAD identisch, kein
+   fremder uncommitteter Hunk — von Lane B selbst per git diff belegt).
+2. **Klasse:** Lane-Lebenszyklus ↔ Claim-Lebenszyklus-Divergenz: das
+   Claim-Register kennt nur die TTL, nicht das Buchungs-Ende einer Lane
+   — ein toter Schreiber liest sich für den Nachfolger wie ein lebender
+   (Fehlfeuer-Klasse; im DENY-Modus würde sie legitime Serien-Dispatches
+   in derselben Arbeitskopie blockieren).
+3. **Vorformulierter Fix-Text:** „Die Lane-Schließung RÄUMT die Claims:
+   beim Booking des Closing-Reports gibt der Dispatcher die Write-Claims
+   der Lane frei (Release-Verb am Claim-Register, Teil der
+   §4-Spiegelpflicht neben Buchen+Mitteilen); alternativ akzeptiert die
+   writer-claims-Lane eine Dispatcher-Attestierung ‚Lane geschlossen,
+   Commits integriert bis <sha>' als Claim-Ende. Bis dahin gilt: ein
+   Claim-Treffer einer Lane, deren Report gebucht und deren Commits im
+   eigenen Base-SHA enthalten sind, ist ein TTL-Rest — prüfen per
+   git diff gegen Base, nie per weiterem Warten."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-Maintenance-
+   Runde (writer-claims-Hook + §4-Wortlaut der Spiegelpflicht).
