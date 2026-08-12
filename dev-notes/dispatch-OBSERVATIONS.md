@@ -611,3 +611,28 @@ pbs-office betrieb/journal-2026-08.jsonl.
 Consumer: die nächste dispatch-guards-Maintenance-Runde (Tail- und
 §1-Wortlaut); Beobachtung 4 zusätzlich als Site-Regel im
 pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
+
+## 2026-08-12 — Mutations-Batterie mit `-k`-Selektor liest sich grün (opus-abw-drei-waechter)
+
+1. **Vorfall + Basis:** Executor-Lektion (e1) aus dem Dispatch
+   `opus-abw-drei-waechter` (Brief pbs-office/bau-welle/
+   abw-drei-waechter-brief-2026-08-12.md, Journal 12.08.): die erste
+   Mutations-Batterie lief mit `pytest -k "antwort"` — der Selektor schloss
+   genau das Fixture aus, das die Mutation fangen sollte, und die Batterie
+   las sich grün. Gefangen nur durch Divergenz zweier Messungen (Bestand
+   zeigte 13 Meldungen, Fixtures schwiegen).
+2. **Klasse:** Instrument-Arrangement — der TEST-SELEKTOR ist Teil des
+   Instruments; ein Namensfilter kann das diskriminierende Fixture
+   ausschließen, und die entstehende Stille ist von einem echten Pass
+   nicht unterscheidbar (Geschwister der Devbook-Schritt-4-Klasse „ein
+   grüner Biss braucht seine Arrangement-Prüfung").
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
+   Ergänzung): „Die Mutations-/Biss-Batterie läuft über die GANZE
+   Testdatei, nie über eine `-k`-Namensauswahl: der Selektor ist Teil des
+   Arrangements, und ein Filter, der das fangende Fixture ausschließt,
+   liefert exakt das Grün eines echten Passes (gemessen 2026-08-12,
+   abw-drei-waechter e1)."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
+   — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
+   setzt den Fingerprint zurück (eval-open).
