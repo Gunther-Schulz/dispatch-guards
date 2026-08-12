@@ -560,3 +560,54 @@ precondition, the same way the REPOINT clause requires confirming a
 knob exists before briefing it.
 
 Consumer: the next dispatch-guards maintenance pass.
+
+## 2026-08-12 — Vier Beobachtungen aus zwei K7-Dispatches (Abwägung Georgendorf, Opus-Agenten)
+
+Quelle: Session 91da2482 (PV Georgendorf), zwei Dispatches
+(opus-abw-runden-elementfelder, opus-abw-kasten-klartext), Journal
+pbs-office betrieb/journal-2026-08.jsonl.
+
+1. **Report-Queue vs. Dispatcher-Nachricht — DREIMAL in einer Session.**
+   Agenten komponieren mehrteilige Abschlussberichte als Queue und
+   drainen ihre Inbox zwischen den Teilen nicht: ein GO des Dispatchers
+   (nach Teil 1 gesendet) war im Schlusssatz von Teil 7 noch „offen";
+   zwei Zusatzaufträge (D13, D8/D9) fehlten in kompletten Berichten
+   undispositioniert — je ein voller Anmahn-Rundlauf. Vorschlag
+   (§2-Tail-Klausel): vor dem Absenden des Abschlussberichts UND
+   zwischen Teilen die eigene Inbox drainen; der Bericht dispositioniert
+   jede bis zum Sendezeitpunkt eingegangene Dispatcher-Nachricht oder
+   nennt sie ausdrücklich als unbearbeitet; Race-Symptom (Bericht
+   „fertig", Nachricht unerwähnt) ist damit vom Bericht selbst
+   unterscheidbar.
+
+2. **Positions-IDs im Brief sind Etiketten über fremden Körpern.** Ein
+   Brief zitierte Register-Nummern („Reg-12/Reg-13") aus einem älteren
+   Prüfer-PDF; das Register war seither regeneriert, alle Nummern um
+   eins versetzt. Gerettet hat die Inhalts-Anker im selben Brief
+   (Kasten-Wortlaut), nach denen der Executor arbeitete. Vorschlag
+   (§1-Klausel, Anwendung der Label-über-Körper-Regel): positions- oder
+   generat-abhängige Identifikatoren (Registernummern, Ä-IDs,
+   Zeilennummern) tragen im Brief IMMER einen Inhalts-Anker daneben;
+   der Executor arbeitet bei Divergenz nach dem Anker und meldet den
+   Versatz.
+
+3. **`git commit -m "…" -- <pfade>` scheitert** — nach dem
+   Pathspec-Trenner liest git -m als Pfad; zwei Sessions sind am selben
+   Tag unabhängig darauf gelaufen (Dispatcher + Executor). Der §2-Tail
+   sagt nur „by pathspec"; Vorschlag: Tail-Wortlaut präzisieren —
+   Flags VOR dem `--` (`git commit -m "…" -- <pfade>` ist falsch
+   herum; korrekt `git commit -m/-F … -- <pfade>` mit Message-Flag vor
+   dem Trenner, bzw. -F bei mehrzeiligen Messages).
+
+4. **Visuelle Chrome-Änderungen haben keine Bild-Prüfstufe.** Ein
+   Farb-Stack-Leck (violetter Fließtext nach neuem framed-Feld) passierte
+   Suite, Struktur-Checks, pdftotext-Zählproben und Seitenzahl-Vergleich
+   unbeanstandet — pdftotext sieht Farben nicht; gefunden vom Betreiber
+   per Screenshot. Vorschlag (Brief-/Verifier-Klausel): Änderungen an
+   sichtbarem Render-Chrome nennen im Verifier eine SEITENBILD-Sichtung
+   (pdftoppm o. ä.) durch den Dispatcher; Text-Extraktions-Checks sind
+   für Farbe/Layout blind, und der Dispatcher kann Bilder sichten.
+
+Consumer: die nächste dispatch-guards-Maintenance-Runde (Tail- und
+§1-Wortlaut); Beobachtung 4 zusätzlich als Site-Regel im
+pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
