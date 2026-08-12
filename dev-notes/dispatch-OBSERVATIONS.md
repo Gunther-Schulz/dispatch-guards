@@ -612,26 +612,37 @@ Consumer: die nächste dispatch-guards-Maintenance-Runde (Tail- und
 §1-Wortlaut); Beobachtung 4 zusätzlich als Site-Regel im
 pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
 
-## 2026-08-12 — Mutations-Batterie mit `-k`-Selektor liest sich grün (opus-abw-drei-waechter)
+## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (2 Vorfälle, 2 Lanes)
 
-1. **Vorfall + Basis:** Executor-Lektion (e1) aus dem Dispatch
-   `opus-abw-drei-waechter` (Brief pbs-office/bau-welle/
-   abw-drei-waechter-brief-2026-08-12.md, Journal 12.08.): die erste
-   Mutations-Batterie lief mit `pytest -k "antwort"` — der Selektor schloss
-   genau das Fixture aus, das die Mutation fangen sollte, und die Batterie
-   las sich grün. Gefangen nur durch Divergenz zweier Messungen (Bestand
-   zeigte 13 Meldungen, Fixtures schwiegen).
-2. **Klasse:** Instrument-Arrangement — der TEST-SELEKTOR ist Teil des
-   Instruments; ein Namensfilter kann das diskriminierende Fixture
-   ausschließen, und die entstehende Stille ist von einem echten Pass
-   nicht unterscheidbar (Geschwister der Devbook-Schritt-4-Klasse „ein
-   grüner Biss braucht seine Arrangement-Prüfung").
+1. **Vorfall + Basis (2×, gleicher Tag):** (a) e1 aus Dispatch
+   `opus-abw-drei-waechter`: Mutations-Batterie mit `pytest -k "antwort"`
+   — der Selektor schloss genau das Fixture aus, das die Mutation fangen
+   sollte; Batterie las sich grün. Gefangen durch Divergenz zweier
+   Messungen (Bestand 13 Meldungen, Fixtures still). (b) e-Nachtrag aus
+   Dispatch `opus-abw-sichtweite-austrag`: Batterie mit `-x` — pro
+   Mutation nur der ERSTE Fehlschlag sichtbar, wodurch systematisch
+   verdeckt blieb, welcher Test-Arm NIE feuert; „alle Mutationen rot"
+   war wahr und trotzdem ohne Aussage über den unbewiesenen Arm
+   (test_sichtweite_elementfeld…, repariert 46a5831 erst auf
+   Dispatcher-Nachfrage). Dazugehörige Erwartungs-Seite: eine
+   SCHWEIGE-Erwartung ist nur so scharf wie die Menge der Meldungsformen,
+   über die sie schweigt — feuert der Wächter unter dem Defekt eine
+   ANDERE Form, bleibt sie erfüllt.
+2. **Klasse:** Instrument-Arrangement — der BATTERIE-AUFRUF (Selektor,
+   Abbruch-Flags, Fehlschlag-Auswertung) ist Teil des Instruments; jede
+   Verengung (Namensfilter, First-Fail-Abbruch) macht eine Stille
+   unlesbar, die von einem echten Pass nicht unterscheidbar ist
+   (Geschwister der Devbook-Schritt-4-Klasse „ein grüner Biss braucht
+   seine Arrangement-Prüfung").
 3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
-   Ergänzung): „Die Mutations-/Biss-Batterie läuft über die GANZE
-   Testdatei, nie über eine `-k`-Namensauswahl: der Selektor ist Teil des
-   Arrangements, und ein Filter, der das fangende Fixture ausschließt,
-   liefert exakt das Grün eines echten Passes (gemessen 2026-08-12,
-   abw-drei-waechter e1)."
+   EINE Ergänzung für beide Hälften): „Die Mutations-/Biss-Batterie läuft
+   über die GANZE Testdatei, nie über eine `-k`-Namensauswahl und nie mit
+   `-x`: der Selektor schließt sonst das fangende Fixture aus, und der
+   First-Fail-Abbruch verdeckt, welche Arme nie feuern — beides liefert
+   ein Grün/Rot, das vom echten nicht unterscheidbar ist. Wo die Frage
+   die Zuordnung Defekt→Arm ist, wird die FEHLSCHLAG-LISTE je Mutation
+   ausgewertet; eine Schweige-Erwartung nennt ALLE Meldungsformen des
+   Wächters (gemessen 2026-08-12, zwei Lanes: -k e1 · -x Nachtrag)."
 4. **Konsument + Abfluss-Naht:** nächste Amendierung des
    guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
    — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
