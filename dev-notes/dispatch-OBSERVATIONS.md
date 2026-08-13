@@ -821,3 +821,33 @@ overrode it with a wrong belief.
    guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
    procedure) — mit den offenen Schritt-4-Ergänzungen bündeln;
    Amendierung setzt den Fingerprint zurück (eval-open).
+
+## 2026-08-13 — Grad-Assertionen über den GANZEN Report unterscheiden die Grade nicht; mehrzeilige Durchreichungen tragen die Marke nur in Zeile 1
+
+1. **Vorfall + Basis:** FB-102-Bau (opus-emission-telemetrie,
+   pbs-projekt ende_check): Die Mutation „Exit!=0-Grad WARNUNG →
+   HINWEIS" lief im ersten Batterie-Durchgang GRÜN durch (34 passed) —
+   die Assertion prüfte `"WARNUNG" in out` über den Gesamtreport, und
+   dort stand ohnehin eine WARNUNG eines anderen Checks. Erst ein
+   Helfer, der den Telemetrie-EINTRAG isoliert (genau einer, sonst
+   Abbruch) und den Grad an der eigenen Zeile prüft, machte alle sechs
+   Mutationen bissig. Zweiter Fund im selben Bau: die durchgereichte
+   Report-Ausgabe ist MEHRZEILIG, die Marke (`[telemetrie]`) steht nur
+   in Zeile 1 — ein Leser, der „die Meldung" nimmt, schneidet die
+   Befundzeilen stumm ab, und die Durchreich-Prüfung wird stumpf, ohne
+   rot zu werden (betrifft auch den Helfer-Kopien-Präzedenzfall).
+2. **Klasse:** Assertions-Schärfe in Report-Gattern — ein Prädikat,
+   das am AGGREGAT prüft, ist von jedem anderen Check erfüllbar
+   (dieselbe „beide Ausgänge erfüllen"-Klasse wie im Fixing-Korpus,
+   hier als Report-Instanz), und Marken-Konventionen (Marke nur am
+   Blockanfang) machen Ein-Zeilen-Leser still unvollständig.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt-4-
+   Ergänzung): „Grade werden an ihrer EIGENEN Zeile geprüft, nie am
+   Report — der Test isoliert den Eintrag des geprüften Schritts
+   (genau einer, sonst Abbruch) und prüft Grad + Inhalt dort. Reicht
+   ein Schritt einen mehrzeiligen Block durch, liest der Test den
+   BLOCK bis zu seiner Endmarke, nie nur die markierte erste Zeile."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure) — mit den dort schon wartenden Schritt-4-Ergänzungen
+   bündeln; Amendierung setzt den Fingerprint zurück (eval-open).
