@@ -662,6 +662,24 @@ pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
    — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
    setzt den Fingerprint zurück (eval-open).
 
+### MERGE 2026-08-13 — 4. Vorfall, neuer Mechanismus derselben Klasse: der .pyc-Cache lässt einen Arm den Nachbarn nachplappern
+
+FB-101-Zusatz (opus-emission-telemetrie, pbs-projekt): Mutation A2
+zeigte exakt A1s Trefferliste — Python validiert .pyc über
+(Quell-mtime in SEKUNDEN, Quell-GRÖSSE), und A1/A2 waren byte-gleich
+groß (je 12253) und liefen 0,09 s auseinander; der zweite Lauf führte
+A1s Bytecode aus. Ein Nachbar-Abklatsch sieht aus wie ein normales
+Ergebnis; verraten hat ihn nur die zur Mutation unpassende Liste.
+Behoben an einer Stelle (PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge
+vor jedem Lauf; jeder Arm druckt seine Dateigröße mit); alle drei
+Batterien der Lane unter der Sperre wiederholt, Ergebnisse
+unverändert. Fix-Text-Ergänzung (in Slot 3 dieser Klasse
+einzuarbeiten): „Der Batterie-Treiber sperrt den Bytecode-Cache
+(PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge je Lauf) — zwei
+Mutationen gleicher Dateigröße innerhalb derselben mtime-Sekunde sind
+für den Cache ununterscheidbar, und der zweite Arm plappert sonst den
+ersten nach, grün und unauffällig."
+
 ## 2026-08-12 — writer-claims: Claims einer GESCHLOSSENEN Lane feuern gegen die Nachfolge-Lane
 
 1. **Vorfall + Basis:** Sequentielle Dispatches in derselben Arbeitskopie
