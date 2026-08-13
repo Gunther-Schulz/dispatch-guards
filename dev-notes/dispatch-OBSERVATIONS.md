@@ -677,6 +677,59 @@ pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-Maintenance-
    Runde (writer-claims-Hook + §4-Wortlaut der Spiegelpflicht).
 
+### MERGE 2026-08-13 — same class, opposite direction: a LIVE lane's claim, dismissed as dead
+
+Second incident of the divergence this entry names, and it completes the pair.
+The 2026-08-12 case was a DEAD lane's claim firing against a successor (a
+false fire). This one is a LIVE lane's claim firing correctly against the
+DISPATCHER, who then talked himself past it — the true-positive direction,
+and the more expensive one, because the guard did its job and the human
+overrode it with a wrong belief.
+
+1. **Incident + basis:** the dispatcher extended a lane's ownership by
+   message ("this extends your ownership until you report it") to add one
+   test. The lane's previous closing report crossed that message in flight.
+   The dispatcher read the report as final, grepped the file, found the test
+   absent, and concluded the grant was closed — both halves false: the grant
+   had just been extended, and a grep at one instant samples a moving state
+   rather than establishing anything about a live writer. The dispatcher then
+   edited both of the lane's exclusive files and committed by pathspec, which
+   takes the whole working-tree state of the named paths and absorbed the
+   lane's uncommitted work under the dispatcher's trailer.
+   `writer-reservation-gate` had fired a WARN immediately before that commit,
+   naming the lane as holder and stating in terms that a disjoint path set is
+   no defence because the commit is what serializes. The dispatcher discharged
+   it by reasoning "the lane reported, its grant is closed" — precisely the
+   false belief. Evidence is the lane's own: it observed FOUR different states
+   of its two exclusive files within minutes (its green run; foreign
+   insertions; a run where a previously-undefined symbol had become defined; an
+   import that had changed again), halted rather than committing a state it
+   could not account for, and returned the question. That halt is why this is
+   a misattribution and not a destroyed lane.
+2. **Class:** unchanged — lane lifecycle vs claim lifecycle. What the pair adds
+   is that the divergence bites in BOTH directions and that neither the gate
+   nor the dispatcher can resolve it from what they can see: the registry knows
+   the holder and the TTL, `git status` proves modification but never
+   authorship (a lesson the consuming repo's own dev-loop already records), and
+   only the DISPATCHER knows whether a lane is live — which is exactly the fact
+   that was wrong here.
+3. **Pre-formulated fix text** (extends this entry's existing proposal rather
+   than replacing it): "The claim register tracks lane STATE, not just a TTL,
+   and the dispatcher moves it: booking a closing report RELEASES the lane's
+   claims, and extending a lane's ownership RE-ARMS them. Then a claim hit
+   means what it says in both directions — a live holder, or nothing. Until
+   that exists, the dispatcher rule is: an extension makes the lane live until
+   it reports ON THE EXTENSION, and a crossed report does not close it; a grep
+   or a `git status` is never the evidence that a writer has finished, because
+   neither observes the writer. Where the guard fires and the dispatcher
+   believes the holder is dead, the cheap discharge is to ASK the holder and
+   wait for its answer — one message against an unrecoverable
+   misattribution."
+4. **Consumer + drain seam:** next dispatch-guards maintenance round, together
+   with this entry's 2026-08-12 half — the release/re-arm verb is one change
+   serving both directions, and shipping only the false-fire half would leave
+   the expensive direction open.
+
 ## 2026-08-13 — a COMPACTED lane booked the dispatcher's own commit as its work
 
 1. **Incident + basis:** three parallel sonnet lanes from a cache-fix session,
