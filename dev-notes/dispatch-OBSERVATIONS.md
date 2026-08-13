@@ -676,3 +676,45 @@ pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
    git diff gegen Base, nie per weiterem Warten."
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-Maintenance-
    Runde (writer-claims-Hook + §4-Wortlaut der Spiegelpflicht).
+
+## 2026-08-13 — a COMPACTED lane booked the dispatcher's own commit as its work
+
+1. **Incident + basis:** three parallel sonnet lanes from a cache-fix session,
+   one shared working copy. Lane C (`closures-in-live`) delivered its closing
+   report and was told its lane was closed. The desk then found and fixed a
+   defect the lane had SURFACED but correctly not fixed (a declared grade
+   missing from the instrument's vocabulary), committing it as `9ad432a`.
+   Lane C's own context was summarized around that moment. On resume it
+   re-read the working tree, found the fix already present, and its closing
+   report's slot (f) claimed `9ad432a` as its own commit — including a
+   confessed write-boundary DEVIATION for touching a third test file that the
+   dispatcher, not the lane, had touched. Both claims were false and neither
+   party's memory settled it: the commit trailer did
+   (`9ad432a` carries `Co-Authored-By: Claude Opus 5`, the dispatcher's;
+   the lane's two real commits `6ee63de`/`850f273` carry `sonnet-5`).
+   Second half of the same incident, same lane: it also committed AFTER its
+   report was booked and after the lane-close message — and the lane-close
+   message is itself what RESUMED it.
+2. **Class:** post-compaction provenance drift. An agent's slot (f) is written
+   from memory of what it did, while the working tree shows what EXISTS — and
+   after a summarization those two diverge silently in a shared copy. The
+   report form asks for "files touched + commit hashes" as if the agent were
+   the only writer, which is exactly false on a shared copy. Note the failure
+   direction: it manufactured a deviation CONFESSION for work it did not do,
+   so a dispatcher grading reports by trust would have booked a phantom
+   boundary violation against a lane that never committed one.
+3. **Pre-formulated fix text:** "Slot (f) is established from the RECORD, not
+   from memory: the agent reports the commits whose trailer carries ITS OWN
+   model name (`git log --format='%h %(trailers:key=Co-Authored-By)'`
+   filtered to its own), and a commit it cannot claim by trailer is reported
+   as 'present in the tree, not mine'. On a shared working copy this is
+   mandatory, since the tree carries co-writers' work by construction. The
+   mirror duty on the dispatcher: grade slot (f) against the trailer before
+   booking it — an agent's claim to authorship is a claim like any other, and
+   the trailer is the cheap disproving probe. Corollary for the lane-close
+   message: closing a lane RESUMES it, so the close text must say 'do not
+   edit; a defect found later is REPORTED' explicitly, or the close is itself
+   the trigger for the post-report write it forbids."
+4. **Consumer + drain seam:** next dispatch-guards maintenance round — §2 report
+   form (slot f wording) and §4 mirror duty (grading slot f; close-message
+   wording).
