@@ -612,9 +612,18 @@ Consumer: die nächste dispatch-guards-Maintenance-Runde (Tail- und
 §1-Wortlaut); Beobachtung 4 zusätzlich als Site-Regel im
 pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
 
-## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (2 Vorfälle, 2 Lanes)
+## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (3 Vorfälle, 3 Lanes)
 
-1. **Vorfall + Basis (2×, gleicher Tag):** (a) e1 aus Dispatch
+1. **Vorfall + Basis (3×, zwei Tage):** (c, 13.08., Dispatch
+   `opus-helfer-kopien`, von der Lane selbst gefangen und gemeldet)
+   Die ANWENDUNG der Mutation ist dieselbe Arrangement-Hälfte: ein
+   handgetipptes Ersetzungs-Muster traf 0×, die Batterie lief GRÜN
+   über der NICHT angewandten Mutation — von „Test greift nicht"
+   nicht unterscheidbar, beinahe als Rot-Beweis gebucht. Reparatur
+   in der Lane: Mutation per Zeilen-Bereich aus der Datei gelesen,
+   entfernter Text vor jedem Lauf ausgedruckt; der Dispatcher-eigene
+   Kontroll-Biss lief 13.08. mit demselben Anwendungs-Beweis.
+   (a) e1 aus Dispatch
    `opus-abw-drei-waechter`: Mutations-Batterie mit `pytest -k "antwort"`
    — der Selektor schloss genau das Fixture aus, das die Mutation fangen
    sollte; Batterie las sich grün. Gefangen durch Divergenz zweier
@@ -642,7 +651,12 @@ pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
    ein Grün/Rot, das vom echten nicht unterscheidbar ist. Wo die Frage
    die Zuordnung Defekt→Arm ist, wird die FEHLSCHLAG-LISTE je Mutation
    ausgewertet; eine Schweige-Erwartung nennt ALLE Meldungsformen des
-   Wächters (gemessen 2026-08-12, zwei Lanes: -k e1 · -x Nachtrag)."
+   Wächters. Und die Mutation BEWEIST ihre Anwendung — das
+   Mutations-Werkzeug zeigt den entfernten/ersetzten Text oder bricht
+   hart ab, wenn das Muster nicht traf: eine grüne Batterie über einer
+   nicht angewandten Mutation ist von einem toten Test nicht
+   unterscheidbar (gemessen 2026-08-12/13, drei Lanes: -k e1 ·
+   -x Nachtrag · 0×-Muster helfer-kopien)."
 4. **Konsument + Abfluss-Naht:** nächste Amendierung des
    guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
    — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
@@ -771,3 +785,39 @@ overrode it with a wrong belief.
 4. **Consumer + drain seam:** next dispatch-guards maintenance round — §2 report
    form (slot f wording) and §4 mirror duty (grading slot f; close-message
    wording).
+
+## 2026-08-13 — Ein global eingehängter Check-Schritt läuft in JEDEM Test: Fail-Loud über repo-externe Artefakte kollidiert per Konstruktion mit Temp-Fixtures
+
+1. **Vorfall + Basis:** Dispatch `opus-helfer-kopien` (FB 3.89, Session
+   ddd83862): Der Brief entschied „Skript fehlt → FEHLER, nie still" für
+   einen global in `pruefe()` eingehängten Wächter, der ein Skript im
+   office_repo und Helfer in zwei Nachbar-Repos liest. Spec-treu gebaut:
+   119 von 818 Tests rot, weil jede Temp-Fixture (`mach_office`) ein
+   office_repo OHNE tools/ baut und dev_root auf einen leeren Temp-Baum
+   zeigt. Executor-STOPP mit drei GEMESSENEN Wegen (A Fixture-Chirurgie
+   +17 s Suite; B durchgängig HINWEIS; C gemischt 2 failed/816 passed);
+   Desk-Entscheid Weg C. Das Repo hatte die Klasse laut dreier
+   conftest-Kommentare („ohne trüge JEDER Graph-Test den HINWEIS")
+   vorher schon dreimal getroffen — die Brief-Komposition las diese
+   Präzedenz nicht.
+2. **Klasse:** Brief-Komposition für global eingehängte Wächter mit
+   repo-EXTERNEN Artefakten. Der Fail-Loud-Kontrakt wird am
+   Produktions-Bild entschieden, aber der Schritt läuft zuerst und
+   tausendfach in der TEST-Umgebung, deren Fixtures die externen
+   Artefakte per Konstruktion nicht stellen — der Abwesend-Fall des
+   Wächters IST der Normalfall der Fixtures.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau,
+   Brief-Kompositions-Schritt): „Hängt der Wächter global in einen
+   Lauf, der auch unter Tests steht, beantwortet der Brief VOR dem Bau:
+   Was sieht dieser Schritt in der Test-Umgebung (Fixtures gelesen,
+   nicht vermutet)? Für jeden repo-externen Anker (Nachbar-Repo,
+   Konfig-Pfad, Werkzeug-Skript) trägt der Brief die entschiedene
+   Grade des Abwesend-Falls — Fail-Loud nur dort, wo die Umgebung den
+   Anker garantiert stellt; sonst die sichtbare Degradations-Grade
+   (HINWEIS-Zeile je Lauf) MIT eigenem gepinntem Test. Die Präzedenz
+   im Ziel-Repo (conftest-Kommentare, Geschwister-Schritte) ist
+   Pflicht-Grounding der Brief-Komposition."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure) — mit den offenen Schritt-4-Ergänzungen bündeln;
+   Amendierung setzt den Fingerprint zurück (eval-open).
