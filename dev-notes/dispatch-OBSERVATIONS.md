@@ -1023,3 +1023,39 @@ overrode it with a wrong belief.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (§1, brief-family-Klausel); Quota-Drain nach
    OBSERVATIONS-Regel.
+
+## 2026-08-14 — Die Harness-Sperre gegen Report-Dateien griff einen deutschen Namen nicht: `*-bericht.md` schrieb sich durch
+
+1. **Vorfall + Basis:** Discovery-Dispatch `sonnet-ready-inventar`
+   (READY-Inventar über pbs-office FEATURE-BACKLOG.md, 14.08.). Der
+   Brief trug den READ-ONLY-Tail wörtlich („never a report file") UND
+   wies eine Datendatei zu. Der Agent legte zusätzlich
+   `ready-inventar-bericht.md` an — 6011 Bytes, erfolgreich
+   geschrieben, vom Dispatcher am Dateisystem bestätigt. Die
+   Harness-Sperre, die laut forms.md §2 „REPORT.md and kin" mit
+   „return findings as text" abweist, hat diesen Schreibvorgang nicht
+   abgewiesen. Zweite Abweichung derselben Lane: die Datendatei landete
+   im Scratchpad des DISPATCHERS statt im eigenen, obwohl der Brief
+   „dein EIGENER Scratchpad" zuwies.
+2. **Klasse:** Reichweite einer MECHANISCHEN Sperre, auf die ein
+   Prosa-Tail sich stillschweigend stützt. GEMESSEN ist ausschließlich,
+   DASS dieser Name durchging — worauf die Sperre keyed (englisch
+   geformtes Muster? feste Basename-Liste? Pfad-Form?), ist unbelegt
+   und gehört deshalb nicht in den Fix-Text. Die Folge steht unabhängig
+   von der Ursache: in einem Brief mit nicht-englischer Arbeitssprache
+   ist die Sperre kein Rückfall, und „never a report file" ist dort
+   allein prosa-durchgesetzt. Schaden hier gering (die Daten waren
+   korrekt), aber die Kontext-Ökonomie, die die Regel schützt, war
+   umgangen — und forms.md zitiert die Sperre als Binding, also als
+   etwas, worauf ein Brief sich verlassen darf.
+3. **Vorformulierter Regel-Text** (forms.md §2, Harness-Binding-Absatz
+   zur Report-Datei-Sperre): „Die Sperre ist an EINEM Namensraum
+   gemessen (`REPORT.md` und nahe englische Verwandte). Für einen Brief
+   in anderer Arbeitssprache ist sie KEIN Rückfall — ein deutsch
+   benanntes `*-bericht.md` schrieb sich am 2026-08-14 durch. Wo die
+   Arbeitssprache nicht englisch ist, benennt der Brief die zugewiesene
+   Datendatei als EINZIGEN erlaubten Schreib-Pfad und sagt ausdrücklich,
+   dass jede weitere Datei — gleich wie benannt — eine Abweichung ist."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (forms.md §2, Harness-Binding-Absatz); Quota-Drain
+   nach OBSERVATIONS-Regel.
