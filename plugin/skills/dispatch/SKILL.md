@@ -327,11 +327,26 @@ Mandatory parts (execution briefs):
   model field). A name forces background mode (§2 forms, binding),
   so generic dispatches are background by construction; only
   pinned-type agents, which the gate exempts, still run unnamed or
-  synchronous. Fan-outs state count × tier before dispatching, and
+  synchronous. Fan-outs state items × lanes × tier before
+  dispatching, and
   the chosen model is named in the turn's final message (canonical
   here; the corpus routing module keeps the veto principle and
   points here) — details and enforcement: the agent-model-gate
   hook (§5).
+- **What rides ONE lane.** Two items bundle when they share a
+  realizing FILE and one mechanism — the fix is a single edit
+  wearing two entry numbers, and splitting it gives two lanes the
+  same edit to make. They split when each carries its own
+  red-first arrangement: a bundle then entangles verdicts (the
+  bundled-changes fact, corpus Fixing) and buys only waiting,
+  since token spend is identical either way and elapsed time is
+  not. A shared tool, an adjacent topic, or a common owner are
+  not bundling reasons — and the mapping is decided before the
+  lanes are named, because deciding it means reading each item's
+  realizing file, which is also what catches an item whose work
+  already landed (measured 2026-08-14: four of five proposed
+  lanes were already built, found only when the bundling question
+  forced the files open).
 - **Gaps: surface, don't fill.** Instruct explicitly: a missing
   decision, file, or value is reported as a gap, never bridged with a
   plausible guess — a gap filled silently is designed at the executing
