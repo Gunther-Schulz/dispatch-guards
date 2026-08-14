@@ -899,3 +899,26 @@ overrode it with a wrong belief.
    Dispatch-Skills (SKILL.md §1 bzw. DEV-RUNBOOK D5 Nr. 1 im
    pbs-office opus-paket — EINE Heimat wählen, Kante im jeweils
    anderen); Quota-Drain nach OBSERVATIONS-Regel.
+
+## 2026-08-14 — grep auf PDF ist ohne `-a` still blind; Struktur-Checks brauchen den dekomprimierten Strom
+
+1. **Vorfall + Basis:** FB-6.18-Mechanik (sonnet-anhang-verlinkung):
+   die PDF-Link-Verifikation per `grep '/Subtype /Link'` lieferte
+   einen Nulltreffer, weil grep die Datei als Binär einstufte — auch
+   für sicher vorhandene Strings wie `/Type` (das war die
+   Positiv-Kontrolle, die die Blindheit aufdeckte). Tragfähig wurde
+   der Check erst mit `qpdf --qdf --object-streams=disable` (Ströme
+   dekomprimieren) plus `grep -a`.
+2. **Klasse:** Zero-Hit-Suche mit totem Instrument (Fixing-Korpus,
+   Non-Events) — die Binär-Einstufung ist ein Instrument-Killer, der
+   exakt das Ergebnis einer echten Absenz liefert; PDF-Objektströme
+   sind der zweite, unabhängige Killer derselben Prüfung.
+3. **Vorformulierter Fix-Text** (executor skill, Verifikations-
+   Abschnitt, ein Satz): „Ein Struktur-Grep über ein PDF (oder
+   anderes Binärformat) zählt nur mit gezeigter Positiv-Kontrolle im
+   selben Aufruf-Modus; für PDFs heißt das dekomprimieren
+   (`qpdf --qdf --object-streams=disable`) und `grep -a` — ein
+   Nulltreffer ohne Positiv ist keine Absenz-Aussage."
+4. **Konsument + Abfluss-Naht:** nächste Maintenance-Runde des
+   executor-Skills (Verify-with-the-check's-own-output-Abschnitt);
+   Quota-Drain nach OBSERVATIONS-Regel.
