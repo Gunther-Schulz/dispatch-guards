@@ -377,6 +377,44 @@ are dropped with a one-line reason.
   waits. Trigger unchanged: an actual decision to publish/share the
   plugin outside this farm.
 
+- **READY 2026-08-14 — first maintenance pass over
+  `dev-notes/dispatch-OBSERVATIONS.md`: 27 entries, none ever
+  drained.** The quota banner shipped this day (dotfiles `b485ec7`,
+  FB 112) and its first real run named this carrier:
+  `maintenance pass owed: dev-notes/dispatch-OBSERVATIONS.md — booked
+  ~8 vs drained ~0 over the last +30% stretch (8 commits)`. The
+  sibling `worktree-OBSERVATIONS.md` stays silent (~1 vs ~0), so the
+  banner discriminates rather than flagging every carrier.
+  Design: an enumeration over the carrier ran the same day and its
+  result decides the CUT, so the pass is a mechanical join, not a
+  judgement sweep. The form's four slots reach back only to
+  2026-08-12, the day the form was minted — all 12 entries from that
+  date on carry a named target file, all 15 before it carry none.
+  Two halves, and only the first is mechanical: (1) the 12
+  form-conforming entries apply or get discarded with a one-line
+  reason, clustered by target — class devbook (`CLAUDE.md
+  §Registered procedure`) ×3, dispatch SKILL.md §1/§2/§4 ×8,
+  executor SKILL.md ×1; (2) the 15 pre-form entries need a CUTOFF
+  rule rather than 15 judgements, the shape `ENVELOPE_CUTOFF`
+  already uses in `dotfiles/git/hooks/pre-commit` — a pass that
+  reds the whole file gets worked around instead of followed.
+  One entry sits outside both halves: the one at line 410 carries no
+  date in its heading, so no date-based rule reaches it at all. It
+  has a sibling at line 683 on the same mechanism and probably
+  merges there; decide at the body, not the title.
+  ⚠ Do NOT open this together with a class-devbook change: 3 of the
+  12 target the very section a withdrawn attempt touched on 2026-08-14
+  (pbs-office FB 133, parked with named missing evidence). Same
+  paragraph twice in one round is what made that the day's most
+  expensive lane.
+  Verifier: after the pass, the banner goes silent for this carrier —
+  and that silence is only evidence once a `## Abgeflossen` section
+  actually exists, since none does anywhere yet and the drain branch
+  is fixture-covered only (FB 112's own honest residue). So the pass
+  is also the first real test of that branch.
+  Done when every one of the 27 has an exit — applied with its commit
+  ref, discarded with a one-line reason, or covered by the stated
+  cutoff rule — and the count of open entries is stated, not implied.
 
 ## Done
 
