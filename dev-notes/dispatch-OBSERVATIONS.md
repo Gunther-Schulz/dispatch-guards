@@ -922,3 +922,61 @@ overrode it with a wrong belief.
 4. **Konsument + Abfluss-Naht:** nächste Maintenance-Runde des
    executor-Skills (Verify-with-the-check's-own-output-Abschnitt);
    Quota-Drain nach OBSERVATIONS-Regel.
+
+## 2026-08-14 — Report-Buchung prüft den ABSENDER nicht: unaufgeforderte Fremd-Nachricht erreichte einen wartenden Dispatcher
+
+1. **Vorfall + Basis:** Während einer Drei-Arm-Probe zum Subagent-
+   Spawn-Cap (dotfiles LEDGER 2026-08-14, Commit 4a40404) empfing
+   eine headless Dispatcher-Session, die auf den Report ihres einen
+   Subagenten wartete, eine unaufgeforderte Nachricht mit plausiblem
+   Ergebnis-Inhalt (`FORK-PROBE-EXECUTED`) von einer Absender-ID, die
+   KEINEM von ihr gestarteten Agenten entsprach — plausibel der
+   Hintergrund-Fork einer VORIGEN Probe-Session, der nach deren Ende
+   zustellte (Cross-Session-Zustellung; Provenienz nicht
+   diagnostiziert). Der Dispatcher verwarf sie aus eigenem Urteil,
+   per Namensabgleich gegen seine Dispatch-Liste — keine Regel im
+   Skill deckt diesen Abgleich.
+2. **Klasse:** Report-Attribution — die Absender-Identität eines
+   eingehenden Reports ist eine Prämisse, die nichts prüft. §4 deckt
+   „Schweigen ist nie Erfolg" und den Erwartungs-Horizont, aber ein
+   INHALTLICH passender Report vom FALSCHEN Absender bucht sich durch:
+   er beantwortet scheinbar den offenen Horizont und beendet das
+   Warten auf den echten.
+3. **Vorformulierter Regel-Text** (dispatch skill §4, beim
+   Horizont-Absatz): „Ein eingehender Report wird erst gebucht,
+   nachdem sein Absender gegen die eigene Dispatch-Liste aufgelöst
+   ist (Agent-ID oder Brief-Name); ein Report von nicht aufgelöstem
+   Absender ist ein BEFUND (Cross-Talk), nie ein Report — er schließt
+   keinen offenen Horizont, und das Warten auf den echten Report
+   läuft weiter."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde, oder der nächste Bau an §4; Quota-Drain nach
+   OBSERVATIONS-Regel.
+
+## 2026-08-14 — Fork-Skills sind der Rest-Spawn-Kanal unter dem Cap, und ein Fork ist per Konstruktion Selbst-Review
+
+1. **Vorfall + Basis:** Dieselbe Drei-Arm-Probe (dotfiles LEDGER
+   2026-08-14, Commit 4a40404) maß: unter
+   `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` verliert ein Subagent das
+   Agent-Tool hart und laut („No such tool available: Agent…"), aber
+   ein `context: fork`-Skill, den der Subagent aufruft, forkt WEITER
+   und liefert („completed (forked execution)"). Kein Fehlverhalten
+   beobachtet — der Kanal ist nur offen, und niemand hat ihn je
+   gegradet.
+2. **Klasse:** Verifikations-Etikett — ein Fork erbt den VOLLEN
+   Kontext seines Aufrufers und ist damit per Konstruktion keine
+   frische Verifikation (er erbt die blinden Flecken mitsamt der
+   Rahmung); die Cap-Mechanik schließt den Kanal nicht, also kann ein
+   Executor über einen Fork-Skill etwas erzeugen, das im Report als
+   unabhängige Prüfung AUSSIEHT.
+3. **Vorformulierter Regel-Text** (Grading-Seite, dispatch skill §2,
+   beim Fresh-Context-Bezug; Spiegel im executor-Skill denkbar, ein
+   Fakt eine Heimat — Heimat entscheidet der Pass): „Ein
+   `context: fork`-Skill erbt den vollen Kontext seines Aufrufers;
+   eine darüber erzeugte Prüfung ist Selbst-Review und wird so
+   gegradet, nie als Fresh-Context-Verifikation. Der
+   Subagent-Spawn-Cap schließt diesen Kanal nicht (gemessen
+   2026-08-14)."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (Grading-Abschnitt §2); Quota-Drain nach
+   OBSERVATIONS-Regel.
