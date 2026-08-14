@@ -980,3 +980,46 @@ overrode it with a wrong belief.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (Grading-Abschnitt §2); Quota-Drain nach
    OBSERVATIONS-Regel.
+
+## 2026-08-14 — Die Re-Lese-Einheit eines gespeicherten Briefs ist der Eintrag PLUS seine Nachbarn: eine Um-Bewertung steht oft im BENACHBARTEN Bullet
+
+1. **Vorfall + Basis:** Dispatch aus einer cache-fix-Session
+   (2026-08-14, Basis 52b8912): ein Brief zitierte einen
+   BACKLOG.md-Eintrag wörtlich aus der AKTUELLEN Datei zur
+   Compose-Zeit — §1s Stored-Brief-Klausel („re-read a stored
+   brief's premises against the current world") also dem Buchstaben
+   nach erfüllt. Der Eintrag war trotzdem längst geschlossen: die
+   Schließung stand fünf Zeilen darüber in einem EIGENEN Bullet
+   (BACKLOG.md:3513-3517, „MECHANISM HALF DONE 2026-08-11
+   (`d6647cc`)" … „PROCEDURE half: DONE separately" … „Original
+   entry follows, RE-GRADED rather than left at READY"), während
+   das Original-Bullet (:3518) seinen `READY`-Kopf behielt. Der
+   Dispatcher-Extraktor splittete auf der Bullet-Grenze
+   (`^- \*\*`) und lieferte genau EIN Bullet — die Um-Bewertung lag
+   außerhalb der Sicht. Kosten: eine Sonnet-Lane (~170k Tokens),
+   die korrekt NICHTS baute; der Mechanismus (`lintCaptureAliases`,
+   tools/backlog-lint.mjs:1595) war seit d6647cc (2026-08-11)
+   fertig samt 10 Tests. Zweitschaden: derselbe lebende `READY`-Kopf
+   hob den Eintrag auf Rang 3 einer Build-Order-Ableitung.
+2. **Klasse:** Re-Lese-EINHEIT unbenannt + selbstgebaute Sicht. §1
+   sagt WAS neu zu lesen ist, nie in welchem UMFANG — und weil eine
+   Um-Bewertung häufig als benachbarter Datensatz geschrieben wird
+   statt als In-Place-Edit, ist „der Eintrag" die falsche Einheit.
+   Darunter die Grounding-Klasse: der Extraktor IST das Instrument,
+   seine Grenzwahl ist die Basis der Behauptung „ich habe den
+   Eintrag gelesen" — und Extrahieren präsentiert sich als SCHAUEN,
+   nicht als Messen, also fragt nichts nach dem diskriminierenden
+   Beleg.
+3. **Vorformulierter Regel-Text** (§1, brief family / stored
+   brief): „Die Re-Lese-Einheit eines gespeicherten Briefs ist der
+   Eintrag PLUS seine Nachbarn, nie das Bullet allein: eine
+   Um-Bewertung wird häufig als BENACHBARTER Datensatz geschrieben,
+   nicht als In-Place-Edit, und der ursprüngliche Kopf behält dann
+   seinen lebenden Grad. Besitzt das Ziel-Repo eine eigene
+   Closure-/Stale-Prüfung, läuft sie über den Eintrag, BEVOR der
+   Brief rausgeht; sonst werden die Bullets davor und danach
+   mitgelesen. Ein selbst gebauter Extraktor ist dabei das
+   Instrument — seine Grenzwahl ist die Basis, nicht seine Ausgabe."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (§1, brief-family-Klausel); Quota-Drain nach
+   OBSERVATIONS-Regel.
