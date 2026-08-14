@@ -869,3 +869,33 @@ overrode it with a wrong belief.
    guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
    procedure) — mit den dort schon wartenden Schritt-4-Ergänzungen
    bündeln; Amendierung setzt den Fingerprint zurück (eval-open).
+
+## 2026-08-14 — Ein gebrieftes Randbeispiel als Pflicht-Assertion pinnt die Spec, nicht den Defekt
+
+1. **Vorfall + Basis:** FB-103-Bau (opus-befund-referenz,
+   pbs-abwaegung b213761): Der Brief gab das durchgerechnete
+   Randbeispiel BF22/BF2 als Pflicht-Assertion vor („Dokument enthält
+   nur `% BF22` → BF2 gilt NICHT als referenziert"). Die Assertion
+   ging unter der korrekten Lookaround-Regex UND unter der naiven
+   `BF([0-9]+)` gleich aus — Regex-Gier ersetzt die Lookarounds im
+   Beispiel-Fall. Diskriminierend war erst die Zeichen-Nachbarschaft
+   (`\labelBF2`, `ABF2`); gefunden hat es die Mutations-Batterie des
+   Executors (M1 überlebte den Erstlauf), nicht die Vorgabe.
+2. **Klasse:** Instrument-Diskriminierung am Brief-Seam — dieselbe
+   „beide Ausgänge erfüllen"-Klasse (Fixing-Korpus), hier als
+   BRIEF-Instanz: eine vom Dispatcher vorgegebene Pflicht-Assertion
+   erbt die Elternschaft der Spec und kann den Defekt, gegen den das
+   Prädikat gebaut ist, systematisch verfehlen; sie liest sich dabei
+   als Rigor.
+3. **Vorformulierter Fix-Text** (Dispatch-Skill §1, Klausel
+   „Criteria state OUTCOMES first" oder D5-Spec-Check Nr. 1,
+   Ergänzungssatz): „Gibt der Brief ein Randbeispiel als
+   Pflicht-Assertion vor, verlangt er dazu eine Assertion, die die
+   vorgegebene Implementierung von der NAIVEN trennt (ein Fall, den
+   beide verschieden beantworten) — sonst pinnt die Pflicht-Assertion
+   die Spec, nicht den Defekt; die Mutations-Batterie bleibt der
+   Nachweis."
+4. **Konsument + Abfluss-Naht:** nächste Maintenance-Runde des
+   Dispatch-Skills (SKILL.md §1 bzw. DEV-RUNBOOK D5 Nr. 1 im
+   pbs-office opus-paket — EINE Heimat wählen, Kante im jeweils
+   anderen); Quota-Drain nach OBSERVATIONS-Regel.
