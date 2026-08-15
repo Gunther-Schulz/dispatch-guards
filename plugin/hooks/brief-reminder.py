@@ -280,6 +280,14 @@ def tail_mode_mismatch_deny_text(payload: dict) -> str:
 
 
 _SECTIONS_ANCHOR = "closing report (mandatory"
+# The READ-ONLY tail's own signature. Needed because forms.md carries
+# BOTH tails verbatim, and the brief text this guard reads includes
+# every .md file the prompt names: a verifier brief whose only offence
+# is CITING forms.md — which §1 tells verifier briefs to cite — picked
+# up the execution anchor from the citation and was denied for lacking
+# §1 execution sections it is explicitly exempt from. Observed live on
+# a legitimate verifier dispatch.
+_READONLY_ANCHOR = "no repo writes, no report files"
 # Marker-Familien statt Einzel-Literale: Haus-Briefe folgen dem
 # DEV-RUNBOOK-Formular mit deutschen Feld-Etiketten (GROUNDING-BASIS,
 # SCHREIB-GRENZEN) — die Erkennung akzeptiert die Abschnitts-Etiketten
@@ -306,11 +314,32 @@ def missing_sections(payload: dict) -> bool:
     tool_input = payload.get("tool_input") or {}
     if not (tool_input.get("prompt") or ""):
         return False
+    if _tail_kind(payload) != "execution":
+        return False  # verifier/discovery or no tail; exempt
     brief = _brief_text(payload)
-    if _SECTIONS_ANCHOR not in brief:
-        return False  # not an execution-tail brief; exempt
     return not (any(m in brief for m in _GROUNDING_MARKERS)
                 and any(m in brief for m in _WRITE_BOUNDARY_MARKERS))
+
+
+def _tail_kind(payload: dict) -> str:
+    """Which §2 tail governs this dispatch: 'execution' | 'readonly' |
+    'none'.
+
+    Decided from the PROMPT wherever the prompt itself carries a tail,
+    and only otherwise from the referenced brief files. Prompt-first is
+    the whole point: forms.md contains both tails verbatim, so reading
+    the referenced files first makes every brief that cites the forms
+    file look like an execution brief — the false fire this exemption
+    closes. A brief file may still carry the tail (§2 allows it), which
+    is why the referenced-file fallback stays."""
+    tool_input = payload.get("tool_input") or {}
+    prompt = _norm(tool_input.get("prompt") or "")
+    for text in (prompt, _brief_text(payload)):
+        if _READONLY_ANCHOR in text:
+            return "readonly"
+        if _SECTIONS_ANCHOR in text:
+            return "execution"
+    return "none"
 
 
 def _brief_text(payload: dict) -> str:
@@ -748,6 +777,54 @@ if __name__ == "__main__":
 
         assert "Blocked" in missing_sections_deny_text(
             missing_grounding_brief)
+
+        # ── verifier brief citing forms.md → EXEMPT (false fire) ───
+        # forms.md carries BOTH tails verbatim and this guard reads
+        # every .md the prompt names, so a verifier brief that merely
+        # CITES the forms file inherited the execution anchor and was
+        # denied for lacking §1 sections it is exempt from. Observed
+        # live on a legitimate verifier dispatch. Expectation from §1
+        # ("verifier dispatches stay exempt from the rich §1 brief
+        # form ... artifact + question + that block"), not from code.
+        _READONLY_TAIL_REAL = (
+            "Report channel: SendMessage to the dispatcher — your "
+            "final text reaches no one.\n"
+            "Return your findings in ONE message where they fit "
+            "(verifier: verdict + basis; discovery: the N named "
+            "facts, sources actually read); past the message-size "
+            "gate, labeled parts (1/N) — never a report file. A "
+            "missing decision, file, or value is surfaced as a gap, "
+            "never bridged with a guess. No repo writes, no report "
+            "files, no interim messages; transient probe scratch in "
+            "your OWN scratchpad is permitted and is not a report "
+            "file.")
+        # The citation is the REAL forms.md by ABSOLUTE path: the
+        # fixture must actually read a file carrying the execution
+        # anchor, or it tests nothing. A relative path here silently
+        # resolved to no file (no cwd in the payload) and the case
+        # passed against the unfixed code — caught by running it
+        # red-first.
+        _vet = {"tool_name": "Agent", "tool_input": {
+            "name": "opus-vet",
+            "prompt": ("Verifier dispatch. ARTIFACT: the diff. "
+                       "QUESTION: is " + _forms_path() + " §2 "
+                       "consistent with the hook?\n"
+                       + _READONLY_TAIL_REAL)}}
+        assert _SECTIONS_ANCHOR in _brief_text(_vet), (
+            "fixture reads no execution-anchor file — it would pass "
+            "regardless of the exemption")
+        assert _tail_kind(_vet) == "readonly", _tail_kind(_vet)
+        assert not missing_sections(_vet)
+        assert not tail_mode_mismatch(_vet)
+        assert not missing_channel(_vet)
+        assert not missing_tail(_vet)
+        # the lane still bites a real execution brief citing forms.md
+        _exec_bad = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
+            "prompt": ("Do X per " + _forms_path() + ".\n"
+                       + EXECUTION_TAIL_BG)}}
+        assert _tail_kind(_exec_bad) == "execution"
+        assert missing_sections(_exec_bad)
 
         # ── Commit-plan lane (missing_commit_plan), STAGED WARN ────
         # Slot named in the dispatch skill §1 skeleton ("## Commit
