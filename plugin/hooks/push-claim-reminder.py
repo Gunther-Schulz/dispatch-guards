@@ -189,7 +189,7 @@ def main() -> int:
         return 0  # never fail the workflow on a hook parse error
     reason = deny_check(payload)
     if reason:
-        deny(reason, source=_SOURCE)  # prints exit-0 deny JSON and exits
+        deny(reason, source=_SOURCE, payload=payload)  # prints exit-0 deny JSON and exits
     reminder = check(payload)
     if reminder:
         print(json.dumps({

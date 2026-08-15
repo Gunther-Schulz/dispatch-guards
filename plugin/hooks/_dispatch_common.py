@@ -89,8 +89,22 @@ def _deny_payload(reason: str, source: str = "dispatch-guards") -> dict:
     }
 
 
-def deny(reason: str, source: str = "dispatch-guards") -> None:
-    """Emit a clean PreToolUse deny (exit-0 JSON) and exit."""
+def deny(reason: str, source: str = "dispatch-guards",
+         payload: dict | None = None) -> None:
+    """Emit a clean PreToolUse deny (exit-0 JSON) and exit.
+
+    Logs the fire FIRST. A hard deny is a fire, and the fire-rate
+    review counts denies alongside asks and warns — this was the one
+    exit that wrote nothing, so every lane calling it directly was
+    invisible to the very log the review reads, while the same
+    guard's fire()-routed lanes appeared normally. Measured on the
+    shipped payload: brief-reminder's four deny lanes and
+    push-claim-reminder's had zero log entries all-time, against 673
+    for one fire()-routed lane.
+
+    payload is optional so a caller with no hook input still denies;
+    passing it is what fills session/agent/tool/shape in the record."""
+    fire_log(source, "deny", reason, payload)
     print(json.dumps(_deny_payload(reason, source)))
     sys.exit(0)
 
@@ -537,12 +551,32 @@ if __name__ == "__main__" and "--test" in sys.argv:
         j = json.loads(buf.getvalue())
         assert j["hookSpecificOutput"]["permissionDecision"] == "ask"
 
+        # ── deny(): a HARD deny is a fire and must reach the log ──
+        # The fire-rate review reads the log; a lane that denies
+        # without logging is invisible to it while its fire()-routed
+        # siblings appear normally. Expectation from the log's own
+        # declared contract ("Every guard fire — deny, ask, warn,
+        # block — appends one JSONL line"), which deny() did not meet.
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            try:
+                deny("hard no", source="dispatch-guards/brief-reminder",
+                     payload={"session_id": "s3", "tool_name": "Agent",
+                              "agent_id": "a9"})
+            except SystemExit as e:
+                assert e.code == 0
+        j = json.loads(buf.getvalue())
+        assert j["hookSpecificOutput"]["permissionDecision"] == "deny"
+
         # ── the log: one line per fire, fields + truncation ──
         lines = [json.loads(ln) for ln in
                  Path(td + "/f/fires.jsonl").read_text().splitlines()]
-        assert len(lines) == 4, len(lines)
+        assert len(lines) == 5, len(lines)
         modes = [ln["mode"] for ln in lines]
-        assert modes == ["warn", "deny", "off", "ask"], modes
+        assert modes == ["warn", "deny", "off", "ask", "deny"], modes
+        assert lines[4]["guard"] == "brief-reminder"
+        assert lines[4]["session_id"] == "s3"
+        assert lines[4]["agent_id"] == "a9"
         assert lines[0]["guard"] == "amend-gate"
         assert lines[0]["agent_id"] == "a1"
         assert len(lines[0]["reason"]) == _REASON_MAX  # truncated
