@@ -1204,3 +1204,34 @@ overrode it with a wrong belief.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (forms.md §2, Harness-Binding-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
+
+## 2026-08-15 — Bump-Ausnahme vom Dispatcher-Push konsumiert (statiker-Ernte-Lane)
+
+1. **Vorfall + Basis:** Der Lane-Brief (statiker,
+   docs/directives/2026-08-15-harvest-lane-brief.md) erklärte „no
+   bump is yours — the dispatcher has already landed the version-bump
+   commit". Der Dispatcher pushte den Bump (0.2.61, eb1cc9b) aber VOR
+   dem Dispatch. Der Payload-Guard (dotfiles pre-commit,
+   unbumped_plugins) keyed seine Ausnahme auf UNGEPUSHTEN Batch:
+   origin trug 0.2.61 bereits, also verweigerte er beide
+   Payload-Commits der Lane; die Lane haltete korrekt (kein
+   --no-verify) und die Auflösung kostete einen vollen
+   Directive-Roundtrip (Bump-Ownership nachträglich an die Lane,
+   0.2.62 als eigener Commit 8b3438e). SKILL.md §1 (Commit-Plan)
+   benennt die Klasse bereits: „a mid-batch push moves the basis and
+   re-arms the guard … the dispatcher pushes at integration only" —
+   der Miss war Anwendung, nicht Regel-Lücke. Aber der BRIEF-Slot hat
+   keinen Platz, an dem die Push-Lage des Bumps sichtbar würde.
+2. **Klasse:** Brief-Prämisse über den Guard-Zustand, die zwischen
+   Brief-Schreiben und Ausführung vom Dispatcher selbst getötet wird —
+   Spezialfall der stale-premise-Klasse, hier mit dem Dispatcher als
+   beiden Seiten (er schrieb die Prämisse UND beging den Push).
+3. **Vorformulierter Regel-Text** (SKILL.md §1, Commit-Plan-Skeleton-
+   Slot, ein Zusatz-Satz): „Wo der Dispatcher den Bump vorab landet,
+   nennt der Commit-Plan auch dessen PUSH-Lage — ‚bump committed,
+   UNPUSHED (exemption armed)' — und der Dispatcher pusht ihn nicht
+   vor der Integration; ein Brief, der nur ‚bump already landed' sagt,
+   lässt die Lane die Ausnahme-Bedingung erraten."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
+   nach OBSERVATIONS-Regel.
