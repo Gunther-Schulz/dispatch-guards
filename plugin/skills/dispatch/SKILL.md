@@ -292,7 +292,17 @@ Mandatory parts (execution briefs):
     HEAD: a mid-batch push moves the basis and re-arms the guard
     for every lane still in flight, so the dispatcher pushes at
     integration only (measured: both lanes of a two-lane batch
-    bounced after a mid-batch push consumed the bump). A
+    bounced after a mid-batch push consumed the bump). Where the
+    bump is ALREADY committed, the plan names its PUSH STATE —
+    "bump committed, UNPUSHED (exemption armed)" — never merely
+    that it landed: the exemption is keyed to the batch being
+    unpushed, so "the bump is already in" leaves the lane unable
+    to check the condition its own commits depend on, and the
+    dispatcher who wrote that premise is the one who can kill it
+    by pushing (measured: a brief said the bump had landed, the
+    dispatcher had pushed it, and the lane's payload commits
+    bounced — it halted correctly rather than reaching for
+    --no-verify, at the price of a full directive round trip). A
     plugin-payload brief also states WHO bumps the manifest and
     in which commit — the manifest is invisible from a
     write-boundary list, and both lanes of one batch returned
@@ -463,7 +473,8 @@ satisfied by construction:
 
     ## Commit plan
     <the target repo's commit-blocking guards, READ at compose
-    time, and where the bump or ordering commit sits — a
+    time, where the bump or ordering commit sits AND whether it
+    is pushed — a
     payload-version guard comparing against the RELEASE state
     clears every later same-batch commit once the bump is in,
     and where its basis is the origin manifest the dispatcher

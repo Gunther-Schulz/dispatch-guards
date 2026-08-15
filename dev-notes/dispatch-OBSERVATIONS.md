@@ -1238,6 +1238,28 @@ overrode it with a wrong belief.
    Maintenance-Runde (forms.md §2, Harness-Binding-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
 
+## Abgeflossen
+
+Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
+eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
+durchgestrichen oben stehen.
+
+### ANGEWANDT 2026-08-15 — Bump-Push-Lage im Commit-Plan
+
+Slot-3-Text angewandt auf SKILL.md §1, beide Heimaten: der
+Commit-Plan-Absatz (Regel + gemessener Vorfall) und der
+Skeleton-Slot (`where the bump ... sits AND whether it is
+pushed`). Umgesetzt statt zitiert: der Zusatz benennt den
+MECHANISMUS, den Slot 1 selbst herleitet — die Ausnahme ist
+auf den ungepushten Batch gekeyed, also kann die Lane die
+Bedingung ihrer eigenen Commits nicht prüfen, und der
+Dispatcher, der die Prämisse schrieb, ist derselbe, der sie
+durch Pushen tötet. Triage laut Eintrag: loaded-but-inert,
+kein Gap — daher Sharpen am bestehenden Absatz, nicht neuer
+Bullet (amendment over addition).
+
+Beleg: dieser Commit; Eintrag im Wortlaut darunter.
+
 ## 2026-08-15 — Bump-Ausnahme vom Dispatcher-Push konsumiert (statiker-Ernte-Lane)
 
 1. **Vorfall + Basis:** Der Lane-Brief (statiker,
