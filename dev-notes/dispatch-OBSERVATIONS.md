@@ -1244,6 +1244,48 @@ Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
 eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
 durchgestrichen oben stehen.
 
+### ANGEWANDT 2026-08-15 — Commit-Plan-Slot trägt seine Lese-Basis
+
+**Vorfall + Basis:** Peer-Relay aus der Georgendorf-Welle (Session
+-84), zwei eigene Brief-Defekte, von ihr selbst trianguliert und am
+Artefakt belegt: (a) der Commit-Plan-Slot für pbs-website mit „none"
+gefüllt, ohne den Hook-Pfad zu öffnen — das Repo trägt einen
+commit-msg-Hook über `core.hooksPath`, die Lane bounced; (b) ein
+Base-Pin aus einem Vortags-Brief übernommen statt am Tip gelesen,
+zwei Commits drüber, der Executor hielt korrekt am Gate.
+Rezitations-Prüfung hier: beide zitierten §1-Klauseln wörtlich
+bestätigt.
+
+**Triage (Relay, hier geprüft und geteilt):** loaded-but-inert, KEIN
+Gap. §1 verlangt beides bereits wörtlich — „commit-blocking guards,
+READ at compose time" und Background-Zeilen „grepped by the
+DISPATCHER before the brief ships".
+
+**Mechanismus des Nicht-Feuerns**, der den Sharpen trägt: die
+Klausel „'none' is a valid filling; silence is not" legitimiert das
+WORT, ohne seine Basis zu verlangen. Ein ungelesen hingeschriebenes
+„none" ist von einem gelesenen lexikalisch ununterscheidbar — der
+fakeable-evidence-Spalt, den skill-craft für „checked all edge
+cases" beschreibt, hier im Brief-Formular.
+
+**Angewandt** auf SKILL.md §1, als KONSOLIDIERUNG statt Anbau, weil
+es die zweite Amendment am selben Slot an einem Tag war: der Slot
+verlangt jetzt die LESE-BASIS je Guard („none (hooks path read:
+core.hooksPath=hooks, empty)"), und die doppelt geführte Mechanik
+(Payload-Guard-Sequenzierung) verließ den Slot in Richtung des
+Regel-Bullets, wo sie ohnehin ausführlich steht. Netto 80 → 78
+Wörter im Slot bei mehr Abdeckung — Pareto erfüllt statt behauptet.
+Der Grund steht im Regel-Bullet, nicht im Formular: ein Formular
+sagt, was auszufüllen ist, kein Formular lehrt.
+
+**Kein Hook-Kandidat:** ob gelesen wurde, ist nicht komputierbar.
+Die Basis-ANGABE wäre greppbar, falls brief-reminder je darauf
+linten soll — als Kandidat notiert, nicht gebaut (der Slot ist
+gerade erst gemintet; eine Lane, die auf einen Tag alten Text
+lintet, feuert auf jeden Altbestand).
+
+**Beleg:** dieser Commit.
+
 ### ANGEWANDT 2026-08-15 — Bump-Push-Lage im Commit-Plan
 
 Slot-3-Text angewandt auf SKILL.md §1, beide Heimaten: der

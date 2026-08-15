@@ -309,7 +309,15 @@ Mandatory parts (execution briefs):
     that gap independently; "the dispatcher sequences the bump
     ahead of your lane" is the default filling. An item that must
     RECORD a commit's ref cannot share that commit: order it into
-    a later commit or split the pathspec.
+    a later commit or split the pathspec. The slot takes the READ
+    that found each guard, not the verdict alone: "none" written
+    without opening the hooks path reads exactly like "none"
+    written after opening it, so the word alone is satisfiable
+    whether or not the work happened — the same fakeable-evidence
+    gap a bare "checked" carries anywhere else, and the same cure
+    (measured: a "none" filling for a repo whose commit-msg hook
+    was one `core.hooksPath` read away bounced the lane it was
+    written for).
   - **Pre-authorized repair classes (optional).** The write
     boundaries may declare a repair class the executor applies
     without a round trip — "if the commit plan collides with a
@@ -472,15 +480,15 @@ satisfied by construction:
     change is deployment-coupled; commit style; the amend rule>
 
     ## Commit plan
-    <the target repo's commit-blocking guards, READ at compose
-    time, where the bump or ordering commit sits AND whether it
-    is pushed — a
-    payload-version guard comparing against the RELEASE state
-    clears every later same-batch commit once the bump is in,
-    and where its basis is the origin manifest the dispatcher
-    pushes at integration only; a plugin-payload brief names who
-    bumps the manifest and in which commit. "none" (no such
-    guard) is a valid filling; silence is not>
+    <the target repo's commit-blocking guards, each named WITH
+    THE READ THAT FOUND IT — "none (hooks path read:
+    core.hooksPath=hooks, empty)", or the guard's name and file
+    on a hit. Then where the bump or ordering commit sits AND
+    whether it is pushed; for a plugin payload, who bumps the
+    manifest and in which commit. Mechanism and sequencing: the
+    commit-plan bullet above. A basis-carrying "none" is a valid
+    filling; a bare
+    "none" and silence are not>
 
     <§2 tail block from references/forms.md, pasted verbatim>
 
