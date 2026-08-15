@@ -7,6 +7,31 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **PARKED 2026-08-15 — report-enforcer asks the stopping agent a
+  question it may not be able to answer: which LANE it is in.** Its
+  instruction branches on "if you are a background/teammate agent"
+  vs "if you are a synchronous subagent", and its own docstring
+  already names this a known soft spot ("the background-vs-sync
+  judgment is delegated to the stopping agent and has been misjudged
+  once"). The 2026-08-15 lane rework sharpens the stakes: the branch
+  is now decided by whether the dispatch carries a `name`, and the
+  two branches give OPPOSITE instructions — a named agent must
+  SendMessage or its report reaches no one, an unnamed one must
+  re-emit its final text in full and must NOT send. Both wordings
+  remain true, so nothing is broken today; what is unverified is
+  whether the agent can observe the deciding fact.
+  **Named missing evidence:** whether a subagent can read its own
+  `name`/lane from its own context or hook input at SubagentStop —
+  if it can, the branch becomes computable and the hook should
+  state the lane instead of asking the agent to classify itself; if
+  it cannot, the honest repair is to state both duties
+  unconditionally rather than behind a self-classification the
+  agent may get wrong. Probe: dispatch one named and one unnamed
+  agent, each instructed to report what it can see about its own
+  name and launch mode.
+  Basis: this session's probe matrix (OBSERVATIONS resolution
+  2026-08-15) plus report-enforcer.py's own docstring soft-spot note.
+
 - **READY 2026-08-11 — the §6 register consult has no mechanism at the
   moment it is owed, and the skill already records that this fails.**
   §1's brief parts say the consult-moment is at brief-writing, and the
@@ -275,20 +300,6 @@ are dropped with a one-line reason.
   and go through the anneal-dev protocol with an operator GO —
   parked until that pass is convened, never folded in casually.
 
-- **PARKED 2026-08-08 — forms.md §2's channel/binding paragraphs rest
-  on two bindings contradicted by same-day probes (n=1 each): an
-  unnamed `run_in_background: false` dispatch launched async, and an
-  async agent's final text WAS delivered via the completion
-  task-notification.** Missing evidence: a controlled probe pair
-  (named/unnamed × run_in_background true/false, plus the
-  pinned-type axis — a pinned-type dispatch launched async on
-  2026-08-15, n=2 for both shapes) recording launch
-  mode and whether the final text reaches the dispatcher. On
-  confirmation, rewrite forms.md §2's 2026-07-30 binding paragraph,
-  the channel-line rationale (incl. the pinned-type sync-line
-  default, which now instructs a form brief-reminder bounces), and
-  brief-reminder's mode logic.
-  Entry: dev-notes/dispatch-OBSERVATIONS.md 2026-08-08 + addendum.
 
 - READY 2026-08-09 — RESTORE §2/§3 HEADINGS OR RENUMBER (corpus-vet
   nit n6, pre-existing): dispatch SKILL.md has headings for §§1, 4,
@@ -421,6 +432,22 @@ are dropped with a one-line reason.
   cutoff rule — and the count of open entries is stated, not implied.
 
 ## Done
+
+- 2026-08-15 — **the §2 channel rules, settled by the controlled
+  re-probe**: closes the PARKED 2026-08-08 item, whose named missing
+  evidence was that probe. Outcome INVERTED the entry's own proposal:
+  the `run_in_background` axis it was built on does not exist (Agent
+  tool schema lists no such parameter), the live axis is `name`, and
+  for an UNNAMED dispatch the completion notification delivers the
+  final text verbatim — so the sync line is TRUE there and the
+  proposed background-line default would have been wrong in the other
+  direction. Root defect was the predicate: `is_background()` read a
+  key the harness stopped supplying and was constant-true. Realized:
+  forms.md §2 channel block + binding, SKILL.md ×2, `mailbox_lane()`
+  in brief-reminder, agent-model-gate docstring, README roster,
+  doc-drift labels, six replay-corpus cases (the guard had zero).
+  Probe matrix and evidence in the OBSERVATIONS resolution of the
+  same date.
 
 - 2026-08-11 — **commit-plan origin-basis + who-bumps, and the
   state-token convention**: realized cfdbc6e (dispatch §1 bullet +

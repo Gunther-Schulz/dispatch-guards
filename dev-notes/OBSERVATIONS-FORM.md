@@ -14,7 +14,14 @@ Einträge, funktional Müllhalde).
 ## Eintrags-Form (vier Pflicht-Slots)
 
 1. **Vorfall + Basis** — was geschah, mit Fundstelle (Session/Journal/
-   Commit); Häufigkeit, wenn > 1.
+   Commit); Häufigkeit, wenn > 1. Der Zähler ist HERKUNFT für die
+   Feuerraten-Review, nie eine Zulassungs-Schwelle: n=1 genügt zum
+   Handeln (Operator-Entscheidung 2026-08-15; spiegelt
+   CLAUDE-maintenance „EINE Beobachtung genügt" — die
+   Feuerraten-Review ist Retirement-Maschinerie, kein Eingangstor).
+   Ein Aufschub bleibt legitim allein, wenn er auf GENANNTER
+   fehlender Evidenz sitzt; „erst mal sammeln, bis n reicht" ist
+   Drift im Kostüm der Sorgfalt.
 2. **Klasse** — die Fehlerklasse, nicht das Symptom. GLEICHE KLASSE =
    MERGE in den bestehenden Eintrag (Zähler hoch, Fundstelle dazu),
    nie ein Geschwister-Eintrag.

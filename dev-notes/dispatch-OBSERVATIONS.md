@@ -310,6 +310,57 @@ Both n=1, that day's harness version. Consequence taken now: the agent-model-gat
 
 Addendum 2026-08-15 (fable desk, PV-Georgendorf cwd, harness 2.1.232): both shapes now n=2, and the PINNED-TYPE exemption is implicated. An unnamed `claude-code-guide` dispatch (no `run_in_background` param) launched ASYNC, and its full final text was again delivered in the completion task-notification. New half: the skill text itself produced a denied call — forms.md §2 routes pinned-type dispatches to the synchronous channel line ("your final text IS the report"), the brief-reminder hook denied the mode/line contradiction (guard correct, fire logged), and the retry with the background line went through clean. So until the parked re-probe settles the channel rework, the pinned-type guidance instructs the exact form the guard bounces. Proposed rule change: forms.md's channel-line paragraph defaults pinned types to the BACKGROUND line too, keeping the sync line only where a sync launch has actually been observed; the re-probe item gains the pinned-type axis (agent type named/pinned × run_in_background). Basis: this session's transcript — deny text, retry, task-notification delivery.
 
+Resolution 2026-08-15 (opus desk, dispatch-guards cwd, harness
+2.1.232 — the controlled re-probe the entry above deferred to).
+**The axis this entry and the parked item were built on does not
+exist.** The Agent tool takes no `run_in_background` parameter
+(schema `additionalProperties: false`, key absent), so the matrix's
+flag axis is unrunnable and the older "silently overridden" binding
+described a flag that is simply gone. The live axis is `name`, and
+the probe separated it from agent type with the cell both earlier
+observations were missing — earlier data compared generic+named
+against pinned+unnamed, changing two variables at once. Cells:
+generic+named → "Spawned successfully … via mailbox";
+pinned+named → the SAME mailbox launch; pinned+unnamed → "Async
+agent launched", output file, completion notification. So the lane
+is keyed on `name`, not on the pinned-type exemption.
+Delivery, the half the channel line asserts: the unnamed lane's
+completion notification carried the agent's final text VERBATIM
+with `tool_uses: 0` — the agent sent nothing and the text arrived
+anyway, so delivery does not depend on the agent. The named lane
+fired no completion notification, does not appear in the subagent
+listing, and one named probe delivered nothing at all despite an
+explicit SendMessage instruction.
+**Consequence: the proposed rule change in the addendum above is
+backwards.** For an unnamed dispatch the background line ("your
+final text reaches no one") is FALSE and the sync line is TRUE;
+defaulting pinned types to the background line would have made the
+guidance wrong in the other direction. The real defect was in the
+predicate: `is_background()` read `run_in_background is not False`,
+which with the key absent is CONSTANT TRUE — every dispatch
+classified background, the unnamed lane's correct line unreachable,
+and `tail_mode_mismatch` denying it. That is exactly the 2026-08-15
+bounce. Class: a binding whose environment moved, plus a predicate
+whose premise the environment silently stopped supplying — the
+check kept passing while testing less than it claimed.
+Correction to the addendum above: "(guard correct, fire logged)" —
+the guard was correct, the fire was NOT logged. `deny()` never
+called `fire_log()`, so all six hard-deny call sites wrote nothing;
+the log holds zero deny-mode entries for brief-reminder all-time
+against 673 for one `fire()`-routed lane. The fire-rate review —
+the repo's stated instrument for warn→deny promotion and lane
+retirement — was blind to every hard deny. Fixed in the same batch,
+red-first (4 log lines instead of 5 under the shipped `deny()`).
+Class: an assurance wider than its predicate — the log's own
+comment claims "Every guard fire — deny, ask, warn, block — appends
+one JSONL line".
+Mechanism, both halves: forms.md §2's channel-line block and
+binding rewritten to the two lanes; `mailbox_lane()` replaces
+`is_background()`; six brief-reminder cases added to the replay
+corpus (it had ZERO), two of which go red against the old hook —
+the bounce is now pinned as a regression case. Consumer: shipped in
+this batch, no drain owed.
+
 (The two entries below were authored by a peer opus desk session and
 relayed by the operator; appended verbatim by the integrating
 session. Their bases are the authoring session's transcript and
