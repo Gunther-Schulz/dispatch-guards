@@ -1244,6 +1244,69 @@ Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
 eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
 durchgestrichen oben stehen.
 
+### ANGEWANDT 2026-08-15 — Removal ist terminal; Reihenfolge und drei Heimaten
+
+Slot-3-Text angewandt, aber der Audit fand eine Heimat MEHR als der
+Eintrag nannte — und die dritte war ein aktiver Widerspruch, kein
+Loch:
+
+1. **Writer-Rezept** (Slot-3-Ziel): trägt jetzt die Bindung und die
+   Sequenz — buchen, Lane-Close, Nachfragen, DANN entfernen. Die
+   Mechanik steht hier, EINMAL.
+2. **Reader-Worktree-Klausel** — vom Eintrag nicht genannt, und der
+   schärfste Fund: sie wies an, den Reader-Worktree „at the booking
+   of its findings" zu entfernen. Buchung ist genau der Moment, in
+   dem man nachfragt; die Klausel instruierte also die verlierende
+   Reihenfolge. Jetzt: gebucht UND befragt, dann entfernen.
+3. **§4-Spiegel-Pflicht** (Slot 4 fragte, ob ein Querverweis
+   genügt): nein — der Satz BEHAUPTETE „a named/mailbox agent stays
+   resumable after its report", was nach einer Entfernung schlicht
+   falsch ist. Kein fehlender Zeiger, sondern eine Aussage, die die
+   neue Bindung widerlegt. Jetzt mit Vorbehalt plus Quell-Etikett.
+
+**Lehre über den Vorfall hinaus:** ein Eintrag, der EINE Zielstelle
+nennt, hat die Amendment-Audit-Pflicht nicht erledigt — die Regel
+verlangt, jede Heimat der Regel zu prüfen, und die teuerste Heimat
+war die, die niemand als betroffen las, weil sie über einen anderen
+Worktree-TYP sprach. Klasse: dieselbe Reichweiten-Frage wie beim
+Vokabular-Cascade heute früh (0.10.20), anderer Träger.
+
+**Beleg:** dieser Commit.
+
+## 2026-08-15 — Worktree-Entfernung verbrennt den Resume-Kanal (statiker E-Lane-Batch)
+
+1. **Vorfall + Basis:** Nach Buchung von Lane Gs Report entfernte der
+   Dispatcher zuerst den Worktree (`git worktree remove --force`)
+   und sandte DANACH die Lane-Close-Nachricht (§4 Spiegel-Pflicht).
+   Die Harness verweigerte die Zustellung: "cannot be resumed: its
+   worktree no longer exists, and the fallback directory is not
+   covered by the session's isolation fences" (SendMessage-Fehler,
+   wörtlich). Ausgang hier benign (Report vollständig gebucht,
+   Integration fertig, Schreibrisiko strukturell null), aber der
+   Kanal ist irreversibel zu: auch eine legitime NACHFRAGE an die
+   Lane (Interrogation eines gebuchten Reports — im Ziel-Repo
+   ausdrücklich als billige Mint-Quelle gewertet) ist ab der
+   Entfernung unmöglich.
+2. **Klasse:** Reihenfolge zweier Dispatcher-Pflichten, deren zweite
+   die erste irreversibel unerfüllbar macht — §1-Worktree-Rezept
+   ("remove the worktree after integration") und §4-Spiegel-Pflicht
+   ("book the report AND tell it the lane is closed") nennen beide
+   Akte, aber keine Sequenz; die Harness-Bindung (Resume setzt den
+   Worktree voraus) steht in keinem der beiden.
+3. **Vorformulierter Regel-Text** (§1 Worktree-Rezept, Removal-Satz —
+   Amendment, kein neuer Bullet): "Removal ist der TERMINALE Akt und
+   schließt den Resume-Kanal des Agenten (Harness-Bindung, gemessen
+   2026-08-15: SendMessage an einen Agenten ohne Worktree wird
+   verweigert). Reihenfolge daher: Report buchen, Lane-Close senden,
+   offene Nachfragen an die Lane stellen — DANN entfernen. Ein
+   entfernter Worktree ersetzt die Close-Nachricht strukturell
+   (der Agent kann nicht mehr schreiben), aber er ersetzt keine
+   Nachfrage, und die ist das teure verlorene Stück."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (SKILL.md §1 Worktree-Rezept; §4-Spiegel-Satz
+   prüfen, ob ein Querverweis genügt); Quota-Drain nach
+   OBSERVATIONS-Regel.
+
 ### ANGEWANDT 2026-08-15 — Provenance-Grade bindet an die Behauptungs-KLASSE, nicht an die Zitat-Form
 
 **Vorfall + Basis:** Peer-Relay, dritter Brief-Defekt derselben
@@ -1384,37 +1447,3 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
-
-## 2026-08-15 — Worktree-Entfernung verbrennt den Resume-Kanal (statiker E-Lane-Batch)
-
-1. **Vorfall + Basis:** Nach Buchung von Lane Gs Report entfernte der
-   Dispatcher zuerst den Worktree (`git worktree remove --force`)
-   und sandte DANACH die Lane-Close-Nachricht (§4 Spiegel-Pflicht).
-   Die Harness verweigerte die Zustellung: "cannot be resumed: its
-   worktree no longer exists, and the fallback directory is not
-   covered by the session's isolation fences" (SendMessage-Fehler,
-   wörtlich). Ausgang hier benign (Report vollständig gebucht,
-   Integration fertig, Schreibrisiko strukturell null), aber der
-   Kanal ist irreversibel zu: auch eine legitime NACHFRAGE an die
-   Lane (Interrogation eines gebuchten Reports — im Ziel-Repo
-   ausdrücklich als billige Mint-Quelle gewertet) ist ab der
-   Entfernung unmöglich.
-2. **Klasse:** Reihenfolge zweier Dispatcher-Pflichten, deren zweite
-   die erste irreversibel unerfüllbar macht — §1-Worktree-Rezept
-   ("remove the worktree after integration") und §4-Spiegel-Pflicht
-   ("book the report AND tell it the lane is closed") nennen beide
-   Akte, aber keine Sequenz; die Harness-Bindung (Resume setzt den
-   Worktree voraus) steht in keinem der beiden.
-3. **Vorformulierter Regel-Text** (§1 Worktree-Rezept, Removal-Satz —
-   Amendment, kein neuer Bullet): "Removal ist der TERMINALE Akt und
-   schließt den Resume-Kanal des Agenten (Harness-Bindung, gemessen
-   2026-08-15: SendMessage an einen Agenten ohne Worktree wird
-   verweigert). Reihenfolge daher: Report buchen, Lane-Close senden,
-   offene Nachfragen an die Lane stellen — DANN entfernen. Ein
-   entfernter Worktree ersetzt die Close-Nachricht strukturell
-   (der Agent kann nicht mehr schreiben), aber er ersetzt keine
-   Nachfrage, und die ist das teure verlorene Stück."
-4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
-   Maintenance-Runde (SKILL.md §1 Worktree-Rezept; §4-Spiegel-Satz
-   prüfen, ob ein Querverweis genügt); Quota-Drain nach
-   OBSERVATIONS-Regel.

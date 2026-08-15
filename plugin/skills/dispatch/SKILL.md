@@ -229,9 +229,13 @@ Mandatory parts (execution briefs):
     dispatch — the freeze is the point for an instrument and wrong
     for an agent that must see live state, so which one it is gets
     decided per dispatch, never defaulted. A reader worktree is
-    REMOVED by the dispatcher at the booking of its findings: a
-    reader has no integration moment, so the writer recipe's removal
-    clause below never fires for it by construction (frozen probe
+    REMOVED by the dispatcher once its findings are booked AND
+    interrogated — removal is terminal (recipe below), and a
+    reader's findings are precisely what a follow-up question is
+    for, so removing AT booking spends the channel at the moment
+    it is worth most: a reader has no integration moment, so the
+    writer recipe's removal clause below never fires for it by
+    construction (frozen probe
     readers have sat registered long after their sessions ended), and
     its registration lives in .git/worktrees/ where no repo-level
     check looks. Ladder: (1) same file, small overlap → serialize the
@@ -253,7 +257,16 @@ Mandatory parts (execution briefs):
     before dispatch and re-check after return (mismatch = the agent
     escaped its worktree — halt, don't integrate); integrate by
     `cherry-pick <worktree-commit>` onto main after verification,
-    never merge; remove the worktree after integration. Harness note:
+    never merge; remove the worktree LAST. Removal is the TERMINAL
+    act: it closes the agent's resume channel (harness binding, as
+    of 2026-08-15 — SendMessage to an agent whose worktree is gone
+    is refused, "cannot be resumed: its worktree no longer
+    exists"). Sequence: book the report, send the lane-close, ask
+    whatever the report raises — THEN remove. A removed worktree
+    structurally replaces the CLOSE message, since the agent can no
+    longer write; it replaces no follow-up QUESTION, and that is
+    the expensive half, because a booked report is the cheapest
+    place a question ever gets asked. Harness note:
     where the agent runner offers native worktree isolation, prefer
     it over the manual recipe — same guarantees, less plumbing.
     Worktrees cost setup + integration and only pay where overlap is
@@ -569,7 +582,8 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   the dispatcher's newer HEAD — the §1 amend rule's post-report
   case). Mirror duty for the
   dispatcher: a named/mailbox agent stays resumable after its
-  report, so
+  report — unless its worktree was removed, which closes that
+  channel for good (§1 worktree recipe) — so
   before writing in the same working copy, treat it as a live writer —
   book the report AND tell it the lane is closed, or check `git status`
   defensively before every own commit there.
