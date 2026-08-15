@@ -156,6 +156,8 @@ _EXEC_TAIL_HEADING = "EXECUTION tail (any dispatch that writes):"
 _CHANNEL_PLACEHOLDER = "<channel line>"
 _BG_CHANNEL_RE = re.compile(r"^- named \(mailbox teammate\): `([^`]+)`",
                             re.M)
+_UNNAMED_CHANNEL_RE = re.compile(
+    r"^- unnamed \(background task\): `([^`]+)`", re.M | re.S)
 
 
 def _brief_reminder() -> object:
@@ -280,12 +282,60 @@ def check_execution_tail_fixture() -> list:
     return out
 
 
+
+def check_channel_line_markers() -> list:
+    """Each §2 channel line must contain the marker the hook matches it
+    by — otherwise the guard classifies a correctly-pasted tail as the
+    wrong lane, or fails to classify it at all.
+
+    This is the consistency question a fresh-context reviewer would
+    ask, made mechanical: forms.md and brief-reminder are two homes of
+    ONE rule, and the marker constants are the only place they touch.
+    Both sides are read from their OWN home — the lines from forms.md,
+    the markers from the hook's module — so the comparison is not
+    vacuous the way deriving one from the other would be.
+    """
+    out = []
+    forms = _read(*_FORMS_REL)
+    hook = _brief_reminder()
+    named = _BG_CHANNEL_RE.search(forms)
+    unnamed = _UNNAMED_CHANNEL_RE.search(forms)
+    if named is None or unnamed is None:
+        raise CouldNotVerify(
+            "forms.md §2 does not name both channel lines "
+            "(`- named (mailbox teammate):` / `- unnamed (background "
+            "task):`) — there is nothing to compare the hook's "
+            "markers against")
+    norm = hook._norm
+    pairs = (("named/mailbox", named.group(1), hook._MAILBOX_TAIL_MARKER),
+             ("unnamed/background task", unnamed.group(1),
+              hook._DELIVERED_TAIL_MARKER))
+    for lane, line, marker in pairs:
+        if marker not in norm(line):
+            out.append(
+                f"forms.md's {lane} channel line does not contain the "
+                f"marker brief-reminder matches it by: line is "
+                f"{norm(line)!r}, marker is {marker!r} — a tail pasted "
+                f"verbatim from §2 would be read as the wrong lane")
+    # the markers must also tell the two lanes APART: a marker that
+    # matches both lines classifies nothing.
+    if hook._MAILBOX_TAIL_MARKER in norm(unnamed.group(1)):
+        out.append("the mailbox marker also matches the unnamed lane's "
+                   "channel line — the two lanes are indistinguishable")
+    if hook._DELIVERED_TAIL_MARKER in norm(named.group(1)):
+        out.append("the background-task marker also matches the named "
+                   "lane's channel line — the two lanes are "
+                   "indistinguishable")
+    return out
+
+
 CHECKS = (
     ("guard roster", check_guards),
     ("skills", check_skills),
     ("report-form slots", check_report_slots),
     ("config schema", check_config_schema),
     ("EXECUTION tail fixture", check_execution_tail_fixture),
+    ("channel-line markers", check_channel_line_markers),
 )
 
 
