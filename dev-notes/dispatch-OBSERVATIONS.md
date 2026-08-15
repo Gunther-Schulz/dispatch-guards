@@ -354,6 +354,35 @@ red-first (4 log lines instead of 5 under the shipped `deny()`).
 Class: an assurance wider than its predicate — the log's own
 comment claims "Every guard fire — deny, ask, warn, block — appends
 one JSONL line".
+Same-day operational residue, same class, recorded because it bears
+on the rule just written: the MAILBOX lane's delivery rate in this
+session was poor. Five named dispatches, three of which were asked
+for a message: one pinned-type agent delivered via SendMessage; two
+`general-purpose` agents (one sonnet, one opus) delivered NOTHING —
+no message, no notification — despite explicit SendMessage
+instructions, one of them after two staged resumes (status check,
+then a narrowed close-out). A named agent is also unreachable for
+inspection: it does not appear in ListAgents' subagent listing and
+fires no notification, so SendMessage is the only channel in BOTH
+directions, and a silent one cannot be distinguished from a working
+one. Cause NOT established — a permission block on the executing
+agent's tools is a live hypothesis (this machine pins manual
+permission mode and the operator was away), and the pinned-type
+agent that did deliver used a narrower tool set. n is small and the
+arms were not blind.
+Why it matters for §1 rather than being a curiosity: the model gate
+mandates a `<model>-` name on every GENERIC dispatch, so generic
+dispatches cannot reach the unnamed lane at all — the mandate routes
+them all into the lane whose delivery just failed twice, and whose
+report arrives only if the agent cooperates. The mailbox channel
+line and report-enforcer exist for exactly that exposure; this is
+evidence about how much load they carry, not evidence against the
+name mandate. Consumer: the next fire-rate review, alongside the
+report-enforcer PARKED item; a controlled probe (does a named
+general-purpose agent's SendMessage reach the dispatcher at all, and
+does a blocked permission surface anywhere the dispatcher can see?)
+is the missing evidence.
+
 Mechanism, both halves: forms.md §2's channel-line block and
 binding rewritten to the two lanes; `mailbox_lane()` replaces
 `is_background()`; six brief-reminder cases added to the replay
