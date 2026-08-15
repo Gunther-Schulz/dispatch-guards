@@ -350,11 +350,44 @@ lane) having ceased to exist. The pre-formulated text above therefore
 carries NO number; sizing by a measured per-lane load needs a
 measurement nobody has taken yet.
 
+**MEASURED 2026-08-15, so sizing term (a) now carries a number.**
+The peer mined its own five lane transcripts (no new dispatch spent)
+and I RE-DERIVED the result from the same source rather than booking
+the relay: `tools/lane-cost.py`, run against those transcripts.
+Direction confirmed and it inverts the folk intuition — at this
+workload SPLITTING WAS TOKEN-CHEAPER, because a single lane re-reads
+its whole accumulated prefix every call (read cost quadratic in call
+count) while splitting pays a fixed per-lane startup once.
+CORRECTION to the relayed figures, found by re-deriving: its growth
+constant divided TOTAL cache-creation by TOTAL calls, folding each
+lane's one-time ~49k startup into the per-call growth term —
+inflated 1.56x (4,689 vs 3,007 per call, measured; startup is
+265,572 of the 698,604 total creation). Consequences, both material
+for a sizing rule: the modeled ratio is 2.58x raw, not 3.7x, and the
+crossover is ~29 tool calls per lane, not ~23. The rule of thumb is
+therefore "a read-only lane expected to exceed ~30 calls is worth
+splitting on token cost alone", and the correction moves AGAINST the
+headline, which is why it was worth spending the re-derivation on.
+Grades, kept apart: the 5-lane arm is MEASURED from real per-request
+usage (deduped by requestId, last snapshot — the per-stream-snapshot
+caveat); the 1-lane arm is MODELED from measured growth and has
+never been run. The price weights (cache-read 0.1x, creation 1.25x)
+are ASSUMED, unverified against billing; raw counts are the
+measurement. Unmodelled and worth naming: a real 149-call single lane
+would likely hit compaction, which the model does not represent at
+all — so the modeled arm is if anything generous to the single lane.
+Carry the FORMULA, never these constants: n* = sqrt(4*C_lane/(w_r*g)),
+with g and C_lane measured per workload by the tool.
+
 **Consumer + drain.** Dispatching sessions at the route-line moment;
 drains on this carrier's normal quota. Applying it means choosing a
 home (§1 vs routing.md) — the sizing terms are consumed while
 composing a fan-out, i.e. after the dispatch skill's gate-forced
-load, which argues §1 over the always-loaded routing module.
+load, which argues §1 over the always-loaded routing module. The
+miner GRADUATED to `tools/lane-cost.py` under the probe-used-twice
+rule (peer once, here once); it carries the growth-constant trap in
+its own docstring and a `--test` whose central assertion is that g
+excludes per-lane startup, so the next reader cannot repeat it.
 
 ## 2026-08-08 — harness bindings: sync lane unobserved; async final text delivered
 

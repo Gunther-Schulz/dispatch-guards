@@ -63,7 +63,11 @@ are not — this repo carries both sides, and the split is the design.
   for claims the skills cite but do not rest on
   (`payload-cache-correlation.md`, `permission-request-seam.md`).
 - `tools/` — repo-owned checks: `replay-bench.py` plus its curated
-  payload corpus.
+  payload corpus, `check-doc-drift.py`, and `lane-cost.py` (measures
+  what a fan-out actually cost from its own transcripts, and the
+  crossover call-count above which splitting a read-only lane pays
+  on tokens alone — the sizing question §1's write-boundary join
+  cannot answer for read lanes).
 - `README.md` — humans deciding whether to install; the guard roster
   and the site-policy schema live there.
 
