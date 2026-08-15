@@ -301,6 +301,61 @@ Rule candidates for §1 (base-commit clause):
    alternative is an executor exercising exactly the judgment the
    tier choice was meant to keep at the desk.
 
+## 2026-08-15 — read-only fan-outs have no join to size them, so every one is hand-grouped
+
+**Incident + basis.** Peer testimony (opus desk, pbs-office wave,
+2026-08-15), relayed via the peer channel; basis is that session's
+own transcript, NOT verified here — recorded at recollection grade.
+It ran a 5-lane sonnet read-only pass over ~21 items and, asked why
+five, named its own grouping as the weakest point: write-disjointness
+was no reason at all, because pure read assignments have no write
+sets to derive a split from, so the lanes were grouped by hand.
+
+**Class.** A gap in lane-sizing guidance, not a misapplication. §1
+governs what rides one WRITE lane (shared realizing file + one
+mechanism) and the route line's mapping SOURCE is a derived join over
+write-boundaries — which returns nothing for read-only lanes by
+construction. routing.md prices top-tier fan-out WIDTH but does not
+size or group read fan-outs. So the route line can be satisfied in
+form while the item→lane mapping is pure hand-grouping with no rule
+behind it, which is the identity-mapping failure one level down.
+
+**Pre-formulated text** (evidence register; §1 near the ONE-lane
+clause, or routing.md). Peer-supplied, amended here — see the
+correction below before applying:
+"Read-only fan-outs have no write-boundary join to derive lanes
+from; three terms size them: a lane's fixed load (system prompt +
+corpus + brief, re-paid per agent) must stay small against its work
+— the brief-rivals-work test at lane grain; exhaustive per-item
+checks cap items per lane, because late items in a long enumeration
+get shallower checking than early ones — the under-report principle
+as a sizing bound; and the grouping axis (repo, section, artifact
+class) is stated in the route line, since no join exists to derive
+it. Parallel-vs-queued of the same N lanes stays token-identical;
+N-vs-1 lane count does not."
+
+**Two corrections to the relay, both checked here.** (1) The peer is
+RIGHT that "token spend is identical either way" was transferred out
+of its mechanism: routing.md's sentence compares PARALLEL vs QUEUED
+scheduling of the same N dispatches, so it says nothing about N lanes
+vs 1. Confirmed at the source. (2) The peer's own draft then repeats
+the same error one clause on: it cites forms.md's "~1.3×
+cost-weighted on trivial dispatches" as the per-lane fixed load. That
+measurement compared the SYNC vs BACKGROUND channel for a single
+dispatch — the plumbing one channel skips — never the marginal cost
+of an extra lane, which is dominated by the re-paid system prompt +
+corpus. The citation is also DEAD as of c6f614b: the figure was
+removed from forms.md in this batch, its subject (a sync launch
+lane) having ceased to exist. The pre-formulated text above therefore
+carries NO number; sizing by a measured per-lane load needs a
+measurement nobody has taken yet.
+
+**Consumer + drain.** Dispatching sessions at the route-line moment;
+drains on this carrier's normal quota. Applying it means choosing a
+home (§1 vs routing.md) — the sizing terms are consumed while
+composing a fan-out, i.e. after the dispatch skill's gate-forced
+load, which argues §1 over the always-loaded routing module.
+
 ## 2026-08-08 — harness bindings: sync lane unobserved; async final text delivered
 
 Two probes from a fable desk session (dotfiles cwd), same day:
