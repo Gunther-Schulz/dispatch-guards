@@ -1244,6 +1244,58 @@ Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
 eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
 durchgestrichen oben stehen.
 
+### ANGEWANDT 2026-08-15 — Provenance-Grade bindet an die Behauptungs-KLASSE, nicht an die Zitat-Form
+
+**Vorfall + Basis:** Peer-Relay, dritter Brief-Defekt derselben
+Welle, gleiche Wurzel, NEUER Slot: das settled design schrieb
+„Enum-Typ additiv", ohne den Konsumenten zu lesen — das Zielmodul
+hält ein geschlossenes, wächter-getestetes Dict über den Enum, der
+nackte Wert hätte Wächter plus Laufzeit-KeyError gerissen. Der
+Executor meldete die Lücke statt zu überbrücken (die Box hielt —
+das ist die Positiv-Seite und gehört zur Basis).
+Zusammen mit den zwei vorher relayten (Base-Pin vom Vortag statt am
+Tip gelesen; Commit-Plan-„none" ohne Hook-Pfad) sind das drei
+Slots, eine Wurzel.
+
+**Triage:** dreimal loaded-but-inert, KEIN Gap. §1 trug die Regel
+bereits — und trug sogar schon die Verallgemeinerung in der
+Fettung („the grade follows the CLAIM, never the section holding
+it").
+
+**Mechanismus des Nicht-Feuerns**, hier am Quelltext geprüft statt
+aus dem Relay übernommen: die Fettung verallgemeinert, der
+OPERATIVE Satz verengt wieder — „each cited line is either OPENED
+…". Die Regel band damit lexikalisch an die ZITAT-Form, während
+die teuersten Fälle Repo-Behauptungen im DESIGN-Kostüm sind. Ein
+Design-Satz, ein Base-Pin, ein ausgefülltes Formularfeld
+präsentieren als ENTSCHEIDUNG des Dispatchers — und Entscheidungen
+werden ausgeführt, nicht geprüft. Genau das Kostüm-Prinzip des
+Korpus, eine Ebene tiefer: was gebunden wird, entscheidet die
+Behauptung; was geprüft wird, entscheidet die Präsentation.
+
+**Angewandt** auf §1: die Fettung nennt jetzt auch die FORM
+(„never the section or the FORM holding it"), der operative Satz
+bindet an die Klasse statt an die Form („every line asserting the
+target repo's CURRENT STATE — in whichever slot, wearing whichever
+form"), und ein Satz benennt das Kostüm samt der drei beobachteten
+Träger, de-partikularisiert. Der 0.10.23-Slot-Basis-Zusatz wird
+darin als Spezialfall QUELL-ETIKETTIERT statt ein zweites Zuhause
+zu eröffnen — Verallgemeinerung nach oben, wie die
+Amendment-Disziplin sie vor dem Anbau verlangt.
+
+**Reihenfolge-Selbstkritik, fürs Protokoll:** ich habe erst die
+Instanz gebaut (0.10.23, Commit-Plan-Slot) und dann das Prinzip —
+die Disziplin will es umgekehrt („generalize upward BEFORE
+appending"). Kein Schaden, weil die Instanz unter dem Prinzip
+gültig bleibt; die Lehre ist, dass drei Relays derselben Wurzel
+das Prinzip schon sichtbar machten, als der erste ankam, und ich
+den ersten für ein Einzelstück hielt.
+
+**Kein Hook:** ob eine Zeile eine Repo-Behauptung ist, ist
+Urteil, nicht Prädikat.
+
+**Beleg:** dieser Commit.
+
 ### ANGEWANDT 2026-08-15 — Commit-Plan-Slot trägt seine Lese-Basis
 
 **Vorfall + Basis:** Peer-Relay aus der Georgendorf-Welle (Session

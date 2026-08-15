@@ -103,10 +103,12 @@ Mandatory parts (execution briefs):
   read before building and require the final report to cite what was
   actually read.
 - **Every claim the brief asserts carries a per-line provenance
-  grade, and the grade follows the CLAIM, never the section
-  holding it.** "Established" is a per-line verification claim,
-  never a section-level tone: each cited line is either OPENED at
-  brief-write time or carried with its provenance and grade —
+  grade, and the grade follows the CLAIM, never the section or the
+  FORM holding it.** "Established" is a per-line verification
+  claim, never a section-level tone: every line asserting the
+  target repo's CURRENT STATE — in whichever slot, wearing
+  whichever form — is either OPENED at brief-write time or
+  carried with its provenance and grade —
   "from <source>, unverified" — so the executor can tell which
   citations hold dispatcher weight and which are inherited (mixed
   provenance under one uniform header is the label-over-body
@@ -115,7 +117,15 @@ Mandatory parts (execution briefs):
   executor plausibly "corrects" toward). Opening a REFERENCE is
   not opening its CONTENT: proving a ref, path or ticket RESOLVES
   establishes nothing the brief rests on, and that existence check
-  is the one that feels like diligence. A section-scoped reading
+  is the one that feels like diligence. FORM is the harder half,
+  because it decides what gets read as a claim at all: a
+  repo-assertion wearing a CITATION draws the grade, while the
+  same assertion as a design sentence, a base commit, or a filled
+  form slot reads as the dispatcher's own DECISION and draws
+  nothing — and decisions are executed, not checked. Ask of each
+  line what it asserts about the repo AS IT IS; the commit-plan
+  slot's read-basis is that question made mechanical for one
+  slot. A section-scoped reading
   of this rule fails first at an EXPECTED RESULT, which is also
   the costliest line to inherit: the executor bends its work to
   satisfy an expectation, so an unverified one is either forced to
