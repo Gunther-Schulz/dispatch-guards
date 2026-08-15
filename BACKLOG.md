@@ -280,11 +280,15 @@ are dropped with a one-line reason.
   unnamed `run_in_background: false` dispatch launched async, and an
   async agent's final text WAS delivered via the completion
   task-notification.** Missing evidence: a controlled probe pair
-  (named/unnamed × run_in_background true/false) recording launch
+  (named/unnamed × run_in_background true/false, plus the
+  pinned-type axis — a pinned-type dispatch launched async on
+  2026-08-15, n=2 for both shapes) recording launch
   mode and whether the final text reaches the dispatcher. On
   confirmation, rewrite forms.md §2's 2026-07-30 binding paragraph,
-  the channel-line rationale, and brief-reminder's mode logic.
-  Entry: dev-notes/dispatch-OBSERVATIONS.md 2026-08-08.
+  the channel-line rationale (incl. the pinned-type sync-line
+  default, which now instructs a form brief-reminder bounces), and
+  brief-reminder's mode logic.
+  Entry: dev-notes/dispatch-OBSERVATIONS.md 2026-08-08 + addendum.
 
 - READY 2026-08-09 — RESTORE §2/§3 HEADINGS OR RENUMBER (corpus-vet
   nit n6, pre-existing): dispatch SKILL.md has headings for §§1, 4,
