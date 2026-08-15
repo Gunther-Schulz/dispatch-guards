@@ -256,8 +256,21 @@ def tail_mode_mismatch(payload: dict) -> bool:
     if not prompt:
         return False
     if mailbox_lane(tool_input):
-        return _DELIVERED_TAIL_MARKER in prompt
-    return _MAILBOX_TAIL_MARKER in prompt
+        wrong, right = _DELIVERED_TAIL_MARKER, _MAILBOX_TAIL_MARKER
+    else:
+        wrong, right = _MAILBOX_TAIL_MARKER, _DELIVERED_TAIL_MARKER
+    # The lane's OWN line being present is a declared exemption: a
+    # brief that pastes the correct channel line and also QUOTES the
+    # other one is conforming — quoting is how §2 itself gets edited,
+    # and briefs to do exactly that are routine in this repo. Firing
+    # on the mere presence of the other marker denied those with a
+    # repair that cannot be followed: "paste the correct line" when
+    # it is already pasted. Same class as the verifier-brief false
+    # fire, one level in — there the other lane's text arrived by
+    # CITING forms.md, here by quoting it inline.
+    # This keeps the catch it exists for: a brief carrying only the
+    # wrong line still has `right` absent and still denies.
+    return wrong in prompt and right not in prompt
 
 
 def tail_mode_mismatch_deny_text(payload: dict) -> str:
@@ -859,6 +872,19 @@ if __name__ == "__main__":
         # exempted — a staged warn lane firing on legitimate work.
         assert not missing_commit_plan(_vet)
         assert missing_commit_plan(_exec_bad)
+        # The lane's STAGING is a claim its docstring makes about
+        # itself ("ships WARN, earns deny through the fire-rate
+        # review") and repo CLAUDE.md makes a rule. Nothing asserted
+        # it: flipping the default to "deny" left every net green — a
+        # mechanism's own words with no predicate behind them. The
+        # call site's default_mode is read from the source, so the
+        # claim now ages loudly.
+        import inspect as _inspect
+        _main_src = _inspect.getsource(main)
+        assert 'default_mode="warn"' in _main_src, (
+            "the commit-plan lane must ship WARN (repo CLAUDE.md: a "
+            "new lane earns deny through the fire-rate review, never "
+            "by assertion)")
 
         # ── Commit-plan lane (missing_commit_plan), STAGED WARN ────
         # Slot named in the dispatch skill §1 skeleton ("## Commit
@@ -946,12 +972,26 @@ if __name__ == "__main__":
             "run_in_background": False}}
         assert not missing_tail(wrapped_sync_brief)
         assert not tail_mode_mismatch(wrapped_sync_brief)
-        # Channel line wrapped mid-marker ("Report\nchannel") still counts
-        assert not missing_channel({"tool_name": "Agent", "tool_input": {
-            "prompt": "Do X. Report\nchannel: SendMessage to the "
-                      "dispatcher — your final text reaches no one.\n"
-                      "A missing decision, file, or value is surfaced "
-                      "as a gap, never\nbridged with a guess."}})
+        # Channel line wrapped mid-marker ("Report\nchannel") still
+        # counts. TWO things make this bite, both learned by it not
+        # biting: the payload needs a `name`, or missing_channel exits
+        # at the mailbox_lane guard before any marker is matched; and
+        # the wrapped marker must be the ONLY one present, or an
+        # unwrapped "SendMessage" satisfies the check whatever
+        # normalization does. As written before both, it passed with
+        # the whole channel sentence deleted and under a mutant that
+        # replaced _norm with plain .lower().
+        _wrapped_only = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
+            "prompt": "Do X. Report\nchannel: deliver the report by "
+                      "mailbox."}}
+        assert not missing_channel(_wrapped_only)
+        # positive control: the same brief with the marker text gone
+        # must DENY, or the assert above is satisfied by something
+        # other than the wrap surviving normalization.
+        assert missing_channel({"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
+            "prompt": "Do X. Deliver the report by mailbox."}})
         # Section markers wrapped ("write\nboundaries") still count
         wrapped_sections_brief = {"tool_name": "Agent", "tool_input": {
             "prompt": "Do X.\nGrounding basis: read spec.md first.\n"

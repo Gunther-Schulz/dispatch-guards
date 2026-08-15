@@ -7,6 +7,50 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **PARKED 2026-08-15 — the channel lanes read the PROMPT as a flat
+  substring haystack, and three shapes slip through.** All found by a
+  second fresh-context vet, each with a run control; none is a false
+  fire, all are silent misses. (i) A NAMED brief whose only channel
+  token is incidental prose — "the previous agent's SendMessage was
+  truncated" — satisfies missing_channel; rename the token and it
+  denies. A prefix/substring test in an equality's costume, the
+  corpus's own named class. (ii) An UNNAMED brief that pastes the
+  tail BODY but omits the channel line entirely is seen by no lane:
+  missing_channel exempts the unnamed lane wholesale, and
+  missing_tail's anchor sits in the body, not the line — yet §2 says
+  paste exactly one. (iii) An UNNAMED dispatch whose referenced brief
+  FILE carries the wrong-lane line is silent, though §2 calls it
+  wrong twice over (wrong lane, and the channel line must be
+  prompt-side).
+  **Named missing evidence, and why this is parked rather than
+  ready:** the obvious repair — require a channel-line SHAPE
+  ("report channel:" + a lane marker) rather than any of four loose
+  tokens — would deny briefs that name the channel in prose, and one
+  such brief is already asserted as legitimate in this hook's own
+  bite-tests ("Deliver via SendMessage to main."). So the design
+  question is whether that prose form is still sanctioned by §2; it
+  is an operator/§2 call, not a predicate tweak, and tightening
+  first would trade three silent misses for an unknown false-fire
+  rate on the lane that gates every dispatch. Decide the §2 question,
+  then the predicate follows. Related: no fixture anywhere
+  discriminates the "report channel" marker — deleting it from
+  _CHANNEL_MARKERS leaves both nets green, because every fixture
+  using it also carries "sendmessage".
+  Basis: fresh-context vet 2026-08-15, controls pasted in its report.
+
+- **PARKED 2026-08-15 — `isolation: "remote"` is a lane cell the
+  probe matrix never covered.** The Agent tool documents remote
+  dispatches as "always runs in background". Whether `name` still
+  selects the mailbox lane there — and whether a remote agent's
+  final text reaches the dispatcher — is unverified, so the §2
+  binding is stated over a matrix with a hole in it. Named missing
+  evidence: the same controlled probe this batch ran (launch text,
+  and whether the final text arrives in a completion notification),
+  for named × unnamed at `isolation: "remote"`. Cheap; it needs a
+  session willing to spend two remote dispatches.
+  Basis: fresh-context vet 2026-08-15; Agent tool schema
+  `isolation` enum.
+
 - **PARKED 2026-08-15 — report-enforcer asks the stopping agent a
   question it may not be able to answer: which LANE it is in.** Its
   instruction branches on "if you are a background/teammate agent"

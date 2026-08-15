@@ -355,32 +355,40 @@ Class: an assurance wider than its predicate — the log's own
 comment claims "Every guard fire — deny, ask, warn, block — appends
 one JSONL line".
 Same-day operational residue, same class, recorded because it bears
-on the rule just written: the MAILBOX lane's delivery rate in this
-session was poor. Five named dispatches, three of which were asked
-for a message: one pinned-type agent delivered via SendMessage; two
-`general-purpose` agents (one sonnet, one opus) delivered NOTHING —
-no message, no notification — despite explicit SendMessage
-instructions, one of them after two staged resumes (status check,
-then a narrowed close-out). A named agent is also unreachable for
-inspection: it does not appear in ListAgents' subagent listing and
-fires no notification, so SendMessage is the only channel in BOTH
-directions, and a silent one cannot be distinguished from a working
-one. Cause NOT established — a permission block on the executing
-agent's tools is a live hypothesis (this machine pins manual
-permission mode and the operator was away), and the pinned-type
-agent that did deliver used a narrower tool set. n is small and the
+on the rule just written: the MAILBOX lane's problem is LATENCY, not
+loss.
+CORRECTION, and the correction is the finding. An earlier version of
+this paragraph claimed two `general-purpose` agents "delivered
+NOTHING — no message, no notification". That was FALSE and is
+withdrawn: both delivered. One arrived roughly half an hour after
+its trivial no-op task, long past two staged resumes; the verifier's
+full report arrived after its close-out had already been issued, and
+its own SendMessage had returned success all along. What the claim
+actually measured was the DISPATCHER'S WAITING WINDOW, not the
+channel — a not-observed booked as a not-there, in a record whose
+subject was how to verify things. The permission-block hypothesis it
+floated is unsupported: the agents were not blocked, they were slow.
+Standing fact after correction: on the mailbox lane a report can
+arrive tens of minutes after the work is done, and the dispatcher
+cannot tell a slow lane from a dead one — a named agent is absent
+from ListAgents' subagent listing and fires no completion
+notification, so SendMessage is the only channel in both directions
+and silence carries no information either way. n is small and the
 arms were not blind.
 Why it matters for §1 rather than being a curiosity: the model gate
 mandates a `<model>-` name on every GENERIC dispatch, so generic
 dispatches cannot reach the unnamed lane at all — the mandate routes
-them all into the lane whose delivery just failed twice, and whose
-report arrives only if the agent cooperates. The mailbox channel
+them all into the lane whose reports run late and arrive only if the
+agent cooperates. It also prices the expected-return horizon rule:
+the horizon is what tells a dispatcher to ACT, and acting means
+inspecting or re-dispatching, never concluding loss — a horizon
+passed is evidence about the wait, not about the agent. The mailbox channel
 line and report-enforcer exist for exactly that exposure; this is
 evidence about how much load they carry, not evidence against the
 name mandate. Consumer: the next fire-rate review, alongside the
-report-enforcer PARKED item; a controlled probe (does a named
-general-purpose agent's SendMessage reach the dispatcher at all, and
-does a blocked permission surface anywhere the dispatcher can see?)
+report-enforcer PARKED item; a controlled probe (what is the actual
+delivery-latency distribution on the mailbox lane, and can a
+dispatcher observe in-flight state at all?)
 is the missing evidence.
 
 Mechanism, both halves: forms.md §2's channel-line block and
