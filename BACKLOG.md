@@ -29,6 +29,15 @@ are dropped with a one-line reason.
   agent may get wrong. Probe: dispatch one named and one unnamed
   agent, each instructed to report what it can see about its own
   name and launch mode.
+  Carried with it, deliberately NOT repaired piecemeal:
+  report-enforcer.py:73 and :141 still say "synchronous subagent",
+  vocabulary the rest of the repo retired on 2026-08-15 — the lanes
+  are named/mailbox and unnamed/background-task. The wording stays
+  TRUE (an unnamed agent's final text is indeed the report), so this
+  is drift, not a defect; it is left here rather than reworded
+  because the honest fix depends on this entry's own missing
+  evidence — reword and the branch still asks the agent a question
+  it may not be able to answer.
   Basis: this session's probe matrix (OBSERVATIONS resolution
   2026-08-15) plus report-enforcer.py's own docstring soft-spot note.
 

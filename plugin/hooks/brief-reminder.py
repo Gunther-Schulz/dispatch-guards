@@ -236,8 +236,9 @@ def missing_tail_deny_text() -> str:
         "Blocked: dispatch brief without the §2 tail block. Paste the "
         f"EXECUTION or READ-ONLY tail verbatim from {_forms_path()} "
         "into the prompt — "
-        "pick the channel line matching the dispatch mode (background "
-        "vs synchronous) — or point the prompt at a brief FILE that "
+        "pick the channel line matching the dispatch LANE, which "
+        "`name` alone decides (named = mailbox, unnamed = background "
+        "task) — or point the prompt at a brief FILE that "
         "carries the tail, and retry."
     )
 
