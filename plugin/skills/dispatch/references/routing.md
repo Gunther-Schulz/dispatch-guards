@@ -59,10 +59,27 @@ The evidence:
   the redo path is what makes the cheap default low-risk.
 - **A top-tier subagent has less context than the dispatching
   session and costs the most; its comparative advantage is the
-  fresh-context verdict on a bounded artifact.** Fan-outs multiply
-  cost by width — a harness's prescribed width (skill, effort
-  level, workflow) is a default someone else chose, not a judgment
-  about this task.
+  fresh-context verdict on a bounded artifact.** Width prices
+  differently by KIND, and one sentence for both steers dispatchers
+  off the splits that save tokens. REPLICATED fan-outs — the same
+  work k times, parallel reviewers on one artifact, eval arms —
+  multiply cost by width; a harness's prescribed width (skill,
+  effort level, workflow) is a default someone else chose, not a
+  judgment about this task. PARTITIONED fan-outs, where the work is
+  divided across lanes, do not: each lane's context grows only with
+  its OWN calls, so the per-call re-read of the accumulated prefix —
+  quadratic in a lane's call count, and the dominant term on any
+  long lane — shrinks with splitting, while width adds one marginal
+  arrival context per lane. Above a crossover in calls-per-lane,
+  splitting is cheaper on tokens ALONE, wall-clock arguing the same
+  way. Crossover n* = sqrt(4·C_lane / (w_r·g)) — C_lane the marginal
+  lane's weighted startup, g the per-call context growth, w_r the
+  cache-read weight. Measure them per workload rather than carrying
+  a number (`tools/lane-cost.py`, source repo); g in particular is
+  growth over calls 2..n, and folding the one-time per-lane startup
+  into it inflated a real measurement by half again. Grade: measured
+  once, on one read-only workload, with the single-lane arm MODELED
+  and never run — the direction is structural, the constants are not.
 - **A tier's refusal classifiers are a routing input, not an
   accident.** Where a tier's safeguards decline the DOMAIN the work
   sits in, it is the wrong tier for that work whatever its rank —
