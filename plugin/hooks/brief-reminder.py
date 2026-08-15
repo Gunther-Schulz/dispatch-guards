@@ -80,38 +80,46 @@ _CHANNEL_MARKERS = ("sendmessage", "send_message", "report channel",
                     "final text is the report")
 
 
-def is_background(tool_input: dict) -> bool:
-    """True iff the dispatch runs in background FACT, not just by flag.
+def mailbox_lane(tool_input: dict) -> bool:
+    """True iff this dispatch lands in the MAILBOX lane, where the
+    agent's final text reaches no one and only SendMessage delivers.
 
-    Background is the Agent tool's default, so an explicit
-    run_in_background=False is the only flag-side exemption — but
-    setting `name` forces background mode and silently overrides that
-    flag (forms.md §2, binding as of 2026-07-30, probe-confirmed
-    same-model controlled pair). A named dispatch is therefore
-    background whatever the flag says.
+    `name` alone decides the lane (forms.md §2, binding as of
+    2026-08-15, harness 2.1.232, controlled probe matrix): a NAMED
+    dispatch — generic or pinned type alike — spawns as a mailbox
+    teammate ("Spawned successfully … via mailbox"), promises no
+    completion notification, and does not appear in the subagent
+    listing. An UNNAMED dispatch launches as a background task
+    ("Async agent launched") whose completion task-notification
+    carries the agent's final text to the dispatcher VERBATIM —
+    observed from an agent that called no tool at all, so that
+    delivery does not depend on the agent cooperating.
 
-    One predicate for both call sites below: reading the flag alone
-    made `missing_channel` exempt a named sync-flagged dispatch (its
-    report reached no one, measured 2026-08-07) while
-    `tail_mode_mismatch` blocked the CORRECT background channel line
-    on that same shape — the guard manufacturing the defect it exists
-    to prevent (BACKLOG READY 2026-08-07)."""
-    return (tool_input.get("run_in_background") is not False
-            or bool(tool_input.get("name")))
+    Supersedes the run_in_background predicate: the Agent tool takes
+    no such parameter (schema `additionalProperties: false`, key
+    absent), so the old `.get("run_in_background") is not False` was
+    CONSTANT TRUE. That classified every dispatch as background,
+    which made the unnamed lane's correct channel line unreachable
+    and had tail_mode_mismatch deny it — the guard manufacturing the
+    defect it exists to prevent, the same shape the 2026-08-07 lane
+    repair closed for named sync-flagged dispatches.
+
+    One predicate for both call sites below, so the two lanes cannot
+    disagree about which channel line a dispatch owes."""
+    return bool(tool_input.get("name"))
 
 
 def missing_channel(payload: dict) -> bool:
-    """True iff this is a BACKGROUND Agent dispatch whose prompt names
-    no report channel — the deliver-into-the-void class (JOURNAL
+    """True iff this is a MAILBOX-lane Agent dispatch whose prompt
+    names no report channel — the deliver-into-the-void class (JOURNAL
     2026-07-27, epsilon-probe: agent finished, reported as final text,
-    reached no one). Background is decided by is_background() above:
-    the run_in_background flag, overridden by a `name`. Fail-open on
-    any doubt."""
+    reached no one). The lane is decided by mailbox_lane() above:
+    a `name` is present. Fail-open on any doubt."""
     if payload.get("tool_name") != "Agent":
         return False  # Task tool has its own return path
     tool_input = payload.get("tool_input") or {}
-    if not is_background(tool_input):
-        return False  # synchronous: final text IS the report
+    if not mailbox_lane(tool_input):
+        return False  # background task: final text IS delivered
     prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
@@ -120,41 +128,42 @@ def missing_channel(payload: dict) -> bool:
 
 def deny_text(payload: dict) -> str:
     """Deny text for missing_channel — it must name a repair that
-    clears on retry: for a NAMED dispatch the sync flag is not one
-    (name forces background, is_background above)."""
-    tool_input = payload.get("tool_input") or {}
-    if tool_input.get("name"):
-        return (
-            "Blocked: background dispatch without a report channel. "
-            "This dispatch is NAMED, and a name forces background "
-            "mode — `run_in_background: false` is silently overridden, "
-            "so a sync retry denies identically. The brief must "
-            "instruct delivery: paste the tail block's background "
-            f"channel line from {_forms_path()} §2 (SendMessage to the "
-            "dispatcher — your final text reaches no one). Fix the "
-            "brief and retry."
-        )
+    clears on retry. missing_channel fires on the MAILBOX lane only,
+    which is exactly the named case, so there is one repair: paste
+    the mailbox channel line. The other exit — dropping the name —
+    changes the lane, so it is named too, with the gate that limits
+    it. The superseded text offered `run_in_background: false`, a
+    parameter the Agent tool does not accept: a repair that could
+    never clear on retry."""
     return (
-        "Blocked: background dispatch without a report channel. A "
-        "background agent's final text reaches no one — the brief "
-        "must instruct delivery (paste the tail block's channel "
-        f"line from {_forms_path()} §2: SendMessage to the "
-        "dispatcher), or pass "
-        "run_in_background: false for a synchronous dispatch. "
-        "Fix the brief and retry."
+        "Blocked: mailbox-lane dispatch without a report channel. "
+        "This dispatch is NAMED, and a name puts it in the mailbox "
+        "lane — no completion notification fires for it, so its "
+        "final text reaches no one. The brief must instruct "
+        "delivery: paste the tail block's mailbox channel line from "
+        f"{_forms_path()} §2 (SendMessage to the dispatcher — your "
+        "final text reaches no one). Dropping the `name` instead "
+        "moves the dispatch to the background-task lane, whose "
+        "completion notification does deliver the final text — but "
+        "the model gate mandates a name on every generic dispatch, "
+        "so that exit is open to pinned types only. Fix the brief "
+        "and retry."
     )
 
 
 _TAIL_ANCHOR = "never bridged with a guess"
-_SYNC_TAIL_MARKER = "final text is the report"
-_BACKGROUND_TAIL_MARKER = "final text reaches no one"
+# Lane markers, named for the DELIVERY each asserts rather than for a
+# launch mode: the unnamed lane's notification delivers the final
+# text, the mailbox lane's does not exist.
+_DELIVERED_TAIL_MARKER = "final text is the report"
+_MAILBOX_TAIL_MARKER = "final text reaches no one"
 
 # The BRIEF is prompt + any brief files the prompt names (forms.md
 # §2: the tail reaches the executing agent inline OR in a referenced
 # brief file; inline is required only when no file brief exists). The
 # channel lanes above stay prompt-only by design — the channel line
-# is bound to run_in_background, decided at the call site, which a
-# static file cannot know.
+# is bound to `name`, decided at the call site, which a static file
+# cannot know.
 #
 # Two alternatives, because a brief names a path in two forms and both
 # occur here: QUOTED (the only form that can carry spaces) and bare.
@@ -234,36 +243,39 @@ def missing_tail_deny_text() -> str:
 
 
 def tail_mode_mismatch(payload: dict) -> bool:
-    """True iff the pasted tail's channel line contradicts
-    run_in_background — the wrong tail variant pasted for the
-    dispatch mode (§2: background → SendMessage/'reaches no one';
-    synchronous → 'final text IS the report'). Fail-open on any parse
-    doubt."""
+    """True iff the pasted tail's channel line contradicts the
+    dispatch's LANE — the wrong tail variant for the lane `name`
+    selects (§2: named/mailbox → SendMessage/'reaches no one';
+    unnamed/background task → 'final text IS the report'). Fail-open
+    on any parse doubt."""
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
     prompt = _norm(tool_input.get("prompt") or "")
     if not prompt:
         return False
-    if is_background(tool_input):
-        return _SYNC_TAIL_MARKER in prompt
-    return _BACKGROUND_TAIL_MARKER in prompt
+    if mailbox_lane(tool_input):
+        return _DELIVERED_TAIL_MARKER in prompt
+    return _MAILBOX_TAIL_MARKER in prompt
 
 
 def tail_mode_mismatch_deny_text(payload: dict) -> str:
     doc = policy().get("discipline_doc") or "the dispatch skill"
     tool_input = payload.get("tool_input") or {}
-    if is_background(tool_input):
-        wrong = ('the synchronous channel line ("your final text IS '
-                 'the report") was pasted into a background dispatch')
+    if mailbox_lane(tool_input):
+        wrong = ('the background-task channel line ("your final text '
+                 'IS the report") was pasted into a NAMED dispatch, '
+                 'which runs in the mailbox lane — no completion '
+                 'notification fires, so that final text reaches no '
+                 'one')
     else:
-        wrong = ('the background channel line ("your final text '
-                 'reaches no one") was pasted into a synchronous '
-                 'dispatch (run_in_background: false)')
+        wrong = ('the mailbox channel line ("your final text reaches '
+                 'no one") was pasted into an UNNAMED dispatch, whose '
+                 'completion notification does deliver the final text')
     return (
-        "Blocked: tail channel line contradicts the dispatch mode — "
-        f"{wrong}. Pick the channel line matching the actual mode "
-        f"({doc} §2) and retry."
+        "Blocked: tail channel line contradicts the dispatch lane — "
+        f"{wrong}. The lane is set by `name` alone. Pick the channel "
+        f"line matching it ({doc} §2) and retry."
     )
 
 
@@ -429,13 +441,15 @@ def main() -> int:
     # with the harness's bare "Hook PreToolUse:Agent denied this tool",
     # which two sessions misattributed to a Claude Code permission bug.
     if missing_channel(payload):
-        deny(deny_text(payload), source=_SOURCE)
+        deny(deny_text(payload), source=_SOURCE, payload=payload)
     if missing_tail(payload):
-        deny(missing_tail_deny_text(), source=_SOURCE)
+        deny(missing_tail_deny_text(), source=_SOURCE, payload=payload)
     if tail_mode_mismatch(payload):
-        deny(tail_mode_mismatch_deny_text(payload), source=_SOURCE)
+        deny(tail_mode_mismatch_deny_text(payload), source=_SOURCE,
+             payload=payload)
     if missing_sections(payload):
-        deny(missing_sections_deny_text(payload), source=_SOURCE)
+        deny(missing_sections_deny_text(payload), source=_SOURCE,
+             payload=payload)
     # Staged lane: ships warn, promotable to deny via guard_modes
     # (key "brief-reminder" — the four deny lanes above call deny()
     # directly, so that key reaches this lane alone). fire() exits in
@@ -476,70 +490,86 @@ if __name__ == "__main__":
         assert "dispatch skill §1" in check({"tool_name": "Agent"})
         assert check({"tool_name": "Bash"}) is None
         assert check({}) is None
-        # Channel gate: background + no channel → deny
+        # Channel gate: mailbox lane (NAMED) + no channel → deny
         assert missing_channel({"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
             "prompt": "Go read files and report your findings."}})
         # Channel named (any marker) → allow
         assert not missing_channel({"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
             "prompt": "Do X. Deliver via SendMessage to main."}})
-        assert not missing_channel({"tool_name": "Agent", "tool_input": {
-            "prompt": "Do X.\nReport channel: your final text IS the "
-                      "report."}})
-        # Explicit synchronous → allow
-        assert not missing_channel({"tool_name": "Agent", "tool_input": {
-            "prompt": "Do X, answer inline.",
-            "run_in_background": False}})
         # Task tool, empty prompt, non-dispatch tools → never deny
         assert not missing_channel({"tool_name": "Task", "tool_input": {
-            "prompt": "no channel here"}})
+            "name": "sonnet-x", "prompt": "no channel here"}})
         assert not missing_channel({"tool_name": "Agent", "tool_input": {}})
         assert not missing_channel({"tool_name": "Bash", "tool_input": {
             "command": "ls"}})
         _named = {"tool_name": "Agent", "tool_input": {
-            "name": "sonnet-x", "run_in_background": False,
-            "prompt": "do the thing"}}
-        _unnamed = {"tool_name": "Agent", "tool_input": {
-            "prompt": "do the thing"}}
-        assert "Blocked" in deny_text(_unnamed)
-        assert "for a synchronous dispatch" in deny_text(_unnamed)
-        assert "name forces background" in deny_text(_named)
-        assert "synchronous" not in deny_text(_named)  # the un-followable advice is gone for named dispatches
+            "name": "sonnet-x", "prompt": "do the thing"}}
+        assert "Blocked" in deny_text(_named)
+        assert "mailbox" in deny_text(_named)
+        # The superseded text advised `run_in_background: false`, a
+        # parameter the Agent tool does not accept — a repair that
+        # could never clear on retry. It must not come back.
+        assert "run_in_background" not in deny_text(_named)
 
-        # ── Named dispatch is BACKGROUND in fact (BACKLOG 2026-08-07) ─
-        # Expectation derived from forms.md §2's binding ("setting
-        # `name` forces background mode — run_in_background: false is
-        # silently overridden"), never from this hook's behavior: the
-        # flag-only predicate agreed with itself in both directions.
-        # (i) named + sync flag + no channel line → DENY. Measured
-        # live 2026-08-07: this shape passed, the agent finished, its
-        # report reached no one.
-        assert missing_channel({"tool_name": "Agent", "tool_input": {
-            "name": "x-agent", "run_in_background": False,
+        # ── The LANE is set by `name` alone ────────────────────────
+        # Expectations derived from forms.md §2's binding (as of
+        # 2026-08-15, harness 2.1.232) and the probe matrix behind
+        # it — never from this hook's behavior. Measured: a NAMED
+        # dispatch (generic or pinned type) spawns as a mailbox
+        # teammate and fires no completion notification; an UNNAMED
+        # one launches as a background task whose notification
+        # carried the agent's final text verbatim, from an agent
+        # that called no tool at all.
+        # (i) UNNAMED + no channel line → NO deny. The background
+        # task's notification delivers the final text, so nothing is
+        # owed. The superseded flag predicate was constant-true and
+        # denied here.
+        assert not missing_channel({"tool_name": "Agent", "tool_input": {
             "prompt": "Do the thing and report back."}})
-        # (ii) same shape carrying the CORRECT background channel line
-        # → tail_mode_mismatch must stay silent. The flag-only
-        # predicate read it as sync and blocked it, instructing the
-        # author to paste the sync line — the guard manufacturing the
-        # defect it exists to prevent.
-        assert not tail_mode_mismatch({"tool_name": "Agent", "tool_input": {
-            "name": "x-agent", "run_in_background": False,
+        # (ii) UNNAMED carrying the background-task line → silent.
+        # This is the shape the superseded predicate bounced: it read
+        # every dispatch as background and denied the line that is
+        # true for this lane.
+        _unnamed_delivered = {"tool_name": "Agent", "tool_input": {
+            "subagent_type": "claude-code-guide",
+            "prompt": "Do the thing.\nReport channel: your final text "
+                      "IS the report."}}
+        assert not missing_channel(_unnamed_delivered)
+        assert not tail_mode_mismatch(_unnamed_delivered)
+        # (iii) UNNAMED carrying the MAILBOX line → mismatch: that
+        # line tells an agent its final text reaches no one when the
+        # notification does deliver it.
+        assert tail_mode_mismatch({"tool_name": "Agent", "tool_input": {
+            "subagent_type": "claude-code-guide",
             "prompt": "Do the thing.\nReport channel: SendMessage to "
                       "the dispatcher — your final text reaches no "
                       "one."}})
-        # (iii) the negative that bounds the widening: an UNNAMED
-        # synchronous dispatch with the sync line is unchanged — no
-        # channel deny, no mode mismatch.
-        _unnamed_sync = {"tool_name": "Agent", "tool_input": {
-            "run_in_background": False,
+        # (iv) NAMED carrying the correct mailbox line → silent;
+        # NAMED carrying the background-task line → mismatch.
+        assert not tail_mode_mismatch({"tool_name": "Agent", "tool_input": {
+            "name": "x-agent",
+            "prompt": "Do the thing.\nReport channel: SendMessage to "
+                      "the dispatcher — your final text reaches no "
+                      "one."}})
+        assert tail_mode_mismatch({"tool_name": "Agent", "tool_input": {
+            "name": "x-agent",
             "prompt": "Do the thing.\nReport channel: your final text "
-                      "IS the report."}}
-        assert not missing_channel(_unnamed_sync)
-        assert not tail_mode_mismatch(_unnamed_sync)
-        # the predicate itself, both differing inputs and the agreeing one
-        assert is_background({"name": "x-agent", "run_in_background": False})
-        assert not is_background({"run_in_background": False})
-        assert is_background({})
-        assert is_background({"name": "x-agent"})
+                      "IS the report."}})
+        # (v) a pinned type is not itself a lane: NAMED pinned sits in
+        # the mailbox lane with every other named dispatch. This is
+        # the cell that separated `name` from agent type in the probe.
+        assert mailbox_lane({"name": "x-agent",
+                             "subagent_type": "claude-code-guide"})
+        assert not mailbox_lane({"subagent_type": "claude-code-guide"})
+        # the predicate itself, both directions
+        assert mailbox_lane({"name": "x-agent"})
+        assert not mailbox_lane({})
+        # a dead `run_in_background` key changes nothing either way
+        assert mailbox_lane({"name": "x-agent",
+                             "run_in_background": False})
+        assert not mailbox_lane({"run_in_background": False})
 
         # ── Tail-presence lane (missing_tail) ──────────────────────
         # Tails copied verbatim from the §2 forms (cite: dispatch
@@ -610,30 +640,30 @@ if __name__ == "__main__":
         assert missing_tail({"tool_name": "Agent", "tool_input": {
             "prompt": "Do X and report back."}})
         assert missing_tail({"tool_name": "Agent", "tool_input": {
-            "prompt": "Do X and report back.",
-            "run_in_background": False}})
+            "name": "sonnet-x",
+            "prompt": "Do X and report back."}})
 
         # (ii) each §2 tail verbatim, correct channel line for the
         # mode used → missing_tail False, tail_mode_mismatch False
         bg_brief = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
             "prompt": "Do X.\n" + EXECUTION_TAIL_BG}}
         assert not missing_tail(bg_brief)
         assert not tail_mode_mismatch(bg_brief)
         sync_brief = {"tool_name": "Agent", "tool_input": {
-            "prompt": "Do X.\n" + READONLY_TAIL_SYNC,
-            "run_in_background": False}}
+            "prompt": "Do X.\n" + READONLY_TAIL_SYNC}}
         assert not missing_tail(sync_brief)
         assert not tail_mode_mismatch(sync_brief)
 
         # (iii) wrong channel line for the mode → tail_mode_mismatch
         # True, both directions
         bg_with_sync_line = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
             "prompt": "Do X.\n" + EXECUTION_TAIL_SYNC_LINE}}
         assert not missing_tail(bg_with_sync_line)  # tail present
         assert tail_mode_mismatch(bg_with_sync_line)
         sync_with_bg_line = {"tool_name": "Agent", "tool_input": {
-            "prompt": "Do X.\n" + READONLY_TAIL_BG_LINE,
-            "run_in_background": False}}
+            "prompt": "Do X.\n" + READONLY_TAIL_BG_LINE}}
         assert not missing_tail(sync_with_bg_line)  # tail present
         assert tail_mode_mismatch(sync_with_bg_line)
 

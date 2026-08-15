@@ -74,14 +74,14 @@ rejected — style prefers none, tolerance keeps the false-fire
 surface at zero.
 Why the title lane could retire: it existed for the SYNCHRONOUS
 dispatch, where no name is set and the title is the only carrier —
-and that shape was not observed. Two n=1 probes the same day
-(dispatcher's session, dev-notes/dispatch-OBSERVATIONS.md
-2026-08-08): an UNNAMED `general-purpose` dispatch with
-`run_in_background: false` launched ASYNC, and that async agent's
-final text WAS delivered to the dispatcher inside the completion
-task-notification. Both single observations on that day's harness
-version; they justify retiring the lane and nothing else — the §2
-channel rules stand pending a controlled re-probe.
+and that shape does not exist. The controlled re-probe settled it
+(forms.md §2, binding as of 2026-08-15, harness 2.1.232): the Agent
+tool takes no `run_in_background` parameter, so there is no sync
+launch to carry a title; an UNNAMED dispatch launches as a
+background task whose completion notification delivers its final
+text, and `name` alone selects that lane against the mailbox one.
+An unnamed dispatch is reachable only by pinned types, which this
+gate exempts anyway — so the lane guards nothing.
 
 Accepted residue: agent types that pin their model in their
 definition bypass the gate entirely for the model/title checks
@@ -318,7 +318,8 @@ def main() -> int:
     if payload.get("tool_name") not in ("Agent", "Task"):
         return 0
     if grund := escalation_deny(payload):
-        deny(grund, source="dispatch-guards/agent-model-gate")  # before the name check and the ask: an escalating subagent gets the return-the-question rule, not a name lesson or the dialog
+        deny(grund, source="dispatch-guards/agent-model-gate",
+             payload=payload)  # before the name check and the ask: an escalating subagent gets the return-the-question rule, not a name lesson or the dialog
     tool_input = payload.get("tool_input") or {}
     error = check(tool_input)
     if error:

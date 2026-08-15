@@ -74,9 +74,9 @@ no writes): the brief names the N facts to return and the pointers
 to trust unverified; no report files, no interim messages — each
 extra output medium re-writes the answer and the observed cost
 driver is output volume, not finding quality. The return channel
-follows the tail block (references/forms.md) verbatim (background →
+follows the tail block (references/forms.md) verbatim (named →
 SendMessage; "final message" alone has read as final text, which
-reaches no one — the §2 re-demand loop, live).
+on that lane reaches no one — the §2 re-demand loop, live).
 
 Mandatory parts (execution briefs):
 
@@ -324,10 +324,11 @@ Mandatory parts (execution briefs):
   `<model>-<slug>` — the panel renders the name, so the model is
   visible live in the UI and the title stays clean prose (no
   `<model>: ` prefix; a legacy prefix, if present, must mirror the
-  model field). A name forces background mode (§2 forms, binding),
-  so generic dispatches are background by construction; only
-  pinned-type agents, which the gate exempts, still run unnamed or
-  synchronous. Fan-outs state items × lanes × tier before
+  model field). The name also selects the report LANE (§2 forms,
+  binding): named = mailbox teammate, whose final text reaches no
+  one, so generic dispatches are mailbox-lane by construction;
+  only pinned-type agents, which the gate exempts, can run
+  unnamed. Fan-outs state items × lanes × tier before
   dispatching, and
   the chosen model is named in the turn's final message (canonical
   here; the corpus routing module keeps the veto principle and

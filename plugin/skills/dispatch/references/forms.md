@@ -49,11 +49,12 @@ re-pays it (observed: a single dispatch survived an API cut and then
 a watchdog stall on staged resumes, its accumulated context intact,
 and delivered complete). The report-written-but-never-
 SENT class presents as the same silence; the same demand cures it.
-**Channel rule (background/
-teammate dispatches):** the closing report reaches the dispatcher ONLY
-via SendMessage — a final text answer reaches no one; the brief names
-this channel explicitly, and going idle without having SENT the report
-counts as no report. **Payload vs. pointer:** the channel carries the
+**Channel rule (NAMED/mailbox dispatches — the lane test is the
+channel-line block below):** the closing report reaches the
+dispatcher ONLY via SendMessage — a final text answer reaches no
+one; the brief names this channel explicitly, and going idle
+without having SENT the report counts as no report.
+**Payload vs. pointer:** the channel carries the
 short signal; anything beyond the report form's slots — roughly more
 than a screen — goes in a FILE, and the message points to it. Basis,
 context economy: an injected payload occupies the dispatcher's
@@ -80,38 +81,40 @@ background-vs-sync call is the dispatcher's, made at paste time,
 never left to the agent (it has been misjudged agent-side; the
 report-enforcer hook's docstring, soft-spot note).
 
-Channel line (paste exactly one). A GENERIC dispatch is named and
-therefore background (bindings below) — it always takes the
-background line; the synchronous line remains only for pinned-type
-agents, which the model gate exempts from the name mandate:
-- background/teammate agent: `Report channel: SendMessage to the
+Channel line (paste exactly one). `name` alone decides the lane,
+and the two lanes differ in where the agent's closing text lands.
+The model gate names every generic dispatch, so only a pinned type
+can reach the unnamed lane:
+- named (mailbox teammate): `Report channel: SendMessage to the
   dispatcher — your final text reaches no one.`
-- synchronous agent (pinned types only): `Report channel: your
-  final text IS the report.`
+- unnamed (background task): `Report channel: your final text IS
+  the report.`
 
-Binding (as of 2026-07-30): setting `name` on a dispatch forces
-background mode — `run_in_background: false` is silently overridden
-(probe-confirmed, same-model controlled pair). Follow-up bindings
-(as of 2026-08-08): the agent-model-gate requires a `<model>-` name
-on every generic dispatch (0.6.0), so generic dispatches are
-background by construction; and an UNNAMED dispatch with
-`run_in_background: false` was also observed launching async, its
-final text delivered in the completion task-notification (n=1 each
-— the sync lane may be gone from the harness entirely; the
-controlled re-probe is a PARKED backlog item, and the deeper
-channel-rule rework waits on it).
+Binding (as of 2026-08-15, harness 2.1.232): the Agent tool takes
+no `run_in_background` parameter — its schema is
+`additionalProperties: false` and lists none — so a
+sync-vs-background FLAG cannot be expressed at all, and what once
+read as a mode choice is made by naming. A NAMED dispatch returns
+"Spawned successfully … via mailbox", promises no completion
+notification, and is absent from the subagent listing: its final
+text has not been observed reaching the dispatcher, and only
+SendMessage delivers. An UNNAMED dispatch returns "Async agent
+launched" plus an output file, and the completion task-notification
+carries its final text to the dispatcher VERBATIM — including from
+an agent that called no tool at all, so delivery does not depend on
+the agent cooperating. Re-probe when the Agent tool's schema
+changes.
 
-The call's criteria, now scoped to PINNED-TYPE dispatches (the only
-place a sync form remains reachable): background suits work the
-session talks across — long builds, parallel fan-outs, teammates. A
-short dispatch whose result the current turn depends on (probe,
-verifier, single pipeline stage) runs sync — the inline return
-carries the report and the usage metadata, and skips the mailbox
-plumbing (measured 2026-07-30, dedup-corrected same day: ~1.3×
-cost-weighted, ~2.2× raw on a trivial task; roughly fixed per
-dispatch, so it shrinks on large ones. Transcript usage entries are
-per-stream snapshots — dedupe by API-call id before summing, and the
-harness's subagent_tokens figure measures context, not spend).
+Which lane to pick: NAME the dispatch when the session must talk
+across it — long builds, parallel fan-outs, teammates, anything
+worth resuming — accepting that its report arrives only if the
+agent SENDs it, which is what the mailbox channel line exists to
+secure. Leave it UNNAMED for a short closed-form job the current
+turn wants back without mailbox plumbing (probe, verifier, single
+pipeline stage): the notification returns the report and the usage
+metadata for free. Transcript usage entries are per-stream
+snapshots — dedupe by API-call id before summing, and the
+harness's subagent_tokens figure measures context, not spend.
 
 Binding (as of 2026-08-01): the
 harness HARD-BLOCKS a subagent writing report-shaped files

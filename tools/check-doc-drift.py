@@ -154,7 +154,7 @@ _HOOK_REL = ("plugin", "hooks", "brief-reminder.py")
 _FORMS_REL = ("plugin", "skills", "dispatch", "references", "forms.md")
 _EXEC_TAIL_HEADING = "EXECUTION tail (any dispatch that writes):"
 _CHANNEL_PLACEHOLDER = "<channel line>"
-_BG_CHANNEL_RE = re.compile(r"^- background/teammate agent: `([^`]+)`",
+_BG_CHANNEL_RE = re.compile(r"^- named \(mailbox teammate\): `([^`]+)`",
                             re.M)
 
 
@@ -261,7 +261,7 @@ def check_execution_tail_fixture() -> list:
     channel = _BG_CHANNEL_RE.search(forms)
     if channel is None:
         raise CouldNotVerify(
-            "forms.md §2 names no `- background/teammate agent:` "
+            "forms.md §2 names no `- named (mailbox teammate):` "
             "channel line — the substitution has no source")
     expected = tail.replace(_CHANNEL_PLACEHOLDER, channel.group(1))
     fixture = _string_literal(_read(*_HOOK_REL), "EXECUTION_TAIL_BG",
