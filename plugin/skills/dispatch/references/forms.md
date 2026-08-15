@@ -73,18 +73,19 @@ bounce and the report re-demand loop entirely. The tail reaches the
 executing agent pasted in the DISPATCH PROMPT or inside a brief FILE
 the prompt names — inline required only when no file brief exists;
 duplicating the tail into both is a second copy that drifts. The
-CHANNEL LINE alone is always prompt-side: it binds to the
-background-vs-sync call, made at dispatch time, which a static file
-cannot know. Two blocks; pick by
-dispatch kind, fill `<model>` AND the channel line — the
-background-vs-sync call is the dispatcher's, made at paste time,
+CHANNEL LINE alone is always prompt-side: it binds to `name`,
+set at dispatch time, which a static file cannot know. Two blocks;
+pick by dispatch kind, fill `<model>` AND the channel line — the
+lane call is the dispatcher's, made at paste time,
 never left to the agent (it has been misjudged agent-side; the
 report-enforcer hook's docstring, soft-spot note).
 
 Channel line (paste exactly one). `name` alone decides the lane,
 and the two lanes differ in where the agent's closing text lands.
-The model gate names every generic dispatch, so only a pinned type
-can reach the unnamed lane:
+The model gate mandates a name on every GENERIC dispatch, so the
+unnamed lane is reachable only by the types that gate exempts —
+pinned agent types, and modes whose model is fixed by construction
+rather than chosen (a fork inherits its parent's):
 - named (mailbox teammate): `Report channel: SendMessage to the
   dispatcher — your final text reaches no one.`
 - unnamed (background task): `Report channel: your final text IS

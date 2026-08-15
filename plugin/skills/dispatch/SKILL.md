@@ -478,10 +478,14 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
 
 ## 4. Dispatcher duties (integration never delegates)
 
-- **A background dispatch carries an expected-return horizon,**
-  stated in the dispatching turn's final message, where its
-  passing is checkable. Silence past the horizon is a finding —
-  inspect or stop the agent, never more waiting. (Source:
+- **Every dispatch carries an expected-return horizon,** stated
+  in the dispatching turn's final message, where its passing is
+  checkable. Silence past the horizon is a finding — inspect or
+  stop the agent, never more waiting. It binds hardest on the
+  MAILBOX lane (§2): a named agent fires no completion
+  notification and is absent from the agent listing, so silence
+  there is the only signal either way, and SendMessage is the
+  sole channel in both directions. (Source:
   site corpus dispatched-work rule.)
 - **Verify in the artifact, then integrate.** Run the tests, greps,
   renders YOURSELF before push/merge/publish. An agent's "done" is a
@@ -535,7 +539,8 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   waits, it never edits on its own (a well-meant `--amend` can hit
   the dispatcher's newer HEAD — the §1 amend rule's post-report
   case). Mirror duty for the
-  dispatcher: a background agent stays resumable after its report, so
+  dispatcher: a named/mailbox agent stays resumable after its
+  report, so
   before writing in the same working copy, treat it as a live writer —
   book the report AND tell it the lane is closed, or check `git status`
   defensively before every own commit there.

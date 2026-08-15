@@ -261,22 +261,44 @@ def tail_mode_mismatch(payload: dict) -> bool:
 
 
 def tail_mode_mismatch_deny_text(payload: dict) -> str:
+    """Deny text naming a repair that actually CLEARS.
+
+    Two knobs move a dispatch between lanes — the channel line and
+    the `name` — so this deny must not name only the line. An UNNAMED
+    GENERIC dispatch cannot stay unnamed: the model gate mandates a
+    `<model>-` name on every generic dispatch, so "swap the line"
+    sends the author into a bounce loop (mismatch → model gate →
+    mismatch), and the one-step repair, ADD THE NAME AND KEEP THE
+    MAILBOX LINE, is the only exit. Naming just the line here
+    reintroduced one lane over exactly the un-followable-repair class
+    that missing_channel's deny text was fixed for."""
     doc = policy().get("discipline_doc") or "the dispatch skill"
     tool_input = payload.get("tool_input") or {}
     if mailbox_lane(tool_input):
-        wrong = ('the background-task channel line ("your final text '
-                 'IS the report") was pasted into a NAMED dispatch, '
-                 'which runs in the mailbox lane — no completion '
-                 'notification fires, so that final text reaches no '
-                 'one')
-    else:
-        wrong = ('the mailbox channel line ("your final text reaches '
-                 'no one") was pasted into an UNNAMED dispatch, whose '
-                 'completion notification does deliver the final text')
+        return (
+            "Blocked: tail channel line contradicts the dispatch "
+            'lane — the background-task channel line ("your final '
+            'text IS the report") was pasted into a NAMED dispatch, '
+            "which runs in the mailbox lane: no completion "
+            "notification fires, so that final text reaches no one. "
+            "Repair: keep the name and paste the MAILBOX line "
+            '("SendMessage to the dispatcher — your final text '
+            'reaches no one") from '
+            f"{_forms_path()} §2, and retry."
+        )
     return (
         "Blocked: tail channel line contradicts the dispatch lane — "
-        f"{wrong}. The lane is set by `name` alone. Pick the channel "
-        f"line matching it ({doc} §2) and retry."
+        'the mailbox channel line ("your final text reaches no one") '
+        "was pasted into an UNNAMED dispatch, whose completion "
+        "notification does deliver the final text. TWO repairs, and "
+        "which one applies depends on the agent type: for a GENERIC "
+        "dispatch (general-purpose, Explore, Plan, claude) ADD the "
+        "`<model>-<slug>` name the model gate mandates and KEEP this "
+        "mailbox line — dropping the line instead only moves the "
+        "bounce to the model gate. For a pinned-type agent, which the "
+        "model gate exempts, either works: name it and keep this "
+        'line, or stay unnamed and paste "your final text IS the '
+        f'report" instead ({doc} §2). Retry.'
     )
 
 
@@ -384,22 +406,27 @@ def missing_commit_plan(payload: dict) -> bool:
     target repo's commit-blocking guards, read at compose time, and
     where the bump or ordering commit sits.
 
-    Scope is exactly missing_sections' above: Agent tool, execution
-    tail present, brief = prompt plus referenced brief files. What
-    this establishes is PRESENCE OF THE LABEL and nothing more — a
-    plan naming the wrong guard reads identical to a correct one
-    here, so this lane grades composition, never the plan. Staged: it
-    ships WARN and earns deny only through the fire-rate review
-    (repo CLAUDE.md), never by assertion. Fail-open on parse doubt."""
+    Scope is exactly missing_sections' above — including its
+    verifier/discovery exemption, which this lane must share: both
+    decide the governing tail through _tail_kind(), so a verifier
+    brief that merely CITES forms.md is exempt here too. Read
+    referenced-files-first, this lane false-fired on exactly the
+    brief shape its twin was repaired for, one function below the
+    repair. What this establishes is PRESENCE OF THE LABEL and
+    nothing more — a plan naming the wrong guard reads identical to a
+    correct one here, so this lane grades composition, never the
+    plan. Staged: it ships WARN and earns deny only through the
+    fire-rate review (repo CLAUDE.md), never by assertion. Fail-open
+    on parse doubt."""
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
     if not (tool_input.get("prompt") or ""):
         return False
-    brief = _brief_text(payload)
-    if _SECTIONS_ANCHOR not in brief:
-        return False  # not an execution-tail brief; exempt
-    return not any(m in brief for m in _COMMIT_PLAN_MARKERS)
+    if _tail_kind(payload) != "execution":
+        return False  # verifier/discovery or no tail; exempt
+    return not any(m in _brief_text(payload)
+                   for m in _COMMIT_PLAN_MARKERS)
 
 
 def missing_commit_plan_warn_text() -> str:
@@ -826,6 +853,12 @@ if __name__ == "__main__":
                        + EXECUTION_TAIL_BG)}}
         assert _tail_kind(_exec_bad) == "execution"
         assert missing_sections(_exec_bad)
+        # missing_commit_plan shares the exemption: it read
+        # referenced-files-first after its twin was repaired, so it
+        # still false-fired on the very brief shape the repair
+        # exempted — a staged warn lane firing on legitimate work.
+        assert not missing_commit_plan(_vet)
+        assert missing_commit_plan(_exec_bad)
 
         # ── Commit-plan lane (missing_commit_plan), STAGED WARN ────
         # Slot named in the dispatch skill §1 skeleton ("## Commit

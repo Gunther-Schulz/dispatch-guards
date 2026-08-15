@@ -29,15 +29,18 @@ are dropped with a one-line reason.
   agent may get wrong. Probe: dispatch one named and one unnamed
   agent, each instructed to report what it can see about its own
   name and launch mode.
-  Carried with it, deliberately NOT repaired piecemeal:
-  report-enforcer.py:73 and :141 still say "synchronous subagent",
-  vocabulary the rest of the repo retired on 2026-08-15 — the lanes
-  are named/mailbox and unnamed/background-task. The wording stays
-  TRUE (an unnamed agent's final text is indeed the report), so this
-  is drift, not a defect; it is left here rather than reworded
-  because the honest fix depends on this entry's own missing
-  evidence — reword and the branch still asks the agent a question
-  it may not be able to answer.
+  CORRECTION (fresh-context vet, same day): an earlier version of
+  this entry claimed report-enforcer's two branches "remain true, so
+  nothing is broken today". That was FALSE and is withdrawn. The
+  branch read "if you are a background/teammate agent (your final
+  text does NOT reach your dispatcher)" — and under the 2026-08-15
+  binding "background" names the UNNAMED lane, the one whose
+  completion notification DOES deliver the final text. The wording
+  attached the void property to the delivering lane, inverting the
+  instruction for whichever agent read it literally. The vocabulary
+  is repaired (the hook now branches on NAMED/mailbox vs UNNAMED and
+  its docstring says so), so what remains parked is only the
+  question below, not the wording.
   Basis: this session's probe matrix (OBSERVATIONS resolution
   2026-08-15) plus report-enforcer.py's own docstring soft-spot note.
 

@@ -2,17 +2,26 @@
 """SubagentStop enforcer: re-demand the closing report from the stopping agent.
 
 Root cause this closes (dispatch skill references/forms.md §2, "Channel rule"): a
-BACKGROUND/teammate dispatch's final text answer reaches NO ONE — the
+NAMED/mailbox dispatch's final text answer reaches NO ONE — the
 closing report only arrives if the agent SENDs it (SendMessage) to its
-dispatcher. The observed failure is a channel mismatch: the agent writes
+dispatcher. Lane vocabulary matters here and inverted once already:
+`name` selects the lane, and the UNNAMED lane is the one whose
+completion notification DOES deliver the final text verbatim, so
+"background" now names the delivering side and must not be used for
+the void one (forms.md §2 binding, as of 2026-08-15). The observed failure is a channel mismatch: the agent writes
 its report as final text, goes idle, and the dispatcher never sees it.
 `report-reminder.py` nudges the DISPATCHER to demand the report; this hook
 closes the other side — it nudges the stopping SUBAGENT to SEND it before
 going idle, replacing the manual re-demand loop.
 
-Known soft spot: the background-vs-sync judgment is delegated to the
-stopping agent and has been misjudged once (agent-side; the channel
-line in the brief tail is the dispatcher-side cure — forms.md §2).
+Known soft spot: the LANE judgment is delegated to the stopping
+agent and has been misjudged once (agent-side; the channel line in
+the brief tail is the dispatcher-side cure — forms.md §2). Whether a
+subagent can even observe its own lane is unestablished — the
+deciding fact is whether the dispatch carried a `name`, which the
+agent may not see; tracked as a PARKED backlog item, and the
+instruction below therefore states BOTH duties rather than resting
+on the self-classification.
 
 Mechanism (verified against the Claude Code hooks reference, as-of
 2026-07-18): on SubagentStop, `hookSpecificOutput.additionalContext` is
@@ -60,8 +69,9 @@ def instruction() -> str:
         "guess: AWAIT it via TaskOutput(block=true) and report its real "
         "result, or send an INTERIM report that says so and names what "
         "remains — ending your turn with it running orphans the work. "
-        "If you are a background/teammate agent "
-        "(your final text does NOT reach your dispatcher), send your "
+        "If you are a NAMED/mailbox agent — your dispatch carried "
+        "an agent name, and no completion notification fires for it "
+        "(your final text does NOT reach your dispatcher) — send your "
         "closing report NOW via SendMessage to your dispatcher — going "
         "idle without having SENT it counts as no report. BEFORE "
         f"composing it: message max {max_chars()} chars — write any "
@@ -70,8 +80,9 @@ def instruction() -> str:
         "context for the rest of its session; oversized sends are "
         "denied by a gate, costing you a rewrite). Already SENT it via "
         "SendMessage? Do not send twice — that idempotency applies to "
-        "SendMessage ONLY. If you are a synchronous subagent, your "
-        "final text IS the report, and only your LAST text block is "
+        "SendMessage ONLY. If you are an UNNAMED subagent, your "
+        "final text IS the report — the completion notification "
+        "delivers it verbatim — and only your LAST text block is "
         "delivered: so if you already wrote the report above, RE-EMIT "
         "IT IN FULL now. A bare acknowledgement ('already reported "
         "above', 'nothing further needed') becomes your final text and "
@@ -138,7 +149,7 @@ if __name__ == "__main__":
         assert "final text is the report" in text.lower().replace("  ", " ")
         assert "do not send twice" in text.lower()    # idempotency clause
         # The idempotency clause MUST stay scoped to SendMessage. Unscoped, a
-        # resumed SYNCHRONOUS agent reads "already reported → stop", emits a
+        # resumed UNNAMED agent reads "already reported → stop", emits a
         # bare acknowledgement, and that acknowledgement — being the LAST text
         # block — replaces the report the dispatcher was meant to receive.
         # The hook then destroys the artifact it exists to guarantee.

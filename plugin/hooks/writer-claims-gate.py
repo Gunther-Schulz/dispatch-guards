@@ -24,7 +24,7 @@ One file, two events (payload `hook_event_name` discriminates):
 - PreToolUse, MAIN session: a fresh subagent claim on the file →
   one-line additionalContext reminder, never a deny — the §4 mirror
   duty ("before writing in the same working copy, treat a reported
-  background agent as a live writer"); main-session denies train the
+  named/mailbox agent as a live writer"); main-session denies train the
   override reflex.
 
 Both PreToolUse lanes RELIEVE a claim whose file has no uncommitted
