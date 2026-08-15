@@ -1384,3 +1384,37 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
+
+## 2026-08-15 — Worktree-Entfernung verbrennt den Resume-Kanal (statiker E-Lane-Batch)
+
+1. **Vorfall + Basis:** Nach Buchung von Lane Gs Report entfernte der
+   Dispatcher zuerst den Worktree (`git worktree remove --force`)
+   und sandte DANACH die Lane-Close-Nachricht (§4 Spiegel-Pflicht).
+   Die Harness verweigerte die Zustellung: "cannot be resumed: its
+   worktree no longer exists, and the fallback directory is not
+   covered by the session's isolation fences" (SendMessage-Fehler,
+   wörtlich). Ausgang hier benign (Report vollständig gebucht,
+   Integration fertig, Schreibrisiko strukturell null), aber der
+   Kanal ist irreversibel zu: auch eine legitime NACHFRAGE an die
+   Lane (Interrogation eines gebuchten Reports — im Ziel-Repo
+   ausdrücklich als billige Mint-Quelle gewertet) ist ab der
+   Entfernung unmöglich.
+2. **Klasse:** Reihenfolge zweier Dispatcher-Pflichten, deren zweite
+   die erste irreversibel unerfüllbar macht — §1-Worktree-Rezept
+   ("remove the worktree after integration") und §4-Spiegel-Pflicht
+   ("book the report AND tell it the lane is closed") nennen beide
+   Akte, aber keine Sequenz; die Harness-Bindung (Resume setzt den
+   Worktree voraus) steht in keinem der beiden.
+3. **Vorformulierter Regel-Text** (§1 Worktree-Rezept, Removal-Satz —
+   Amendment, kein neuer Bullet): "Removal ist der TERMINALE Akt und
+   schließt den Resume-Kanal des Agenten (Harness-Bindung, gemessen
+   2026-08-15: SendMessage an einen Agenten ohne Worktree wird
+   verweigert). Reihenfolge daher: Report buchen, Lane-Close senden,
+   offene Nachfragen an die Lane stellen — DANN entfernen. Ein
+   entfernter Worktree ersetzt die Close-Nachricht strukturell
+   (der Agent kann nicht mehr schreiben), aber er ersetzt keine
+   Nachfrage, und die ist das teure verlorene Stück."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (SKILL.md §1 Worktree-Rezept; §4-Spiegel-Satz
+   prüfen, ob ein Querverweis genügt); Quota-Drain nach
+   OBSERVATIONS-Regel.
