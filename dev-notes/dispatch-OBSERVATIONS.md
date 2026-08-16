@@ -1478,3 +1478,49 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (SKILL.md §1, Write-Boundaries-Absatz);
    Quota-Drain nach OBSERVATIONS-Regel.
+
+## 2026-08-16 — Das Report-File-Verbot am ENDE des READ-ONLY-Tails wird als Klempnerei gelesen, nicht als bindend (statiker beat-the-books, Session 11)
+
+1. **Vorfall + Basis:** Drei Discovery-Dispatches (sonnet) im selben
+   Lauf, alle drei mit dem wörtlich gepasteten READ-ONLY-Tail aus
+   `references/forms.md` §2. Die ersten ZWEI schrieben trotzdem eine
+   Report-DATEI und meldeten per SendMessage nur einen Zeiger darauf —
+   obwohl der Tail das Verbot zweimal trägt ("never a report file",
+   "no report files"). Beide schrieben die Datei zudem in das
+   Scratchpad des DISPATCHERS, nicht ihr eigenes, obwohl der Brief
+   Scratch explizit zuwies. Inhaltlich waren beide Reports
+   ausgezeichnet — genau deshalb fällt die Abweichung nicht auf.
+   Beim DRITTEN Dispatch wurde das Verbot unverändert im Wortlaut,
+   aber an den KOPF des Briefs gehoben, mit genannter Folge ("A file
+   is not a report and will not be read as one") — dieser Agent hielt
+   es ein. n=2 Verstoß / n=1 Bestätigung nach Umstellung, alle drei
+   im selben Lauf, gleiche Brief-Form, gleiches Modell, gleiche
+   Aufgabenklasse. Damit ist die Position die einzige veränderte
+   Variable.
+2. **Klasse:** Platzierungs-Klasse im Brief — ein Verbot, das im
+   invarianten Block-Ende steht, wird als Transport-Klempnerei
+   gelesen und nicht als Anweisung; dieselbe Klasse, die §1 für den
+   Route-Line-Seam und der Operator-Korpus für "Text zwischen
+   Tool-Calls wird nicht ausgeliefert" schon kennt. Der Tail wird als
+   Formalie überflogen, weil er in jedem Brief identisch ist — genau
+   die Eigenschaft, die ihn als Garantie tragen sollte, macht ihn
+   unsichtbar. NICHT die Klasse "Executor ignoriert Anweisung": zwei
+   unabhängige Agenten mit demselben Text und die Umkehr durch reine
+   Umstellung zeigen auf den Brief, nicht auf die Ausführenden.
+3. **Vorformulierter Fix-Text** (`references/forms.md` §2,
+   READ-ONLY-Tail — die Verbots-Zeile an den ANFANG des Blocks
+   ziehen und die Folge nennen, statt sie in Satz zwei und vier
+   mitlaufen zu lassen): den Block eröffnen mit "NO REPORT FILE.
+   Your findings go in your SendMessage reply — a file you write is
+   not a report, is not read as one, and reaches no one. Split into
+   labeled parts (1/N) past the size gate." Danach der bestehende
+   Wortlaut ohne die beiden jetzt redundanten Verbots-Halbsätze.
+   Gleiches gilt spiegelbildlich für die Scratch-Zuweisung: sie
+   gehört neben das Verbot, nicht in den Kopfteil des Briefs, weil
+   beide dieselbe Naht betreffen (wohin schreibt der Agent).
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde, `references/forms.md` §2 (READ-ONLY-Tail);
+   Quota-Drain nach OBSERVATIONS-Regel. Beobachtungs-Herkunft: der
+   Dispatcher hat die Umstellung im Lauf selbst als Reparatur
+   getestet, der Fix-Text ist also bereits einmal live bestätigt und
+   nicht nur hergeleitet.
