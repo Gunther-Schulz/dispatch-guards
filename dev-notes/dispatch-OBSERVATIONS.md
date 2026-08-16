@@ -1565,3 +1565,13 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
    Quota-Drain nach OBSERVATIONS-Regel. Sofort-Konsument: jede
    Session, die heute nach §2 dispatcht — bis zum Fix gilt die
    Probe per Hand (Schema ansehen, dann komponieren).
+   **Nachtrag, gleiche Runde (Gegen-Probe der Desk-Session):** Die
+   Divergenz ist PRO SESSION, nicht maschinenweit — die
+   beat-the-books-cd-Session las ihr Live-Schema auf Anfrage:
+   `name` VORHANDEN, Mailbox-Lane lebendig (A3-Spawn "via mailbox"
+   im selben Fenster), Model-Gate feuert normal; die Meta-Session
+   daneben hat beides verloren. Konsequenz für den Fix-Text: die
+   Probe gilt PRO SESSION ("prüfe DEIN Schema"), und eine Session
+   darf die Lane einer anderen nie aus der eigenen ableiten — auch
+   nicht andersherum: ein Brief mit Mailbox-Channel-Zeile, von der
+   synchron-gewordenen Session komponiert, strandet den Report.
