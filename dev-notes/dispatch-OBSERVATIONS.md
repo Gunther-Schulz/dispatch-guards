@@ -1524,3 +1524,44 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
    Dispatcher hat die Umstellung im Lauf selbst als Reparatur
    getestet, der Fix-Text ist also bereits einmal live bestätigt und
    nicht nur hergeleitet.
+
+## 2026-08-16 — Harness entzieht der Mailbox-Lane mid-session die Grundlage: Agent-Tool verliert `name` + `run_in_background` (Begehung R3, statiker meta-session)
+
+1. **Vorfall + Basis:** In der laufenden statiker-Meta-Session
+   aktualisierte der Harness die Agent-Tool-Beschreibung MID-SESSION:
+   "`run_in_background` and `name` are unavailable here — only
+   synchronous subagents" (beobachtet 2026-08-16, dieselbe Session
+   hatte Stunden zuvor zwei NAMED-Dispatches erfolgreich gefahren:
+   opus-review-078/-080, beide Mailbox-Lane). forms.md §2 trägt die
+   Lane-Bindung datiert 2026-08-15 ("naming decides the lane",
+   forms.md:94-97 gelesen) und der Model-Gate verlangt einen Namen
+   auf jedem generischen Dispatch. Unter dem neuen Schema ist die
+   benannte Lane NICHT AUSDRÜCKBAR: ein Desk, der nach §2
+   komponiert, wird entweder vom eigenen Gate abgewiesen oder
+   pastet eine Mailbox-Channel-Zeile, deren Lane nicht existiert.
+   Der §2-Text selbst nennt die Re-Probe-Pflicht ("Re-probe when
+   the Agent tool's schema changes") — dieser Eintrag IST diese
+   Re-Probe, positiv gefeuert.
+2. **Klasse:** Binding-Staleness (Bindings gelten, solange die
+   Umgebung gilt — und der Harness ändert das Schema unangekündigt
+   mid-session). Zweitklasse mitbeobachtet: die Konvention "das
+   Modell reitet auf dem NAMEN" verliert ihren Träger, wenn `name`
+   entfällt — das Modell reitet dann allein auf dem
+   `model`-Parameter (in der beobachteten Session weiterhin
+   vorhanden).
+3. **Vorformulierter Fix-Text** (forms.md §2, Binding-Absatz +
+   Channel-Zeilen-Block): die Lane-Entscheidung an eine
+   PROBE koppeln statt an ein Datum — "Vor dem ersten Dispatch
+   einer Session mit Lane-relevanter Form: prüfe, ob das
+   Agent-Schema `name` akzeptiert. Akzeptiert es keins, existiert
+   nur die synchrone Lane: kein Channel-Zeilen-Paste (der finale
+   Text IST der Report, kehrt als Tool-Result zurück), Model-Gate
+   liest den `model`-Parameter, Horizon-Regel entfällt (ein
+   Sync-Dispatch kann den Turn nicht überleben)." Beide
+   datierten Binding-Absätze auf diese Probe umstellen; die
+   Mailbox-Beschreibung bleibt als der andere Probe-Zweig.
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (forms.md §2 + model-gate-Hook-Text);
+   Quota-Drain nach OBSERVATIONS-Regel. Sofort-Konsument: jede
+   Session, die heute nach §2 dispatcht — bis zum Fix gilt die
+   Probe per Hand (Schema ansehen, dann komponieren).
