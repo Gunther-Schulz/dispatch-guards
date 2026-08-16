@@ -1447,3 +1447,34 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
+
+## 2026-08-16 — `git add -N` mit Verzeichnis-Argument registriert fremde untracked Dateien unsichtbar
+
+1. **Vorfall + Basis:** statiker-Meta-Session (Session-Record
+   2026-08-16, statiker-Repo dev-notes/OBSERVATIONS, Round-3-
+   Dispositions-Eintrag): ein Compound-Command trug `git add -N
+   docs 2>/dev/null` — Absicht war EINE neue Brief-Datei; das
+   Verzeichnis-Argument intent-to-addete zusätzlich VIER fremde
+   untracked Lane-Briefs eines anderen Workstreams. Aufgefallen
+   erst als lauter Stash-Fehler ("Entry … not uptodate. Cannot
+   merge") viele Kommandos später; rückgängig per pfadgenauem
+   `git reset --`. n=1.
+2. **Klasse:** Verzeichnis-Pfadspec-Klasse (§1 kennt sie für
+   Lock-/Write-Set-Pfade: "names a FILE, never a directory");
+   `add -N` ist ihr ungenanntes Gesicht — der Schaden ist nicht
+   ein Mit-COMMIT (Pathspec-Commit blieb sauber), sondern
+   stiller Index-Zustand über fremden Dateien, der spätere
+   Operationen (stash, checkout) bricht oder — schlimmer — sie
+   in ein späteres breites Staging zieht.
+3. **Vorformulierter Fix-Text** (SKILL.md §1, Widening der
+   bestehenden add-N-Klausel im Write-Boundaries-Teil): nach
+   "`git add -N <path>` first — intent-to-add registers the path
+   against the empty blob …" ergänzen: "— and `<path>` names a
+   FILE, never a directory: a directory argument intent-to-adds
+   every unowned untracked file under it, invisibly (foreign
+   briefs included; measured 2026-08-16 as a stash broken many
+   commands later), the write-boundary directory rule's add-N
+   face."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (SKILL.md §1, Write-Boundaries-Absatz);
+   Quota-Drain nach OBSERVATIONS-Regel.
