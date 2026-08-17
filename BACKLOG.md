@@ -7,6 +7,23 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-17 — 0.11.3 release-train grab-bag: two one-line
+  text fixes, bundle into the next release rather than forcing one.**
+  Design: two settled text edits, no code path touched.
+  (a) agent-model-gate.py docstring still reads "nesting itself
+  stays legal (3 layers by default)" — true of the gate, stale as
+  read on a site capping CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1;
+  amend to name the harness spawn-depth setting as the governing
+  knob a site may cap. (b) README "What this does not ship" gains
+  one line: the author additionally caps spawn depth to 1 as site
+  policy; the guards do not require it, sites adopting the
+  routing layer want it. Verifier: doc-drift check green plus a
+  reader test — both texts name the same env var; no behavior
+  change, no corpus extension needed. Done: lands with the next
+  version bump, whoever releases next (wave 2b desk is the
+  likely carrier). Origin: fable desk recommendation 2026-08-17,
+  operator "leave most to recommendations".
+
 - **READY 2026-08-17 — a marker-gated Stop lane for handed-off desks:
   report-enforcer's sibling one level up.** A session that received
   whole work over the peer channel composes its report as FINAL TEXT,
