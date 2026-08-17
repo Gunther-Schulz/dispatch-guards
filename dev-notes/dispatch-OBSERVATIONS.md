@@ -1898,3 +1898,36 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
+
+## 2026-08-17 — Ein Brief benennt eine Schema-Ableitungsquelle, die die abzuleitende LANE-KLASSE gar nicht führt (statiker P16-Lane)
+
+1. **Vorfall + Basis:** Ein Build-Brief (statiker Stop-Hook-Lane,
+   2026-08-17) wies den Executor an, das blockierende
+   Stop-Hook-Schema "aus dem Referenz-Plugin dispatch-guards
+   abzuleiten" — das Plugin führt aber KEINE blockierende
+   Stop/SubagentStop-Lane (writer-reservation-gate warnt nur,
+   report-enforcer injiziert nur additionalContext). Der Executor
+   lief in die Sackgasse, wich korrekt auf die Harness-QUELLE aus
+   (~/dev/reference/claude-code: processHookJSONOutput,
+   stopHooks.ts) und meldete die Abweichung unter der
+   vorautorisierten Reparaturklasse des Briefs. Kein Schaden —
+   aber nur, weil die stärkere Quelle lokal vorlag und der
+   Executor sie fand.
+2. **Klasse:** Brief-Behauptung über eine QUELLE, deren bloße
+   Existenz am Brief-Zeitpunkt geprüft wurde, deren INHALT aber
+   nicht — die §1-Regel "Opening a REFERENCE is not opening its
+   CONTENT", hier in der Ableitungs-Variante: die Quelle
+   existiert, führt aber die Klasse nicht, die abgeleitet werden
+   soll.
+3. **Vorformulierter Regel-Text** (§1, an die
+   Schema-bearing-external-facts-Klausel oder als eigener Punkt):
+   „Ein Brief, der eine ABLEITUNGSQUELLE benennt (‚leite das
+   Schema/Muster aus X ab'), prüft am Brief-Zeitpunkt, dass X die
+   abzuleitende Klasse tatsächlich FÜHRT — ein Grep auf die
+   Klassen-Signatur genügt; die Quelle nur zu öffnen genügt
+   nicht. Führt X die Klasse nicht, benennt der Brief die echte
+   Quelle oder kommissioniert die Suche ausdrücklich."
+4. **Konsument + Abfluss-Naht:** nächste
+   dispatch-guards-Maintenance-Runde (§1-Text); Quota-Drain nach
+   OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
+   Ableitungs-Briefe komponiert — per Hand bis zum Mint.
