@@ -11,11 +11,19 @@ Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
 eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
 durchgestrichen oben stehen.
 
-Struktur-Nachtrag 2026-08-17: dieser Abschnitt stand bis heute in der
-MITTE der Datei, während neue Einträge hinten angehängt wurden — fünf
-lebende Einträge lasen sich damit über ihre Position als abgeflossen.
-Der Abschnitt ist jetzt der Datei-Schluss; lebende Einträge stehen
-oben unter „Offen".
+Struktur-Nachtrag 2026-08-17, am selben Tag zweimal korrigiert:
+Dieser Abschnitt stand zunächst in der MITTE der Datei, während neue
+Einträge hinten anwuchsen — fünf lebende Einträge lasen sich über ihre
+Position als abgeflossen. Der erste Fix schob ihn ans Datei-ENDE und
+kehrte den Fehler bloß um: eine fremde Session hängte binnen einer
+Stunde am EOF an und landete IM abgeflossenen Abschnitt. Jetzt steht
+Abgeflossenes OBEN und die lebende Liste am Datei-Ende, wo angehängt
+wird; `check_observations_tail` (tools/check-doc-drift.py) hält die
+Reihenfolge fest. Dieser Absatz selbst war einen Commit lang falsch —
+er beschrieb den ersten Fix weiter, nachdem der zweite ihn umgedreht
+hatte: ein Etikett, das seinen eigenen Körper überlebt, in der Datei,
+deren Pass genau davon handelt. Gefunden von der Frisch-Kontext-Runde,
+von keinem Check.
 
 ## 2026-08-06 — three from one fan-out (3 × opus, two fork worktrees + one shared repo)
 
@@ -1440,6 +1448,48 @@ dieser Commit.
    nicht andersherum: ein Brief mit Mailbox-Channel-Zeile, von der
    synchron-gewordenen Session komponiert, strandet den Report.
 
+## 2026-08-17 — Ein Identitäts-Check, gekeyed auf ein Feld, das nicht IDENTIFIZIERT (§4-Slot-(f)-Regel, eine Stunde nach ihrem eigenen Versand widerlegt)
+
+**ANGEWANDT 2026-08-17 (im selben Pass geschrieben und angewandt)** —
+§4 Slot-(f)-Grading und §2 Slot (f); der Eintrag hält die KLASSE fest,
+nicht eine Schuld. Positions-Korrektur derselben Runde: er stand
+zuerst unter `## Offen`, obwohl seine Slots 3 und 4 ihn als
+abgeflossen auswiesen — das Spiegelbild des Fehlers, den dieser Pass
+behob, gemintet vom selben Commit und gefunden von der
+Frisch-Kontext-Runde. Beleg: 5bd8e03.
+1. **Vorfall + Basis:** Die in diesem Pass geschriebene §4-Regel nennt
+   den Commit-Trailer die „billige widerlegende Probe" für Slot (f).
+   Ihr eigener Autor wandte sie eine Stunde später auf einen
+   unerwarteten Commit in der eigenen Arbeitskopie an — und bekam eine
+   FALSCHE Zuordnung: beide Kandidaten waren fable-Sessions, der
+   `Co-Authored-By`-Trailer trug bei beiden identisch „Claude Fable 5".
+   Korrigiert von einem Peer, danach an der Quelle geprüft
+   (`git log -1 --format='%(trailers:key=Co-Authored-By,valueonly)
+   %(trailers:key=Claude-Session,valueonly)'` über dbbcb76 / 84d0e30 /
+   b115a2d): Autoren-Trailer gleich, Session-Trailer verschieden. Eine
+   Zählung über 60 Commits zeigt zudem, dass der Session-Trailer NICHT
+   universell ist (4 von 60 ohne).
+2. **Klasse:** Diskriminierungs-Frage an ein Attributions-Instrument —
+   das Feld beantwortet eine ANDERE Frage (welches Modell) als die
+   gestellte (welcher Schreiber), und es liefert bei geteiltem Modell
+   eine Antwort, die von der richtigen nicht unterscheidbar ist. Die
+   Instrument-Paar-Regel des Korpus, angewandt auf Identität statt auf
+   Defekte: geprüft wird nicht, ob das Feld einen Wert hat, sondern ob
+   zwei Kandidaten darin verschieden AUSSEHEN.
+3. **Vorformulierter Text:** ANGEWANDT in diesem Pass — §4,
+   Slot-(f)-Grading („der Autoren-Trailer nennt ein MODELL, trennt
+   also Tiers und nichts Feineres … der Session-Trailer, wo die
+   Harness einen schrieb, ist der Diskriminator; sonst haben die
+   Trailer die Autorschaft NICHT geklärt — den Halter fragen") und
+   §2-Slot (f) auf der Agenten-Seite. Bewusst NICHT in den
+   EXECUTION-Tail übernommen: der Tail wird je Dispatch gepastet, die
+   Klausel hilft dem Agenten nicht, der die Identität so wenig
+   auflösen kann wie der Dispatcher — eine Heimat je Bedeutung.
+4. **Konsument + Abfluss-Naht:** in derselben Runde abgeflossen; der
+   Eintrag hält die KLASSE fest, nicht eine Schuld. Nächste Runde, die
+   ein Attributions- oder Identitäts-Feld einführt, liest ihn als
+   Präzedenz.
+
 ## 2026-08-17 — Ein genannter Horizont ohne bewaffneten Wecker ist Prosa, die nur eine GEWECKTE Session ausführen kann (Peer-Handoff statiker-Meta → beat-the-books-Desk)
 
 **ANGEWANDT 2026-08-17, als EINE Amendierung mit der
@@ -1581,6 +1631,15 @@ Vokabular-Cascade heute früh (0.10.20), anderer Träger.
 **Beleg:** dieser Commit.
 
 ## 2026-08-15 — Worktree-Entfernung verbrennt den Resume-Kanal (statiker E-Lane-Batch)
+
+**ANGEWANDT 2026-08-15 — Beleg: der `### ANGEWANDT`-Block DIREKT
+DARÜBER** („Removal ist terminal; Reihenfolge und drei Heimaten"), der
+diesen Eintrag disponiert. Bis zum Pass am 2026-08-17 trug er gar
+keine eigene Disposition: sein einziges Ausgangs-Signal war die
+POSITION im abgeflossenen Abschnitt — genau die Lesart, die dieser
+Träger nicht mehr zulässt. Die Arbeit selbst war gelandet
+(plugin/skills/worktree/SKILL.md, Cleanup-Klausel); die Lücke war der
+RECORD, nachgetragen auf Befund der Frisch-Kontext-Runde.
 
 1. **Vorfall + Basis:** Nach Buchung von Lane Gs Report entfernte der
    Dispatcher zuerst den Worktree (`git worktree remove --force`)
@@ -1757,9 +1816,11 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 
 ## Offen
 
-Lebende Einträge. Was hier steht, hat den Wartungs-Pass NICHT
-verlassen — und die drei unten stehen nicht, weil sie ungeklärt
-wären, sondern weil ihre Zielstelle in einem anderen Repo liegt.
+Lebende Einträge — die Liste, an die angehängt wird. Was hier steht,
+hat den Wartungs-Pass nicht verlassen, aus je am EINTRAG genanntem
+Grund; diese Kopfzeile zählt sie nicht auf, damit sie nicht mit dem
+Bestand veraltet (eine frühere Fassung sprach von „den drei unten",
+während fünf hier standen — Etikett über eigenem Körper).
 
 **RESIDUUM (Wartungs-Pass 2026-08-17) — Heimat außerhalb
 dieser Arbeitskopie:** der vorformulierte Text amendiert das
@@ -1945,41 +2006,6 @@ jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
    dispatch-guards-Maintenance-Runde (§1-Text); Quota-Drain nach
    OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
    Ableitungs-Briefe komponiert — per Hand bis zum Mint.
-
-## 2026-08-17 — Ein Identitäts-Check, gekeyed auf ein Feld, das nicht IDENTIFIZIERT (§4-Slot-(f)-Regel, eine Stunde nach ihrem eigenen Versand widerlegt)
-
-1. **Vorfall + Basis:** Die in diesem Pass geschriebene §4-Regel nennt
-   den Commit-Trailer die „billige widerlegende Probe" für Slot (f).
-   Ihr eigener Autor wandte sie eine Stunde später auf einen
-   unerwarteten Commit in der eigenen Arbeitskopie an — und bekam eine
-   FALSCHE Zuordnung: beide Kandidaten waren fable-Sessions, der
-   `Co-Authored-By`-Trailer trug bei beiden identisch „Claude Fable 5".
-   Korrigiert von einem Peer, danach an der Quelle geprüft
-   (`git log -1 --format='%(trailers:key=Co-Authored-By,valueonly)
-   %(trailers:key=Claude-Session,valueonly)'` über dbbcb76 / 84d0e30 /
-   b115a2d): Autoren-Trailer gleich, Session-Trailer verschieden. Eine
-   Zählung über 60 Commits zeigt zudem, dass der Session-Trailer NICHT
-   universell ist (4 von 60 ohne).
-2. **Klasse:** Diskriminierungs-Frage an ein Attributions-Instrument —
-   das Feld beantwortet eine ANDERE Frage (welches Modell) als die
-   gestellte (welcher Schreiber), und es liefert bei geteiltem Modell
-   eine Antwort, die von der richtigen nicht unterscheidbar ist. Die
-   Instrument-Paar-Regel des Korpus, angewandt auf Identität statt auf
-   Defekte: geprüft wird nicht, ob das Feld einen Wert hat, sondern ob
-   zwei Kandidaten darin verschieden AUSSEHEN.
-3. **Vorformulierter Text:** ANGEWANDT in diesem Pass — §4,
-   Slot-(f)-Grading („der Autoren-Trailer nennt ein MODELL, trennt
-   also Tiers und nichts Feineres … der Session-Trailer, wo die
-   Harness einen schrieb, ist der Diskriminator; sonst haben die
-   Trailer die Autorschaft NICHT geklärt — den Halter fragen") und
-   §2-Slot (f) auf der Agenten-Seite. Bewusst NICHT in den
-   EXECUTION-Tail übernommen: der Tail wird je Dispatch gepastet, die
-   Klausel hilft dem Agenten nicht, der die Identität so wenig
-   auflösen kann wie der Dispatcher — eine Heimat je Bedeutung.
-4. **Konsument + Abfluss-Naht:** in derselben Runde abgeflossen; der
-   Eintrag hält die KLASSE fest, nicht eine Schuld. Nächste Runde, die
-   ein Attributions- oder Identitäts-Feld einführt, liest ihn als
-   Präzedenz.
 
 <!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
      die lebende Liste. Abgeflossenes steht OBERHALB. Der

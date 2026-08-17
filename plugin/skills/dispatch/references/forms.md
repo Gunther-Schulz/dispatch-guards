@@ -113,9 +113,20 @@ Which lanes EXIST is a per-session PROBE, never a date: look at
 THIS session's Agent-tool schema before the first dispatch whose
 form depends on the lane. Accepts no `name` → only the synchronous
 lane exists, so paste NO channel line (the final text is the
-report, returning as the tool result), the model gate reads the
-`model` parameter, and the horizon rule does not apply, a sync
-dispatch being unable to outlive the turn. The harness has
+report, returning as the tool result) and the horizon rule does not
+apply, a sync dispatch being unable to outlive the turn. Weigh what
+that state does to the model gate, which mandates a `<model>-` NAME
+on every generic dispatch and denies without one (measured, stdin →
+stdout: generic type + `model` + no `name` → exit 2; the same
+payload named → exit 0): where `name` cannot be expressed the
+mandate is unsatisfiable, so only the pinned types the gate exempts
+dispatch at all. The collision is real rather than a wording
+problem, and the gate keeps its lane — the failure it guards, a
+dispatch whose model is invisible where the operator watches, does
+not stop being a failure because the schema moved. A session
+needing a GENERIC dispatch in that state takes it to the operator;
+working around a guard silently is the override reflex the guard
+exists to prevent. The harness has
 withdrawn `name` MID-SESSION from a session that had run named
 dispatches hours earlier while a sibling session kept it, so the
 divergence is per session in both directions — and a brief

@@ -350,41 +350,72 @@ def check_observations_tail() -> list:
     no convention outranks it. So the live section goes last and the
     marker names the file's end as the live list. A carrier with no
     drained section yet is skipped: it has no way to strand anything.
+
+    Every predicate below is written against a state that was
+    CONSTRUCTED and measured green under a weaker one (`--test` carries
+    them all as arms; a fresh-context vet built the first four):
+    the LAST drained heading decides, never the first, or a second
+    drained section opened after the live one passes — and that is the
+    next maintenance pass's own shape, `## Abgeflossen (Wartungs-Pass
+    <date>)`, which a literal-equality test also misses; headings match
+    at any level and any indentation, since one leading space made
+    `startswith("## ")` skip an entire broken file; and the marker is
+    sought in the last non-empty LINES rather than the last
+    blank-line-delimited paragraph, which a file with no blank line
+    satisfies from the top. The could-not-verify exit is a file that
+    cannot be READ — the only third answer this check actually has.
+
+    SCOPE, stated because it is narrower than the class: the
+    name-keyed, non-recursive glob covers the observations carriers
+    only. BACKLOG.md shares the hazard (its `## Done` sits last, so an
+    EOF append lands among closed items) and is deliberately NOT
+    covered here — whether that file inverts is a convention decision,
+    not a drift finding.
     """
     out = []
+    drained_re = re.compile(r"^\s*#{2,}\s*Abgeflossen\b")
+    live_re = re.compile(r"^\s*#{2,}\s*Offen\b")
     for path in sorted(glob.glob(os.path.join(ROOT, "dev-notes",
                                               "*OBSERVATIONS*.md"))):
         rel = os.path.relpath(path, ROOT)
-        with open(path, encoding="utf-8") as fh:
-            text = fh.read()
-        headings = [ln for ln in text.split("\n") if ln.startswith("## ")]
+        try:
+            with open(path, encoding="utf-8") as fh:
+                text = fh.read()
+        except OSError as exc:
+            raise CouldNotVerify(f"{rel} could not be read: {exc}")
+        lines = text.split("\n")
         # The HEADING, never the string: the form template names
         # `## Abgeflossen` in its prose while carrying no such section,
         # and firing on it would be a fire on a non-defect.
-        if not any(ln.strip() == _DRAINED_HEADING for ln in headings):
+        drained = [i for i, ln in enumerate(lines) if drained_re.match(ln)]
+        if not drained:
             continue                      # nothing drained, nothing to strand
-        if not headings:
-            raise CouldNotVerify(
-                f"{rel} carries `{_DRAINED_HEADING}` but no `## ` headings "
-                f"the tail rule could compare")
-        # Section ORDER, not last-heading: entries are `## ` headings
-        # themselves in these carriers, so a live section with any entry
-        # under it never ends the file. What must hold is that the live
-        # SECTION opens after the drained one — then an EOF append lands
-        # under the live heading whatever entries sit between.
-        stripped = [ln.strip() for ln in headings]
-        if _LIVE_HEADING not in stripped:
-            out.append(f"{rel}: carries {_DRAINED_HEADING!r} but no "
-                       f"{_LIVE_HEADING!r} section — an appended entry has "
-                       f"no live section to land in")
-        elif stripped.index(_LIVE_HEADING) < stripped.index(_DRAINED_HEADING):
-            out.append(f"{rel}: {_LIVE_HEADING!r} opens BEFORE "
-                       f"{_DRAINED_HEADING!r} — an entry appended at EOF "
-                       f"lands in the drained section and reads as drained")
-        if _APPEND_MARKER not in text.rsplit("\n\n", 1)[-1]:
-            out.append(f"{rel}: no append marker at the file's end — the "
-                       f"next writer has nothing telling them EOF is the "
-                       f"live list")
+        live = [i for i, ln in enumerate(lines) if live_re.match(ln)]
+        if not live:
+            out.append(f"{rel}: carries a drained section but no "
+                       f"{_LIVE_HEADING!r} — an appended entry has no live "
+                       f"section to land in")
+        elif live[-1] < drained[-1]:
+            out.append(f"{rel}: the last drained section (line "
+                       f"{drained[-1] + 1}) opens AFTER the last live one "
+                       f"(line {live[-1] + 1}) — an entry appended at EOF "
+                       f"lands in a drained section and reads as drained")
+        # Nothing FOLLOWS the marker — the invariant a line-window test
+        # only approximates: a window is meaningless on a short file, and
+        # this marker spans several lines itself. What must hold is that
+        # no section opens after it.
+        marks = [i for i, ln in enumerate(lines) if _APPEND_MARKER in ln]
+        headings_all = [i for i, ln in enumerate(lines)
+                        if drained_re.match(ln) or live_re.match(ln)
+                        or ln.startswith("#")]
+        if not marks:
+            out.append(f"{rel}: no append marker — the next writer has "
+                       f"nothing telling them EOF is the live list")
+        elif headings_all and marks[-1] < headings_all[-1]:
+            out.append(f"{rel}: the append marker (line {marks[-1] + 1}) is "
+                       f"followed by a section heading (line "
+                       f"{headings_all[-1] + 1}) — it no longer names the "
+                       f"file's end")
     return out
 
 
@@ -439,5 +470,87 @@ def main() -> int:
     return 0
 
 
+def _test() -> int:
+    """Bite-test for check_observations_tail.
+
+    Every arm below is a state that was green under a WEAKER version of
+    the predicate — four constructed by a fresh-context vet, the rest
+    while repairing it. The pair that matters is (good, swapped): the
+    check must be silent on one and fire on the other, or it
+    discriminates nothing. The graduation rule: this began as a
+    throwaway probe run twice, so it lives here instead.
+    """
+    import tempfile, textwrap                              # noqa: E401
+    global ROOT
+    marker = _APPEND_MARKER
+    def run(body: str) -> list:
+        global ROOT
+        td = tempfile.mkdtemp()
+        os.makedirs(os.path.join(td, "dev-notes"))
+        with open(os.path.join(td, "dev-notes", "x-OBSERVATIONS.md"),
+                  "w", encoding="utf-8") as fh:
+            fh.write(textwrap.dedent(body))
+        keep, ROOT = ROOT, td
+        try:
+            return check_observations_tail()
+        finally:
+            ROOT = keep
+
+    good = f"# t\n\n## Abgeflossen\n\ndrained\n\n## Offen\n\nlive\n\n{marker}\n"
+    arms = [
+        ("good order", good, False),
+        ("sections swapped", f"# t\n\n## Offen\n\nl\n\n## Abgeflossen\n\nd"
+                             f"\n\n{marker}\n", True),
+        ("second drained section after the live one",
+         f"# t\n\n## Abgeflossen\n\no\n\n## Offen\n\nl\n\n## Abgeflossen"
+         f"\n\nn\n\n{marker}\n", True),
+        ("next pass's dated drained heading at the tail",
+         f"# t\n\n## Abgeflossen\n\no\n\n## Offen\n\nl\n\n## Abgeflossen "
+         f"(Wartungs-Pass 2026-09-01)\n\nn\n\n{marker}\n", True),
+        ("one leading space on the headings",
+         f"# t\n\n ## Abgeflossen\n\nd\n\n ## Offen\n\nl\n", True),
+        ("deeper-level drained heading at the tail",
+         f"# t\n\n## Abgeflossen\n\no\n\n## Offen\n\nl\n\n### Abgeflossen"
+         f"\n\nn\n\n{marker}\n", True),
+        ("marker missing", "# t\n\n## Abgeflossen\n\nd\n\n## Offen\n\nl\n",
+         True),
+        ("marker present but not at the end (no blank lines)",
+         f"# t\n{marker}\n## Abgeflossen\nd\n## Offen\nl\n", True),
+        ("no drained section — skipped, not a finding",
+         "# t\n\n## Offen\n\nlive only\n", False),
+        ("prose naming the drained section without having one",
+         "# t\n\nDer `## Abgeflossen`-Abschnitt nimmt Einträge auf.\n", False),
+    ]
+    bad = 0
+    for label, body, must_fire in arms:
+        fired = bool(run(body))
+        if fired != must_fire:
+            bad += 1
+            print(f"FAIL [{label}]: expected "
+                  f"{'a finding' if must_fire else 'silence'}, got "
+                  f"{'a finding' if fired else 'silence'}")
+    # could-not-verify is a REAL exit here, not a decorative branch
+    td = tempfile.mkdtemp()
+    os.makedirs(os.path.join(td, "dev-notes"))
+    p = os.path.join(td, "dev-notes", "y-OBSERVATIONS.md")
+    with open(p, "w", encoding="utf-8") as fh:
+        fh.write("## Abgeflossen\n")
+    os.chmod(p, 0o000)
+    keep, ROOT = ROOT, td
+    try:
+        check_observations_tail()
+        if os.geteuid() != 0:            # root reads anything; skip there
+            bad += 1
+            print("FAIL [unreadable carrier]: expected CouldNotVerify")
+    except CouldNotVerify:
+        pass
+    finally:
+        ROOT = keep
+        os.chmod(p, 0o600)
+    print("check-doc-drift: all tests passed" if not bad
+          else f"check-doc-drift: {bad} FAILED")
+    return 1 if bad else 0
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(_test() if "--test" in sys.argv else main())

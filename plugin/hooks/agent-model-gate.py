@@ -73,15 +73,23 @@ model field, and a matching prefix is tolerated rather than
 rejected — style prefers none, tolerance keeps the false-fire
 surface at zero.
 Why the title lane could retire: it existed for the SYNCHRONOUS
-dispatch, where no name is set and the title is the only carrier —
-and that shape does not exist. The controlled re-probe settled it
-(forms.md §2, binding as of 2026-08-15, harness 2.1.232): the Agent
-tool takes no `run_in_background` parameter, so there is no sync
-launch to carry a title; an UNNAMED dispatch launches as a
-background task whose completion notification delivers its final
-text, and `name` alone selects that lane against the mailbox one.
-An unnamed dispatch is reachable only by pinned types, which this
-gate exempts anyway — so the lane guards nothing.
+dispatch, where no name is set and the title is the only carrier.
+The controlled re-probe (forms.md §2) found no sync LAUNCH MODE to
+carry a title: the Agent tool takes no `run_in_background`
+parameter, an UNNAMED dispatch launches as a background task whose
+completion notification delivers its final text, and `name` alone
+selects that lane against the mailbox one. An unnamed dispatch is
+then reachable only by pinned types, which this gate exempts
+anyway — so the lane guards nothing.
+CAVEAT, and it is why forms.md now decides the lane by a PER-SESSION
+schema probe rather than a dated binding: the harness has withdrawn
+`name` from the Agent schema mid-session, and in such a session the
+synchronous shape is all there is. This gate's mandatory-name lane
+then denies every GENERIC dispatch, since the mandate cannot be
+satisfied at all. That is deliberate and stays: the guarded failure
+— a dispatch whose model is invisible where the operator watches —
+does not stop being a failure because the schema moved, and the
+route in that state is the operator, never a silent workaround.
 
 Accepted residue: agent types that pin their model in their
 definition bypass the gate entirely for the model/title checks
