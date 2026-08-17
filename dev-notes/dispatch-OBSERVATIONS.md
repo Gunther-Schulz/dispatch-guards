@@ -1623,3 +1623,51 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
    BACKLOG P17 erhält den Timer als verengten
    Kandidat-Mechanismus, bleibt dort auf seiner genannten
    Evidenz geparkt.
+
+## 2026-08-17 — Der Report eines Peer-getriebenen Desks strandet im Terminal-Finaltext (Wave-Handoff dispatch-guards-Desk → dotfiles-f4)
+
+1. **Vorfall + Basis:** Ein per Peer-Kanal übergebener Wave-Desk
+   (opus, dotfiles-f4) lieferte zweimal binnen einer Stunde
+   seinen Report als FINALTEXT der eigenen Session ab statt per
+   SendMessage — der Bericht erreichte niemanden, der Operator
+   sah nur „idle" und fragte beim treibenden Desk nach
+   (Transkript-Probe 5a243b52: Entscheidungsrunde 16:01,
+   Restatement 16:14 mit eigener Formulierung „since they may
+   not have rendered" — die Session KONNTE ihre Zustellung
+   nicht prüfen). n=2 am selben Tag, derselbe Desk. Der
+   Handoff selbst hatte den Report-Konsumenten benannt
+   (Operator) — was fehlt, ist der KANAL: „Konsument benannt"
+   liest sich als zugestellt, während Finaltext auf der
+   Peer-Lane genau das ist, was report-enforcer für
+   Mailbox-Subagenten schon verhindert.
+2. **Klasse:** report-enforcer-Klasse eine Ebene höher — der
+   Peer-Executor-Report strandet im Finaltext, weil kein
+   Mechanismus am Turn-Ende den SENDE-Akt verlangt.
+   (Nachbarklassen, kein Merge: der Wecker-Eintrag oberhalb
+   ist die EMPFÄNGER-Hälfte — Schweigen erkennen; dieser hier
+   die Sender-Hälfte — Schweigen gar nicht erst entstehen
+   lassen. Beide zusammen sind die Peer-Rendering der
+   §2-Report-Pflicht.)
+3. **Vorformulierter Text:** (a) Skill §4, Handoff-Klausel
+   (neben Horizont + Residuen-Split): „Der Handoff nennt den
+   Report-KANAL maschinenlesbar — eine Zeile
+   `REPORT-CHANNEL: SendMessage <name|operator-terminal>` —
+   und die Kadenz (mindestens: jede Entscheidungsrunde, der
+   Close-Report). Finaltext erreicht auf der Peer-Lane
+   niemanden; ‚Konsument benannt' ist keine Zustellung."
+   (b) Guard-Kandidat, default-warn: Stop-Lane als
+   Geschwister von report-enforcer — feuert nur wenn das
+   Transkript einen `REPORT-CHANNEL: SendMessage <name>`-
+   Marker trägt UND der endende Turn substanziellen Finaltext
+   komponiert UND kein SendMessage an <name> im Turn liegt;
+   Marker-gated, dadurch nahe null False-Fires. Ohne Marker
+   stumm.
+4. **Konsument + Drain:** die fällige Maintenance-Pass-Runde
+   dieses Carriers (Banner meldet sie seit heute: gebucht ~6
+   vs gedraint ~1) — Text (a) ist ein §4-Amendment
+   (skill-craft-gated, Release-Pipeline), Kandidat (b) geht
+   als geparkter BACKLOG-Eintrag mit Bite-Test-Pflicht. Die
+   Pass-Schuld wächst mit diesem Eintrag bewusst um eins; der
+   treibende Desk empfiehlt, den Pass nach Wellenschluss an
+   den opus-Desk zu geben statt ihn auf fable zu fahren
+   (Guard-Vokabular-Bindung, routing-Modul).
