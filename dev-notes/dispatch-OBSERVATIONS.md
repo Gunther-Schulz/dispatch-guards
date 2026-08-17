@@ -1575,3 +1575,51 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
    darf die Lane einer anderen nie aus der eigenen ableiten — auch
    nicht andersherum: ein Brief mit Mailbox-Channel-Zeile, von der
    synchron-gewordenen Session komponiert, strandet den Report.
+
+## 2026-08-17 — Ein genannter Horizont ohne bewaffneten Wecker ist Prosa, die nur eine GEWECKTE Session ausführen kann (Peer-Handoff statiker-Meta → beat-the-books-Desk)
+
+1. **Vorfall + Basis:** Die statiker-Meta-Session übergab einen
+   Run per Peer-Kanal (SendMessage-Handoff, Desk
+   beat-the-books-e9) und nannte den Erwartungs-Horizont (~2 h
+   bis zum ersten Report) — und stellte beim Komponieren fest,
+   dass die Horizont-Regel („Schweigen jenseits davon ist ein
+   Befund, nie weiteres Warten", Korpus Insurance / Skill §4)
+   von genau der Partei ausgelöst würde, deren Ausfall sie
+   erkennen soll: der einzige Wecker der wartenden Session IST
+   die erwartete Peer-Nachricht. Ein toter oder gestrandeter
+   Peer erzeugt permanentes Schweigen, ununterscheidbar von
+   Arbeit. Klasse zuerst identifiziert als statiker P17
+   (Begehung R3, 2026-08-16, dort für Desk-Waits geparkt); die
+   Prämisse „Wake-Kanal unzuverlässig" ist gemessen (Eintrag
+   direkt oberhalb: Mailbox-Lane-Entzug pro Session,
+   2026-08-16). Ein beobachteter Stall jenseits eines genannten
+   Horizonts steht noch aus (n=0 für den Stall selbst; die
+   Bewaffnung heute war Hand-Anwendung, kein Feuer).
+2. **Klasse:** Horizont genannt, aber unvollstreckbar — der
+   Wecker ist die überwachte Partei. (Nachbarklasse, nicht
+   Merge: der Lane-Entzugs-Eintrag misst den KANAL-Verlust;
+   dieser hier die fehlende Vollstreckungs-Hälfte der
+   Horizont-Regel, die auch bei intaktem Kanal fehlt.)
+3. **Vorformulierter Regel-Text** (Skill §4, an die
+   Horizont-Klausel): „Wo die erwartete Rückkehr selbst der
+   einzige Wecker ist — Peer-Handoff, Mailbox-Dispatch, jede
+   Wartestellung ohne harness-verfolgte Task — bewaffnet der
+   Wartende den Horizont beim Warte-Beginn als EIGENEN Wecker:
+   ein In-Harness-Hintergrund-Timer (z. B. `sleep <Horizont>`
+   als Background-Task), dessen Ablauf die Session re-invoziert.
+   Feuert der Timer vor dem Report, ist das Schweigen der
+   Befund, den die Regel bereits benennt — nachgefasst wird
+   sofort, nicht weiter gewartet. Ein Horizont ohne bewaffneten
+   Wecker ist Prosa, die nur eine geweckte Session ausführen
+   kann." (Kein neues Werkzeug: ein Bash-Call; die
+   Timer-Maschinerie, die statiker P17 als „machinery without a
+   fire" parkt — cron, systemd, mtime-watch — bleibt ungebaut.)
+4. **Konsument + Abfluss-Naht:** nächste
+   dispatch-guards-Maintenance-Runde (Skill §4,
+   Horizont-Klausel); Quota-Drain nach OBSERVATIONS-Regel.
+   Sofort-Konsument: jede Session, die einen Horizont über
+   einen Peer-Handoff stellt — bis zum Mint per Hand (heute so
+   angewandt, statiker-Meta-Session). Querverweis: statiker
+   BACKLOG P17 erhält den Timer als verengten
+   Kandidat-Mechanismus, bleibt dort auf seiner genannten
+   Evidenz geparkt.
