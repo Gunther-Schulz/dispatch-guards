@@ -25,7 +25,10 @@ answer, silence is not; (h) rides the EXECUTION tail only:
       the RECORD rather than from memory: the commits reported are
       those whose Co-Authored-By trailer carries the agent's OWN
       model name, and a commit it cannot claim by trailer is
-      reported as "present in the tree, not mine" — mandatory on a
+      reported as "present in the tree, not mine". That trailer
+      names a MODEL, so where a same-model sibling writes in the
+      same copy it proves tier, never identity: the report says so
+      rather than claiming the commit — mandatory on a
       shared copy, whose tree carries co-writers' work by
       construction, and doubly so after a summarization, where what
       the agent remembers doing and what the tree shows diverge

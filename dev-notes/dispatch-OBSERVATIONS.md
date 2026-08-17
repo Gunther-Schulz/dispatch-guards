@@ -5,156 +5,6 @@ discipline should have prevented, or a rule it states wrongly, gets written here
 with its evidence, and the rule change proposed. Not a changelog — each entry is
 a measured incident.
 
-## Offen
-
-Lebende Einträge. Was hier steht, hat den Wartungs-Pass NICHT
-verlassen — und die drei unten stehen nicht, weil sie ungeklärt
-wären, sondern weil ihre Zielstelle in einem anderen Repo liegt.
-
-**RESIDUUM (Wartungs-Pass 2026-08-17) — Heimat außerhalb
-dieser Arbeitskopie:** der vorformulierte Text amendiert das
-guard-checker-bau-Devbook im dotfiles-Repo (dortiges CLAUDE.md,
-§Registered procedure). Diese Session hält die dispatch-guards-Kopie,
-nicht dotfiles (ein Schreiber pro Arbeitskopie), also ist der Eintrag
-hier NICHT abgeflossen und wird auch nicht so gebucht. Naht: die
-nächste Amendierung des Devbooks dort. Prüfung, wer sie am Abschluss
-fährt: diese Session meldet die drei Texte an den dotfiles-Desk und
-an den Operator; erledigt ist sie erst, wenn das Devbook sie trägt.
-
-## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (3 Vorfälle, 3 Lanes)
-
-1. **Vorfall + Basis (3×, zwei Tage):** (c, 13.08., Dispatch
-   `opus-helfer-kopien`, von der Lane selbst gefangen und gemeldet)
-   Die ANWENDUNG der Mutation ist dieselbe Arrangement-Hälfte: ein
-   handgetipptes Ersetzungs-Muster traf 0×, die Batterie lief GRÜN
-   über der NICHT angewandten Mutation — von „Test greift nicht"
-   nicht unterscheidbar, beinahe als Rot-Beweis gebucht. Reparatur
-   in der Lane: Mutation per Zeilen-Bereich aus der Datei gelesen,
-   entfernter Text vor jedem Lauf ausgedruckt; der Dispatcher-eigene
-   Kontroll-Biss lief 13.08. mit demselben Anwendungs-Beweis.
-   (a) e1 aus Dispatch
-   `opus-abw-drei-waechter`: Mutations-Batterie mit `pytest -k "antwort"`
-   — der Selektor schloss genau das Fixture aus, das die Mutation fangen
-   sollte; Batterie las sich grün. Gefangen durch Divergenz zweier
-   Messungen (Bestand 13 Meldungen, Fixtures still). (b) e-Nachtrag aus
-   Dispatch `opus-abw-sichtweite-austrag`: Batterie mit `-x` — pro
-   Mutation nur der ERSTE Fehlschlag sichtbar, wodurch systematisch
-   verdeckt blieb, welcher Test-Arm NIE feuert; „alle Mutationen rot"
-   war wahr und trotzdem ohne Aussage über den unbewiesenen Arm
-   (test_sichtweite_elementfeld…, repariert 46a5831 erst auf
-   Dispatcher-Nachfrage). Dazugehörige Erwartungs-Seite: eine
-   SCHWEIGE-Erwartung ist nur so scharf wie die Menge der Meldungsformen,
-   über die sie schweigt — feuert der Wächter unter dem Defekt eine
-   ANDERE Form, bleibt sie erfüllt.
-2. **Klasse:** Instrument-Arrangement — der BATTERIE-AUFRUF (Selektor,
-   Abbruch-Flags, Fehlschlag-Auswertung) ist Teil des Instruments; jede
-   Verengung (Namensfilter, First-Fail-Abbruch) macht eine Stille
-   unlesbar, die von einem echten Pass nicht unterscheidbar ist
-   (Geschwister der Devbook-Schritt-4-Klasse „ein grüner Biss braucht
-   seine Arrangement-Prüfung").
-3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
-   EINE Ergänzung für beide Hälften): „Die Mutations-/Biss-Batterie läuft
-   über die GANZE Testdatei, nie über eine `-k`-Namensauswahl und nie mit
-   `-x`: der Selektor schließt sonst das fangende Fixture aus, und der
-   First-Fail-Abbruch verdeckt, welche Arme nie feuern — beides liefert
-   ein Grün/Rot, das vom echten nicht unterscheidbar ist. Wo die Frage
-   die Zuordnung Defekt→Arm ist, wird die FEHLSCHLAG-LISTE je Mutation
-   ausgewertet; eine Schweige-Erwartung nennt ALLE Meldungsformen des
-   Wächters. Und die Mutation BEWEIST ihre Anwendung — das
-   Mutations-Werkzeug zeigt den entfernten/ersetzten Text oder bricht
-   hart ab, wenn das Muster nicht traf: eine grüne Batterie über einer
-   nicht angewandten Mutation ist von einem toten Test nicht
-   unterscheidbar (gemessen 2026-08-12/13, drei Lanes: -k e1 ·
-   -x Nachtrag · 0×-Muster helfer-kopien)."
-4. **Konsument + Abfluss-Naht:** nächste Amendierung des
-   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
-   — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
-   setzt den Fingerprint zurück (eval-open).
-
-### MERGE 2026-08-13 — 4. Vorfall, neuer Mechanismus derselben Klasse: der .pyc-Cache lässt einen Arm den Nachbarn nachplappern
-
-FB-101-Zusatz (opus-emission-telemetrie, pbs-projekt): Mutation A2
-zeigte exakt A1s Trefferliste — Python validiert .pyc über
-(Quell-mtime in SEKUNDEN, Quell-GRÖSSE), und A1/A2 waren byte-gleich
-groß (je 12253) und liefen 0,09 s auseinander; der zweite Lauf führte
-A1s Bytecode aus. Ein Nachbar-Abklatsch sieht aus wie ein normales
-Ergebnis; verraten hat ihn nur die zur Mutation unpassende Liste.
-Behoben an einer Stelle (PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge
-vor jedem Lauf; jeder Arm druckt seine Dateigröße mit); alle drei
-Batterien der Lane unter der Sperre wiederholt, Ergebnisse
-unverändert. Fix-Text-Ergänzung (in Slot 3 dieser Klasse
-einzuarbeiten): „Der Batterie-Treiber sperrt den Bytecode-Cache
-(PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge je Lauf) — zwei
-Mutationen gleicher Dateigröße innerhalb derselben mtime-Sekunde sind
-für den Cache ununterscheidbar, und der zweite Arm plappert sonst den
-ersten nach, grün und unauffällig."
-
-## 2026-08-13 — Ein global eingehängter Check-Schritt läuft in JEDEM Test: Fail-Loud über repo-externe Artefakte kollidiert per Konstruktion mit Temp-Fixtures
-
-1. **Vorfall + Basis:** Dispatch `opus-helfer-kopien` (FB 3.89, Session
-   ddd83862): Der Brief entschied „Skript fehlt → FEHLER, nie still" für
-   einen global in `pruefe()` eingehängten Wächter, der ein Skript im
-   office_repo und Helfer in zwei Nachbar-Repos liest. Spec-treu gebaut:
-   119 von 818 Tests rot, weil jede Temp-Fixture (`mach_office`) ein
-   office_repo OHNE tools/ baut und dev_root auf einen leeren Temp-Baum
-   zeigt. Executor-STOPP mit drei GEMESSENEN Wegen (A Fixture-Chirurgie
-   +17 s Suite; B durchgängig HINWEIS; C gemischt 2 failed/816 passed);
-   Desk-Entscheid Weg C. Das Repo hatte die Klasse laut dreier
-   conftest-Kommentare („ohne trüge JEDER Graph-Test den HINWEIS")
-   vorher schon dreimal getroffen — die Brief-Komposition las diese
-   Präzedenz nicht.
-2. **Klasse:** Brief-Komposition für global eingehängte Wächter mit
-   repo-EXTERNEN Artefakten. Der Fail-Loud-Kontrakt wird am
-   Produktions-Bild entschieden, aber der Schritt läuft zuerst und
-   tausendfach in der TEST-Umgebung, deren Fixtures die externen
-   Artefakte per Konstruktion nicht stellen — der Abwesend-Fall des
-   Wächters IST der Normalfall der Fixtures.
-3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau,
-   Brief-Kompositions-Schritt): „Hängt der Wächter global in einen
-   Lauf, der auch unter Tests steht, beantwortet der Brief VOR dem Bau:
-   Was sieht dieser Schritt in der Test-Umgebung (Fixtures gelesen,
-   nicht vermutet)? Für jeden repo-externen Anker (Nachbar-Repo,
-   Konfig-Pfad, Werkzeug-Skript) trägt der Brief die entschiedene
-   Grade des Abwesend-Falls — Fail-Loud nur dort, wo die Umgebung den
-   Anker garantiert stellt; sonst die sichtbare Degradations-Grade
-   (HINWEIS-Zeile je Lauf) MIT eigenem gepinntem Test. Die Präzedenz
-   im Ziel-Repo (conftest-Kommentare, Geschwister-Schritte) ist
-   Pflicht-Grounding der Brief-Komposition."
-4. **Konsument + Abfluss-Naht:** nächste Amendierung des
-   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
-   procedure) — mit den offenen Schritt-4-Ergänzungen bündeln;
-   Amendierung setzt den Fingerprint zurück (eval-open).
-
-## 2026-08-13 — Grad-Assertionen über den GANZEN Report unterscheiden die Grade nicht; mehrzeilige Durchreichungen tragen die Marke nur in Zeile 1
-
-1. **Vorfall + Basis:** FB-102-Bau (opus-emission-telemetrie,
-   pbs-projekt ende_check): Die Mutation „Exit!=0-Grad WARNUNG →
-   HINWEIS" lief im ersten Batterie-Durchgang GRÜN durch (34 passed) —
-   die Assertion prüfte `"WARNUNG" in out` über den Gesamtreport, und
-   dort stand ohnehin eine WARNUNG eines anderen Checks. Erst ein
-   Helfer, der den Telemetrie-EINTRAG isoliert (genau einer, sonst
-   Abbruch) und den Grad an der eigenen Zeile prüft, machte alle sechs
-   Mutationen bissig. Zweiter Fund im selben Bau: die durchgereichte
-   Report-Ausgabe ist MEHRZEILIG, die Marke (`[telemetrie]`) steht nur
-   in Zeile 1 — ein Leser, der „die Meldung" nimmt, schneidet die
-   Befundzeilen stumm ab, und die Durchreich-Prüfung wird stumpf, ohne
-   rot zu werden (betrifft auch den Helfer-Kopien-Präzedenzfall).
-2. **Klasse:** Assertions-Schärfe in Report-Gattern — ein Prädikat,
-   das am AGGREGAT prüft, ist von jedem anderen Check erfüllbar
-   (dieselbe „beide Ausgänge erfüllen"-Klasse wie im Fixing-Korpus,
-   hier als Report-Instanz), und Marken-Konventionen (Marke nur am
-   Blockanfang) machen Ein-Zeilen-Leser still unvollständig.
-3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt-4-
-   Ergänzung): „Grade werden an ihrer EIGENEN Zeile geprüft, nie am
-   Report — der Test isoliert den Eintrag des geprüften Schritts
-   (genau einer, sonst Abbruch) und prüft Grad + Inhalt dort. Reicht
-   ein Schritt einen mehrzeiligen Block durch, liest der Test den
-   BLOCK bis zu seiner Endmarke, nie nur die markierte erste Zeile."
-4. **Konsument + Abfluss-Naht:** nächste Amendierung des
-   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
-   procedure) — mit den dort schon wartenden Schritt-4-Ergänzungen
-   bündeln; Amendierung setzt den Fingerprint zurück (eval-open).
-
 ## Abgeflossen
 
 Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
@@ -432,6 +282,12 @@ tree says.
 graduiert („Criteria state OUTCOMES first, sites second", beide
 Feuerrichtungen); Kandidat 1 (je Disposition die Rot-zuerst-Anordnung
 als erster Akt) steht im Operator-Korpus, brief-family-Bullet.
+**Basis-Vorbehalt (Enumerations-Lane 2026-08-17):** Kandidat 1s
+Zielstelle liegt im GLOBALEN Operator-Korpus, also außerhalb dieser
+Arbeitskopie — von hier aus nicht prüfbar. Der Eintrag ist gegen eine
+Fundstelle zurückgezogen, die diese Session nicht öffnen kann; die
+Hälfte gilt als unverified, bis eine Session mit dotfiles-Zugriff sie
+liest.
 
 The pre-registered statiker experiment (criterion recorded before the
 arm ran) graded SUCCESS on all three clauses: nine repair dispositions
@@ -1899,6 +1755,164 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
    Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
 
+## Offen
+
+Lebende Einträge. Was hier steht, hat den Wartungs-Pass NICHT
+verlassen — und die drei unten stehen nicht, weil sie ungeklärt
+wären, sondern weil ihre Zielstelle in einem anderen Repo liegt.
+
+**RESIDUUM (Wartungs-Pass 2026-08-17) — Heimat außerhalb
+dieser Arbeitskopie:** der vorformulierte Text amendiert das
+guard-checker-bau-Devbook im dotfiles-Repo (dortiges CLAUDE.md,
+§Registered procedure). Diese Session hält die dispatch-guards-Kopie,
+nicht dotfiles (ein Schreiber pro Arbeitskopie), also ist der Eintrag
+hier NICHT abgeflossen und wird auch nicht so gebucht. Naht: die
+nächste Amendierung des Devbooks dort. Prüfung, wer sie am Abschluss
+fährt: diese Session meldet die drei Texte an den dotfiles-Desk und
+an den Operator; erledigt ist sie erst, wenn das Devbook sie trägt.
+
+## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (3 Vorfälle, 3 Lanes)
+
+1. **Vorfall + Basis (3×, zwei Tage):** (c, 13.08., Dispatch
+   `opus-helfer-kopien`, von der Lane selbst gefangen und gemeldet)
+   Die ANWENDUNG der Mutation ist dieselbe Arrangement-Hälfte: ein
+   handgetipptes Ersetzungs-Muster traf 0×, die Batterie lief GRÜN
+   über der NICHT angewandten Mutation — von „Test greift nicht"
+   nicht unterscheidbar, beinahe als Rot-Beweis gebucht. Reparatur
+   in der Lane: Mutation per Zeilen-Bereich aus der Datei gelesen,
+   entfernter Text vor jedem Lauf ausgedruckt; der Dispatcher-eigene
+   Kontroll-Biss lief 13.08. mit demselben Anwendungs-Beweis.
+   (a) e1 aus Dispatch
+   `opus-abw-drei-waechter`: Mutations-Batterie mit `pytest -k "antwort"`
+   — der Selektor schloss genau das Fixture aus, das die Mutation fangen
+   sollte; Batterie las sich grün. Gefangen durch Divergenz zweier
+   Messungen (Bestand 13 Meldungen, Fixtures still). (b) e-Nachtrag aus
+   Dispatch `opus-abw-sichtweite-austrag`: Batterie mit `-x` — pro
+   Mutation nur der ERSTE Fehlschlag sichtbar, wodurch systematisch
+   verdeckt blieb, welcher Test-Arm NIE feuert; „alle Mutationen rot"
+   war wahr und trotzdem ohne Aussage über den unbewiesenen Arm
+   (test_sichtweite_elementfeld…, repariert 46a5831 erst auf
+   Dispatcher-Nachfrage). Dazugehörige Erwartungs-Seite: eine
+   SCHWEIGE-Erwartung ist nur so scharf wie die Menge der Meldungsformen,
+   über die sie schweigt — feuert der Wächter unter dem Defekt eine
+   ANDERE Form, bleibt sie erfüllt.
+2. **Klasse:** Instrument-Arrangement — der BATTERIE-AUFRUF (Selektor,
+   Abbruch-Flags, Fehlschlag-Auswertung) ist Teil des Instruments; jede
+   Verengung (Namensfilter, First-Fail-Abbruch) macht eine Stille
+   unlesbar, die von einem echten Pass nicht unterscheidbar ist
+   (Geschwister der Devbook-Schritt-4-Klasse „ein grüner Biss braucht
+   seine Arrangement-Prüfung").
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
+   EINE Ergänzung für beide Hälften): „Die Mutations-/Biss-Batterie läuft
+   über die GANZE Testdatei, nie über eine `-k`-Namensauswahl und nie mit
+   `-x`: der Selektor schließt sonst das fangende Fixture aus, und der
+   First-Fail-Abbruch verdeckt, welche Arme nie feuern — beides liefert
+   ein Grün/Rot, das vom echten nicht unterscheidbar ist. Wo die Frage
+   die Zuordnung Defekt→Arm ist, wird die FEHLSCHLAG-LISTE je Mutation
+   ausgewertet; eine Schweige-Erwartung nennt ALLE Meldungsformen des
+   Wächters. Und die Mutation BEWEIST ihre Anwendung — das
+   Mutations-Werkzeug zeigt den entfernten/ersetzten Text oder bricht
+   hart ab, wenn das Muster nicht traf: eine grüne Batterie über einer
+   nicht angewandten Mutation ist von einem toten Test nicht
+   unterscheidbar (gemessen 2026-08-12/13, drei Lanes: -k e1 ·
+   -x Nachtrag · 0×-Muster helfer-kopien)."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
+   — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
+   setzt den Fingerprint zurück (eval-open).
+
+### MERGE 2026-08-13 — 4. Vorfall, neuer Mechanismus derselben Klasse: der .pyc-Cache lässt einen Arm den Nachbarn nachplappern
+
+FB-101-Zusatz (opus-emission-telemetrie, pbs-projekt): Mutation A2
+zeigte exakt A1s Trefferliste — Python validiert .pyc über
+(Quell-mtime in SEKUNDEN, Quell-GRÖSSE), und A1/A2 waren byte-gleich
+groß (je 12253) und liefen 0,09 s auseinander; der zweite Lauf führte
+A1s Bytecode aus. Ein Nachbar-Abklatsch sieht aus wie ein normales
+Ergebnis; verraten hat ihn nur die zur Mutation unpassende Liste.
+Behoben an einer Stelle (PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge
+vor jedem Lauf; jeder Arm druckt seine Dateigröße mit); alle drei
+Batterien der Lane unter der Sperre wiederholt, Ergebnisse
+unverändert. Fix-Text-Ergänzung (in Slot 3 dieser Klasse
+einzuarbeiten): „Der Batterie-Treiber sperrt den Bytecode-Cache
+(PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge je Lauf) — zwei
+Mutationen gleicher Dateigröße innerhalb derselben mtime-Sekunde sind
+für den Cache ununterscheidbar, und der zweite Arm plappert sonst den
+ersten nach, grün und unauffällig."
+
+## 2026-08-13 — Ein global eingehängter Check-Schritt läuft in JEDEM Test: Fail-Loud über repo-externe Artefakte kollidiert per Konstruktion mit Temp-Fixtures
+
+1. **Vorfall + Basis:** Dispatch `opus-helfer-kopien` (FB 3.89, Session
+   ddd83862): Der Brief entschied „Skript fehlt → FEHLER, nie still" für
+   einen global in `pruefe()` eingehängten Wächter, der ein Skript im
+   office_repo und Helfer in zwei Nachbar-Repos liest. Spec-treu gebaut:
+   119 von 818 Tests rot, weil jede Temp-Fixture (`mach_office`) ein
+   office_repo OHNE tools/ baut und dev_root auf einen leeren Temp-Baum
+   zeigt. Executor-STOPP mit drei GEMESSENEN Wegen (A Fixture-Chirurgie
+   +17 s Suite; B durchgängig HINWEIS; C gemischt 2 failed/816 passed);
+   Desk-Entscheid Weg C. Das Repo hatte die Klasse laut dreier
+   conftest-Kommentare („ohne trüge JEDER Graph-Test den HINWEIS")
+   vorher schon dreimal getroffen — die Brief-Komposition las diese
+   Präzedenz nicht.
+2. **Klasse:** Brief-Komposition für global eingehängte Wächter mit
+   repo-EXTERNEN Artefakten. Der Fail-Loud-Kontrakt wird am
+   Produktions-Bild entschieden, aber der Schritt läuft zuerst und
+   tausendfach in der TEST-Umgebung, deren Fixtures die externen
+   Artefakte per Konstruktion nicht stellen — der Abwesend-Fall des
+   Wächters IST der Normalfall der Fixtures.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau,
+   Brief-Kompositions-Schritt): „Hängt der Wächter global in einen
+   Lauf, der auch unter Tests steht, beantwortet der Brief VOR dem Bau:
+   Was sieht dieser Schritt in der Test-Umgebung (Fixtures gelesen,
+   nicht vermutet)? Für jeden repo-externen Anker (Nachbar-Repo,
+   Konfig-Pfad, Werkzeug-Skript) trägt der Brief die entschiedene
+   Grade des Abwesend-Falls — Fail-Loud nur dort, wo die Umgebung den
+   Anker garantiert stellt; sonst die sichtbare Degradations-Grade
+   (HINWEIS-Zeile je Lauf) MIT eigenem gepinntem Test. Die Präzedenz
+   im Ziel-Repo (conftest-Kommentare, Geschwister-Schritte) ist
+   Pflicht-Grounding der Brief-Komposition."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure) — mit den offenen Schritt-4-Ergänzungen bündeln;
+   Amendierung setzt den Fingerprint zurück (eval-open).
+
+## 2026-08-13 — Grad-Assertionen über den GANZEN Report unterscheiden die Grade nicht; mehrzeilige Durchreichungen tragen die Marke nur in Zeile 1
+
+1. **Vorfall + Basis:** FB-102-Bau (opus-emission-telemetrie,
+   pbs-projekt ende_check): Die Mutation „Exit!=0-Grad WARNUNG →
+   HINWEIS" lief im ersten Batterie-Durchgang GRÜN durch (34 passed) —
+   die Assertion prüfte `"WARNUNG" in out` über den Gesamtreport, und
+   dort stand ohnehin eine WARNUNG eines anderen Checks. Erst ein
+   Helfer, der den Telemetrie-EINTRAG isoliert (genau einer, sonst
+   Abbruch) und den Grad an der eigenen Zeile prüft, machte alle sechs
+   Mutationen bissig. Zweiter Fund im selben Bau: die durchgereichte
+   Report-Ausgabe ist MEHRZEILIG, die Marke (`[telemetrie]`) steht nur
+   in Zeile 1 — ein Leser, der „die Meldung" nimmt, schneidet die
+   Befundzeilen stumm ab, und die Durchreich-Prüfung wird stumpf, ohne
+   rot zu werden (betrifft auch den Helfer-Kopien-Präzedenzfall).
+2. **Klasse:** Assertions-Schärfe in Report-Gattern — ein Prädikat,
+   das am AGGREGAT prüft, ist von jedem anderen Check erfüllbar
+   (dieselbe „beide Ausgänge erfüllen"-Klasse wie im Fixing-Korpus,
+   hier als Report-Instanz), und Marken-Konventionen (Marke nur am
+   Blockanfang) machen Ein-Zeilen-Leser still unvollständig.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt-4-
+   Ergänzung): „Grade werden an ihrer EIGENEN Zeile geprüft, nie am
+   Report — der Test isoliert den Eintrag des geprüften Schritts
+   (genau einer, sonst Abbruch) und prüft Grad + Inhalt dort. Reicht
+   ein Schritt einen mehrzeiligen Block durch, liest der Test den
+   BLOCK bis zu seiner Endmarke, nie nur die markierte erste Zeile."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure) — mit den dort schon wartenden Schritt-4-Ergänzungen
+   bündeln; Amendierung setzt den Fingerprint zurück (eval-open).
+
+**Positions-Nachtrag 2026-08-17 (Wartungs-Pass):** dieser Eintrag
+wurde von einer dritten Session am Datei-ENDE angehängt und lag damit
+im Abschnitt `## Abgeflossen` — ohne Disposition, also als abgeflossen
+LESBAR, ohne es zu sein. Nur die Position ist geändert, der Wortlaut
+steht unberührt. Der Auslöser ist strukturell, nicht persönlich: wer
+anhängt, schreibt ans Datei-Ende — deshalb steht die lebende Liste
+jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
+
 ## 2026-08-17 — Ein Brief benennt eine Schema-Ableitungsquelle, die die abzuleitende LANE-KLASSE gar nicht führt (statiker P16-Lane)
 
 1. **Vorfall + Basis:** Ein Build-Brief (statiker Stop-Hook-Lane,
@@ -1931,3 +1945,43 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
    dispatch-guards-Maintenance-Runde (§1-Text); Quota-Drain nach
    OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
    Ableitungs-Briefe komponiert — per Hand bis zum Mint.
+
+## 2026-08-17 — Ein Identitäts-Check, gekeyed auf ein Feld, das nicht IDENTIFIZIERT (§4-Slot-(f)-Regel, eine Stunde nach ihrem eigenen Versand widerlegt)
+
+1. **Vorfall + Basis:** Die in diesem Pass geschriebene §4-Regel nennt
+   den Commit-Trailer die „billige widerlegende Probe" für Slot (f).
+   Ihr eigener Autor wandte sie eine Stunde später auf einen
+   unerwarteten Commit in der eigenen Arbeitskopie an — und bekam eine
+   FALSCHE Zuordnung: beide Kandidaten waren fable-Sessions, der
+   `Co-Authored-By`-Trailer trug bei beiden identisch „Claude Fable 5".
+   Korrigiert von einem Peer, danach an der Quelle geprüft
+   (`git log -1 --format='%(trailers:key=Co-Authored-By,valueonly)
+   %(trailers:key=Claude-Session,valueonly)'` über dbbcb76 / 84d0e30 /
+   b115a2d): Autoren-Trailer gleich, Session-Trailer verschieden. Eine
+   Zählung über 60 Commits zeigt zudem, dass der Session-Trailer NICHT
+   universell ist (4 von 60 ohne).
+2. **Klasse:** Diskriminierungs-Frage an ein Attributions-Instrument —
+   das Feld beantwortet eine ANDERE Frage (welches Modell) als die
+   gestellte (welcher Schreiber), und es liefert bei geteiltem Modell
+   eine Antwort, die von der richtigen nicht unterscheidbar ist. Die
+   Instrument-Paar-Regel des Korpus, angewandt auf Identität statt auf
+   Defekte: geprüft wird nicht, ob das Feld einen Wert hat, sondern ob
+   zwei Kandidaten darin verschieden AUSSEHEN.
+3. **Vorformulierter Text:** ANGEWANDT in diesem Pass — §4,
+   Slot-(f)-Grading („der Autoren-Trailer nennt ein MODELL, trennt
+   also Tiers und nichts Feineres … der Session-Trailer, wo die
+   Harness einen schrieb, ist der Diskriminator; sonst haben die
+   Trailer die Autorschaft NICHT geklärt — den Halter fragen") und
+   §2-Slot (f) auf der Agenten-Seite. Bewusst NICHT in den
+   EXECUTION-Tail übernommen: der Tail wird je Dispatch gepastet, die
+   Klausel hilft dem Agenten nicht, der die Identität so wenig
+   auflösen kann wie der Dispatcher — eine Heimat je Bedeutung.
+4. **Konsument + Abfluss-Naht:** in derselben Runde abgeflossen; der
+   Eintrag hält die KLASSE fest, nicht eine Schuld. Nächste Runde, die
+   ein Attributions- oder Identitäts-Feld einführt, liest ihn als
+   Präzedenz.
+
+<!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
+     die lebende Liste. Abgeflossenes steht OBERHALB. Der
+     doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
+     Anhängen am EOF sonst im abgeflossenen Abschnitt landet. -->

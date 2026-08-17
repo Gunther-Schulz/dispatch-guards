@@ -158,7 +158,8 @@ Mandatory parts (execution briefs):
 - **Write boundaries.** Which paths the agent owns (one writer per
   working copy; parallel dispatches need disjoint, brief-named path
   sets — source: site corpus dispatched-work rule). On a SHARED copy
-  commit by pathspec — `git commit -- <paths>`, not `git add` then
+  commit by pathspec — `git commit -m "…" -- <paths>` with every
+  flag BEFORE the separator, not `git add` then
   `git commit`; `-A` is wrong everywhere. A path git does not yet
   TRACK is invisible to a pathspec commit ("did not match any
   file(s) known to git"), so a brief whose deliverable is a NEW
@@ -661,8 +662,18 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   authorship is a claim like any other and the trailer is its cheap
   disproving probe (measured: a summarized lane re-read the tree on
   resume, booked the DISPATCHER's commit as its own, and confessed
-  a write-boundary deviation for work it never did — a dispatcher
-  grading by trust would have booked a phantom violation).
+  a write-boundary deviation for work it never did). WHICH trailer
+  answers WHICH question decides it: the author trailer names a
+  MODEL, so it separates tiers and nothing finer — where two
+  writers in one copy share a model it does not discriminate at
+  all, and read as identity it yields a confident wrong attribution
+  (measured: an unexpected commit assigned to the wrong session,
+  both candidates one model, identical author trailers, different
+  session trailers). The session trailer, where the harness wrote
+  one, is the discriminator; absent one, or with the candidates
+  still indistinguishable, the trailers have NOT settled
+  authorship — ask the holder rather than reading the probe's
+  silence as its verdict.
   A SPLIT report — summary message + report file (§2
   payload-vs-pointer) — is booked from the FILE: the summary is a
   label over its body (site corpus paraphrase-drift rule), and

@@ -205,3 +205,13 @@ failed.**
 
 Do not delete branches as part of any worktree cleanup — branches are why
 the committed work survived; their retirement is a separate question.
+
+## Offen
+
+Lebende Einträge: keine. Neue Beobachtungen ans
+Datei-Ende, unter diese Überschrift.
+
+<!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
+     die lebende Liste. Abgeflossenes steht OBERHALB. Der
+     doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
+     Anhängen am EOF sonst im abgeflossenen Abschnitt landet. -->

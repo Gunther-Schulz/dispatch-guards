@@ -329,8 +329,68 @@ def check_channel_line_markers() -> list:
     return out
 
 
+_APPEND_MARKER = "NEUE EINTRÄGE ANS DATEI-ENDE"
+_LIVE_HEADING = "## Offen"
+_DRAINED_HEADING = "## Abgeflossen"
+
+
+def check_observations_tail() -> list:
+    """An observations carrier that has a drained section ends with its
+    LIVE section, and its last line is the append marker.
+
+    Not a style rule — a measured failure, twice in one day and from
+    opposite directions. The carrier first had `## Abgeflossen` in the
+    middle while entries appended at EOF: five live entries sat under
+    the drained heading and read as drained by position. Moving the
+    drained section to the end inverted it: within the hour a peer
+    session appended a new observation at EOF and it landed INSIDE
+    `## Abgeflossen`, disposition-less, reading as already drained.
+
+    Whoever appends writes at end-of-file — that is the invariant, and
+    no convention outranks it. So the live section goes last and the
+    marker names the file's end as the live list. A carrier with no
+    drained section yet is skipped: it has no way to strand anything.
+    """
+    out = []
+    for path in sorted(glob.glob(os.path.join(ROOT, "dev-notes",
+                                              "*OBSERVATIONS*.md"))):
+        rel = os.path.relpath(path, ROOT)
+        with open(path, encoding="utf-8") as fh:
+            text = fh.read()
+        headings = [ln for ln in text.split("\n") if ln.startswith("## ")]
+        # The HEADING, never the string: the form template names
+        # `## Abgeflossen` in its prose while carrying no such section,
+        # and firing on it would be a fire on a non-defect.
+        if not any(ln.strip() == _DRAINED_HEADING for ln in headings):
+            continue                      # nothing drained, nothing to strand
+        if not headings:
+            raise CouldNotVerify(
+                f"{rel} carries `{_DRAINED_HEADING}` but no `## ` headings "
+                f"the tail rule could compare")
+        # Section ORDER, not last-heading: entries are `## ` headings
+        # themselves in these carriers, so a live section with any entry
+        # under it never ends the file. What must hold is that the live
+        # SECTION opens after the drained one — then an EOF append lands
+        # under the live heading whatever entries sit between.
+        stripped = [ln.strip() for ln in headings]
+        if _LIVE_HEADING not in stripped:
+            out.append(f"{rel}: carries {_DRAINED_HEADING!r} but no "
+                       f"{_LIVE_HEADING!r} section — an appended entry has "
+                       f"no live section to land in")
+        elif stripped.index(_LIVE_HEADING) < stripped.index(_DRAINED_HEADING):
+            out.append(f"{rel}: {_LIVE_HEADING!r} opens BEFORE "
+                       f"{_DRAINED_HEADING!r} — an entry appended at EOF "
+                       f"lands in the drained section and reads as drained")
+        if _APPEND_MARKER not in text.rsplit("\n\n", 1)[-1]:
+            out.append(f"{rel}: no append marker at the file's end — the "
+                       f"next writer has nothing telling them EOF is the "
+                       f"live list")
+    return out
+
+
 CHECKS = (
     ("guard roster", check_guards),
+    ("observations tail", check_observations_tail),
     ("skills", check_skills),
     ("report-form slots", check_report_slots),
     ("config schema", check_config_schema),
