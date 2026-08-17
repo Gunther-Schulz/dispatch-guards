@@ -2058,3 +2058,32 @@ jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
      die lebende Liste. Abgeflossenes steht OBERHALB. Der
      doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
      Anhängen am EOF sonst im abgeflossenen Abschnitt landet. -->
+
+## 2026-08-17 — Prädikat-WEITUNG entwertet Alt-Fixtures gleicher Form still; grün laufen genügt nicht (statiker Mint-Batch, P27)
+
+1. **Vorfall + Basis:** Beim Weiten eines Verdikt-Prädikats
+   (statiker P27: CLOSURE_ABSENT akzeptiert jetzt terminale
+   [BIT]-Runden ohne design-ändernde Disposition als SATISFIED)
+   änderten drei bestehende Suite-Stellen (2 Tests, 1
+   Contract-Fixture) still ihre BEDEUTUNG — alle drei teilten
+   eine Form (bare [BIT]-Runde, keine Findings, keine D-Zeile),
+   die unter dem alten Prädikat must-fail war und unter dem
+   neuen vakuum-grün lief. Die Lane fand sie per Form-SUCHE über
+   die Suite, nicht über den Testlauf (der war grün); Executor-
+   Report Lesson 3, Commit 522e8d2 (statiker).
+2. **Klasse:** Accept-Set-Weitung macht Alt-Fixtures gleicher
+   Form zu Vakuum-Pässen — die Fixture-hört-auf-zu-testen-Klasse
+   (Korpus Fixing: Prädikat GEWINNT einen Wert) am Weitungs-Seam,
+   wo der grüne Lauf das Loch exakt verdeckt.
+3. **Vorformulierter Regel-Text** (§1, an die Verifier- oder
+   Settled-Design-Klausel eines Build-Briefs, der ein Prädikat
+   weitet): „Ein Brief, der ein Verdikt-/Gate-Prädikat WEITET,
+   kommissioniert neben dem Testlauf eine FORM-SUCHE über die
+   Suite: jede bestehende Assertion, deren Fixture die neu
+   akzeptierte Form trägt, wird enumeriert und je als
+   noch-testend oder vakuum-grün dispositioniert — ein grüner
+   Lauf allein unterscheidet die beiden nicht."
+4. **Konsument + Abfluss-Naht:** nächste
+   dispatch-guards-Maintenance-Runde (§1-Text); Quota-Drain nach
+   OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
+   Prädikat-weitende Briefs komponiert — per Hand bis zum Mint.
