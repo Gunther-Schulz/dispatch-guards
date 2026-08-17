@@ -150,8 +150,12 @@ hashes; the writer is the one that moves it.
   holding real commits nobody surfaces: at integration, enumerate
   the branches created for worktrees and dispose of each by merge,
   cherry-pick, or an explicit drop.
-- Remove reader/probe worktrees at the booking of their findings;
-  they have no integration moment.
+- Reader/probe worktrees have no integration moment, so nothing
+  else will remove them — but removal is TERMINAL: it closes the
+  agent's resume channel (harness binding, stamped in the dispatch
+  skill's §1 worktree recipe), and a booked finding is the cheapest
+  place a follow-up question ever gets asked. Remove once the
+  findings are booked AND interrogated, never at booking.
 
 ## Evolution
 

@@ -57,13 +57,24 @@ judgment on honest reporting, not on redesign.
    or a checker: red before green, and the red run's output goes in
    the report. (Source: site corpus Fixing rules — this is their
    prescriptive rendering for executing tiers.)
+   A structure search over a BINARY or compressed format counts
+   only with its positive control shown in the SAME invocation
+   mode: a zero-hit search there returns exactly what a true
+   absence returns. Measured on PDF, where two independent
+   instrument-killers stack — the binary classification silences
+   even a string certain to be present, and object streams hide the
+   structure until decompressed (`qpdf --qdf
+   --object-streams=disable`, then `grep -a`).
 5. **Escalation returns the question.** At a STOP signal: halt that
    item, finish everything independent of it, and report signal +
    location + the decision question + a path per outcome. Never spawn
    a higher tier yourself — the dispatcher holds the design context
    and decides (dispatch skill §4).
-6. **The box.** Commit unpushed by pathspec — `git commit --
-   <paths>`, never `git add` then `git commit`, never `-A`: the
+6. **The box.** Commit unpushed by pathspec — `git commit -m "…"
+   -- <paths>`, every flag BEFORE the `--` (after the separator git
+   reads `-m` as a pathspec and the commit fails; `-F <file>` for a
+   multi-line message), never `git add` then `git commit`, never
+   `-A`: the
    INDEX is shared on a shared working copy, so a co-writer
    staging between your `git status` and your commit rides out
    under your message whatever paths you added; pathspec ignores

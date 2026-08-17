@@ -5,7 +5,176 @@ discipline should have prevented, or a rule it states wrongly, gets written here
 with its evidence, and the rule change proposed. Not a changelog — each entry is
 a measured incident.
 
+## Offen
+
+Lebende Einträge. Was hier steht, hat den Wartungs-Pass NICHT
+verlassen — und die drei unten stehen nicht, weil sie ungeklärt
+wären, sondern weil ihre Zielstelle in einem anderen Repo liegt.
+
+**RESIDUUM (Wartungs-Pass 2026-08-17) — Heimat außerhalb
+dieser Arbeitskopie:** der vorformulierte Text amendiert das
+guard-checker-bau-Devbook im dotfiles-Repo (dortiges CLAUDE.md,
+§Registered procedure). Diese Session hält die dispatch-guards-Kopie,
+nicht dotfiles (ein Schreiber pro Arbeitskopie), also ist der Eintrag
+hier NICHT abgeflossen und wird auch nicht so gebucht. Naht: die
+nächste Amendierung des Devbooks dort. Prüfung, wer sie am Abschluss
+fährt: diese Session meldet die drei Texte an den dotfiles-Desk und
+an den Operator; erledigt ist sie erst, wenn das Devbook sie trägt.
+
+## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (3 Vorfälle, 3 Lanes)
+
+1. **Vorfall + Basis (3×, zwei Tage):** (c, 13.08., Dispatch
+   `opus-helfer-kopien`, von der Lane selbst gefangen und gemeldet)
+   Die ANWENDUNG der Mutation ist dieselbe Arrangement-Hälfte: ein
+   handgetipptes Ersetzungs-Muster traf 0×, die Batterie lief GRÜN
+   über der NICHT angewandten Mutation — von „Test greift nicht"
+   nicht unterscheidbar, beinahe als Rot-Beweis gebucht. Reparatur
+   in der Lane: Mutation per Zeilen-Bereich aus der Datei gelesen,
+   entfernter Text vor jedem Lauf ausgedruckt; der Dispatcher-eigene
+   Kontroll-Biss lief 13.08. mit demselben Anwendungs-Beweis.
+   (a) e1 aus Dispatch
+   `opus-abw-drei-waechter`: Mutations-Batterie mit `pytest -k "antwort"`
+   — der Selektor schloss genau das Fixture aus, das die Mutation fangen
+   sollte; Batterie las sich grün. Gefangen durch Divergenz zweier
+   Messungen (Bestand 13 Meldungen, Fixtures still). (b) e-Nachtrag aus
+   Dispatch `opus-abw-sichtweite-austrag`: Batterie mit `-x` — pro
+   Mutation nur der ERSTE Fehlschlag sichtbar, wodurch systematisch
+   verdeckt blieb, welcher Test-Arm NIE feuert; „alle Mutationen rot"
+   war wahr und trotzdem ohne Aussage über den unbewiesenen Arm
+   (test_sichtweite_elementfeld…, repariert 46a5831 erst auf
+   Dispatcher-Nachfrage). Dazugehörige Erwartungs-Seite: eine
+   SCHWEIGE-Erwartung ist nur so scharf wie die Menge der Meldungsformen,
+   über die sie schweigt — feuert der Wächter unter dem Defekt eine
+   ANDERE Form, bleibt sie erfüllt.
+2. **Klasse:** Instrument-Arrangement — der BATTERIE-AUFRUF (Selektor,
+   Abbruch-Flags, Fehlschlag-Auswertung) ist Teil des Instruments; jede
+   Verengung (Namensfilter, First-Fail-Abbruch) macht eine Stille
+   unlesbar, die von einem echten Pass nicht unterscheidbar ist
+   (Geschwister der Devbook-Schritt-4-Klasse „ein grüner Biss braucht
+   seine Arrangement-Prüfung").
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
+   EINE Ergänzung für beide Hälften): „Die Mutations-/Biss-Batterie läuft
+   über die GANZE Testdatei, nie über eine `-k`-Namensauswahl und nie mit
+   `-x`: der Selektor schließt sonst das fangende Fixture aus, und der
+   First-Fail-Abbruch verdeckt, welche Arme nie feuern — beides liefert
+   ein Grün/Rot, das vom echten nicht unterscheidbar ist. Wo die Frage
+   die Zuordnung Defekt→Arm ist, wird die FEHLSCHLAG-LISTE je Mutation
+   ausgewertet; eine Schweige-Erwartung nennt ALLE Meldungsformen des
+   Wächters. Und die Mutation BEWEIST ihre Anwendung — das
+   Mutations-Werkzeug zeigt den entfernten/ersetzten Text oder bricht
+   hart ab, wenn das Muster nicht traf: eine grüne Batterie über einer
+   nicht angewandten Mutation ist von einem toten Test nicht
+   unterscheidbar (gemessen 2026-08-12/13, drei Lanes: -k e1 ·
+   -x Nachtrag · 0×-Muster helfer-kopien)."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
+   — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
+   setzt den Fingerprint zurück (eval-open).
+
+### MERGE 2026-08-13 — 4. Vorfall, neuer Mechanismus derselben Klasse: der .pyc-Cache lässt einen Arm den Nachbarn nachplappern
+
+FB-101-Zusatz (opus-emission-telemetrie, pbs-projekt): Mutation A2
+zeigte exakt A1s Trefferliste — Python validiert .pyc über
+(Quell-mtime in SEKUNDEN, Quell-GRÖSSE), und A1/A2 waren byte-gleich
+groß (je 12253) und liefen 0,09 s auseinander; der zweite Lauf führte
+A1s Bytecode aus. Ein Nachbar-Abklatsch sieht aus wie ein normales
+Ergebnis; verraten hat ihn nur die zur Mutation unpassende Liste.
+Behoben an einer Stelle (PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge
+vor jedem Lauf; jeder Arm druckt seine Dateigröße mit); alle drei
+Batterien der Lane unter der Sperre wiederholt, Ergebnisse
+unverändert. Fix-Text-Ergänzung (in Slot 3 dieser Klasse
+einzuarbeiten): „Der Batterie-Treiber sperrt den Bytecode-Cache
+(PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge je Lauf) — zwei
+Mutationen gleicher Dateigröße innerhalb derselben mtime-Sekunde sind
+für den Cache ununterscheidbar, und der zweite Arm plappert sonst den
+ersten nach, grün und unauffällig."
+
+## 2026-08-13 — Ein global eingehängter Check-Schritt läuft in JEDEM Test: Fail-Loud über repo-externe Artefakte kollidiert per Konstruktion mit Temp-Fixtures
+
+1. **Vorfall + Basis:** Dispatch `opus-helfer-kopien` (FB 3.89, Session
+   ddd83862): Der Brief entschied „Skript fehlt → FEHLER, nie still" für
+   einen global in `pruefe()` eingehängten Wächter, der ein Skript im
+   office_repo und Helfer in zwei Nachbar-Repos liest. Spec-treu gebaut:
+   119 von 818 Tests rot, weil jede Temp-Fixture (`mach_office`) ein
+   office_repo OHNE tools/ baut und dev_root auf einen leeren Temp-Baum
+   zeigt. Executor-STOPP mit drei GEMESSENEN Wegen (A Fixture-Chirurgie
+   +17 s Suite; B durchgängig HINWEIS; C gemischt 2 failed/816 passed);
+   Desk-Entscheid Weg C. Das Repo hatte die Klasse laut dreier
+   conftest-Kommentare („ohne trüge JEDER Graph-Test den HINWEIS")
+   vorher schon dreimal getroffen — die Brief-Komposition las diese
+   Präzedenz nicht.
+2. **Klasse:** Brief-Komposition für global eingehängte Wächter mit
+   repo-EXTERNEN Artefakten. Der Fail-Loud-Kontrakt wird am
+   Produktions-Bild entschieden, aber der Schritt läuft zuerst und
+   tausendfach in der TEST-Umgebung, deren Fixtures die externen
+   Artefakte per Konstruktion nicht stellen — der Abwesend-Fall des
+   Wächters IST der Normalfall der Fixtures.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau,
+   Brief-Kompositions-Schritt): „Hängt der Wächter global in einen
+   Lauf, der auch unter Tests steht, beantwortet der Brief VOR dem Bau:
+   Was sieht dieser Schritt in der Test-Umgebung (Fixtures gelesen,
+   nicht vermutet)? Für jeden repo-externen Anker (Nachbar-Repo,
+   Konfig-Pfad, Werkzeug-Skript) trägt der Brief die entschiedene
+   Grade des Abwesend-Falls — Fail-Loud nur dort, wo die Umgebung den
+   Anker garantiert stellt; sonst die sichtbare Degradations-Grade
+   (HINWEIS-Zeile je Lauf) MIT eigenem gepinntem Test. Die Präzedenz
+   im Ziel-Repo (conftest-Kommentare, Geschwister-Schritte) ist
+   Pflicht-Grounding der Brief-Komposition."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure) — mit den offenen Schritt-4-Ergänzungen bündeln;
+   Amendierung setzt den Fingerprint zurück (eval-open).
+
+## 2026-08-13 — Grad-Assertionen über den GANZEN Report unterscheiden die Grade nicht; mehrzeilige Durchreichungen tragen die Marke nur in Zeile 1
+
+1. **Vorfall + Basis:** FB-102-Bau (opus-emission-telemetrie,
+   pbs-projekt ende_check): Die Mutation „Exit!=0-Grad WARNUNG →
+   HINWEIS" lief im ersten Batterie-Durchgang GRÜN durch (34 passed) —
+   die Assertion prüfte `"WARNUNG" in out` über den Gesamtreport, und
+   dort stand ohnehin eine WARNUNG eines anderen Checks. Erst ein
+   Helfer, der den Telemetrie-EINTRAG isoliert (genau einer, sonst
+   Abbruch) und den Grad an der eigenen Zeile prüft, machte alle sechs
+   Mutationen bissig. Zweiter Fund im selben Bau: die durchgereichte
+   Report-Ausgabe ist MEHRZEILIG, die Marke (`[telemetrie]`) steht nur
+   in Zeile 1 — ein Leser, der „die Meldung" nimmt, schneidet die
+   Befundzeilen stumm ab, und die Durchreich-Prüfung wird stumpf, ohne
+   rot zu werden (betrifft auch den Helfer-Kopien-Präzedenzfall).
+2. **Klasse:** Assertions-Schärfe in Report-Gattern — ein Prädikat,
+   das am AGGREGAT prüft, ist von jedem anderen Check erfüllbar
+   (dieselbe „beide Ausgänge erfüllen"-Klasse wie im Fixing-Korpus,
+   hier als Report-Instanz), und Marken-Konventionen (Marke nur am
+   Blockanfang) machen Ein-Zeilen-Leser still unvollständig.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt-4-
+   Ergänzung): „Grade werden an ihrer EIGENEN Zeile geprüft, nie am
+   Report — der Test isoliert den Eintrag des geprüften Schritts
+   (genau einer, sonst Abbruch) und prüft Grad + Inhalt dort. Reicht
+   ein Schritt einen mehrzeiligen Block durch, liest der Test den
+   BLOCK bis zu seiner Endmarke, nie nur die markierte erste Zeile."
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure) — mit den dort schon wartenden Schritt-4-Ergänzungen
+   bündeln; Amendierung setzt den Fingerprint zurück (eval-open).
+
+## Abgeflossen
+
+Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
+eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
+durchgestrichen oben stehen.
+
+Struktur-Nachtrag 2026-08-17: dieser Abschnitt stand bis heute in der
+MITTE der Datei, während neue Einträge hinten angehängt wurden — fünf
+lebende Einträge lasen sich damit über ihre Position als abgeflossen.
+Der Abschnitt ist jetzt der Datei-Schluss; lebende Einträge stehen
+oben unter „Offen".
+
 ## 2026-08-06 — three from one fan-out (3 × opus, two fork worktrees + one shared repo)
+
+**ANGEWANDT 2026-08-17 (Wartungs-Pass)** — alle drei Hälften.
+#1 → §1 „Commit unpushed": eine Arbeitskopie mit einem Schreiber
+AUSSERHALB des Dispatches trägt kein Unpushed. #2 → neuer
+§1-Unterpunkt „Deployment-coupled ist eine andere Frage als LIVE ON
+WRITE" plus Skeleton-Slot. #3 → Leiter-Sprosse 2: das worktree-Skill
+wird GELADEN, nie bloß zitiert. Beleg: dieser Commit.
 
 Context: three parallel lanes dispatched from a cache-fix session; two in git
 worktrees of one repo, one in the operator's dotfiles repo. All three delivered.
@@ -85,6 +254,10 @@ would have surfaced in a free-composed report.
 
 ## 2026-08-07 — mint: terminal-idle-after-lane-close gets no reply (forms.md §2, race clause widened)
 
+**ANGEWANDT (vor diesem Pass)** — der Eintrag IST das
+Mint-Protokoll; die geweitete Race-Klausel steht in forms.md §2
+(„The race's mirror sits at the lane's END"). Kein Text offen.
+
 Live incident, twice in one session (statiker meta desk): the §4
 mirror duty ("book the report AND tell it the lane is closed")
 itself resumes the completed agent, which re-idles; the dispatcher
@@ -99,6 +272,11 @@ kept). Not mechanizable at this layer: incoming teammate
 notifications have no hook surface to suppress on.
 
 ## 2026-08-07 — over-fire: the push gate matches "push" as a SUBSTRING of commit-message text
+
+**ANGEWANDT (vor diesem Pass, 2026-08-10)** — die Lane
+keyed auf die VERB-Position; der Docstring nennt den gemessenen
+Fehlfeuer-Fall, zwei Biss-Tests pinnen ihn. Beleg:
+push-claim-reminder.py (Docstring + --test).
 
 Live incident, cache-fix fork (leak-gate lane). An agent's `git commit`
 was denied by the push guard because its heredoc MESSAGE contained the
@@ -129,6 +307,13 @@ skill's evolution rule rather than patched from outside.
 
 ## 2026-08-07 — a brief cut from a ranked-list head inherits the list's staleness
 
+**ANGEWANDT 2026-08-17, GEMERGT mit dem
+2026-08-14-Eintrag „Re-Lese-Einheit"** — gleiche Klasse: die
+Um-Bewertung liegt außerhalb des Lesefensters. Landet im
+§1-Provenance-Bullet („Opening a stored ENTRY means the entry PLUS
+its neighbours"), zusammen mit dem Extraktor als Instrument. Beleg:
+dieser Commit.
+
 Dispatched (statiker meta session): implement cache-fix BACKLOG Tier B
 item 17. The executing agent's first read found the entry body already
 grade-marked "(DONE — f2ab6d0)" — landed by another session 70 minutes
@@ -149,6 +334,13 @@ a DONE-graded bullet still holding a rank anchor, so the ranked head
 can never notice its own staleness mechanically.
 
 ## 2026-08-07 — the base-check halt rule has nothing to say about commits that land DURING the dispatch
+
+**ANGEWANDT 2026-08-17** — die Write-Set-Overlap-Hälfte
+trug §1 schon (Fast-Path `git diff --quiet <base> HEAD -- <paths>`);
+neu ist der Compose-Zeit-CENSUS (`git worktree list` neben `git
+status` und `git log -1 --format=%cr`), der zugleich die
+Integrations-Naht bedient — §4 verweist darauf, eine Heimat. Beleg:
+dieser Commit.
 
 Dispatched (dotfiles): migrate this repo's own hook state out of
 `~/.claude/` to XDG. The brief carried the §1 base check verbatim —
@@ -193,6 +385,12 @@ and §4 currently reads as though it were.
 
 ## 2026-08-07 — a read-only lane's working copy grew push-denial config, unreported
 
+**ANGEWANDT 2026-08-17** — Kandidat 1 stand bereits im
+worktree-Skill (`extensions.worktreeConfig`, `config --worktree`);
+Kandidat 2 landet zweigeteilt: der Census in §1 (von §4 zitiert) und
+„Config-Writes sind Repo-Writes" im §2-Slot (f) samt Tail. Beleg:
+dieser Commit.
+
 During a read-only discovery dispatch into a sibling repo's MAIN
 clone, both remotes' pushurl were set to `DENY-worktree-push` (the
 worktree skill's every-remote recipe) at a timestamp inside the
@@ -230,6 +428,11 @@ tree says.
 
 ## 2026-08-07 — dispositions-as-brief graduated; two §1 note candidates
 
+**ANGEWANDT (vor diesem Pass)** — Kandidat 2 ist nach §1
+graduiert („Criteria state OUTCOMES first, sites second", beide
+Feuerrichtungen); Kandidat 1 (je Disposition die Rot-zuerst-Anordnung
+als erster Akt) steht im Operator-Korpus, brief-family-Bullet.
+
 The pre-registered statiker experiment (criterion recorded before the
 arm ran) graded SUCCESS on all three clauses: nine repair dispositions
 dispatched as a brief landed red-first with zero desk correction
@@ -255,6 +458,12 @@ lap:
 
 ## 2026-08-08 — a stated base can be stale: §1's base clause says
 ## STATED, never that the statement is a fresh read
+
+**ANGEWANDT 2026-08-17** — Kandidat 1 und 2 → §1
+Base-Klausel: „Stated means READ at compose time", Ausgabe gepastet,
+plus der Co-Writer-Census. Kandidat 3 verlangte keine Änderung (der
+Executor-Halt bleibt, wie der Eintrag begründet). Beleg: dieser
+Commit.
 
 A dispatch into `dotfiles` carried base `3014043`, taken from the
 dispatcher's own orientation read several turns earlier. By compose
@@ -302,6 +511,11 @@ Rule candidates for §1 (base-commit clause):
    tier choice was meant to keep at the desk.
 
 ## 2026-08-15 — read-only fan-outs have no join to size them, so every one is hand-grouped
+
+**ANGEWANDT 2026-08-17** — die drei Sizing-Terme plus die
+Crossover-Faustgröße (~30 Tool-Calls je Lane, Formel statt Konstante,
+gemessen von `tools/lane-cost.py`) → §1 „What rides ONE lane". Beleg:
+dieser Commit.
 
 **Incident + basis.** Peer testimony (opus desk, pbs-office wave,
 2026-08-15), relayed via the peer channel; basis is that session's
@@ -390,6 +604,12 @@ its own docstring and a `--test` whose central assertion is that g
 excludes per-lane startup, so the next reader cannot repeat it.
 
 ## 2026-08-08 — harness bindings: sync lane unobserved; async final text delivered
+
+**ANGEWANDT (vor diesem Pass)** — Mechanismus im selben
+Batch geschifft (forms.md §2 Zwei-Lanes-Binding, `mailbox_lane()`,
+sechs Korpus-Fälle). Der Binding-Absatz ist im heutigen Pass auf die
+PRO-SESSION-Probe umgestellt (Eintrag 2026-08-16) und trägt den
+Stempel „as of 2026-08-17".
 
 Two probes from a fable desk session (dotfiles cwd), same day:
 (1) an UNNAMED `general-purpose` dispatch with `run_in_background: false` launched ASYNC ("Async agent launched successfully"), contradicting the sync-on-request behavior the title-prefix lane was built for (forms.md §2, binding as of 2026-07-30).
@@ -494,6 +714,10 @@ executed commands, as each entry states.)
 ## 2026-08-08 — the outcomes-vs-sites candidate re-fires, and the
 ## second firing was briefed by a session that had just read it
 
+**ANGEWANDT (vor diesem Pass)** — §1 trägt die Klausel mit
+beiden Feuerrichtungen („Criteria state OUTCOMES first, sites
+second").
+
 A brief closing the "installer must yield to externally-managed
 symlinks" lane named its edit sites: install.sh:132, :142, and
 uninstall.sh:41. uninstall.sh has TWO writes to $SETTINGS — the
@@ -543,6 +767,10 @@ direction, same clause.
 ## 2026-08-08 — a Background section claimed dispatcher verification
 ## over a citation the dispatcher never opened
 
+**ANGEWANDT (vor diesem Pass)** — §1-Provenance-Bullet:
+Pro-Zeilen-Grade, die FORM-Hälfte, und der Übergang von
+Discovery-Testimony zur Anweisung.
+
 The same brief carried a part (3): uninstall.sh:22 removes
 ~/.claude/cachebust-runbook.md, so guard that removal with `[ -L ]` and
 leave an externally-managed symlink alone. No such code exists.
@@ -586,6 +814,16 @@ Rule candidates for §1 (the Background/grounding part):
    verified.
 
 ## writer-claims-gate WARNs on a claim whose work is already in HEAD
+
+**TEILS ANGEWANDT (vor diesem Pass), REST VERWORFEN** — die
+billigere Variante ist gebaut: beide PreToolUse-Lanes entlasten einen
+Claim, dessen Datei keine uncommittete Arbeit mehr trägt
+(`no_uncommitted_work`), gemessen gegen drei Fehlfeuer. Die
+HEAD-Erreichbarkeits-Variante wird VERWORFEN — sie fängt dieselbe
+Klasse teurer und braucht Commit-Attribution, die die Entlastung nicht
+braucht. Das angehängte 0.7.1-Bullet (geteiltes Version-Gate,
+Bump-first) ist im Commit-Plan-Absatz angewandt. Beleg:
+writer-claims-gate.py Docstring; SKILL.md §1 Commit-Plan.
 
 Observed 2026-08-08, live, during a two-lane dispatch. A lane's first
 Edit to a file in a sibling repo fired `writer-claims-gate`: "written by
@@ -645,6 +883,13 @@ the carrier a fresh context in THIS repo reads.
 
 ## 2026-08-09 — fire-log path may not match the README's XDG_DATA_HOME claim
 
+**VERWORFEN 2026-08-17** — die Hypothese ist am Quelltext
+widerlegt: `_dispatch_common.fire_log_path()` liest
+CLAUDE_DISPATCH_GUARDS_FIRELOG, sonst XDG_DATA_HOME, und README nennt
+genau diesen Default. Die Stille im Doctor-Lauf hat ihre Ursache
+außerhalb dieses Repos (Kind-Env des Doctors), nicht in einem
+veralteten README — kein Text zu ändern.
+
 Observed during dotfiles doctor hardening (dotfiles b4914c5), not
 explained there: a full dotfiles doctor run appended 2 lines per run
 to ~/.local/share/claude/dispatch-guards-fires.jsonl (via the replay
@@ -663,6 +908,11 @@ _dispatch_common path resolution and either fix the README or the
 resolver. Consumer: the next dispatch-guards maintenance pass.
 
 ## 2026-08-10 — Brief-committed-first makes the stated base self-refuting
+
+**ANGEWANDT 2026-08-17** — die pfad-skopierte Toleranz stand
+als Fast-Path schon in §1; neu ist die Absender-Hälfte: wo die
+Brief-DATEI in die Kopie des Executors committet wird, ist der
+Brief-Commit selbst die Basis. Beleg: dieser Commit.
 
 Class: brief-form defect (§1 "base commit is STATED"), observed live.
 A brief committed to the SAME working copy the executor builds in
@@ -685,6 +935,16 @@ instead of a bare pre-brief hash. Consumer: the next dispatch-guards
 maintenance pass.
 
 ## 2026-08-11 — Shared config file across two parallel dispatches: the rule was right, the enforcement posture was not
+
+**ANGEWANDT 2026-08-17** — (a) ADD-ONLY ist keine
+Disjunktheits-Ausnahme, (b) für eine GETEILTE Datei existiert keine
+sichere Form, weshalb Serialisierung das Mittel ist und nicht die
+Präferenz, (c) Container/Dienst/Privileg als Umgebungs-Vorbedingung —
+am REPOINT-Bullet, dort nach oben verallgemeinert („confirms what it
+assumes exists — the knob AND the environment"). Die
+Enforcement-Beobachtung (writer-reservation im Warn-Modus hätte
+gefangen) bleibt Feuerraten-Material, kein Regeltext. Beleg: dieser
+Commit.
 
 Class: dispatcher error against §1's per-FILE disjointness, plus a
 warn-only gate that would have caught it. Observed live, two agents.
@@ -741,6 +1001,15 @@ Consumer: the next dispatch-guards maintenance pass.
 
 ## 2026-08-12 — Vier Beobachtungen aus zwei K7-Dispatches (Abwägung Georgendorf, Opus-Agenten)
 
+**ANGEWANDT 2026-08-17** — alle vier: (1) Inbox-Drain vor
+dem Senden UND zwischen Report-Teilen (§2 plus EXECUTION-Tail),
+(2) Inhalts-Anker neben positions-/generat-abhängigen IDs (§1 „Files
+to read"), (3) Flags VOR dem `--` (Tail und executor-Regel 6; hier
+ausgeführt geprüft: `git commit -- f.txt -m "…"` → „pathspec '-m' did
+not match any file(s)", die Form mit Flag davor committet sauber),
+(4) Seitenbild-Sichtung bei sichtbarem Render-Chrome (Verifier-Slot).
+Beleg: dieser Commit.
+
 Quelle: Session 91da2482 (PV Georgendorf), zwei Dispatches
 (opus-abw-runden-elementfelder, opus-abw-kasten-klartext), Journal
 pbs-office betrieb/journal-2026-08.jsonl.
@@ -790,75 +1059,17 @@ Consumer: die nächste dispatch-guards-Maintenance-Runde (Tail- und
 §1-Wortlaut); Beobachtung 4 zusätzlich als Site-Regel im
 pbs-abwaegung-Repo gelandet (dortiges CLAUDE.md, via laufenden Dispatch).
 
-## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (3 Vorfälle, 3 Lanes)
-
-1. **Vorfall + Basis (3×, zwei Tage):** (c, 13.08., Dispatch
-   `opus-helfer-kopien`, von der Lane selbst gefangen und gemeldet)
-   Die ANWENDUNG der Mutation ist dieselbe Arrangement-Hälfte: ein
-   handgetipptes Ersetzungs-Muster traf 0×, die Batterie lief GRÜN
-   über der NICHT angewandten Mutation — von „Test greift nicht"
-   nicht unterscheidbar, beinahe als Rot-Beweis gebucht. Reparatur
-   in der Lane: Mutation per Zeilen-Bereich aus der Datei gelesen,
-   entfernter Text vor jedem Lauf ausgedruckt; der Dispatcher-eigene
-   Kontroll-Biss lief 13.08. mit demselben Anwendungs-Beweis.
-   (a) e1 aus Dispatch
-   `opus-abw-drei-waechter`: Mutations-Batterie mit `pytest -k "antwort"`
-   — der Selektor schloss genau das Fixture aus, das die Mutation fangen
-   sollte; Batterie las sich grün. Gefangen durch Divergenz zweier
-   Messungen (Bestand 13 Meldungen, Fixtures still). (b) e-Nachtrag aus
-   Dispatch `opus-abw-sichtweite-austrag`: Batterie mit `-x` — pro
-   Mutation nur der ERSTE Fehlschlag sichtbar, wodurch systematisch
-   verdeckt blieb, welcher Test-Arm NIE feuert; „alle Mutationen rot"
-   war wahr und trotzdem ohne Aussage über den unbewiesenen Arm
-   (test_sichtweite_elementfeld…, repariert 46a5831 erst auf
-   Dispatcher-Nachfrage). Dazugehörige Erwartungs-Seite: eine
-   SCHWEIGE-Erwartung ist nur so scharf wie die Menge der Meldungsformen,
-   über die sie schweigt — feuert der Wächter unter dem Defekt eine
-   ANDERE Form, bleibt sie erfüllt.
-2. **Klasse:** Instrument-Arrangement — der BATTERIE-AUFRUF (Selektor,
-   Abbruch-Flags, Fehlschlag-Auswertung) ist Teil des Instruments; jede
-   Verengung (Namensfilter, First-Fail-Abbruch) macht eine Stille
-   unlesbar, die von einem echten Pass nicht unterscheidbar ist
-   (Geschwister der Devbook-Schritt-4-Klasse „ein grüner Biss braucht
-   seine Arrangement-Prüfung").
-3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
-   EINE Ergänzung für beide Hälften): „Die Mutations-/Biss-Batterie läuft
-   über die GANZE Testdatei, nie über eine `-k`-Namensauswahl und nie mit
-   `-x`: der Selektor schließt sonst das fangende Fixture aus, und der
-   First-Fail-Abbruch verdeckt, welche Arme nie feuern — beides liefert
-   ein Grün/Rot, das vom echten nicht unterscheidbar ist. Wo die Frage
-   die Zuordnung Defekt→Arm ist, wird die FEHLSCHLAG-LISTE je Mutation
-   ausgewertet; eine Schweige-Erwartung nennt ALLE Meldungsformen des
-   Wächters. Und die Mutation BEWEIST ihre Anwendung — das
-   Mutations-Werkzeug zeigt den entfernten/ersetzten Text oder bricht
-   hart ab, wenn das Muster nicht traf: eine grüne Batterie über einer
-   nicht angewandten Mutation ist von einem toten Test nicht
-   unterscheidbar (gemessen 2026-08-12/13, drei Lanes: -k e1 ·
-   -x Nachtrag · 0×-Muster helfer-kopien)."
-4. **Konsument + Abfluss-Naht:** nächste Amendierung des
-   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered procedure)
-   — mit anderen offenen Schritt-4-Ergänzungen bündeln, jede Amendierung
-   setzt den Fingerprint zurück (eval-open).
-
-### MERGE 2026-08-13 — 4. Vorfall, neuer Mechanismus derselben Klasse: der .pyc-Cache lässt einen Arm den Nachbarn nachplappern
-
-FB-101-Zusatz (opus-emission-telemetrie, pbs-projekt): Mutation A2
-zeigte exakt A1s Trefferliste — Python validiert .pyc über
-(Quell-mtime in SEKUNDEN, Quell-GRÖSSE), und A1/A2 waren byte-gleich
-groß (je 12253) und liefen 0,09 s auseinander; der zweite Lauf führte
-A1s Bytecode aus. Ein Nachbar-Abklatsch sieht aus wie ein normales
-Ergebnis; verraten hat ihn nur die zur Mutation unpassende Liste.
-Behoben an einer Stelle (PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge
-vor jedem Lauf; jeder Arm druckt seine Dateigröße mit); alle drei
-Batterien der Lane unter der Sperre wiederholt, Ergebnisse
-unverändert. Fix-Text-Ergänzung (in Slot 3 dieser Klasse
-einzuarbeiten): „Der Batterie-Treiber sperrt den Bytecode-Cache
-(PYTHONDONTWRITEBYTECODE=1 + __pycache__-Purge je Lauf) — zwei
-Mutationen gleicher Dateigröße innerhalb derselben mtime-Sekunde sind
-für den Cache ununterscheidbar, und der zweite Arm plappert sonst den
-ersten nach, grün und unauffällig."
-
 ## 2026-08-12 — writer-claims: Claims einer GESCHLOSSENEN Lane feuern gegen die Nachfolge-Lane
+
+**ANGEWANDT 2026-08-17 (Prosa-Hälfte), MECHANISMUS
+VERWORFEN** — beide Richtungen des Paares landen in §4 „Additions
+extend ownership": ein kreuzender Report schließt die Lane nicht, und
+weder grep noch `git status` beobachtet einen SCHREIBER; bei Zweifel
+den Halter fragen und die Antwort abwarten. Das Lane-STATE-Register
+(Release-/Re-Arm-Verb am Claim-Register) wird VERWORFEN: „Lane
+geschlossen" ist zur Hook-Zeit nicht komputierbar, und die
+Fehlfeuer-Richtung deckt die bestehende `no_uncommitted_work`-
+Entlastung. Beleg: dieser Commit.
 
 1. **Vorfall + Basis:** Sequentielle Dispatches in derselben Arbeitskopie
    (pbs-abwaegung): Lane A (opus-abw-drei-waechter) sauber geschlossen —
@@ -942,6 +1153,13 @@ overrode it with a wrong belief.
 
 ## 2026-08-13 — a COMPACTED lane booked the dispatcher's own commit as its work
 
+**ANGEWANDT 2026-08-17** — Slot (f) wird aus dem RECORD
+etabliert (Trailer-Filter; „present in the tree, not mine") in
+§2-Slotliste und EXECUTION-Tail; §4 gradet Slot (f) vor der Buchung
+gegen den Trailer, und die Close-Nachricht trägt ihre eigene Grenze
+(„do not edit; a defect found later is REPORTED"), weil sie den
+Agenten resumiert. Beleg: dieser Commit.
+
 1. **Incident + basis:** three parallel sonnet lanes from a cache-fix session,
    one shared working copy. Lane C (`closures-in-live`) delivered its closing
    report and was told its lane was closed. The desk then found and fixed a
@@ -982,73 +1200,13 @@ overrode it with a wrong belief.
    form (slot f wording) and §4 mirror duty (grading slot f; close-message
    wording).
 
-## 2026-08-13 — Ein global eingehängter Check-Schritt läuft in JEDEM Test: Fail-Loud über repo-externe Artefakte kollidiert per Konstruktion mit Temp-Fixtures
-
-1. **Vorfall + Basis:** Dispatch `opus-helfer-kopien` (FB 3.89, Session
-   ddd83862): Der Brief entschied „Skript fehlt → FEHLER, nie still" für
-   einen global in `pruefe()` eingehängten Wächter, der ein Skript im
-   office_repo und Helfer in zwei Nachbar-Repos liest. Spec-treu gebaut:
-   119 von 818 Tests rot, weil jede Temp-Fixture (`mach_office`) ein
-   office_repo OHNE tools/ baut und dev_root auf einen leeren Temp-Baum
-   zeigt. Executor-STOPP mit drei GEMESSENEN Wegen (A Fixture-Chirurgie
-   +17 s Suite; B durchgängig HINWEIS; C gemischt 2 failed/816 passed);
-   Desk-Entscheid Weg C. Das Repo hatte die Klasse laut dreier
-   conftest-Kommentare („ohne trüge JEDER Graph-Test den HINWEIS")
-   vorher schon dreimal getroffen — die Brief-Komposition las diese
-   Präzedenz nicht.
-2. **Klasse:** Brief-Komposition für global eingehängte Wächter mit
-   repo-EXTERNEN Artefakten. Der Fail-Loud-Kontrakt wird am
-   Produktions-Bild entschieden, aber der Schritt läuft zuerst und
-   tausendfach in der TEST-Umgebung, deren Fixtures die externen
-   Artefakte per Konstruktion nicht stellen — der Abwesend-Fall des
-   Wächters IST der Normalfall der Fixtures.
-3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau,
-   Brief-Kompositions-Schritt): „Hängt der Wächter global in einen
-   Lauf, der auch unter Tests steht, beantwortet der Brief VOR dem Bau:
-   Was sieht dieser Schritt in der Test-Umgebung (Fixtures gelesen,
-   nicht vermutet)? Für jeden repo-externen Anker (Nachbar-Repo,
-   Konfig-Pfad, Werkzeug-Skript) trägt der Brief die entschiedene
-   Grade des Abwesend-Falls — Fail-Loud nur dort, wo die Umgebung den
-   Anker garantiert stellt; sonst die sichtbare Degradations-Grade
-   (HINWEIS-Zeile je Lauf) MIT eigenem gepinntem Test. Die Präzedenz
-   im Ziel-Repo (conftest-Kommentare, Geschwister-Schritte) ist
-   Pflicht-Grounding der Brief-Komposition."
-4. **Konsument + Abfluss-Naht:** nächste Amendierung des
-   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
-   procedure) — mit den offenen Schritt-4-Ergänzungen bündeln;
-   Amendierung setzt den Fingerprint zurück (eval-open).
-
-## 2026-08-13 — Grad-Assertionen über den GANZEN Report unterscheiden die Grade nicht; mehrzeilige Durchreichungen tragen die Marke nur in Zeile 1
-
-1. **Vorfall + Basis:** FB-102-Bau (opus-emission-telemetrie,
-   pbs-projekt ende_check): Die Mutation „Exit!=0-Grad WARNUNG →
-   HINWEIS" lief im ersten Batterie-Durchgang GRÜN durch (34 passed) —
-   die Assertion prüfte `"WARNUNG" in out` über den Gesamtreport, und
-   dort stand ohnehin eine WARNUNG eines anderen Checks. Erst ein
-   Helfer, der den Telemetrie-EINTRAG isoliert (genau einer, sonst
-   Abbruch) und den Grad an der eigenen Zeile prüft, machte alle sechs
-   Mutationen bissig. Zweiter Fund im selben Bau: die durchgereichte
-   Report-Ausgabe ist MEHRZEILIG, die Marke (`[telemetrie]`) steht nur
-   in Zeile 1 — ein Leser, der „die Meldung" nimmt, schneidet die
-   Befundzeilen stumm ab, und die Durchreich-Prüfung wird stumpf, ohne
-   rot zu werden (betrifft auch den Helfer-Kopien-Präzedenzfall).
-2. **Klasse:** Assertions-Schärfe in Report-Gattern — ein Prädikat,
-   das am AGGREGAT prüft, ist von jedem anderen Check erfüllbar
-   (dieselbe „beide Ausgänge erfüllen"-Klasse wie im Fixing-Korpus,
-   hier als Report-Instanz), und Marken-Konventionen (Marke nur am
-   Blockanfang) machen Ein-Zeilen-Leser still unvollständig.
-3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt-4-
-   Ergänzung): „Grade werden an ihrer EIGENEN Zeile geprüft, nie am
-   Report — der Test isoliert den Eintrag des geprüften Schritts
-   (genau einer, sonst Abbruch) und prüft Grad + Inhalt dort. Reicht
-   ein Schritt einen mehrzeiligen Block durch, liest der Test den
-   BLOCK bis zu seiner Endmarke, nie nur die markierte erste Zeile."
-4. **Konsument + Abfluss-Naht:** nächste Amendierung des
-   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
-   procedure) — mit den dort schon wartenden Schritt-4-Ergänzungen
-   bündeln; Amendierung setzt den Fingerprint zurück (eval-open).
-
 ## 2026-08-14 — Ein gebrieftes Randbeispiel als Pflicht-Assertion pinnt die Spec, nicht den Defekt
+
+**ANGEWANDT 2026-08-17** — Heimat §1 gewählt (Bullet zur
+Instrument-Semantik), Kante im pbs-office-Devbook nicht nötig: eine
+vorgegebene Pflicht-Assertion nennt dazu einen Fall, der die
+vorgeschriebene von der NAIVEN Implementierung trennt. Beleg: dieser
+Commit.
 
 1. **Vorfall + Basis:** FB-103-Bau (opus-befund-referenz,
    pbs-abwaegung b213761): Der Brief gab das durchgerechnete
@@ -1080,6 +1238,11 @@ overrode it with a wrong belief.
 
 ## 2026-08-14 — grep auf PDF ist ohne `-a` still blind; Struktur-Checks brauchen den dekomprimierten Strom
 
+**ANGEWANDT 2026-08-17** — executor-Skill Regel 4: eine
+Struktur-Suche über ein Binärformat zählt nur mit Positiv-Kontrolle im
+SELBEN Aufruf-Modus; die zwei gestapelten Instrument-Killer des PDF
+(Binär-Einstufung, Objektströme) sind benannt. Beleg: dieser Commit.
+
 1. **Vorfall + Basis:** FB-6.18-Mechanik (sonnet-anhang-verlinkung):
    die PDF-Link-Verifikation per `grep '/Subtype /Link'` lieferte
    einen Nulltreffer, weil grep die Datei als Binär einstufte — auch
@@ -1102,6 +1265,11 @@ overrode it with a wrong belief.
    Quota-Drain nach OBSERVATIONS-Regel.
 
 ## 2026-08-14 — Report-Buchung prüft den ABSENDER nicht: unaufgeforderte Fremd-Nachricht erreichte einen wartenden Dispatcher
+
+**ANGEWANDT 2026-08-17** — §4 Horizont-Absatz: ein
+eingehender Report wird erst gebucht, wenn sein ABSENDER gegen die
+eigene Dispatch-Liste auflöst; ein unaufgelöster Absender ist ein
+Befund (Cross-Talk), schließt keinen Horizont. Beleg: dieser Commit.
 
 1. **Vorfall + Basis:** Während einer Drei-Arm-Probe zum Subagent-
    Spawn-Cap (dotfiles LEDGER 2026-08-14, Commit 4a40404) empfing
@@ -1133,6 +1301,11 @@ overrode it with a wrong belief.
 
 ## 2026-08-14 — Fork-Skills sind der Rest-Spawn-Kanal unter dem Cap, und ein Fork ist per Konstruktion Selbst-Review
 
+**ANGEWANDT 2026-08-17** — §4 Verdict-Routing: ein
+`context: fork` erbt den vollen Kontext des Aufrufers, ist damit
+Selbst-Review und wird so gegradet; der Subagent-Spawn-Cap schließt
+diesen Kanal nicht. Beleg: dieser Commit.
+
 1. **Vorfall + Basis:** Dieselbe Drei-Arm-Probe (dotfiles LEDGER
    2026-08-14, Commit 4a40404) maß: unter
    `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` verliert ein Subagent das
@@ -1160,6 +1333,12 @@ overrode it with a wrong belief.
    OBSERVATIONS-Regel.
 
 ## 2026-08-14 — Die Re-Lese-Einheit eines gespeicherten Briefs ist der Eintrag PLUS seine Nachbarn: eine Um-Bewertung steht oft im BENACHBARTEN Bullet
+
+**ANGEWANDT 2026-08-17, gemergt mit dem
+2026-08-07-Eintrag „ranked-list head"** — §1-Provenance-Bullet: die
+Re-Lese-Einheit ist der Eintrag PLUS seine Nachbarn, die Grenzwahl des
+selbstgebauten Extraktors ist die Basis, und eine repo-eigene
+Closure-Prüfung läuft vor dem Versand. Beleg: dieser Commit.
 
 1. **Vorfall + Basis:** Dispatch aus einer cache-fix-Session
    (2026-08-14, Basis 52b8912): ein Brief zitierte einen
@@ -1204,6 +1383,12 @@ overrode it with a wrong belief.
 
 ## 2026-08-14 — Die Harness-Sperre gegen Report-Dateien griff einen deutschen Namen nicht: `*-bericht.md` schrieb sich durch
 
+**ANGEWANDT 2026-08-17** — forms.md §2,
+Harness-Binding-Absatz: die Sperre ist an EINEM Namensraum gemessen und
+für eine andere Arbeitssprache kein Rückfall; dort nennt der Brief die
+zugewiesene Datendatei als einzigen erlaubten Schreib-Pfad und jede
+weitere Datei ausdrücklich als Abweichung. Beleg: dieser Commit.
+
 1. **Vorfall + Basis:** Discovery-Dispatch `sonnet-ready-inventar`
    (READY-Inventar über pbs-office FEATURE-BACKLOG.md, 14.08.). Der
    Brief trug den READ-ONLY-Tail wörtlich („never a report file") UND
@@ -1238,11 +1423,277 @@ overrode it with a wrong belief.
    Maintenance-Runde (forms.md §2, Harness-Binding-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
 
-## Abgeflossen
+## 2026-08-16 — `git add -N` mit Verzeichnis-Argument registriert fremde untracked Dateien unsichtbar
 
-Angewandte oder verworfene Einträge, mit Beleg — ein Fakt,
-eine Heimat. Der Eintrag WANDERT hierher, er bleibt nicht
-durchgestrichen oben stehen.
+**ANGEWANDT 2026-08-17** — Wortlaut in §1
+Write-Boundaries (add-N-Klausel), de-partikularisiert: das Datum ist
+raus (Korpus-Provenance-Regel — in-file nur Staleness-Stempel), der
+Mechanismus steht. Beleg: dieser Commit.
+
+1. **Vorfall + Basis:** statiker-Meta-Session (Session-Record
+   2026-08-16, statiker-Repo dev-notes/OBSERVATIONS, Round-3-
+   Dispositions-Eintrag): ein Compound-Command trug `git add -N
+   docs 2>/dev/null` — Absicht war EINE neue Brief-Datei; das
+   Verzeichnis-Argument intent-to-addete zusätzlich VIER fremde
+   untracked Lane-Briefs eines anderen Workstreams. Aufgefallen
+   erst als lauter Stash-Fehler ("Entry … not uptodate. Cannot
+   merge") viele Kommandos später; rückgängig per pfadgenauem
+   `git reset --`. n=1.
+2. **Klasse:** Verzeichnis-Pfadspec-Klasse (§1 kennt sie für
+   Lock-/Write-Set-Pfade: "names a FILE, never a directory");
+   `add -N` ist ihr ungenanntes Gesicht — der Schaden ist nicht
+   ein Mit-COMMIT (Pathspec-Commit blieb sauber), sondern
+   stiller Index-Zustand über fremden Dateien, der spätere
+   Operationen (stash, checkout) bricht oder — schlimmer — sie
+   in ein späteres breites Staging zieht.
+3. **Vorformulierter Fix-Text** (SKILL.md §1, Widening der
+   bestehenden add-N-Klausel im Write-Boundaries-Teil): nach
+   "`git add -N <path>` first — intent-to-add registers the path
+   against the empty blob …" ergänzen: "— and `<path>` names a
+   FILE, never a directory: a directory argument intent-to-adds
+   every unowned untracked file under it, invisibly (foreign
+   briefs included; measured 2026-08-16 as a stash broken many
+   commands later), the write-boundary directory rule's add-N
+   face."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (SKILL.md §1, Write-Boundaries-Absatz);
+   Quota-Drain nach OBSERVATIONS-Regel.
+
+## 2026-08-16 — Das Report-File-Verbot am ENDE des READ-ONLY-Tails wird als Klempnerei gelesen, nicht als bindend (statiker beat-the-books, Session 11)
+
+**ANGEWANDT 2026-08-17** — der READ-ONLY-Tail eröffnet mit
+dem Verbot samt genannter Folge, die Scratch-Zuweisung steht daneben,
+die zwei redundanten Verbots-Halbsätze sind entfernt; der Grund
+(bindende Klausel gehört an den Blockanfang) steht als ein Satz im
+Tail-Boilerplate-Absatz.
+**Nachtrag, Fund DIESES Passes:** der brief-reminder-Hook keyed seine
+READ-ONLY-Erkennung auf einen der entfernten Halbsätze („no repo
+writes, no report files"), also riss die Umstellung einen Dependent.
+Gefangen hat es der Korpus-Fall PREMISE PIN (erwartet `context`,
+beobachtet `deny`) — er war damit der Rot-zuerst-Beweis der Reparatur,
+und die Reparatur ist eine Marker-FAMILIE (alter plus neuer Anker),
+damit Briefe im Flug nicht fehlfeuern. Zwei Regressions-Fälle mit dem
+neuen Tail sind im Korpus, ausdrücklich als Regressions-Pins
+etikettiert: gemessen unterscheiden sie die beiden Prädikate NICHT
+(sie waren unter dem alten Anker ebenfalls grün), also tragen sie den
+Beweis nicht. Beleg: dieser Commit.
+
+1. **Vorfall + Basis:** Drei Discovery-Dispatches (sonnet) im selben
+   Lauf, alle drei mit dem wörtlich gepasteten READ-ONLY-Tail aus
+   `references/forms.md` §2. Die ersten ZWEI schrieben trotzdem eine
+   Report-DATEI und meldeten per SendMessage nur einen Zeiger darauf —
+   obwohl der Tail das Verbot zweimal trägt ("never a report file",
+   "no report files"). Beide schrieben die Datei zudem in das
+   Scratchpad des DISPATCHERS, nicht ihr eigenes, obwohl der Brief
+   Scratch explizit zuwies. Inhaltlich waren beide Reports
+   ausgezeichnet — genau deshalb fällt die Abweichung nicht auf.
+   Beim DRITTEN Dispatch wurde das Verbot unverändert im Wortlaut,
+   aber an den KOPF des Briefs gehoben, mit genannter Folge ("A file
+   is not a report and will not be read as one") — dieser Agent hielt
+   es ein. n=2 Verstoß / n=1 Bestätigung nach Umstellung, alle drei
+   im selben Lauf, gleiche Brief-Form, gleiches Modell, gleiche
+   Aufgabenklasse. Damit ist die Position die einzige veränderte
+   Variable.
+2. **Klasse:** Platzierungs-Klasse im Brief — ein Verbot, das im
+   invarianten Block-Ende steht, wird als Transport-Klempnerei
+   gelesen und nicht als Anweisung; dieselbe Klasse, die §1 für den
+   Route-Line-Seam und der Operator-Korpus für "Text zwischen
+   Tool-Calls wird nicht ausgeliefert" schon kennt. Der Tail wird als
+   Formalie überflogen, weil er in jedem Brief identisch ist — genau
+   die Eigenschaft, die ihn als Garantie tragen sollte, macht ihn
+   unsichtbar. NICHT die Klasse "Executor ignoriert Anweisung": zwei
+   unabhängige Agenten mit demselben Text und die Umkehr durch reine
+   Umstellung zeigen auf den Brief, nicht auf die Ausführenden.
+3. **Vorformulierter Fix-Text** (`references/forms.md` §2,
+   READ-ONLY-Tail — die Verbots-Zeile an den ANFANG des Blocks
+   ziehen und die Folge nennen, statt sie in Satz zwei und vier
+   mitlaufen zu lassen): den Block eröffnen mit "NO REPORT FILE.
+   Your findings go in your SendMessage reply — a file you write is
+   not a report, is not read as one, and reaches no one. Split into
+   labeled parts (1/N) past the size gate." Danach der bestehende
+   Wortlaut ohne die beiden jetzt redundanten Verbots-Halbsätze.
+   Gleiches gilt spiegelbildlich für die Scratch-Zuweisung: sie
+   gehört neben das Verbot, nicht in den Kopfteil des Briefs, weil
+   beide dieselbe Naht betreffen (wohin schreibt der Agent).
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde, `references/forms.md` §2 (READ-ONLY-Tail);
+   Quota-Drain nach OBSERVATIONS-Regel. Beobachtungs-Herkunft: der
+   Dispatcher hat die Umstellung im Lauf selbst als Reparatur
+   getestet, der Fix-Text ist also bereits einmal live bestätigt und
+   nicht nur hergeleitet.
+
+## 2026-08-16 — Harness entzieht der Mailbox-Lane mid-session die Grundlage: Agent-Tool verliert `name` + `run_in_background` (Begehung R3, statiker meta-session)
+
+**ANGEWANDT 2026-08-17** — forms.md §2: welche Lanes
+EXISTIEREN, entscheidet eine Probe am Agent-Schema PRO SESSION, kein
+Datum; der synchrone Zweig ist als eigener Zweig beschrieben (kein
+Channel-Line-Paste, Model-Gate liest `model`, Horizont entfällt), und
+die Probe-Regel steht VOR den Channel-Zeilen, damit der Vorbehalt
+nicht hinter dem Default landet. Mailbox-Zweig neu gestempelt „as of
+2026-08-17" — in dieser Session geprobt: `name` im Schema vorhanden,
+`run_in_background` abwesend. „Re-probe when the schema changes" ist
+entfallen, die Probe-Regel ersetzt sie (ein Fakt, eine Heimat). Beleg:
+dieser Commit.
+
+1. **Vorfall + Basis:** In der laufenden statiker-Meta-Session
+   aktualisierte der Harness die Agent-Tool-Beschreibung MID-SESSION:
+   "`run_in_background` and `name` are unavailable here — only
+   synchronous subagents" (beobachtet 2026-08-16, dieselbe Session
+   hatte Stunden zuvor zwei NAMED-Dispatches erfolgreich gefahren:
+   opus-review-078/-080, beide Mailbox-Lane). forms.md §2 trägt die
+   Lane-Bindung datiert 2026-08-15 ("naming decides the lane",
+   forms.md:94-97 gelesen) und der Model-Gate verlangt einen Namen
+   auf jedem generischen Dispatch. Unter dem neuen Schema ist die
+   benannte Lane NICHT AUSDRÜCKBAR: ein Desk, der nach §2
+   komponiert, wird entweder vom eigenen Gate abgewiesen oder
+   pastet eine Mailbox-Channel-Zeile, deren Lane nicht existiert.
+   Der §2-Text selbst nennt die Re-Probe-Pflicht ("Re-probe when
+   the Agent tool's schema changes") — dieser Eintrag IST diese
+   Re-Probe, positiv gefeuert.
+2. **Klasse:** Binding-Staleness (Bindings gelten, solange die
+   Umgebung gilt — und der Harness ändert das Schema unangekündigt
+   mid-session). Zweitklasse mitbeobachtet: die Konvention "das
+   Modell reitet auf dem NAMEN" verliert ihren Träger, wenn `name`
+   entfällt — das Modell reitet dann allein auf dem
+   `model`-Parameter (in der beobachteten Session weiterhin
+   vorhanden).
+3. **Vorformulierter Fix-Text** (forms.md §2, Binding-Absatz +
+   Channel-Zeilen-Block): die Lane-Entscheidung an eine
+   PROBE koppeln statt an ein Datum — "Vor dem ersten Dispatch
+   einer Session mit Lane-relevanter Form: prüfe, ob das
+   Agent-Schema `name` akzeptiert. Akzeptiert es keins, existiert
+   nur die synchrone Lane: kein Channel-Zeilen-Paste (der finale
+   Text IST der Report, kehrt als Tool-Result zurück), Model-Gate
+   liest den `model`-Parameter, Horizon-Regel entfällt (ein
+   Sync-Dispatch kann den Turn nicht überleben)." Beide
+   datierten Binding-Absätze auf diese Probe umstellen; die
+   Mailbox-Beschreibung bleibt als der andere Probe-Zweig.
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (forms.md §2 + model-gate-Hook-Text);
+   Quota-Drain nach OBSERVATIONS-Regel. Sofort-Konsument: jede
+   Session, die heute nach §2 dispatcht — bis zum Fix gilt die
+   Probe per Hand (Schema ansehen, dann komponieren).
+   **Nachtrag, gleiche Runde (Gegen-Probe der Desk-Session):** Die
+   Divergenz ist PRO SESSION, nicht maschinenweit — die
+   beat-the-books-cd-Session las ihr Live-Schema auf Anfrage:
+   `name` VORHANDEN, Mailbox-Lane lebendig (A3-Spawn "via mailbox"
+   im selben Fenster), Model-Gate feuert normal; die Meta-Session
+   daneben hat beides verloren. Konsequenz für den Fix-Text: die
+   Probe gilt PRO SESSION ("prüfe DEIN Schema"), und eine Session
+   darf die Lane einer anderen nie aus der eigenen ableiten — auch
+   nicht andersherum: ein Brief mit Mailbox-Channel-Zeile, von der
+   synchron-gewordenen Session komponiert, strandet den Report.
+
+## 2026-08-17 — Ein genannter Horizont ohne bewaffneten Wecker ist Prosa, die nur eine GEWECKTE Session ausführen kann (Peer-Handoff statiker-Meta → beat-the-books-Desk)
+
+**ANGEWANDT 2026-08-17, als EINE Amendierung mit der
+Sender-Hälfte darunter** — §4 Horizont-Klausel: wo die erwartete
+Rückkehr selbst der einzige Wecker ist (Mailbox-Dispatch,
+Peer-Handoff, jede Wartestellung ohne harness-verfolgte Task),
+bewaffnet der Wartende den Horizont beim Warte-Beginn als eigenen
+Hintergrund-Timer. Beleg: dieser Commit.
+
+1. **Vorfall + Basis:** Die statiker-Meta-Session übergab einen
+   Run per Peer-Kanal (SendMessage-Handoff, Desk
+   beat-the-books-e9) und nannte den Erwartungs-Horizont (~2 h
+   bis zum ersten Report) — und stellte beim Komponieren fest,
+   dass die Horizont-Regel („Schweigen jenseits davon ist ein
+   Befund, nie weiteres Warten", Korpus Insurance / Skill §4)
+   von genau der Partei ausgelöst würde, deren Ausfall sie
+   erkennen soll: der einzige Wecker der wartenden Session IST
+   die erwartete Peer-Nachricht. Ein toter oder gestrandeter
+   Peer erzeugt permanentes Schweigen, ununterscheidbar von
+   Arbeit. Klasse zuerst identifiziert als statiker P17
+   (Begehung R3, 2026-08-16, dort für Desk-Waits geparkt); die
+   Prämisse „Wake-Kanal unzuverlässig" ist gemessen (Eintrag
+   direkt oberhalb: Mailbox-Lane-Entzug pro Session,
+   2026-08-16). Ein beobachteter Stall jenseits eines genannten
+   Horizonts steht noch aus (n=0 für den Stall selbst; die
+   Bewaffnung heute war Hand-Anwendung, kein Feuer).
+2. **Klasse:** Horizont genannt, aber unvollstreckbar — der
+   Wecker ist die überwachte Partei. (Nachbarklasse, nicht
+   Merge: der Lane-Entzugs-Eintrag misst den KANAL-Verlust;
+   dieser hier die fehlende Vollstreckungs-Hälfte der
+   Horizont-Regel, die auch bei intaktem Kanal fehlt.)
+3. **Vorformulierter Regel-Text** (Skill §4, an die
+   Horizont-Klausel): „Wo die erwartete Rückkehr selbst der
+   einzige Wecker ist — Peer-Handoff, Mailbox-Dispatch, jede
+   Wartestellung ohne harness-verfolgte Task — bewaffnet der
+   Wartende den Horizont beim Warte-Beginn als EIGENEN Wecker:
+   ein In-Harness-Hintergrund-Timer (z. B. `sleep <Horizont>`
+   als Background-Task), dessen Ablauf die Session re-invoziert.
+   Feuert der Timer vor dem Report, ist das Schweigen der
+   Befund, den die Regel bereits benennt — nachgefasst wird
+   sofort, nicht weiter gewartet. Ein Horizont ohne bewaffneten
+   Wecker ist Prosa, die nur eine geweckte Session ausführen
+   kann." (Kein neues Werkzeug: ein Bash-Call; die
+   Timer-Maschinerie, die statiker P17 als „machinery without a
+   fire" parkt — cron, systemd, mtime-watch — bleibt ungebaut.)
+4. **Konsument + Abfluss-Naht:** nächste
+   dispatch-guards-Maintenance-Runde (Skill §4,
+   Horizont-Klausel); Quota-Drain nach OBSERVATIONS-Regel.
+   Sofort-Konsument: jede Session, die einen Horizont über
+   einen Peer-Handoff stellt — bis zum Mint per Hand (heute so
+   angewandt, statiker-Meta-Session). Querverweis: statiker
+   BACKLOG P17 erhält den Timer als verengten
+   Kandidat-Mechanismus, bleibt dort auf seiner genannten
+   Evidenz geparkt.
+
+## 2026-08-17 — Der Report eines Peer-getriebenen Desks strandet im Terminal-Finaltext (Wave-Handoff dispatch-guards-Desk → dotfiles-f4)
+
+**ANGEWANDT 2026-08-17 (Text a); (b) GEBUCHT** — §4 trägt
+jetzt eine eigene Handoff-Klausel: `REPORT-CHANNEL: SendMessage
+<name|operator-terminal>` plus Kadenz, und „Konsument benannt" ist
+keine Zustellung. Der Guard-Kandidat (b) ist als BACKLOG-Eintrag
+gebucht (marker-gated Stop-Lane als Geschwister von report-enforcer,
+default-warn, Biss-Test-Pflicht) — diesen Ausgang hatte der Eintrag
+selbst vorformuliert. Beleg: dieser Commit + BACKLOG.md.
+
+1. **Vorfall + Basis:** Ein per Peer-Kanal übergebener Wave-Desk
+   (opus, dotfiles-f4) lieferte zweimal binnen einer Stunde
+   seinen Report als FINALTEXT der eigenen Session ab statt per
+   SendMessage — der Bericht erreichte niemanden, der Operator
+   sah nur „idle" und fragte beim treibenden Desk nach
+   (Transkript-Probe 5a243b52: Entscheidungsrunde 16:01,
+   Restatement 16:14 mit eigener Formulierung „since they may
+   not have rendered" — die Session KONNTE ihre Zustellung
+   nicht prüfen). n=2 am selben Tag, derselbe Desk. Der
+   Handoff selbst hatte den Report-Konsumenten benannt
+   (Operator) — was fehlt, ist der KANAL: „Konsument benannt"
+   liest sich als zugestellt, während Finaltext auf der
+   Peer-Lane genau das ist, was report-enforcer für
+   Mailbox-Subagenten schon verhindert.
+2. **Klasse:** report-enforcer-Klasse eine Ebene höher — der
+   Peer-Executor-Report strandet im Finaltext, weil kein
+   Mechanismus am Turn-Ende den SENDE-Akt verlangt.
+   (Nachbarklassen, kein Merge: der Wecker-Eintrag oberhalb
+   ist die EMPFÄNGER-Hälfte — Schweigen erkennen; dieser hier
+   die Sender-Hälfte — Schweigen gar nicht erst entstehen
+   lassen. Beide zusammen sind die Peer-Rendering der
+   §2-Report-Pflicht.)
+3. **Vorformulierter Text:** (a) Skill §4, Handoff-Klausel
+   (neben Horizont + Residuen-Split): „Der Handoff nennt den
+   Report-KANAL maschinenlesbar — eine Zeile
+   `REPORT-CHANNEL: SendMessage <name|operator-terminal>` —
+   und die Kadenz (mindestens: jede Entscheidungsrunde, der
+   Close-Report). Finaltext erreicht auf der Peer-Lane
+   niemanden; ‚Konsument benannt' ist keine Zustellung."
+   (b) Guard-Kandidat, default-warn: Stop-Lane als
+   Geschwister von report-enforcer — feuert nur wenn das
+   Transkript einen `REPORT-CHANNEL: SendMessage <name>`-
+   Marker trägt UND der endende Turn substanziellen Finaltext
+   komponiert UND kein SendMessage an <name> im Turn liegt;
+   Marker-gated, dadurch nahe null False-Fires. Ohne Marker
+   stumm.
+4. **Konsument + Drain:** die fällige Maintenance-Pass-Runde
+   dieses Carriers (Banner meldet sie seit heute: gebucht ~6
+   vs gedraint ~1) — Text (a) ist ein §4-Amendment
+   (skill-craft-gated, Release-Pipeline), Kandidat (b) geht
+   als geparkter BACKLOG-Eintrag mit Bite-Test-Pflicht. Die
+   Pass-Schuld wächst mit diesem Eintrag bewusst um eins; der
+   treibende Desk empfiehlt, den Pass nach Wellenschluss an
+   den opus-Desk zu geben statt ihn auf fable zu fahren
+   (Guard-Vokabular-Bindung, routing-Modul).
 
 ### ANGEWANDT 2026-08-15 — Removal ist terminal; Reihenfolge und drei Heimaten
 
@@ -1447,227 +1898,3 @@ Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
    Maintenance-Runde (SKILL.md §1 Commit-Plan-Absatz); Quota-Drain
    nach OBSERVATIONS-Regel.
-
-## 2026-08-16 — `git add -N` mit Verzeichnis-Argument registriert fremde untracked Dateien unsichtbar
-
-1. **Vorfall + Basis:** statiker-Meta-Session (Session-Record
-   2026-08-16, statiker-Repo dev-notes/OBSERVATIONS, Round-3-
-   Dispositions-Eintrag): ein Compound-Command trug `git add -N
-   docs 2>/dev/null` — Absicht war EINE neue Brief-Datei; das
-   Verzeichnis-Argument intent-to-addete zusätzlich VIER fremde
-   untracked Lane-Briefs eines anderen Workstreams. Aufgefallen
-   erst als lauter Stash-Fehler ("Entry … not uptodate. Cannot
-   merge") viele Kommandos später; rückgängig per pfadgenauem
-   `git reset --`. n=1.
-2. **Klasse:** Verzeichnis-Pfadspec-Klasse (§1 kennt sie für
-   Lock-/Write-Set-Pfade: "names a FILE, never a directory");
-   `add -N` ist ihr ungenanntes Gesicht — der Schaden ist nicht
-   ein Mit-COMMIT (Pathspec-Commit blieb sauber), sondern
-   stiller Index-Zustand über fremden Dateien, der spätere
-   Operationen (stash, checkout) bricht oder — schlimmer — sie
-   in ein späteres breites Staging zieht.
-3. **Vorformulierter Fix-Text** (SKILL.md §1, Widening der
-   bestehenden add-N-Klausel im Write-Boundaries-Teil): nach
-   "`git add -N <path>` first — intent-to-add registers the path
-   against the empty blob …" ergänzen: "— and `<path>` names a
-   FILE, never a directory: a directory argument intent-to-adds
-   every unowned untracked file under it, invisibly (foreign
-   briefs included; measured 2026-08-16 as a stash broken many
-   commands later), the write-boundary directory rule's add-N
-   face."
-4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
-   Maintenance-Runde (SKILL.md §1, Write-Boundaries-Absatz);
-   Quota-Drain nach OBSERVATIONS-Regel.
-
-## 2026-08-16 — Das Report-File-Verbot am ENDE des READ-ONLY-Tails wird als Klempnerei gelesen, nicht als bindend (statiker beat-the-books, Session 11)
-
-1. **Vorfall + Basis:** Drei Discovery-Dispatches (sonnet) im selben
-   Lauf, alle drei mit dem wörtlich gepasteten READ-ONLY-Tail aus
-   `references/forms.md` §2. Die ersten ZWEI schrieben trotzdem eine
-   Report-DATEI und meldeten per SendMessage nur einen Zeiger darauf —
-   obwohl der Tail das Verbot zweimal trägt ("never a report file",
-   "no report files"). Beide schrieben die Datei zudem in das
-   Scratchpad des DISPATCHERS, nicht ihr eigenes, obwohl der Brief
-   Scratch explizit zuwies. Inhaltlich waren beide Reports
-   ausgezeichnet — genau deshalb fällt die Abweichung nicht auf.
-   Beim DRITTEN Dispatch wurde das Verbot unverändert im Wortlaut,
-   aber an den KOPF des Briefs gehoben, mit genannter Folge ("A file
-   is not a report and will not be read as one") — dieser Agent hielt
-   es ein. n=2 Verstoß / n=1 Bestätigung nach Umstellung, alle drei
-   im selben Lauf, gleiche Brief-Form, gleiches Modell, gleiche
-   Aufgabenklasse. Damit ist die Position die einzige veränderte
-   Variable.
-2. **Klasse:** Platzierungs-Klasse im Brief — ein Verbot, das im
-   invarianten Block-Ende steht, wird als Transport-Klempnerei
-   gelesen und nicht als Anweisung; dieselbe Klasse, die §1 für den
-   Route-Line-Seam und der Operator-Korpus für "Text zwischen
-   Tool-Calls wird nicht ausgeliefert" schon kennt. Der Tail wird als
-   Formalie überflogen, weil er in jedem Brief identisch ist — genau
-   die Eigenschaft, die ihn als Garantie tragen sollte, macht ihn
-   unsichtbar. NICHT die Klasse "Executor ignoriert Anweisung": zwei
-   unabhängige Agenten mit demselben Text und die Umkehr durch reine
-   Umstellung zeigen auf den Brief, nicht auf die Ausführenden.
-3. **Vorformulierter Fix-Text** (`references/forms.md` §2,
-   READ-ONLY-Tail — die Verbots-Zeile an den ANFANG des Blocks
-   ziehen und die Folge nennen, statt sie in Satz zwei und vier
-   mitlaufen zu lassen): den Block eröffnen mit "NO REPORT FILE.
-   Your findings go in your SendMessage reply — a file you write is
-   not a report, is not read as one, and reaches no one. Split into
-   labeled parts (1/N) past the size gate." Danach der bestehende
-   Wortlaut ohne die beiden jetzt redundanten Verbots-Halbsätze.
-   Gleiches gilt spiegelbildlich für die Scratch-Zuweisung: sie
-   gehört neben das Verbot, nicht in den Kopfteil des Briefs, weil
-   beide dieselbe Naht betreffen (wohin schreibt der Agent).
-4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
-   Maintenance-Runde, `references/forms.md` §2 (READ-ONLY-Tail);
-   Quota-Drain nach OBSERVATIONS-Regel. Beobachtungs-Herkunft: der
-   Dispatcher hat die Umstellung im Lauf selbst als Reparatur
-   getestet, der Fix-Text ist also bereits einmal live bestätigt und
-   nicht nur hergeleitet.
-
-## 2026-08-16 — Harness entzieht der Mailbox-Lane mid-session die Grundlage: Agent-Tool verliert `name` + `run_in_background` (Begehung R3, statiker meta-session)
-
-1. **Vorfall + Basis:** In der laufenden statiker-Meta-Session
-   aktualisierte der Harness die Agent-Tool-Beschreibung MID-SESSION:
-   "`run_in_background` and `name` are unavailable here — only
-   synchronous subagents" (beobachtet 2026-08-16, dieselbe Session
-   hatte Stunden zuvor zwei NAMED-Dispatches erfolgreich gefahren:
-   opus-review-078/-080, beide Mailbox-Lane). forms.md §2 trägt die
-   Lane-Bindung datiert 2026-08-15 ("naming decides the lane",
-   forms.md:94-97 gelesen) und der Model-Gate verlangt einen Namen
-   auf jedem generischen Dispatch. Unter dem neuen Schema ist die
-   benannte Lane NICHT AUSDRÜCKBAR: ein Desk, der nach §2
-   komponiert, wird entweder vom eigenen Gate abgewiesen oder
-   pastet eine Mailbox-Channel-Zeile, deren Lane nicht existiert.
-   Der §2-Text selbst nennt die Re-Probe-Pflicht ("Re-probe when
-   the Agent tool's schema changes") — dieser Eintrag IST diese
-   Re-Probe, positiv gefeuert.
-2. **Klasse:** Binding-Staleness (Bindings gelten, solange die
-   Umgebung gilt — und der Harness ändert das Schema unangekündigt
-   mid-session). Zweitklasse mitbeobachtet: die Konvention "das
-   Modell reitet auf dem NAMEN" verliert ihren Träger, wenn `name`
-   entfällt — das Modell reitet dann allein auf dem
-   `model`-Parameter (in der beobachteten Session weiterhin
-   vorhanden).
-3. **Vorformulierter Fix-Text** (forms.md §2, Binding-Absatz +
-   Channel-Zeilen-Block): die Lane-Entscheidung an eine
-   PROBE koppeln statt an ein Datum — "Vor dem ersten Dispatch
-   einer Session mit Lane-relevanter Form: prüfe, ob das
-   Agent-Schema `name` akzeptiert. Akzeptiert es keins, existiert
-   nur die synchrone Lane: kein Channel-Zeilen-Paste (der finale
-   Text IST der Report, kehrt als Tool-Result zurück), Model-Gate
-   liest den `model`-Parameter, Horizon-Regel entfällt (ein
-   Sync-Dispatch kann den Turn nicht überleben)." Beide
-   datierten Binding-Absätze auf diese Probe umstellen; die
-   Mailbox-Beschreibung bleibt als der andere Probe-Zweig.
-4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
-   Maintenance-Runde (forms.md §2 + model-gate-Hook-Text);
-   Quota-Drain nach OBSERVATIONS-Regel. Sofort-Konsument: jede
-   Session, die heute nach §2 dispatcht — bis zum Fix gilt die
-   Probe per Hand (Schema ansehen, dann komponieren).
-   **Nachtrag, gleiche Runde (Gegen-Probe der Desk-Session):** Die
-   Divergenz ist PRO SESSION, nicht maschinenweit — die
-   beat-the-books-cd-Session las ihr Live-Schema auf Anfrage:
-   `name` VORHANDEN, Mailbox-Lane lebendig (A3-Spawn "via mailbox"
-   im selben Fenster), Model-Gate feuert normal; die Meta-Session
-   daneben hat beides verloren. Konsequenz für den Fix-Text: die
-   Probe gilt PRO SESSION ("prüfe DEIN Schema"), und eine Session
-   darf die Lane einer anderen nie aus der eigenen ableiten — auch
-   nicht andersherum: ein Brief mit Mailbox-Channel-Zeile, von der
-   synchron-gewordenen Session komponiert, strandet den Report.
-
-## 2026-08-17 — Ein genannter Horizont ohne bewaffneten Wecker ist Prosa, die nur eine GEWECKTE Session ausführen kann (Peer-Handoff statiker-Meta → beat-the-books-Desk)
-
-1. **Vorfall + Basis:** Die statiker-Meta-Session übergab einen
-   Run per Peer-Kanal (SendMessage-Handoff, Desk
-   beat-the-books-e9) und nannte den Erwartungs-Horizont (~2 h
-   bis zum ersten Report) — und stellte beim Komponieren fest,
-   dass die Horizont-Regel („Schweigen jenseits davon ist ein
-   Befund, nie weiteres Warten", Korpus Insurance / Skill §4)
-   von genau der Partei ausgelöst würde, deren Ausfall sie
-   erkennen soll: der einzige Wecker der wartenden Session IST
-   die erwartete Peer-Nachricht. Ein toter oder gestrandeter
-   Peer erzeugt permanentes Schweigen, ununterscheidbar von
-   Arbeit. Klasse zuerst identifiziert als statiker P17
-   (Begehung R3, 2026-08-16, dort für Desk-Waits geparkt); die
-   Prämisse „Wake-Kanal unzuverlässig" ist gemessen (Eintrag
-   direkt oberhalb: Mailbox-Lane-Entzug pro Session,
-   2026-08-16). Ein beobachteter Stall jenseits eines genannten
-   Horizonts steht noch aus (n=0 für den Stall selbst; die
-   Bewaffnung heute war Hand-Anwendung, kein Feuer).
-2. **Klasse:** Horizont genannt, aber unvollstreckbar — der
-   Wecker ist die überwachte Partei. (Nachbarklasse, nicht
-   Merge: der Lane-Entzugs-Eintrag misst den KANAL-Verlust;
-   dieser hier die fehlende Vollstreckungs-Hälfte der
-   Horizont-Regel, die auch bei intaktem Kanal fehlt.)
-3. **Vorformulierter Regel-Text** (Skill §4, an die
-   Horizont-Klausel): „Wo die erwartete Rückkehr selbst der
-   einzige Wecker ist — Peer-Handoff, Mailbox-Dispatch, jede
-   Wartestellung ohne harness-verfolgte Task — bewaffnet der
-   Wartende den Horizont beim Warte-Beginn als EIGENEN Wecker:
-   ein In-Harness-Hintergrund-Timer (z. B. `sleep <Horizont>`
-   als Background-Task), dessen Ablauf die Session re-invoziert.
-   Feuert der Timer vor dem Report, ist das Schweigen der
-   Befund, den die Regel bereits benennt — nachgefasst wird
-   sofort, nicht weiter gewartet. Ein Horizont ohne bewaffneten
-   Wecker ist Prosa, die nur eine geweckte Session ausführen
-   kann." (Kein neues Werkzeug: ein Bash-Call; die
-   Timer-Maschinerie, die statiker P17 als „machinery without a
-   fire" parkt — cron, systemd, mtime-watch — bleibt ungebaut.)
-4. **Konsument + Abfluss-Naht:** nächste
-   dispatch-guards-Maintenance-Runde (Skill §4,
-   Horizont-Klausel); Quota-Drain nach OBSERVATIONS-Regel.
-   Sofort-Konsument: jede Session, die einen Horizont über
-   einen Peer-Handoff stellt — bis zum Mint per Hand (heute so
-   angewandt, statiker-Meta-Session). Querverweis: statiker
-   BACKLOG P17 erhält den Timer als verengten
-   Kandidat-Mechanismus, bleibt dort auf seiner genannten
-   Evidenz geparkt.
-
-## 2026-08-17 — Der Report eines Peer-getriebenen Desks strandet im Terminal-Finaltext (Wave-Handoff dispatch-guards-Desk → dotfiles-f4)
-
-1. **Vorfall + Basis:** Ein per Peer-Kanal übergebener Wave-Desk
-   (opus, dotfiles-f4) lieferte zweimal binnen einer Stunde
-   seinen Report als FINALTEXT der eigenen Session ab statt per
-   SendMessage — der Bericht erreichte niemanden, der Operator
-   sah nur „idle" und fragte beim treibenden Desk nach
-   (Transkript-Probe 5a243b52: Entscheidungsrunde 16:01,
-   Restatement 16:14 mit eigener Formulierung „since they may
-   not have rendered" — die Session KONNTE ihre Zustellung
-   nicht prüfen). n=2 am selben Tag, derselbe Desk. Der
-   Handoff selbst hatte den Report-Konsumenten benannt
-   (Operator) — was fehlt, ist der KANAL: „Konsument benannt"
-   liest sich als zugestellt, während Finaltext auf der
-   Peer-Lane genau das ist, was report-enforcer für
-   Mailbox-Subagenten schon verhindert.
-2. **Klasse:** report-enforcer-Klasse eine Ebene höher — der
-   Peer-Executor-Report strandet im Finaltext, weil kein
-   Mechanismus am Turn-Ende den SENDE-Akt verlangt.
-   (Nachbarklassen, kein Merge: der Wecker-Eintrag oberhalb
-   ist die EMPFÄNGER-Hälfte — Schweigen erkennen; dieser hier
-   die Sender-Hälfte — Schweigen gar nicht erst entstehen
-   lassen. Beide zusammen sind die Peer-Rendering der
-   §2-Report-Pflicht.)
-3. **Vorformulierter Text:** (a) Skill §4, Handoff-Klausel
-   (neben Horizont + Residuen-Split): „Der Handoff nennt den
-   Report-KANAL maschinenlesbar — eine Zeile
-   `REPORT-CHANNEL: SendMessage <name|operator-terminal>` —
-   und die Kadenz (mindestens: jede Entscheidungsrunde, der
-   Close-Report). Finaltext erreicht auf der Peer-Lane
-   niemanden; ‚Konsument benannt' ist keine Zustellung."
-   (b) Guard-Kandidat, default-warn: Stop-Lane als
-   Geschwister von report-enforcer — feuert nur wenn das
-   Transkript einen `REPORT-CHANNEL: SendMessage <name>`-
-   Marker trägt UND der endende Turn substanziellen Finaltext
-   komponiert UND kein SendMessage an <name> im Turn liegt;
-   Marker-gated, dadurch nahe null False-Fires. Ohne Marker
-   stumm.
-4. **Konsument + Drain:** die fällige Maintenance-Pass-Runde
-   dieses Carriers (Banner meldet sie seit heute: gebucht ~6
-   vs gedraint ~1) — Text (a) ist ein §4-Amendment
-   (skill-craft-gated, Release-Pipeline), Kandidat (b) geht
-   als geparkter BACKLOG-Eintrag mit Bite-Test-Pflicht. Die
-   Pass-Schuld wächst mit diesem Eintrag bewusst um eins; der
-   treibende Desk empfiehlt, den Pass nach Wellenschluss an
-   den opus-Desk zu geben statt ihn auf fable zu fahren
-   (Guard-Vokabular-Bindung, routing-Modul).

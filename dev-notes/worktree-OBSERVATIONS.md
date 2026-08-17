@@ -76,6 +76,49 @@ enforcement structure. No capability patches as of minting.
 
 (append dated lines when a rule catches a real issue)
 
+## Abgeflossen
+
+Angewandte oder verworfene Einträge mit Beleg — der Eintrag WANDERT
+hierher (Form: `dev-notes/OBSERVATIONS-FORM.md`).
+
+### ABGEFLOSSEN 2026-08-17 (Wartungs-Pass, mit dem dispatch-Carrier
+### mitgezogen — dieser Träger schuldete nach Quote nichts)
+
+Vorschläge 1–3 sind gebaut, 5 verworfen, 4 bleibt geparkt — der
+Eintrag verlässt damit die lebende Liste, ohne dass die offene Frage
+verschwindet:
+
+1. **Ownership** — realisiert als DEKLARATION statt Markierung:
+   `worktree_doctor.py` behandelt nur per `--owned PATH` erklärte
+   Worktrees als eigene, leitet Besitz nie aus Pfad-Form, Namens-
+   Präfix oder Branch ab (genau die Muster-Blindheit, die der
+   Vorschlag ausschloss); alles andere ist UNKNOWN und nie entfernbar.
+2. **Kein Force über schmutzige Worktrees** — das Werkzeug hat
+   überhaupt keinen Entfernungs-Pfad: es druckt das unforcierte
+   `git worktree remove <path>` als TEXT, DIRTY schlägt jede andere
+   Klassifikation.
+3. **Melden vor Handeln** — die drei Verdikte (clean / stale-found /
+   could-not-verify) sind die Ausgangs-Codes; UNREADABLE wird nie zu
+   etwas anderem gemacht.
+4. **Retirement-Trigger** — bleibt OFFEN mit unveränderter genannter
+   fehlender Evidenz (Fehlfeuer-Rate eines Kandidaten-Prädikats);
+   Heimat ist der BACKLOG-Eintrag PARKED 2026-08-08, nicht dieser
+   Träger.
+5. **Lane meldet ihren Worktree-Pfad** — VERWORFEN: der Dispatcher
+   legt den Worktree an und hält den Pfad per Konstruktion; die
+   Entfernung selbst ist im dispatch-Skill §1 als terminaler Akt
+   sequenziert.
+
+**Fund desselben Passes, hier vermerkt, weil er diesen Träger
+betrifft:** die Cleanup-Sektion des Skills wies noch an, Reader-/
+Probe-Worktrees „at the booking of their findings" zu entfernen —
+die Reihenfolge, die die 0.10.25-Amendierung als verlierend
+identifiziert und in dispatch §1 korrigiert hatte, ohne diese vierte
+Heimat zu erreichen (geprüft: `git log -L` zeigt die Zeile seit
+38e9ae7 unverändert, `git show --stat 7a23673` nennt drei Dateien,
+diese nicht dabei). Jetzt: buchen, befragen, DANN entfernen. Beleg:
+dieser Commit.
+
 ## 2026-08-08 — LIFECYCLE: nobody removes worktrees, and the sweep that does has no ownership predicate
 
 Two halves of one system, both measured the same afternoon in

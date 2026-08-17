@@ -21,7 +21,17 @@ answer, silence is not; (h) rides the EXECUTION tail only:
       with its evidence, never settled at your own tier (§4)
   (d) deviations from the brief, each with its reason
   (e) findings worth turning into a rule/test (candidate lessons)
-  (f) files touched + commit hashes (unpushed)
+  (f) files touched + commit hashes (unpushed), established from
+      the RECORD rather than from memory: the commits reported are
+      those whose Co-Authored-By trailer carries the agent's OWN
+      model name, and a commit it cannot claim by trailer is
+      reported as "present in the tree, not mine" — mandatory on a
+      shared copy, whose tree carries co-writers' work by
+      construction, and doubly so after a summarization, where what
+      the agent remembers doing and what the tree shows diverge
+      silently. Config writes are repo writes: a lane that touched
+      `.git/config` (a pushurl denial, a hooks path) reports it
+      here, read-only briefs included.
   (g) what was NOT verified (honest residue)
   (h) sources actually read, of those the brief named (execution
       tail only)
@@ -54,6 +64,14 @@ channel-line block below):** the closing report reaches the
 dispatcher ONLY via SendMessage — a final text answer reaches no
 one; the brief names this channel explicitly, and going idle
 without having SENT the report counts as no report.
+**Inbox drained before sending** — and between the parts of a
+multi-part report: the report dispositions every dispatcher message
+received up to send time, or names it explicitly as unhandled.
+Composing a long report as a queue is what strands them (measured,
+three times in one session: a GO sent after part 1 still stood
+"open" in part 7, and two added assignments went undispositioned in
+otherwise complete reports — one re-demand round each). The race
+symptom is then readable from the report itself.
 **Payload vs. pointer:** the channel carries the
 short signal; anything beyond the report form's slots — roughly more
 than a screen — goes in a FILE, and the message points to it. Basis,
@@ -65,7 +83,15 @@ repo; the gate rests on context economy alone. The
 `message-payload-gate` guard enforces the rule mechanically for the
 expensive direction (subagent → dispatcher).
 
-**Brief-tail boilerplate.** The brief's dispatch-invariant tail is
+**Brief-tail boilerplate.** A binding clause opens its block: at
+the END of an invariant block it reads as transport plumbing rather
+than as an instruction, and the very property that should make a
+pasted tail a guarantee — being identical in every brief — is what
+makes it skimmed (measured in one run of three same-form
+discovery dispatches: two wrote a report file with the prohibition
+standing twice in the tail's later sentences, the third, with the
+same wording moved to the block's head and its consequence named,
+complied). The tail is
 PASTED, not recalled — free-composed briefs drop invariant clauses
 (the channel and payload rules have reached executing agents only as
 gate denials, at doubled composition cost); a pasted tail skips the
@@ -80,8 +106,22 @@ lane call is the dispatcher's, made at paste time,
 never left to the agent (it has been misjudged agent-side; the
 report-enforcer hook's docstring, soft-spot note).
 
-Channel line (paste exactly one). `name` alone decides the lane,
-and the two lanes differ in where the agent's closing text lands.
+Which lanes EXIST is a per-session PROBE, never a date: look at
+THIS session's Agent-tool schema before the first dispatch whose
+form depends on the lane. Accepts no `name` → only the synchronous
+lane exists, so paste NO channel line (the final text is the
+report, returning as the tool result), the model gate reads the
+`model` parameter, and the horizon rule does not apply, a sync
+dispatch being unable to outlive the turn. The harness has
+withdrawn `name` MID-SESSION from a session that had run named
+dispatches hours earlier while a sibling session kept it, so the
+divergence is per session in both directions — and a brief
+carrying a mailbox channel line, composed by a session that has
+gone synchronous, strands the report it asks for. Accepts `name`
+→ the two lanes below.
+
+Channel line (paste exactly one). `name` alone decides WHICH of
+them, and they differ in where the agent's closing text lands.
 The model gate mandates a name on every GENERIC dispatch, so the
 unnamed lane is reachable only by the types that gate exempts —
 pinned agent types, and modes whose model is fixed by construction
@@ -91,7 +131,8 @@ rather than chosen (a fork inherits its parent's):
 - unnamed (background task): `Report channel: your final text IS
   the report.`
 
-Binding (as of 2026-08-15, harness 2.1.232): the Agent tool takes
+Binding (as of 2026-08-17, harness 2.1.232 — the mailbox branch):
+the Agent tool takes
 no `run_in_background` parameter — its schema is
 `additionalProperties: false` and lists none — so a
 sync-vs-background FLAG cannot be expressed at all, and what once
@@ -103,8 +144,7 @@ SendMessage delivers. An UNNAMED dispatch returns "Async agent
 launched" plus an output file, and the completion task-notification
 carries its final text to the dispatcher VERBATIM — including from
 an agent that called no tool at all, so delivery does not depend on
-the agent cooperating. Re-probe when the Agent tool's schema
-changes.
+the agent cooperating.
 
 Which lane to pick: NAME the dispatch when the session must talk
 across it — long builds, parallel fan-outs, teammates, anything
@@ -124,6 +164,13 @@ supporting DATA/evidence files still write fine. The report
 therefore travels in the SendMessage itself — split into labeled
 parts (1/N) when it exceeds one message — and briefs stop
 assigning report file paths; data-file assignments are unaffected.
+The block is measured against ONE namespace — `REPORT.md` and near
+English relatives — and what it keys on is unestablished, so for a
+brief in another working language it is NO backstop: a
+German-named `*-bericht.md` wrote straight through. Where the
+working language is not English, the brief names the assigned data
+file as the ONLY permitted write path and says outright that any
+further file, however named, is a deviation.
 
 State tokens — crossings are inherent to the async channel: a
 directive and an in-flight report pass each other, and each
@@ -155,8 +202,14 @@ EXECUTION tail (any dispatch that writes):
     incl. anything needing a tier above yours, returned as a question
     with its evidence, never settled at your tier,
     (d) deviations w/ reason, (e) candidate lessons, (f) files
-    touched + commit hashes (unpushed), (g) what was NOT verified,
+    touched + commit hashes (unpushed) — only commits whose
+    Co-Authored-By trailer is YOURS; one you cannot claim by
+    trailer is "present in the tree, not mine"; a `.git/config`
+    write counts as a repo write, (g) what was NOT verified,
     (h) sources actually read, of those the brief named.
+    Drain your inbox before sending, and between parts of a
+    multi-part report: every dispatcher message received up to send
+    time is dispositioned or named as unhandled.
     <channel line>
     Message ≤3000 chars each: a report longer than one message is
     SPLIT into labeled parts (1/N) — do NOT write a report FILE
@@ -168,7 +221,10 @@ EXECUTION tail (any dispatch that writes):
     report (TaskOutput block=true on its task id) — ending your
     turn orphans it; a report sent with a check still running is
     an INTERIM report, says so, and names what remains.
-    Commits unpushed, by pathspec — `git commit -- <paths>`, never
+    Commits unpushed, by pathspec — `git commit -m "…" -- <paths>`
+    with every flag BEFORE the `--` (after it git reads `-m` as a
+    pathspec and the commit fails; `-F` for a multi-line message),
+    never
     `git add` then `git commit` and never `-A`: the index is shared,
     so a co-writer staging between your `git status` and your commit
     rides out under your message whatever you added. A NEW file is
@@ -187,14 +243,17 @@ READ-ONLY tail (verifier and discovery dispatches — no writes, no
 commits, no report files; enumeration dispatches substitute the
 data-file provision, §3b):
 
+    NO REPORT FILE. Your findings go in your SendMessage reply — a
+    file you write is not a report, is not read as one, and reaches
+    no one. Split into labeled parts (1/N) past the size gate.
+    Transient probe scratch goes in YOUR OWN scratchpad, never the
+    dispatcher's, and is not a report file.
     <channel line>
     Return your findings in ONE message where they fit (verifier:
     verdict + basis; discovery: the N named facts, sources actually
-    read); past the message-size gate, labeled parts (1/N) — never
-    a report file. A missing decision, file, or value is surfaced
-    as a gap, never bridged with a guess. No repo writes, no report
-    files, no interim messages; transient probe scratch in your OWN
-    scratchpad is permitted and is not a report file.
+    read). A missing decision, file, or value is surfaced
+    as a gap, never bridged with a guess. No repo writes, no
+    interim messages.
 
 Verifier dispatches stay exempt from the rich §1 brief form but NOT
 from the read-only tail — artifact + question + that block (the

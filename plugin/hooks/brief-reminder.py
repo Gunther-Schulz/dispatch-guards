@@ -316,14 +316,22 @@ def tail_mode_mismatch_deny_text(payload: dict) -> str:
 
 
 _SECTIONS_ANCHOR = "closing report (mandatory"
-# The READ-ONLY tail's own signature. Needed because forms.md carries
+# The READ-ONLY tail's own signature — a marker FAMILY, like the
+# section markers below, because the tail's wording is amended over
+# time and briefs already in flight carry the older form: one hit is
+# enough, and both members are read-only-exclusive (the execution tail
+# says "do NOT write a report FILE", which contains neither). The
+# report-file prohibition moved to the head of the block, which is
+# where the second marker lives.
+# Needed because forms.md carries
 # BOTH tails verbatim, and the brief text this guard reads includes
 # every .md file the prompt names: a verifier brief whose only offence
 # is CITING forms.md — which §1 tells verifier briefs to cite — picked
 # up the execution anchor from the citation and was denied for lacking
 # §1 execution sections it is explicitly exempt from. Observed live on
 # a legitimate verifier dispatch.
-_READONLY_ANCHOR = "no repo writes, no report files"
+_READONLY_ANCHORS = ("no repo writes, no report files",
+                     "is not a report, is not read as one")
 # Marker-Familien statt Einzel-Literale: Haus-Briefe folgen dem
 # DEV-RUNBOOK-Formular mit deutschen Feld-Etiketten (GROUNDING-BASIS,
 # SCHREIB-GRENZEN) — die Erkennung akzeptiert die Abschnitts-Etiketten
@@ -371,7 +379,7 @@ def _tail_kind(payload: dict) -> str:
     tool_input = payload.get("tool_input") or {}
     prompt = _norm(tool_input.get("prompt") or "")
     for text in (prompt, _brief_text(payload)):
-        if _READONLY_ANCHOR in text:
+        if any(a in text for a in _READONLY_ANCHORS):
             return "readonly"
         if _SECTIONS_ANCHOR in text:
             return "execution"
@@ -655,8 +663,14 @@ if __name__ == "__main__":
             "tier above yours, returned as a question with its "
             "evidence, never settled at your tier, (d) deviations w/ "
             "reason, (e) candidate lessons, (f) files touched + commit "
-            "hashes (unpushed), (g) what was NOT verified, (h) sources "
-            "actually read, of those the brief named.\n"
+            "hashes (unpushed) — only commits whose Co-Authored-By "
+            "trailer is YOURS; one you cannot claim by trailer is "
+            "\"present in the tree, not mine\"; a `.git/config` write "
+            "counts as a repo write, (g) what was NOT verified, "
+            "(h) sources actually read, of those the brief named.\n"
+            "Drain your inbox before sending, and between parts of a "
+            "multi-part report: every dispatcher message received up "
+            "to send time is dispositioned or named as unhandled.\n"
             "Report channel: SendMessage to the dispatcher — your "
             "final text reaches no one.\n"
             "Message ≤3000 chars each: a report longer than one "
@@ -671,8 +685,11 @@ if __name__ == "__main__":
             "ending your turn orphans it; a report sent with a check "
             "still running is an INTERIM report, says so, and names "
             "what remains.\n"
-            "Commits unpushed, by pathspec — `git commit -- <paths>`, "
-            "never `git add` then `git commit` and never `-A`: the "
+            "Commits unpushed, by pathspec — `git commit -m \"…\" -- "
+            "<paths>` with every flag BEFORE the `--` (after it git "
+            "reads `-m` as a pathspec and the commit fails; `-F` for a "
+            "multi-line message), never `git add` then `git commit` "
+            "and never `-A`: the "
             "index is shared, so a co-writer staging between your `git "
             "status` and your commit rides out under your message "
             "whatever you added. A NEW file is invisible to a pathspec "

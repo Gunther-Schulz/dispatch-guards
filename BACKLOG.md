@@ -7,6 +7,34 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-17 — a marker-gated Stop lane for handed-off desks:
+  report-enforcer's sibling one level up.** A session that received
+  whole work over the peer channel composes its report as FINAL TEXT,
+  which on that lane reaches no one — measured twice within one hour
+  on one desk, with the operator seeing only an idle session. §4 now
+  mandates a machine-readable `REPORT-CHANNEL: SendMessage <name>`
+  line in the handoff; this entry is the mechanical half.
+  Design (decided): a Stop hook fires only when ALL of — the
+  transcript carries a `REPORT-CHANNEL: SendMessage <name>` marker,
+  the ending turn composes substantial final text, and no SendMessage
+  to `<name>` occurred in that turn. Marker-gated, so a session that
+  never received such a handoff is silent by construction and the
+  false-fire profile is near zero. Ships default-warn like every new
+  lane.
+  Write boundary: a new `plugin/hooks/` script + its `hooks.json`
+  roster entry, README guard roster, `tools/corpus/guards.jsonl`
+  cases, doc-drift roster labels. No skill text — §4 already carries
+  the prose half.
+  Verifier: `--test` bite-test plus corpus cases, red-first against
+  the shipped predicate — the arms that must differ are (i) marker
+  present + final text + no send → fires, (ii) marker present + final
+  text + send in the same turn → silent, (iii) no marker → silent
+  whatever the turn did. Arm (iii) is the false-fire control.
+  Done when the bench and the bite-test cover all three arms and the
+  lane is registered in the README roster at mode warn.
+  Basis: dev-notes/dispatch-OBSERVATIONS.md, 2026-08-17 sender-half
+  entry (slot 3b) — its own pre-formulated exit was this booking.
+
 - **PARKED 2026-08-15 — the channel lanes read the PROMPT as a flat
   substring haystack, and three shapes slip through.** All found by a
   second fresh-context vet, each with a run control; none is a false
@@ -448,7 +476,27 @@ are dropped with a one-line reason.
   waits. Trigger unchanged: an actual decision to publish/share the
   plugin outside this farm.
 
-- **READY 2026-08-14 — first maintenance pass over
+## Done
+
+- 2026-08-17 — **first maintenance pass over
+  `dev-notes/dispatch-OBSERVATIONS.md`**: closes the READY
+  2026-08-14 entry below. Every live entry got an exit — applied,
+  already-applied with its basis, discarded with a reason, or (three
+  entries) marked RESIDUUM because their target file is the
+  guard-checker-bau devbook in dotfiles, which this working copy does
+  not own. DEVIATION from the stored design, in the cheap direction:
+  the planned CUTOFF rule for the 15 pre-form entries was not needed —
+  each was graded individually against the current corpus, and five of
+  them turned out already applied, one discarded on a hypothesis
+  refuted at the source. Stale premise in the entry itself, worth
+  recording: it said "27 entries, none ever drained", while four had
+  drained on 2026-08-15. The pass also found what the entry's verifier
+  predicted it would test — the `## Abgeflossen` branch — plus one
+  live contradiction between two shipped skills (the reader-worktree
+  removal clause) and one broken mechanism dependent (brief-reminder's
+  read-only anchor). Realized: this commit series.
+
+  - **READY 2026-08-14 — first maintenance pass over
   `dev-notes/dispatch-OBSERVATIONS.md`: 27 entries, none ever
   drained.** The quota banner shipped this day (dotfiles `b485ec7`,
   FB 112) and its first real run named this carrier:
@@ -487,7 +535,6 @@ are dropped with a one-line reason.
   ref, discarded with a one-line reason, or covered by the stated
   cutoff rule — and the count of open entries is stated, not implied.
 
-## Done
 
 - 2026-08-15 — **the §2 channel rules, settled by the controlled
   re-probe**: closes the PARKED 2026-08-08 item, whose named missing

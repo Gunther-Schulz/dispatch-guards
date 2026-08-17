@@ -98,7 +98,14 @@ Mandatory parts (execution briefs):
   the other.
 - **Files to read, listed — never paraphrased.** Bind the source files
   (specs, decision docs, the code to change); a paraphrase carried in
-  the brief drifts and the agent can't detect it.
+  the brief drifts and the agent can't detect it. A POSITION- or
+  GENERATION-dependent identifier — a register number, an item id,
+  a line number — travels with a CONTENT anchor beside it: the
+  numbers shift when the artifact is regenerated while the brief's
+  copy stands, and the executor then works from the anchor and
+  reports the offset (measured: a regenerated register moved every
+  number by one; the quoted wording beside it is what saved the
+  lane).
 - **Grounding basis as a mandatory section.** Name what the agent must
   read before building and require the final report to cite what was
   actually read.
@@ -117,7 +124,20 @@ Mandatory parts (execution briefs):
   executor plausibly "corrects" toward). Opening a REFERENCE is
   not opening its CONTENT: proving a ref, path or ticket RESOLVES
   establishes nothing the brief rests on, and that existence check
-  is the one that feels like diligence. FORM is the harder half,
+  is the one that feels like diligence. Opening a stored ENTRY
+  means the entry PLUS its neighbours: a re-grade is commonly
+  written as an ADJACENT record rather than an in-place edit, so
+  the original head keeps its live grade while the closure sits a
+  few lines above it (measured twice — a "(DONE — <sha>)" line
+  inside a body straddled by two read windows, and a re-grade in
+  the preceding bullet; each cost a lane that correctly built
+  nothing, and one left the closed item ranked third in a
+  build order). A self-built extractor is the INSTRUMENT there and
+  its boundary choice is the basis, not its output: a split on the
+  entry delimiter returns exactly one entry and hides the
+  neighbour that re-graded it. Where the target repo has its own
+  closure or staleness check, it runs over the entry before the
+  brief ships. FORM is the harder half,
   because it decides what gets read as a claim at all: a
   repo-assertion wearing a CITATION draws the grade, while the
   same assertion as a design sentence, a base commit, or a filled
@@ -146,10 +166,22 @@ Mandatory parts (execution briefs):
   first — intent-to-add registers the path against the empty blob,
   staging zero content, so the commit still carries the file's full
   body while a co-writer's staged work stays staged and
-  uncommitted. Unstated, the rule is unsatisfiable for file
-  creation and the executor either bridges it or halts.
+  uncommitted — and `<path>` names a FILE, never a directory: a
+  directory argument intent-to-adds every unowned untracked file
+  under it, invisibly — foreign briefs included, surfacing as a
+  broken stash many commands later — the write-boundary directory
+  rule's add-N face. Unstated, the rule
+  is unsatisfiable for file creation and the executor either
+  bridges it or halts.
   **Commit unpushed; pushing is the dispatcher's act** after
-  verification.
+  verification. On a copy shared with a writer outside the
+  dispatch — peer session, operator, scheduled job — that is a
+  hope rather than a boundary: their push carries the BRANCH (the
+  push-set bullet below), publishing the lane's mid-verification
+  work along with their own (measured: a 270-line hook rewrite on
+  the remote before the dispatcher had verified any of it).
+  Isolate the lane in a worktree, or say in the brief that its
+  commits may be published unverified.
   - **Disjointness is per FILE, and commits serialize on shared
     files:** staging is file-granular, so an agent committing its own
     work in a shared file sweeps up a co-writer's uncommitted hunks —
@@ -170,6 +202,25 @@ Mandatory parts (execution briefs):
     --soft HEAD~1` aimed at that mixed commit un-committed a
     co-writer's newer one instead; recoverable only because
     `--soft` moves the branch pointer alone).
+    An ADD-ONLY or non-overlapping-region grant is no exemption
+    from any of this — the commit is file-granular regardless of
+    where in the file the hunks sit (measured: two lanes each
+    granted one config file "add only, touch no existing field";
+    one lane's commit carried the other's uncommitted hunk under
+    its message). And for a shared FILE no safe form exists —
+    pathspec isolates against other files, never against a
+    co-writer's hunks inside a named one — which makes
+    serialization the remedy rather than the preference.
+  - **Deployment-coupled is a different question from LIVE ON
+    WRITE.** A file on an execution path resolved by PATH rather
+    than by import — a git hook under `core.hooksPath`, a
+    registered harness hook, a file a running daemon re-reads,
+    anything under a watched directory — IS the live mechanism
+    from the moment it is written: no commit, no deploy, no
+    restart. A brief that boxes deployment leaves that unboxed
+    (measured: a lane rewrote the machine's live pre-push gate
+    while the dispatcher's own pushes ran through it). Where the
+    write set touches such a path, the brief answers both.
   - **Amend is COMMIT-granular — file disjointness does not reach
     it:** `git commit --amend` rewrites whatever commit is at HEAD,
     and on a shared copy HEAD moves between working rounds — an amend
@@ -246,9 +297,14 @@ Mandatory parts (execution briefs):
     hazards, push-denial (per-worktree pushurl poison, never the
     `git remote` porcelain), the hook-env GIT_DIR redirection class,
     hooks-reach asymmetry, provisioning probes, the config-hash
-    integrity check — live in this plugin's sibling `worktree` SKILL
-    (single source; this recipe carries only the dispatch-specific
-    binding and must not grow a second copy).
+    integrity check — live in this plugin's sibling `worktree` SKILL,
+    which is LOADED before the first `git worktree add`, never
+    merely cited (single source; this recipe carries only the
+    dispatch-specific binding and must not grow a second copy).
+    Improvised from the citation, the rung's own push-denial step
+    has disabled push for the MAIN clone — remote config is shared
+    across worktrees — surfacing later as an access-rights error
+    that reads like a credentials problem.
   - **Worktree recipe (the ladder's rung 2).** Create outside the
     main tree (`git worktree add /tmp/wt-<task>-<agent> -b
     wt/<task>/<agent> <main-HEAD>`); apply the skill's push denial to
@@ -273,6 +329,27 @@ Mandatory parts (execution briefs):
     genuine — disjoint file sets in one working copy stay the
     default.
   - **The base commit is STATED in the brief, never discovered.**
+    Stated means READ at compose time — `git -C <copy> rev-parse
+    --short HEAD`, its output pasted — never recalled from an
+    earlier read in the same session: a remembered hash satisfies
+    "stated" while naming a body that has moved, and the
+    executor's check is prescribed as an ACT so it cannot go
+    stale while the dispatcher's is a VALUE, which has no
+    freshness (measured: co-writer commits landed between the read
+    and the dispatch, and the executor halted, correctly, at the
+    cost of a round trip). Where the copy has any co-writer, the
+    CENSUS belongs here as well as at integration (§4): `git
+    worktree list` alongside `git status` and `git log -1
+    --format=%cr` — `git status` does not see worktrees, and
+    "committed 2 minutes ago" is what separates a quiet copy from
+    a live one; a scratch-path worktree under a foreign session id
+    is a live co-writer whatever the tree says. Where the brief
+    FILE is committed into the executor's own copy, the base is
+    the brief's own commit, or the tolerance is path-scoped
+    ("<hash>, or any later HEAD whose extra commits leave the
+    target paths untouched") — a base chosen before that commit is
+    self-refuting and spends a round trip ratifying the
+    dispatcher's own metadata commits.
     Either flavor cuts its base from SPAWN-TIME state, so the brief
     states the required base commit and the executor's first act
     verifies it — with TWO reads, because one does not separate the
@@ -351,13 +428,19 @@ Mandatory parts (execution briefs):
     per the box, and the round trip spent ratifying it changed
     nothing). Novel deviations still halt; only the named class is
     pre-authorized.
-  - **A verifier step that says REPOINT confirms the knob exists.**
+  - **A verifier step confirms what it assumes exists — the knob
+    AND the environment.**
     Before writing "point <NAME> at a temp dir", establish that it
     is a parameter or env var and not a module constant: a hardcoded
     constant in a file outside the executor's write boundary makes
     the step unexecutable as written, and the executor either
     invents the in-process rebinding or halts. Either confirm the
-    knob, or state the rebinding form in the brief.
+    knob, or state the rebinding form in the brief. A RUNTIME the
+    step assumes takes the same clause: an agent shell has had
+    neither a docker daemon nor usable sudo, which leaves "run this
+    against a postgres container" unexecutable at that tier — so a
+    step needing a container runtime, a service, or privilege
+    states that as a tier/environment precondition.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
@@ -386,9 +469,25 @@ Mandatory parts (execution briefs):
   not bundling reasons — and the mapping is decided before the
   lanes are named, because deciding it means reading each item's
   realizing file, which is also what catches an item whose work
-  already landed (measured 2026-08-14: four of five proposed
+  already landed (measured: four of five proposed
   lanes were already built, found only when the bundling question
   forced the files open).
+  A READ-ONLY fan-out has no write boundaries to join, so three
+  terms size it instead: a lane's fixed load (system prompt +
+  corpus + brief, re-paid per agent) stays small against its work —
+  the brief-rivals-work test at lane grain; exhaustive per-item
+  checking caps items per lane, because late items in a long
+  enumeration get shallower checking than early ones — the
+  under-report principle as a sizing bound; and the grouping axis
+  (repo, section, artifact class) is NAMED in the route line, since
+  no join derives it. Splitting can be token-CHEAPER, against the
+  folk intuition: one lane re-reads its whole accumulated prefix
+  every call while each split lane pays its startup once, so a
+  read-only lane expected past ~30 tool calls is worth splitting on
+  token cost alone (measured on one workload against a modeled
+  single-lane arm; carry the formula, never the constant —
+  `tools/lane-cost.py` measures growth and per-lane startup per
+  workload and prints the crossover).
 - **Gaps: surface, don't fill.** Instruct explicitly: a missing
   decision, file, or value is reported as a gap, never bridged with a
   plausible guess — a gap filled silently is designed at the executing
@@ -430,7 +529,14 @@ Mandatory parts (execution briefs):
   state of either text makes it green, so the brief has specced an
   unprovable check. Grain is bytes, normalized text, or parsed
   structure, named. (forms.md §3b's Exactness clause is this rule
-  inside the enumeration form.)
+  inside the enumeration form.) A brief dictating a WORKED EXAMPLE
+  as a mandatory assertion also names one case that separates the
+  prescribed implementation from the NAIVE one: an example both
+  answer alike pins the spec rather than the defect, and it reads
+  as rigor while doing it (measured: a lookaround regex and a
+  greedy one satisfied the briefed edge case identically, and the
+  executor's own mutation battery — not the brief — found the
+  discriminating neighbourhood).
 - **Guarded write paths pre-name their gate.** Where the brief's
   write set crosses a mechanical gate (a rule-corpus path
   demanding a same-turn skill invocation, a protected config), the
@@ -495,12 +601,14 @@ satisfied by construction:
     1. <red-first bite>  2. <suites>  3. <live or corpus check>
     <an EXPECTED result quoted from a source is graded like a
     Background line — opened at brief time, or "from <source>,
-    unverified">
+    unverified"; a change to VISIBLE render chrome names a
+    page-image sighting by the dispatcher — text-extraction checks
+    are blind to colour and layout>
 
     ## Write boundaries
     <paths owned; `git commit -- <paths>`; what NOT to touch;
-    whether the
-    change is deployment-coupled; commit style; the amend rule>
+    whether the change is deployment-coupled AND whether any
+    written path is live on write; commit style; the amend rule>
 
     ## Commit plan
     <the target repo's commit-blocking guards, each named WITH
@@ -529,9 +637,32 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   there is the only signal either way, and SendMessage is the
   sole channel in both directions. (Source:
   site corpus dispatched-work rule.)
+  Where the awaited return is itself the only ALARM — a mailbox
+  dispatch, a peer handoff, any wait with no harness-tracked task —
+  the waiter ARMS the horizon at the moment the wait begins, as its
+  own background timer (a `sleep <horizon>` whose exit re-invokes
+  the session). Unarmed, the rule can be executed only by a session
+  something else happens to wake, and a dead or stranded
+  counterpart produces permanent silence indistinguishable from
+  work.
+  An incoming report is booked only once its SENDER resolves
+  against this session's own dispatch list (agent id or brief
+  name). A report from an unresolved sender is a FINDING —
+  cross-talk — never a report: it closes no horizon and the wait
+  for the real one continues (measured: a dispatcher waiting on its
+  one subagent received a plausible result message from an agent it
+  never started).
 - **Verify in the artifact, then integrate.** Run the tests, greps,
   renders YOURSELF before push/merge/publish. An agent's "done" is a
   claim, not a fact. (Source: site corpus dispatched-work rule.)
+  The co-writer census (§1, the base-commit clause) runs again
+  here, before the integrating push. Slot (f) is graded against the
+  COMMIT TRAILER before it is booked: an agent's claim to
+  authorship is a claim like any other and the trailer is its cheap
+  disproving probe (measured: a summarized lane re-read the tree on
+  resume, booked the DISPATCHER's commit as its own, and confessed
+  a write-boundary deviation for work it never did — a dispatcher
+  grading by trust would have booked a phantom violation).
   A SPLIT report — summary message + report file (§2
   payload-vs-pointer) — is booked from the FILE: the summary is a
   label over its body (site corpus paraphrase-drift rule), and
@@ -555,8 +686,13 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   authored ABOVE it — a fresh context removes self-blindness, not the
   judgment ceiling, and review above the default is an operator-named
   exception, never a tier-rule inference (source: site corpus model
-  routing, which names the current default). A verdict that
-  decomposes into
+  routing, which names the current default). A `context: fork`
+  inherits its caller's FULL context, so a check produced through
+  one is self-review and is graded as such, never as a
+  fresh-context verification; a subagent spawn cap does not close
+  that channel — the Agent tool goes away loudly under the cap
+  while a fork skill keeps forking and delivering (measured).
+  A verdict that decomposes into
   exhaustive mechanical enumeration plus judgment over the
   enumeration routes the ENUMERATION to a cheaper tier — that half
   is discovery — briefed with the enumeration-brief form
@@ -574,7 +710,18 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   is judgment.
 - **Additions extend ownership.** A follow-up instruction to a running
   agent extends its write ownership until its closing report covers
-  the addition — don't touch its paths meanwhile.
+  the addition — don't touch its paths meanwhile. A report already
+  IN FLIGHT when the extension was sent does not cover it: the
+  crossing reads as a closed lane, and neither a grep nor `git
+  status` observes a WRITER — each samples a moving state and
+  proves nothing about who holds it (measured: a dispatcher read a
+  crossed report as final, grepped for the added test, edited both
+  of the lane's exclusive files and committed their working-tree
+  state under its own trailer; the reservation gate had warned,
+  naming the lane as holder, immediately before). Where a claim
+  gate fires and the holder looks dead, ASK the holder and wait for
+  the answer — one message against an unrecoverable
+  misattribution.
 - **Ownership ends at the booked report — on both sides.** Once the
   dispatcher has booked the closing report, the agent's write grant is
   over: an agent that discovers a post-report defect REPORTS it and
@@ -586,7 +733,23 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   channel for good (§1 worktree recipe) — so
   before writing in the same working copy, treat it as a live writer —
   book the report AND tell it the lane is closed, or check `git status`
-  defensively before every own commit there.
+  defensively before every own commit there. The close message
+  itself RESUMES the agent, so it states the boundary it needs —
+  "do not edit; a defect found later is REPORTED" — or the close is
+  the trigger for the post-report write it forbids (measured: a
+  lane's only post-report commit followed its own lane-close
+  message).
+- **A handed-off run names its report CHANNEL, machine-readably.**
+  Passing whole work to a peer session is neither a dispatch nor
+  fact traffic: nothing returns by construction. The handoff
+  carries one line — `REPORT-CHANNEL: SendMessage
+  <name|operator-terminal>` — plus the cadence (at minimum: every
+  decision round, and the close report), because on the peer lane
+  a session's final terminal text reaches no one, and "consumer
+  named" is not delivery (measured, twice within one hour on one
+  desk: reports composed as final text, the operator seeing only
+  an idle session and asking the driving desk where they were).
+  The receiving side's mirror is the armed horizon above.
 
 ## 5. Mechanical guards (global; prose rules are best-effort, hooks are not)
 
