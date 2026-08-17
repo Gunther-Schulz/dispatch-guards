@@ -1831,6 +1831,12 @@ hier NICHT abgeflossen und wird auch nicht so gebucht. Naht: die
 nächste Amendierung des Devbooks dort. Prüfung, wer sie am Abschluss
 fährt: diese Session meldet die drei Texte an den dotfiles-Desk und
 an den Operator; erledigt ist sie erst, wenn das Devbook sie trägt.
+**Stand 2026-08-17, Abschluss dieses Passes:** die TEXTE sind im
+besitzenden Repo gebucht (dotfiles b3571ca, READY-Eintrag mit
+LEDGER-Zeile, am Quelltext geprüft); ANGEWANDT sind sie dort nicht.
+Ein anderswo gebuchter Eintrag ist kein angewandter — die
+Unterscheidung steht hier, weil eine Buchung sich beim Lesen wie
+Erledigung anfühlt. Bleibt offen, Konsument unverändert.
 
 ## 2026-08-12 — Batterie-Aufruf ist Teil des Instruments: `-k` verdeckt Fixtures, `-x` verdeckt Arme (3 Vorfälle, 3 Lanes)
 
@@ -2006,6 +2012,47 @@ jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
    dispatch-guards-Maintenance-Runde (§1-Text); Quota-Drain nach
    OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
    Ableitungs-Briefe komponiert — per Hand bis zum Mint.
+
+## 2026-08-17 — Das Signal ÜBER die Maschinerie, gelesen als Aussage über die ARBEIT (Spawn-Quittung; Wecker, der seine Lane überlebt)
+
+1. **Vorfall + Basis (zwei Gesichter, je gemessen):** (a) Ein
+   opus-Verifier-Dispatch quittierte "Spawned successfully … via
+   mailbox" und starb Sekunden später am Wochenlimit — der
+   Fehlschlag kam als SEPARATE Notification. Eine triviale
+   sonnet-Lane eines Nachbar-Desks lieferte dieselbe Zeichenkette
+   und lief durch. Ein Rückgabewert, entgegengesetzte Ausgänge: die
+   Quittung unterscheidet nichts über den LAUF. (b) Zwei in
+   derselben Session bewaffnete Horizont-Timer feuerten, NACHDEM
+   ihre Lanes berichtet und geschlossen waren — n=2 am selben Tag,
+   beide harmlos, beide aus demselben Loch: die frisch geschriebene
+   §4-Klausel sagt, der Wartende BEWAFFNET den Horizont, und hört
+   da auf.
+2. **Klasse:** Ein Signal über die MASCHINERIE (Launcher-Quittung,
+   Wecker, Scheduler-Exit) wird als Aussage über die ARBEIT
+   gelesen. Der Korpus nennt die allgemeine Form — ein Launcher
+   meldet, DASS gelaufen wurde, nie WAS er fand; diese beiden sind
+   ihre Dispatch-Instanzen und beißen an entgegengesetzten Enden:
+   eine Quittung, die zu viel behauptet, und ein Alarm, der seinen
+   Gegenstand überlebt. Ein Fehlalarm auf dem Instrument, dessen
+   ganze Aufgabe es ist, Schweigen lesbar zu machen, trainiert
+   genau den Reflex, der das nächste echte Schweigen abtut.
+3. **Vorformulierter Text** (§4, an die Horizont-Klausel, EIN Satz
+   für beide Hälften — eine Nur-Bewaffnen-Regel ist ja das, was
+   den Fehlalarm erzeugt hat): "Der Rückgabewert eines Spawns ist
+   eine Launcher-Quittung: er belegt den START und sagt nichts
+   über den Lauf — eine Lane, die Sekunden später stirbt,
+   quittiert wie eine, die durchläuft, und ihr Fehlschlag kommt,
+   wenn überhaupt, in eigener Meldung. Kapazitäts-,
+   Lebendigkeits- und Zuschnitt-Schlüsse warten auf einen REPORT.
+   Und der Wartende ENTSCHÄRFT seinen Horizont-Timer, sobald der
+   Report landet: ein Wecker, der seine Lane überlebt, feuert auf
+   eine geschlossene und macht das nächste echte Schweigen zu
+   Rauschen."
+4. **Konsument + Abfluss-Naht:** die nächste §4-Runde; hier
+   gebucht und NICHT angewandt, weil der Release dieses Passes
+   durch ist und ein weiterer Payload-Commit für einen Satz die
+   Runde nicht wert ist — die Buchung ist der Ausgang, nicht der
+   Aufschub.
 
 <!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
      die lebende Liste. Abgeflossenes steht OBERHALB. Der
