@@ -197,64 +197,6 @@ are dropped with a one-line reason.
   **Write boundary.** `plugin/hooks/_dispatch_common.py` + bite
   registration. No lane's own predicate is touched.
 
-- **READY 2026-08-10 — a brief whose ACCEPTANCE requires an
-  outward-facing act must GRANT it in words; §1 states the
-  prohibition but never puts the obligation on the dispatcher.**
-  §1's write boundaries say "nothing outward-facing (sends, posts,
-  deployments, deletions of truth sources) without an explicit grant
-  in the brief". That is addressed to the executor. Nothing tells the
-  DISPATCHER that writing a verifier which cannot pass without such an
-  act IS granting it — implicitly, in a place the executor has to
-  infer from.
-  **Grounding, one live firing 2026-08-10 (dotfiles global-lane
-  dispatch).** The brief's write set was repo paths only, and its
-  verifier demanded a green `./install.sh --check`. That command
-  verifies SYMLINKS exist, so it cannot go green until they are
-  deployed into the operator's real `~/.claude`. The executor did the
-  careful thing in both directions — it reported "nothing was deployed
-  into ~/.claude" as a deviation while that was true, and deployed
-  only after the write set was widened for the item whose acceptance
-  required it — then asked whether such a step should be requested
-  explicitly even when a verifier implies it. The answer is yes, and
-  the defect is the dispatcher's: an inferred grant is exactly the
-  ambiguity §1 exists to remove, and the executor should not be the
-  one resolving it.
-  **Design (decided).** One clause in §1's write boundaries, addressed
-  to the dispatcher: before shipping, read the brief's own acceptance
-  criteria for any step that cannot be satisfied inside the write set,
-  and either GRANT that step in words or replace the criterion with
-  one the executor can satisfy within its boundary. Name it as the
-  compose-time twin of the executor-facing prohibition already there —
-  an amendment to that bullet, not a new one.
-  **Verifier.** `tools/check-doc-drift.py` green, `skill_lint` over all
-  skill .md files exit 0 blocking=0, every ADDED line ≤69 cols.
-  **Done-criterion.** A dispatcher reading §1 alone, holding a brief
-  whose verifier needs a deployment, writes the grant without being
-  asked — and the executor never has to infer one.
-
-- **READY 2026-08-10 — §1's untracked-outputs clause misses the
-  commit-message file, and three lanes proved it in one session.**
-  The clause tells briefs to assign per-agent filenames "for any
-  output that defaults to a shared path". A commit-message file is
-  not a DEFAULT filename — the agent picks it — so the clause reads
-  as not applying, and on 2026-08-10 three parallel lanes
-  independently chose `msg.txt` in the session scratchpad, which is
-  keyed per SESSION, not per agent. Two collisions followed. Both
-  were near-misses only because each file had already been consumed
-  by its `git commit -F`; the writer-claims gate WARNed (staging
-  mode) AFTER each write landed, so it documented the overwrite
-  rather than preventing it.
-  **Design (decided).** Widen the existing untracked-outputs bullet
-  in dispatch SKILL.md §1 — amendment, not a new bullet — from
-  "a tool's DEFAULT output filename" to any file the agent writes
-  under a shared scratch root, naming the commit-message file as
-  the worked instance and stating the fix: the name carries the
-  agent or item slug. No new section, no forms.md change.
-  **Verifier.** `tools/check-doc-drift.py` green, `skill_lint` over
-  all skill .md files exit 0 blocking=0, every ADDED line ≤69 cols.
-  **Done-criterion.** A dispatcher composing a brief from §1 alone
-  assigns a distinct scratch filename without inventing the rule.
-
 - **PARKED 2026-08-10 — writer-claims-gate cannot see shell-redirect
   writes, so its claims store has a hole of unknown size.** The gate
   hooks Write/Edit; a `> file` redirect through Bash reaches the same
@@ -272,6 +214,15 @@ are dropped with a one-line reason.
   (a PreToolUse Bash lane recording redirect targets, itself a design
   question). Until measured, the gate's coverage claim is scoped to
   tool-mediated writes, and that scope belongs in its docstring.
+
+- **RE-GRADED 2026-08-17 — the built half is gone; only the trigger
+  is still parked.** `worktree_doctor.py` ships proposals 1–3
+  (ownership DECLARED via `--owned` and never inferred, no removal
+  path at all, the three reporting verdicts), and the observation
+  carrier drained accordingly. What remains parked is proposal 4
+  alone — the retirement TRIGGER — with its named missing evidence
+  unchanged: a candidate predicate's measured false-fire rate. Read
+  the entry below for the incident, not for the open work.
 
 - **PARKED 2026-08-08 — worktree LIFECYCLE: nobody removes worktrees, and the
   sweep that does has no ownership predicate. Named missing evidence: whether
@@ -384,18 +335,6 @@ are dropped with a one-line reason.
   and go through the anneal-dev protocol with an operator GO —
   parked until that pass is convened, never folded in casually.
 
-
-- READY 2026-08-09 — RESTORE §2/§3 HEADINGS OR RENUMBER (corpus-vet
-  nit n6, pre-existing): dispatch SKILL.md has headings for §§1, 4,
-  5, 6 only, while §2 (report form) and §3 (roadmap) live in
-  references/forms.md — yet SKILL.md:271, the operator corpus
-  (insurance module), and briefs cite "§2"/"§3". Design: keep the
-  numbering, add one line at the section map stating that §§2-3
-  are the forms file's headings (they exist there as "## 2." and
-  "## 3."), and verify every "§2"/"§3" citation resolves. Verifier:
-  grep of citations + doc-drift check green. Done: a reader can
-  resolve every § citation without guessing.
-
 - **PARKED 2026-08-10 — replay-bench corpus does not cover
   writer-claims-gate (0 cases), and relief may not be expressible
   there at all.** Surfaced by the TTL-relief executor (its GAP 2):
@@ -477,6 +416,24 @@ are dropped with a one-line reason.
   plugin outside this farm.
 
 ## Done
+
+- 2026-08-17 — **three READY items built in the retirement pass**,
+  each with its own checks (doc-drift green, skill_lint exit 0
+  blocking=0, every added line ≤69 cols):
+  (a) the untracked-outputs clause now covers ANY file written under
+  a shared scratch root, not only tool-DEFAULTED names — the
+  agent-CHOSEN name is the one that slipped, because a rule about
+  defaults reads as not applying to it;
+  (b) §1 gained the compose-time twin of the executor-side
+  outward-facing prohibition: a verifier that cannot pass inside the
+  write set grants what it needs in words, or the criterion is
+  replaced. STALE PREMISE in that entry, recorded because it is the
+  class this pass amended §1 about: it located the prohibition in §1,
+  while a governed-set scan puts it in the executor skill — the
+  design was unaffected, the citation was not;
+  (c) the section map now states that §§2, 3, 3b are headings of
+  references/forms.md, so every "§2" citation resolves without
+  guessing. That entry also showed the census defect below.
 
 - 2026-08-17 — **first maintenance pass over
   `dev-notes/dispatch-OBSERVATIONS.md`**: closes the READY

@@ -31,7 +31,10 @@ there ("Model routing for dispatches"). "Cheaper tier" means any
 tier below the session model, whatever the current lineup calls
 it.
 
-Section map — §§1, 4, 5, 6 are below; the rest load on demand:
+Section map — §§1, 4, 5, 6 are below and §§2, 3, 3b are the
+HEADINGS OF `references/forms.md` (they open there as "## 2.",
+"## 3.", "## 3b."), so a "§2" citation anywhere resolves in that
+file, not in this one; the rest load on demand:
 
 - §2 report form + brief tails: `references/forms.md` — load it
   BEFORE composing any brief (the tails are pasted, never
@@ -236,11 +239,18 @@ Mandatory parts (execution briefs):
     conditional amend grant in a brief is dead text), and "amend into
     <commit>" names an operation git does not offer.
   - **Disjointness also covers untracked outputs:** parallel agents
-    share the session-keyed scratchpad, so a tool's DEFAULT output
-    filename there (a status file, a log) is a silent
-    last-writer-wins collision that later reads misattribute — the
-    brief assigns per-agent filenames for any output that defaults to
-    a shared path.
+    share the session-keyed scratchpad, so ANY file they write there
+    collides on name alone — the brief assigns names carrying the
+    agent or item slug, for every write under a shared scratch root
+    and not merely for outputs whose filename a tool DEFAULTS.
+    Defaulted names are the obvious half; the agent-CHOSEN name is
+    the one that slips, because a rule about defaults reads as not
+    applying to it (measured: three parallel lanes independently
+    chose the same obvious commit-message filename in one scratchpad,
+    two collisions, saved only by each file having been consumed
+    before the next overwrote it — the claims gate warned AFTER each
+    write landed, documenting the overwrite rather than preventing
+    it).
   - **Disjointness resolves to realization surfaces:** a write
     boundary of named paths is complete only once each commissioned
     change is resolved to the file that REALIZES it — an object
@@ -419,6 +429,22 @@ Mandatory parts (execution briefs):
     (measured: a "none" filling for a repo whose commit-msg hook
     was one `core.hooksPath` read away bounced the lane it was
     written for).
+  - **A verifier that cannot pass inside the write set GRANTS what
+    it needs, in words.** The executor-side rule is a prohibition —
+    nothing outward-facing without an explicit grant (executor
+    skill §1, the box; source label). Its compose-time twin is the
+    dispatcher's: read the brief's own acceptance criteria before
+    shipping, and for any step that cannot be satisfied within the
+    named paths, either grant that step explicitly or replace the
+    criterion with one the write set can satisfy. A criterion
+    demanding an act the boundary forbids grants it IMPLICITLY, in
+    a place the executor has to infer — and an inferred grant is
+    the ambiguity the write boundaries exist to remove (measured: a
+    repo-paths-only write set whose verifier demanded a green
+    deploy-check that only symlinks into the operator's real config
+    could satisfy; the executor reported the gap in both directions
+    rather than resolving it, which is the executor behaving
+    correctly under a defect that was the dispatcher's).
   - **Pre-authorized repair classes (optional).** The write
     boundaries may declare a repair class the executor applies
     without a round trip — "if the commit plan collides with a
