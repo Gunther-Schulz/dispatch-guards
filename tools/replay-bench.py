@@ -111,6 +111,16 @@ def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str]:
         stdin = case["raw"]
     else:
         payload = dict(case["payload"])
+        # A case's `cwd` is a PREMISE the bench must pin, not inherit. Two
+        # cases cite a repo-relative path (plugin/skills/.../forms.md) and
+        # carry `"cwd": "."`; a guard resolving that against the CALLER's
+        # directory reads the citation only when the caller happens to sit
+        # in this checkout. Measured 2026-08-18: green from the repo, 1
+        # mismatch (brief-reminder deny-instead-of-context) when the
+        # machine doctor ran it from its own repo — a red that indicts the
+        # corpus, not the guard, and reads as a guard regression.
+        if not str(payload.get("cwd", "/")).startswith("/"):
+            payload["cwd"] = str((REPO / payload["cwd"]).resolve())
         if "transcript_events" in case:
             tp = tmp / f"transcript-{index}.jsonl"
             tp.write_text(
@@ -120,7 +130,7 @@ def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str]:
         stdin = json.dumps(payload)
 
     proc = subprocess.run(
-        [sys.executable, str(hook)], input=stdin, env=env,
+        [sys.executable, str(hook)], input=stdin, env=env, cwd=str(REPO),
         capture_output=True, text=True)
     observed = classify(proc.returncode, proc.stdout)
     detail = (f"exit={proc.returncode} stdout={proc.stdout.strip()[:160]!r} "
