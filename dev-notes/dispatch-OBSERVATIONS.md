@@ -2282,3 +2282,60 @@ jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
    dispatch-guards-Maintenance-Runde (§1-Text); Quota-Drain nach
    OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
    Prädikat-weitende Briefs komponiert — per Hand bis zum Mint.
+
+### Ein ÜBERSPRUNGENER Test ist ein nicht gelaufener Test, und die Berichtsform fragt ihn nicht ab
+
+**1. Vorfall + Basis.** 2026-08-18, pbs-office-Backlog-Welle
+(Journal `01NhRWdw-backlog-desk-1808`; Bau pbs-office `892ed44`,
+Nachreview-Nachzug `10fb16c`). Eine Lane baute vier Tests, die den
+tragenden Zweig ihres Postens belegen sollten — den strengen
+Schema-Pfad. Im Haupt-Checkout skippten **alle vier**, weil eine
+Pfad-Auflösung still danebenging (`git rev-parse --git-common-dir`
+antwortet relativ zu SEINEM cwd, `Path.resolve()` löst gegen den cwd
+des Python-Prozesses auf). Der Lauf meldete „66 passed, 4 skipped" —
+also GRÜN. Der Posten war damit formal gebaut, verifiziert und
+berichtet, während sein Kern-Zweig nie ausgeführt worden war.
+Gefunden hat es nicht die Berichtsform, sondern ein Suite-Lauf des
+Dispatchers im Haupt-Checkout, und auch der erst, weil danach ANDERE
+Tests rot gingen. Ohne die roten Nachbarn wäre der Skip nie
+aufgefallen.
+
+**2. Klasse.** Nicht die Worktree-Umgebung (die ist der Anlass und
+liegt in `worktree-OBSERVATIONS.md`), sondern die BERICHTSFORM: Slot
+(b) verlangt „checks/tests actually RUN, with their real output".
+Ein Skip erfüllt das wörtlich — er STEHT in der echten Ausgabe — und
+ist trotzdem das Gegenteil dessen, was der Slot belegen soll. Ein
+übersprungener Test unterscheidet sich von einem nicht existierenden
+Test in nichts außer der Zeile im Report. Das ist die
+Nicht-Ereignis-Klasse des Operator-Korpus (ein toter Mechanismus
+liefert dasselbe Bild wie ein bestandener), hier in der Kleidung
+einer Zahl, die niemand liest, weil daneben „passed" steht.
+
+**3. Vorformulierter Regel-/Fix-Text** (Ergänzung in
+`references/forms.md`, Slot (b) der §2-Form, und wörtlich in beide
+Tail-Blöcke):
+
+> (b) checks/tests actually RUN, with their real output — including
+> the **full counts, skips named**: `N passed, M failed, K skipped`.
+> Jeder Skip wird DISPOSITIONIERT: welcher Test, aus welchem Grund
+> übersprungen, und ob dieser Grund den Posten berührt. Ein Skip in
+> einem Test, den DIESE Lane gebaut hat, ist per Konstruktion ein
+> Befund — er belegt, dass der gebaute Zweig nicht ausgeführt wurde,
+> und ein Bau, dessen Verifizierer nicht lief, ist unverifiziert,
+> nicht grün. `K > 0` ohne Dispositions-Satz ist ein unvollständiger
+> Bericht und wird nachgefordert wie ein fehlender Slot.
+
+Dispatcher-Hälfte, in §4 (Integration): der eigene Verifikationslauf
+vergleicht nicht nur passed/failed gegen die Baseline, sondern auch
+die SKIP-Zahl. Eine gegenüber der Baseline gestiegene Skip-Zahl ist
+ein Befund, kein Rauschen — sie ist die leise Richtung derselben
+Frage, die eine gestiegene Fail-Zahl laut stellt.
+
+**4. Konsument + Abfluss-Naht.** Nächste
+dispatch-guards-Maintenance-Runde (`references/forms.md` §2 + beide
+Tails, `SKILL.md` §4). Sofort-Konsument: jede Session, die heute
+einen Lane-Bericht bucht — die Skip-Zahl per Hand nachfragen, bis
+der Mint steht. Mechanisierungs-Kandidat, aber kein sicherer: die
+Zahl ist computierbar, die Frage „berührt dieser Grund den Posten"
+ist es nicht, also trägt der Bericht die Disposition und ein Lint
+höchstens ihre ANWESENHEIT.
