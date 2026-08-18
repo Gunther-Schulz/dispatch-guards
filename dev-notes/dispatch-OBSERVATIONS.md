@@ -1980,6 +1980,105 @@ steht unberührt. Der Auslöser ist strukturell, nicht persönlich: wer
 anhängt, schreibt ans Datei-Ende — deshalb steht die lebende Liste
 jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
 
+### MERGE 2026-08-18 — 2. Vorfall, neuer Mechanismus derselben Klasse: die Meldung hat ZWEI BLÖCKE, und `in stderr` unterscheidet sie nicht
+
+1. **Vorfall + Basis:** YAML-Parse-Lane im globalen `pre-commit`
+   (dotfiles `6c1ba7b`, opus-Lane aus dem Planungsbüro-Desk). Der
+   Nachtrag gab der Lane eine ZWEITE Meldungs-Sektion („KONNTE NICHT
+   GEPRÜFT WERDEN") neben der blockierenden. Der Biss dafür —
+   ComposerError aus der Defekt-Menge entfernen — blieb GRÜN: die
+   Zusicherung prüfte `"alias.yaml: ComposerError" in stderr`, und das
+   ist in BEIDEN Welten wahr, weil dieselbe Zeile bei Fehl-Einordnung
+   wortgleich in den anderen Block wandert; `rc==1` blieb ebenfalls
+   wahr, weil ein zweiter Defekt weiter blockierte. Die Lane las das
+   Grün als Befund über die eigene Zusicherung statt als Freispruch,
+   verschärfte sie (Split am Blocker-Kopf + Abwesenheits-Prüfung im
+   anderen Block) und bekam den Rot.
+2. **Klasse:** identisch zum Stamm-Eintrag — ein Prädikat am AGGREGAT
+   ist von jedem anderen Teil der Ausgabe erfüllbar. NEU ist der
+   Auslöser: nicht ein FREMDER Check liefert die erfüllende Zeile,
+   sondern der geprüfte Mechanismus SELBST, über seine zweite Sektion.
+   Deshalb greift die Stamm-Formulierung („der Test isoliert den
+   Eintrag des geprüften Schritts") hier nicht: der Eintrag IST
+   isoliert, er steht nur im falschen Block.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 4,
+   an die Stamm-Ergänzung anzuhängen): „Emittiert ein Mechanismus mehr
+   als EINE Meldungs-Sektion, nennt die Zusicherung die SEKTION, nie
+   nur den Text: geprüft wird, dass die Zeile im erwarteten Block
+   steht UND in keinem anderen. Eine Fehl-Einordnung zwischen zwei
+   Sektionen erzeugt sonst dieselbe Zeichenfolge wie der korrekte
+   Ausgang — der Biss ist dann in beiden Welten wahr."
+4. **Konsument + Abfluss-Naht:** unverändert die nächste Amendierung
+   des guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure), gebündelt mit den dort wartenden Schritt-4-Ergänzungen.
+
+## 2026-08-18 — Die frisch gebaute MESSUNG ist selbst ein Instrument, und ihr Ergebnis liest sich fertig (2 Vorfälle, 2 Lanes, ein Tag)
+
+1. **Vorfall + Basis:** (a) Sprachpass-Bau (pbs-doc `93d576b`,
+   opus-Lane): Der Bestands-Lauf gab 209/185 statt der im Brief
+   genannten 183/159. Ursache war die Zähl-Pipeline, nicht der
+   Gegenstand — bei MEHREREN Dateiargumenten stellt `hunspell` jeder
+   Ausgabezeile `<datei>: ` voran, `sort -u` zählte also
+   Datei-Token-PAARE statt Tokens. Aufgedeckt allein durch den
+   Abgleich mit einer unabhängig erhobenen zweiten Zahl (der des
+   Dispatchers); ohne sie wäre 209 als Befund über den Bestand
+   gebucht worden. (b) YAML-Lane (dotfiles `518a78d`, opus-Lane): die
+   Bestands-BASELINE wurde aus einer Scratch-Kopie des Werkzeugs
+   genommen — das Werkzeug warnt selbst, dass es den LIVE-Checkout
+   misst. Eine „Baseline aus der Kopie" ist bei einem solchen
+   Werkzeug keine.
+2. **Klasse:** eine ad-hoc gebaute Messung (Zähl-Pipeline, Report-Diff,
+   Baseline-Lauf) präsentiert sich als SCHAUEN, nicht als Messen —
+   nichts fordert den Beweis an, und ihre Ausgabe kommt bereits in
+   Antwort-Form. Der Korpus hat die Regel (Grounding, Instrument-Paar);
+   was hier fehlt, ist ihre Kante im Brief: der Verifier-Slot
+   kommissioniert die ZAHL, nie die Probe auf das Instrument, das sie
+   erzeugt.
+3. **Vorformulierter Regel-Text** (§1, Verifier-Klausel eines Briefs,
+   der eine Bestands-ZAHL erwartet): „Nennt der Brief eine erwartete
+   Bestands-Zahl, verlangt er die Zahl UND die Form ihrer Erhebung:
+   welches Kommando, über welche Population, mit welchem
+   bekannt-positiven Fall als Kontrolle. Weicht die gemessene Zahl ab,
+   ist die erste Hypothese die MESSUNG, nicht der Bestand — und eine
+   Baseline wird VOR der Installation genommen, nie aus einer Kopie
+   danach, wenn das Werkzeug den Live-Zustand misst."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-Maintenance-
+   Runde (§1-Verifier-Klausel) und die nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure, Schritt 2/5) — dort ist die Baseline-Hälfte zu Hause.
+   Sofort-Konsument: jede Session, die eine Bestands-Zahl in einen
+   Brief schreibt — per Hand bis zum Mint.
+
+## 2026-08-18 — Der Devbook-Satz steht als VORFALLS-ERZÄHLUNG da, wo eine Anweisung gebraucht wird
+
+1. **Vorfall + Basis:** YAML-Lane (dotfiles `518a78d`). Schritt 2 des
+   guard-checker-bau-Devbooks verlangt, dass die ALTE Seite jede aus
+   `__file__` abgeleitete Pfad-Prämisse erhält — der Text sagt das,
+   aber als Erzählung zweier Vorfälle vom 2026-08-10 („zu eng in die
+   eine Richtung … eine Ebene weiter draußen dasselbe"). Die Lane
+   berichtet ausdrücklich: als Anweisung gelesen hätte sie zu eng
+   kopiert; sie hat den ganzen Baum per `git archive` nur deshalb
+   genommen, weil sie die Erzählung auf ihren eigenen Fall
+   ÜBERTRAGEN hat. Das ist eine Leistung des Lesers, keine Eigenschaft
+   des Texts.
+2. **Klasse:** Devbook-Form. Eine Regel, die nur als Vorfalls-Bericht
+   vorliegt, verlangt vom Ausführenden die Ableitung des Prädikats aus
+   dem Beispiel — genau die Design-Arbeit, die das Devbook vor den
+   Dispatch verschieben soll. Sie fällt nicht auf, weil ein guter
+   Leser sie stillschweigend leistet.
+3. **Vorformulierter Fix-Text** (Devbook guard-checker-bau, Schritt 2,
+   Kopfsatz vor die Erzählung): „Die ALTE Seite ist eine Kopie des
+   ganzen ARBEITSBAUMS (`git archive HEAD`), nicht des geänderten
+   Verzeichnisses — jede aus `__file__` abgeleitete Pfad-Prämisse muss
+   in ihr auflösen. Die Prüfung dafür ist der eigene Self-Check der
+   Kopie GRÜN, bevor irgendein Rot aus ihr geglaubt wird. Die beiden
+   Vorfälle unten zeigen, was zu eng aussieht." Der bestehende
+   Erzähltext bleibt darunter stehen — er trägt die Belege.
+4. **Konsument + Abfluss-Naht:** nächste Amendierung des
+   guard-checker-bau-Devbooks (dotfiles CLAUDE.md §Registered
+   procedure); Amendierung setzt den Fingerprint zurück (eval-open),
+   also mit den anderen wartenden Schritt-2/4-Ergänzungen bündeln.
+
 ## 2026-08-17 — Ein Brief benennt eine Schema-Ableitungsquelle, die die abzuleitende LANE-KLASSE gar nicht führt (statiker P16-Lane)
 
 1. **Vorfall + Basis:** Ein Build-Brief (statiker Stop-Hook-Lane,
