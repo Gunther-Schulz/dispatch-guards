@@ -2375,6 +2375,50 @@ jetzt dort, und ein doc-drift-Check hält die Reihenfolge fest.
    OBSERVATIONS-Regel. Sofort-Konsument: jede Session, die heute
    Prädikat-weitende Briefs komponiert — per Hand bis zum Mint.
 
+### Ein Handoff, der EINEN Kanal nennt, hat einen Single Point of Failure — der Rückfall-Kanal rettet den Bericht, wenn der Absender vor ihm stirbt
+
+**1. Vorfall + Basis.** 2026-08-18, unmittelbar nach dem
+0.11.3-Pass. Ein Peer-Desk (pbs-office-Backlog) erteilte diesem
+Desk drei Arbeitspunkte und nannte den Report-Kanal DOPPELT:
+„SendMessage an diese Session — oder an den Betreiber im Terminal,
+wenn dir das lieber ist; er hat den Auftrag erteilt und liest mit."
+Der Zwischenbericht ging per SendMessage und LANDETE (success).
+Der ABSCHLUSSBERICHT, keine Stunde später, scheiterte:
+`No agent named 'planungsb-ro-schulz-96' is reachable`, und
+ListAgents führte keine `planungsb-ro-*`-Session mehr. Der Absender
+war zwischen den beiden Nachrichten verschwunden. Nebenbei im
+Protokoll sichtbar: das Desk nannte sich in seiner eigenen
+Kanal-Zeile `planungsb-ro-schulz-7f`, während die Harness es als
+`-96` führte — zwei Kennungen für denselben Absender.
+
+**2. Klasse.** Nicht der Horizont (der ist eine Stunde alt und
+steht in §4), sondern seine SPIEGELUNG auf der Berichts-Seite: §4
+verlangt heute `REPORT-CHANNEL: SendMessage <name|operator-terminal>`
+— EINEN Kanal, als Entweder-oder. Der Kanal kann aber zwischen
+Auftrag und Bericht sterben, und dann ist die genannte Heimat leer.
+Hier ging nichts verloren, weil der Absender aus eigenem Antrieb
+einen ZWEITEN nannte; die Regel verlangt das nicht. Das ist die
+positive Probe: dieselbe Disziplin, die den Bericht rettete, ist
+im Skill nicht vorgeschrieben.
+
+**3. Vorformulierter Regel-/Fix-Text** (§4, an die Handoff-Klausel):
+
+> Die Kanal-Zeile nennt einen RÜCKFALL, nicht nur ein Ziel:
+> `REPORT-CHANNEL: SendMessage <name>, fallback <operator-terminal>`.
+> Ein Peer-Kanal kann zwischen Auftrag und Bericht sterben — der
+> Absender schließt, seine Kennung wechselt — und der Empfänger
+> erfährt es erst beim Senden, also nachdem die Arbeit getan ist.
+> Ohne benannten Rückfall ist der fertige Bericht dann heimatlos,
+> und der Empfänger entscheidet ihn im Zweifel weg. Der Rückfall
+> ist immer erreichbar: der Betreiber.
+
+**4. Konsument + Abfluss-Naht.** Nächste dispatch-guards-Runde
+(§4-Text). Nicht sofort gebaut, weil der Release dieses Passes
+durch ist und ein Payload-Commit samt Bump für einen Satz die Runde
+nicht wert ist — die Buchung ist der Ausgang, nicht der Aufschub.
+Sofort-Konsument: jede Session, die heute einen Handoff annimmt —
+den Rückfall per Hand erfragen, bis der Mint steht.
+
 <!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
      die lebende Liste. Abgeflossenes steht OBERHALB. Der
      doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
