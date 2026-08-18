@@ -1783,6 +1783,51 @@ Bullet (amendment over addition).
 
 Beleg: dieser Commit; Eintrag im Wortlaut darunter.
 
+### MERGE 2026-08-18 — VIERTER Slot derselben Wurzel: die geerbte WIRKUNGS-Behauptung, die als Begründung reist
+
+**Vorfall + Basis:** Sprachpass-Bau (pbs-doc `93d576b`/`7eca7f2`,
+opus-Lane, Planungsbüro-Desk). Der Bauer meldete im Abschluss-Bericht,
+der Pass lese die ROHDATEI statt der kommentarfreien Zeilen — die
+STRUKTURELLE Hälfte, belegt. Daran hing eine WIRKUNGS-Behauptung: „in
+einem Repo mit großen LaTeX-Kommentarblöcken ersäuft der Pass in
+Referenztext". Die war aus einem Docstring erschlossen, nie ausgeführt.
+Der Dispatcher hat sie ungeprüft in einen Nachtrags-Bauauftrag
+verwandelt („statt der Rohdatei die `code_zeilen` verwenden"). Beim Bau
+hat der Bauer sie selbst widerlegt (`hunspell -t` entfernt
+LaTeX-Kommentare, inklusive `\%`-Semantik; Abschalt-Probe über 20 .tex:
+34 Kandidaten in beiden Varianten, 0 Dateien mit Unterschied) und
+gestoppt, statt einen wirkungslosen Umbau zu bauen. Kosten: eine
+Nachtrags-Runde plus eine Bau-Anweisung, die nicht rot herstellbar war.
+Der Dispatcher hat die Widerlegung mit vier Zeilen in Sekunden
+nachgefahren — dieselben Sekunden waren beim Brief-Schreiben verfügbar.
+
+**Triage: loaded-but-inert, aber mit echter Verengung.** §1 bindet
+Provenienz-Grade an „every line asserting the target repo's CURRENT
+STATE" und nennt als Grenze „every audit finding turned into a build
+step gets its cited line opened once". Eine WIRKUNGS-/Mechanismus-
+Behauptung ist beides nicht: sie sagt nichts über den Ist-Zustand,
+sondern über das Verhalten unter Bedingungen, die im Zielrepo gerade
+nicht vorliegen — und sie reist als BEGRÜNDUNG der Anweisung, nicht als
+Zitat. Damit trägt sie kein Grade-Etikett und niemand öffnet sie.
+
+**Vorformulierter Regel-Text** (§1, an die Provenienz-Klausel): „Eine
+geerbte Behauptung über WIRKUNG oder MECHANISMUS — was passieren
+würde, warum ein Umbau nötig ist — wird beim Übergang in eine
+Bau-Anweisung geöffnet wie eine Zustands-Behauptung: der Brief nennt
+den ausgeführten Check oder trägt das Etikett „unverifiziert". Sie ist
+die teuerste Klasse, weil sie als BEGRÜNDUNG reist statt als Zitat und
+darum keinen Grade-Slot berührt; und weil ein Bauauftrag aus ihr
+regelmäßig NICHT ROT HERSTELLBAR ist — der Bauer stößt erst am
+Verifier darauf, eine Runde zu spät."
+
+**Konsument + Abfluss-Naht:** nächste dispatch-guards-Maintenance-Runde
+(§1-Provenienz-Klausel, gebündelt mit den drei Vorgänger-Slots). Die
+Executor-Spiegelhälfte hat der Bauer selbst formuliert und sie ist
+schärfer als die Dispatcher-Seite: ein Befund, der eine WIRKUNG
+behauptet, nennt seinen ausgeführten Check oder trägt das Etikett —
+Prosa-Befunde werden von nichts ausgeführt, anders als alles, was beim
+Bauen ohnehin durchläuft. Sie gehört in den executor-Skill.
+
 ## 2026-08-15 — Bump-Ausnahme vom Dispatcher-Push konsumiert (statiker-Ernte-Lane)
 
 1. **Vorfall + Basis:** Der Lane-Brief (statiker,
