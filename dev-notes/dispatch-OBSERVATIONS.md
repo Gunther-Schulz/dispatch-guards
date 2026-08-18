@@ -2423,3 +2423,25 @@ den Rückfall per Hand erfragen, bis der Mint steht.
      die lebende Liste. Abgeflossenes steht OBERHALB. Der
      doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
      Anhängen am EOF sonst im abgeflossenen Abschnitt landet. -->
+
+- 2026-08-18 **writer-reservation-gate benennt das FALSCHE Repo bei
+  Cross-Repo-Commits** (n=2 am selben Abend, beide aus einer
+  dotfiles-Session heraus: ein Subagent-Commit in
+  `~/dev/Gunther-Schulz/claude-worktime` und ein Desk-Commit via
+  `git -C .../claude-worktime` — beide WARNs nannten die
+  dotfiles-Arbeitskopie samt fremdem Holder, obwohl kein benannter
+  Pfad sie beruehrte; vom Subagenten korrekt als "misdirected/stale
+  warning" gemeldet statt gehandelt). KLASSE: Ziel-Aufloesung eines
+  Waechters aus dem Session-Kontext statt aus dem KOMMANDO — die
+  Arbeitskopie wird aus der Session-cwd gelesen, nicht aus `-C
+  <pfad>`/dem effektiven Ziel des git-Aufrufs; ein WARN ueber ein
+  unbeteiligtes Repo ist die feuert-auf-Nicht-Defekt-Form und
+  trainiert das Abtun genau der Warnung, die einmal echt sein wird.
+  VORFORMULIERTER FIX-TEXT: der Gate loest VOR dem Vergleich die
+  Ziel-Arbeitskopie des Kommandos auf (`-C`-Argument, sonst cwd des
+  Bash-Aufrufs) und warnt nur, wenn DIESE Kopie reserviert ist;
+  Selbstprobe ergaenzt ein Paar: Commit mit `-C` auf ein fremdes,
+  unreserviertes Repo → still, Commit in der reservierten Kopie →
+  WARN (beide Arme muessen differieren). KONSUMENT + ABFLUSS-NAHT:
+  naechster Bau am `writer-reservation-gate` bzw. naechste
+  dispatch-guards-Maintenance-Runde.
