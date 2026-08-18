@@ -208,8 +208,72 @@ the committed work survived; their retirement is a separate question.
 
 ## Offen
 
-Lebende Einträge: keine. Neue Beobachtungen ans
-Datei-Ende, unter diese Überschrift.
+### Ein Worktree ist eine ANDERE UMGEBUNG, und die Suite darin misst sie mit
+
+**1. Vorfall + Basis.** Zwei Messungen an einem Abend (2026-08-18,
+pbs-office-Backlog-Welle; Journal `01NhRWdw-backlog-desk-1808`, Commits
+pbs-office `892ed44` gebaut / `10fb16c` nachgezogen).
+
+(a) Eine Lane baute in einem pbs-office-Worktree unter dem Scratchpad und
+meldete „keine Regression" gegen ihre eigene Baseline. Im Haupt-Checkout
+fielen danach VIER Tests. Ursache: der Bau greift auf ein NACHBAR-Repo zu
+(`<repo>/../pbs-projekt/src`). Im Haupt-Checkout existiert der Nachbar, im
+Scratchpad-Worktree nicht — also lief bei der Lane durchgehend der
+Fallback-Zweig, und der Hauptzweig war schlicht nicht unter Prüfung. Die
+Lane hat das korrekt und vollständig berichtet; sie konnte es nur nicht
+sehen.
+
+(b) Dieselbe Lane baute eine Ortsbestimmung, die in ihrer Umgebung
+funktionierte und im Haupt-Checkout STILL fehlschlug: `git rev-parse
+--git-common-dir` antwortet relativ zu SEINEM cwd (`../../.git`), während
+`Path.resolve()` gegen den cwd des Python-Prozesses auflöst. Ergebnis aus
+`/home/g` gemessen: `/pbs-projekt/src` — existiert nicht, also skippten
+alle vier strengen Fälle stillschweigend und die Suite meldete grün.
+Gepaart belegt: alte Auflösung → nicht existierender Pfad, neue
+(`--path-format=absolute`) → der echte Pfad; nach dem Fix 0 Skips aus
+jedem cwd.
+
+**2. Klasse.** Nicht die geteilte Config und nicht die Hook-Reichweite —
+beide sind hier schon gebucht. Dies ist die UNTRACKED-Umgebung als
+still wirkende Prüf-Prämisse: der Skill sagt heute „a fresh worktree has
+no untracked state" und verlangt eine Isolations-Probe für das EIGENE
+Paket des Repos. Beide Vorfälle liegen daneben: (a) betrifft eine
+NACHBARSCHAFT, die der Worktree nicht hat, und (b) eine
+Pfad-Auflösung, die im Worktree anders ausgeht. Die vorhandene Probe
+hätte beide durchgewinkt. Gemeinsamer Kern: was der Worktree an
+Umgebung NICHT mitbringt, entscheidet mit, welcher Code-Zweig unter
+Prüfung steht — und die Abweichung meldet sich als GRÜN, nie als Fehler.
+
+**3. Vorformulierter Regel-/Fix-Text** (Ergänzung im Abschnitt „A fresh
+worktree has no untracked state", nach der Isolations-Probe):
+
+> Die Probe deckt das eigene Paket ab, nicht die NACHBARSCHAFT. Ein
+> Worktree liegt typisch außerhalb des Verzeichnisses, in dem der
+> Haupt-Checkout mit seinen Geschwister-Repos steht — jeder Code, der
+> ein Nachbar-Repo über einen relativen Pfad sucht (`../<repo>/src`),
+> nimmt dort stumm den Fallback-Zweig, und eine Suite, die beide Zweige
+> abdecken soll, prüft nur den, den ihre Umgebung erzwingt. Ebenso
+> antwortet `git rev-parse --git-common-dir` RELATIV zu seinem cwd;
+> `Path.resolve()` und `realpath` lösen gegen den cwd des AUFRUFENDEN
+> Prozesses auf, und die beiden fallen im Worktree auseinander — immer
+> `--path-format=absolute` verlangen. Beide Fehlschläge sind STILL:
+> der eine nimmt einen anderen Zweig, der andere skippt. Darum gehört in
+> jeden Bericht einer Worktree-Lane, welche ZWEIGE ihre Umgebung
+> überhaupt erreichbar gemacht hat — und die Integration verlangt einen
+> eigenen Suite-Lauf im Haupt-Checkout, bevor irgendetwas gepusht wird.
+> Ein „keine Regression" aus einem Worktree gilt für den Worktree.
+
+Zweite, kleinere Ergänzung (Dispatch-Skill §1, Worktree-Rezept): die
+Rung-2-Entscheidung braucht eine Vorfrage — greift der Bau auf etwas
+außerhalb des Repos zu (Nachbar-Repo, absolute Pfade, installierte
+Kopie)? Dann ist der Worktree die falsche Isolation, nicht die teure.
+
+**4. Konsument + Abfluss-Naht.** Nächste dispatch-guards-Maintenance-Runde
+(Skill-Text `worktree` + Dispatch-Skill §1). Die Integrations-Hälfte ist
+bereits gelebte Praxis dieser Welle — der Haupt-Checkout-Lauf hat beide
+Defekte gefunden —, aber sie steht nirgends als Regel.
+
+Neue Beobachtungen ans Datei-Ende, unter diese Überschrift.
 
 <!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
      die lebende Liste. Abgeflossenes steht OBERHALB. Der
