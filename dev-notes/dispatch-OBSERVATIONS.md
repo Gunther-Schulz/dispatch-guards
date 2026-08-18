@@ -1163,6 +1163,57 @@ Befund (Cross-Talk), schließt keinen Horizont. Beleg: dieser Commit.
    Maintenance-Runde, oder der nächste Bau an §4; Quota-Drain nach
    OBSERVATIONS-Regel.
 
+### MERGE 2026-08-18 — 2. Vorfall, diesmal die ERZEUGENDE Seite: die Kanal-Zeile ist RELATIV formuliert und wird von Forks wörtlich geerbt
+
+1. **Vorfall + Basis:** Opus-Desk 75 (pbs-office `2afbcba`,
+   Journal-Zeile `sonnet-zusicherung-3145`) dispatchte EINE
+   Lese-Durchsicht über fünf Repos (FB 3.145). Der Executor startete
+   dafür fünf Forks. Beim Desk gingen daraufhin SECHS Nachrichten zu
+   diesem einen Posten ein, alle unter dem Absendernamen `fork`, die
+   einander widersprachen: verschiedene Fund-Zahlen für dieselben
+   Repos (pbs-doc mal A=3/B=0, mal A=2/B=0, mal A=1/B=1) und je eine
+   ANDERE Angabe, welches Repo noch ausstehe (einmal pbs-abwaegung,
+   einmal pbs-wissen, einmal pbs-office). Der Executor benannte die
+   Ursache selbst: die Forks erben seinen vollen Kontext samt der
+   Zeile „Report channel: SendMessage to the dispatcher" aus dem
+   Original-Brief und lösten „the dispatcher" auf den GROSSVATER
+   (das Desk) statt auf ihren Erzeuger auf. Zweiter, unabhängiger
+   Schaden derselben Wurzel: drei Forks schrieben fast gleichnamige
+   Ergebnis-Dateien in denselben Session-Scratchpad
+   (`fb3145-zusicherung-durchsicht.md`,
+   `fb-3145-zusicherung-durchsicht.md`,
+   `fb-3145-zusicherung-liste.md` — alle innerhalb zweier Minuten,
+   vom Desk auf Platte nachgezählt); der writer-claims-Gate warnte
+   über einen Write innerhalb der Claim-TTL, und die Funde
+   mindestens eines Forks wurden überschrieben.
+2. **Klasse:** dieselbe (Report-Attribution/Cross-Talk), hier aber
+   die ERZEUGENDE Seite statt der buchenden. Die 2026-08-17
+   angewandte §4-Regel HAT auf der Empfangsseite gehalten: das Desk
+   löste die Absender gegen seine Dispatch-Liste auf, verwarf alle
+   sechs als Cross-Talk, buchte keine und ließ den Horizont offen —
+   der stärkste Fund wurde stattdessen vom Desk selbst am Quelltext
+   bestätigt (pbs-office FB 152). Offen ist die Seite davor: eine
+   Kanal-Zeile, die ihren Empfänger RELATIV benennt, ist unter
+   Vererbung nicht eindeutig, und Vererbung ist beim Fork der
+   Normalfall, nicht die Ausnahme.
+3. **Vorformulierter Regel-Text** (forms.md, Kanal-Zeilen-Block, die
+   benannte Variante): „Die Kanal-Zeile benennt ihren Empfänger
+   ABSOLUT, mit dem Agent-Namen, nie relativ: `Report channel:
+   SendMessage to <dispatcher-name> — your final text reaches no
+   one.` Ein relativer Bezug („the dispatcher") wird von einem Fork
+   wörtlich geerbt und dort auf DESSEN Erzeuger — den Großvater —
+   aufgelöst; gemessen 2026-08-18 als sechs widersprüchliche Reports
+   an einen Dispatcher, der nur einen Agenten gestartet hatte."
+   Zusatz (§1, Schreib-Grenzen): „Ein Brief, der Fan-out nicht
+   ausdrücklich beauftragt, verbietet Sub-Forks — der Executor gibt
+   die Arbeit zurück statt sie zu verteilen. Die Begründung gehört in
+   den Brief, damit sie mitgetragen statt nur befolgt wird:
+   Kanal-Zeile UND Scratch-Dateinamen des Elternteils werden geerbt,
+   Sub-Forks kollidieren also per Konstruktion in beidem."
+4. **Konsument + Abfluss-Naht:** nächste dispatch-guards-
+   Maintenance-Runde (forms.md Kanal-Zeilen-Block + §1
+   Schreib-Grenzen); Quota-Drain nach OBSERVATIONS-Regel.
+
 ## 2026-08-14 — Fork-Skills sind der Rest-Spawn-Kanal unter dem Cap, und ein Fork ist per Konstruktion Selbst-Review
 
 **ANGEWANDT 2026-08-17** — §4 Verdict-Routing: ein
