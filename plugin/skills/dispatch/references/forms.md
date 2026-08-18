@@ -15,7 +15,17 @@ parallel. Every slot (a)–(g) must appear — "none" is a valid
 answer, silence is not; (h) rides the EXECUTION tail only:
 
   (a) items completed, with per-item evidence (file:line, test name)
-  (b) checks/tests actually RUN, with their real output
+  (b) checks/tests actually RUN, with their real output — the FULL
+      counts, skips included (`N passed, M failed, K skipped`).
+      A skip satisfies "real output" word for word and proves
+      nothing: a skipped check differs from a check that does not
+      exist only by its line in the report. So every skip is
+      DISPOSITIONED — which check, why it skipped, whether that
+      reason touches the item — and a skip in a check THIS lane
+      built is a finding by construction: it says the built branch
+      never executed, and a build whose verifier did not run is
+      unverified, not green. `K > 0` with no disposition is an
+      incomplete report, demanded back like a missing slot.
   (c) open points / gaps surfaced (see brief rule above), including
       anything that needed a tier above yours — returned as a question
       with its evidence, never settled at your own tier (§4)
@@ -212,7 +222,11 @@ EXECUTION tail (any dispatch that writes):
     Closing report (mandatory; the project's own report form if it
     defines one, else the §2 form here — never both; "none" is a
     valid slot answer, silence is not): (a) items completed w/
-    evidence, (b) checks RUN w/ real output, (c) gaps surfaced —
+    evidence, (b) checks RUN w/ real output — FULL counts incl.
+    skips (`N passed, M failed, K skipped`), each skip dispositioned
+    (which check, why, whether the reason touches the item); a skip
+    in a check YOU built is a finding, not a pass — the built branch
+    did not execute, (c) gaps surfaced —
     incl. anything needing a tier above yours, returned as a question
     with its evidence, never settled at your tier,
     (d) deviations w/ reason, (e) candidate lessons, (f) files
@@ -265,7 +279,10 @@ data-file provision, §3b):
     <channel line>
     Return your findings in ONE message where they fit (verifier:
     verdict + basis; discovery: the N named facts, sources actually
-    read). A missing decision, file, or value is surfaced
+    read). Where the basis is a check you RAN, its full counts come
+    with it, skips included and dispositioned: a skipped check did
+    not run, and a verdict resting on one is could-not-verify, not
+    clean. A missing decision, file, or value is surfaced
     as a gap, never bridged with a guess. No repo writes, no
     interim messages.
 

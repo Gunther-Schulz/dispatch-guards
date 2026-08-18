@@ -159,6 +159,13 @@ have no local counterpart:
   nothing reads is dead weight. Ignore §6 until some recurring
   procedure actually earns certification, then create the file at
   that moment.
+- **A spawn-depth cap.** The author additionally caps subagent
+  nesting to one layer as site policy
+  (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, against a harness
+  default of 3). The guards neither require nor assume it — they are
+  indifferent to depth — but a site adopting the routing layer
+  generally wants it, since it is what keeps a dispatched agent from
+  quietly becoming a dispatcher.
 
 Citations reading "CLAUDE.md" inside the skills are provenance
 labels — they mark where a rule came from, while the rule itself is

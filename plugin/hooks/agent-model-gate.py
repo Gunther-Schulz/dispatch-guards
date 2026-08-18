@@ -111,7 +111,11 @@ Scope, and why it cannot be general: hook input carries NO caller model
 $CLAUDE_MODEL), so "above yourself" is NOT computable — only the
 ask-tier case is mechanically decidable, and the general rule stays
 prose (dispatch skill §4). Subagents dispatching sideways or
-down are untouched; nesting itself stays legal (3 layers by default).
+down are untouched; nesting itself stays legal — the governing knob
+is the harness setting CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH (3 layers
+by default), which a site may cap independently of this gate; read it
+there rather than from this line, which states the gate's own
+indifference to depth and not the depth a given site allows.
 Binding as-of 2026-07-28: PreToolUse fires inside subagents and the
 input carries `agent_id` — CONFIRMED live (this gate and the push gate
 both observed biting from a subagent context, not merely bite-tested).

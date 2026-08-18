@@ -81,6 +81,100 @@ enforcement structure. No capability patches as of minting.
 Angewandte oder verworfene Einträge mit Beleg — der Eintrag WANDERT
 hierher (Form: `dev-notes/OBSERVATIONS-FORM.md`).
 
+### ANGEWANDT 2026-08-18 (Peer-Auftrag pbs-office-Desk) — beide
+### Hälften, plus ein vom Pass selbst gefundener dritter Defekt
+
+Der vorformulierte Text ist ins Skill übernommen, nicht zitiert:
+`worktree/SKILL.md:111` weitet die Isolations-Probe auf die
+NACHBARSCHAFT (Relativpfad-Nachbar → stiller Fallback-Zweig) und auf
+die Pfad-Auflösung, und schließt mit der positiven Pflicht — der
+Lane-Bericht nennt die erreichbaren Zweige, die Integration läuft im
+Haupt-Checkout. Die kleinere Ergänzung sitzt in
+`dispatch/SKILL.md:341` als VORFRAGE an der Rung-2-Entscheidung, per
+Quellen-Label auf den worktree-Skill, ohne zweite Kopie des
+Mechanismus.
+
+DRITTER DEFEKT, von diesem Pass gefunden, nicht vom Eintrag:
+`worktree/SKILL.md:93` schrieb selbst `--git-common-dir` als
+Auflösungs-Weg für den Hook-Pfad vor — genau das Kommando, dessen
+cwd-Relativität Vorfall (b) misst. Das Skill trug die Falle in
+seiner eigenen Anweisung. Repariert zu `--absolute-git-dir` bzw.
+`--path-format=absolute --git-common-dir`, mit der Unterscheidung,
+welches der beiden welchen gitdir meint.
+
+BASIS, am laufenden git gemessen (nicht aus dem Eintrag übernommen):
+Haupt-Checkout cwd=root → `.git`, cwd=plugin/hooks → `../../.git`;
+im Worktree → bereits absolut; aus `/home/g` gelesen resolved die
+relative Form zu `/home/g/.git`, `exists: False`, die
+`--path-format=absolute`-Form auf den echten Pfad, `exists: True`.
+Das ist das diskriminierende Paar aus der Quelle, beide Richtungen.
+Probe-Worktree danach entfernt, Config-Hash vorher/nachher gleich.
+
+### Ein Worktree ist eine ANDERE UMGEBUNG, und die Suite darin misst sie mit
+
+**1. Vorfall + Basis.** Zwei Messungen an einem Abend (2026-08-18,
+pbs-office-Backlog-Welle; Journal `01NhRWdw-backlog-desk-1808`, Commits
+pbs-office `892ed44` gebaut / `10fb16c` nachgezogen).
+
+(a) Eine Lane baute in einem pbs-office-Worktree unter dem Scratchpad und
+meldete „keine Regression" gegen ihre eigene Baseline. Im Haupt-Checkout
+fielen danach VIER Tests. Ursache: der Bau greift auf ein NACHBAR-Repo zu
+(`<repo>/../pbs-projekt/src`). Im Haupt-Checkout existiert der Nachbar, im
+Scratchpad-Worktree nicht — also lief bei der Lane durchgehend der
+Fallback-Zweig, und der Hauptzweig war schlicht nicht unter Prüfung. Die
+Lane hat das korrekt und vollständig berichtet; sie konnte es nur nicht
+sehen.
+
+(b) Dieselbe Lane baute eine Ortsbestimmung, die in ihrer Umgebung
+funktionierte und im Haupt-Checkout STILL fehlschlug: `git rev-parse
+--git-common-dir` antwortet relativ zu SEINEM cwd (`../../.git`), während
+`Path.resolve()` gegen den cwd des Python-Prozesses auflöst. Ergebnis aus
+`/home/g` gemessen: `/pbs-projekt/src` — existiert nicht, also skippten
+alle vier strengen Fälle stillschweigend und die Suite meldete grün.
+Gepaart belegt: alte Auflösung → nicht existierender Pfad, neue
+(`--path-format=absolute`) → der echte Pfad; nach dem Fix 0 Skips aus
+jedem cwd.
+
+**2. Klasse.** Nicht die geteilte Config und nicht die Hook-Reichweite —
+beide sind hier schon gebucht. Dies ist die UNTRACKED-Umgebung als
+still wirkende Prüf-Prämisse: der Skill sagt heute „a fresh worktree has
+no untracked state" und verlangt eine Isolations-Probe für das EIGENE
+Paket des Repos. Beide Vorfälle liegen daneben: (a) betrifft eine
+NACHBARSCHAFT, die der Worktree nicht hat, und (b) eine
+Pfad-Auflösung, die im Worktree anders ausgeht. Die vorhandene Probe
+hätte beide durchgewinkt. Gemeinsamer Kern: was der Worktree an
+Umgebung NICHT mitbringt, entscheidet mit, welcher Code-Zweig unter
+Prüfung steht — und die Abweichung meldet sich als GRÜN, nie als Fehler.
+
+**3. Vorformulierter Regel-/Fix-Text** (Ergänzung im Abschnitt „A fresh
+worktree has no untracked state", nach der Isolations-Probe):
+
+> Die Probe deckt das eigene Paket ab, nicht die NACHBARSCHAFT. Ein
+> Worktree liegt typisch außerhalb des Verzeichnisses, in dem der
+> Haupt-Checkout mit seinen Geschwister-Repos steht — jeder Code, der
+> ein Nachbar-Repo über einen relativen Pfad sucht (`../<repo>/src`),
+> nimmt dort stumm den Fallback-Zweig, und eine Suite, die beide Zweige
+> abdecken soll, prüft nur den, den ihre Umgebung erzwingt. Ebenso
+> antwortet `git rev-parse --git-common-dir` RELATIV zu seinem cwd;
+> `Path.resolve()` und `realpath` lösen gegen den cwd des AUFRUFENDEN
+> Prozesses auf, und die beiden fallen im Worktree auseinander — immer
+> `--path-format=absolute` verlangen. Beide Fehlschläge sind STILL:
+> der eine nimmt einen anderen Zweig, der andere skippt. Darum gehört in
+> jeden Bericht einer Worktree-Lane, welche ZWEIGE ihre Umgebung
+> überhaupt erreichbar gemacht hat — und die Integration verlangt einen
+> eigenen Suite-Lauf im Haupt-Checkout, bevor irgendetwas gepusht wird.
+> Ein „keine Regression" aus einem Worktree gilt für den Worktree.
+
+Zweite, kleinere Ergänzung (Dispatch-Skill §1, Worktree-Rezept): die
+Rung-2-Entscheidung braucht eine Vorfrage — greift der Bau auf etwas
+außerhalb des Repos zu (Nachbar-Repo, absolute Pfade, installierte
+Kopie)? Dann ist der Worktree die falsche Isolation, nicht die teure.
+
+**4. Konsument + Abfluss-Naht.** Nächste dispatch-guards-Maintenance-Runde
+(Skill-Text `worktree` + Dispatch-Skill §1). Die Integrations-Hälfte ist
+bereits gelebte Praxis dieser Welle — der Haupt-Checkout-Lauf hat beide
+Defekte gefunden —, aber sie steht nirgends als Regel.
+
 ### ABGEFLOSSEN 2026-08-17 (Wartungs-Pass, mit dem dispatch-Carrier
 ### mitgezogen — dieser Träger schuldete nach Quote nichts)
 
@@ -207,71 +301,6 @@ Do not delete branches as part of any worktree cleanup — branches are why
 the committed work survived; their retirement is a separate question.
 
 ## Offen
-
-### Ein Worktree ist eine ANDERE UMGEBUNG, und die Suite darin misst sie mit
-
-**1. Vorfall + Basis.** Zwei Messungen an einem Abend (2026-08-18,
-pbs-office-Backlog-Welle; Journal `01NhRWdw-backlog-desk-1808`, Commits
-pbs-office `892ed44` gebaut / `10fb16c` nachgezogen).
-
-(a) Eine Lane baute in einem pbs-office-Worktree unter dem Scratchpad und
-meldete „keine Regression" gegen ihre eigene Baseline. Im Haupt-Checkout
-fielen danach VIER Tests. Ursache: der Bau greift auf ein NACHBAR-Repo zu
-(`<repo>/../pbs-projekt/src`). Im Haupt-Checkout existiert der Nachbar, im
-Scratchpad-Worktree nicht — also lief bei der Lane durchgehend der
-Fallback-Zweig, und der Hauptzweig war schlicht nicht unter Prüfung. Die
-Lane hat das korrekt und vollständig berichtet; sie konnte es nur nicht
-sehen.
-
-(b) Dieselbe Lane baute eine Ortsbestimmung, die in ihrer Umgebung
-funktionierte und im Haupt-Checkout STILL fehlschlug: `git rev-parse
---git-common-dir` antwortet relativ zu SEINEM cwd (`../../.git`), während
-`Path.resolve()` gegen den cwd des Python-Prozesses auflöst. Ergebnis aus
-`/home/g` gemessen: `/pbs-projekt/src` — existiert nicht, also skippten
-alle vier strengen Fälle stillschweigend und die Suite meldete grün.
-Gepaart belegt: alte Auflösung → nicht existierender Pfad, neue
-(`--path-format=absolute`) → der echte Pfad; nach dem Fix 0 Skips aus
-jedem cwd.
-
-**2. Klasse.** Nicht die geteilte Config und nicht die Hook-Reichweite —
-beide sind hier schon gebucht. Dies ist die UNTRACKED-Umgebung als
-still wirkende Prüf-Prämisse: der Skill sagt heute „a fresh worktree has
-no untracked state" und verlangt eine Isolations-Probe für das EIGENE
-Paket des Repos. Beide Vorfälle liegen daneben: (a) betrifft eine
-NACHBARSCHAFT, die der Worktree nicht hat, und (b) eine
-Pfad-Auflösung, die im Worktree anders ausgeht. Die vorhandene Probe
-hätte beide durchgewinkt. Gemeinsamer Kern: was der Worktree an
-Umgebung NICHT mitbringt, entscheidet mit, welcher Code-Zweig unter
-Prüfung steht — und die Abweichung meldet sich als GRÜN, nie als Fehler.
-
-**3. Vorformulierter Regel-/Fix-Text** (Ergänzung im Abschnitt „A fresh
-worktree has no untracked state", nach der Isolations-Probe):
-
-> Die Probe deckt das eigene Paket ab, nicht die NACHBARSCHAFT. Ein
-> Worktree liegt typisch außerhalb des Verzeichnisses, in dem der
-> Haupt-Checkout mit seinen Geschwister-Repos steht — jeder Code, der
-> ein Nachbar-Repo über einen relativen Pfad sucht (`../<repo>/src`),
-> nimmt dort stumm den Fallback-Zweig, und eine Suite, die beide Zweige
-> abdecken soll, prüft nur den, den ihre Umgebung erzwingt. Ebenso
-> antwortet `git rev-parse --git-common-dir` RELATIV zu seinem cwd;
-> `Path.resolve()` und `realpath` lösen gegen den cwd des AUFRUFENDEN
-> Prozesses auf, und die beiden fallen im Worktree auseinander — immer
-> `--path-format=absolute` verlangen. Beide Fehlschläge sind STILL:
-> der eine nimmt einen anderen Zweig, der andere skippt. Darum gehört in
-> jeden Bericht einer Worktree-Lane, welche ZWEIGE ihre Umgebung
-> überhaupt erreichbar gemacht hat — und die Integration verlangt einen
-> eigenen Suite-Lauf im Haupt-Checkout, bevor irgendetwas gepusht wird.
-> Ein „keine Regression" aus einem Worktree gilt für den Worktree.
-
-Zweite, kleinere Ergänzung (Dispatch-Skill §1, Worktree-Rezept): die
-Rung-2-Entscheidung braucht eine Vorfrage — greift der Bau auf etwas
-außerhalb des Repos zu (Nachbar-Repo, absolute Pfade, installierte
-Kopie)? Dann ist der Worktree die falsche Isolation, nicht die teure.
-
-**4. Konsument + Abfluss-Naht.** Nächste dispatch-guards-Maintenance-Runde
-(Skill-Text `worktree` + Dispatch-Skill §1). Die Integrations-Hälfte ist
-bereits gelebte Praxis dieser Welle — der Haupt-Checkout-Lauf hat beide
-Defekte gefunden —, aber sie steht nirgends als Regel.
 
 Neue Beobachtungen ans Datei-Ende, unter diese Überschrift.
 

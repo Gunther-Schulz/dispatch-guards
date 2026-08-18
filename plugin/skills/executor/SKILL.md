@@ -57,6 +57,12 @@ judgment on honest reporting, not on redesign.
    or a checker: red before green, and the red run's output goes in
    the report. (Source: site corpus Fixing rules — this is their
    prescriptive rendering for executing tiers.)
+   A check that was SKIPPED is a check that did not run, and it
+   reports as part of a green line: report the full counts including
+   skips, disposition each one, and treat a skip in a check this
+   work itself built as a finding — it says the built branch never
+   executed, so the item is unverified rather than done. (Source:
+   dispatch §2 slot (b), the report-form half of the same rule.)
    A structure search over a BINARY or compressed format counts
    only with its positive control shown in the SAME invocation
    mode: a zero-hit search there returns exactly what a true

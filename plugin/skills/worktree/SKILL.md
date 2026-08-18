@@ -90,7 +90,10 @@ users run it from.
   worktree-private hooks win as the override point, the repository's
   `.git/hooks` reaches worktree operations via the fallback. Pass the
   hook's stdin (ref lines) through to the chained hook; resolve via
-  `--absolute-git-dir` / `--git-common-dir`, never `--git-path hooks`
+  `--absolute-git-dir` (this worktree's gitdir) or
+  `--path-format=absolute --git-common-dir` (the shared one) — never
+  a bare `--git-common-dir`, which answers RELATIVE to the hook's
+  own cwd, and never `--git-path hooks`
   (that honors hooksPath and recurses into the dispatcher itself).
 
 ## A fresh worktree has no untracked state
@@ -104,6 +107,33 @@ imports resolve worktree-local and pass even with third-party
 dependencies shared by symlink. Record the probe's executed output as
 the isolation basis. A check that silently measures the main checkout
 from inside a worktree reports on code nobody is testing.
+
+That probe covers the package, never the NEIGHBOURHOOD. A worktree
+sits outside the directory where the main checkout stands among its
+sibling repos, so code reaching a neighbour by relative path
+(`../<repo>/src`) finds nothing and takes its FALLBACK branch — for
+the whole run, without an error. A suite meant to cover both
+branches then exercises only the one its environment allows and
+reports green (measured: a lane reported "no regression" from a
+scratchpad worktree, and the suite failed in the main checkout,
+where the neighbour exists).
+Path resolution splits the same way, and in the direction that
+flatters the worktree. A path is asked for in one process and
+resolved in another, and the two disagree about what it is relative
+TO: `git rev-parse --git-common-dir` answers RELATIVE to its own
+cwd, while any caller-side resolution (`realpath`, a language's
+`resolve()`) resolves against the CALLING process's cwd. Measured
+here — inside a worktree the answer comes back absolute and
+everything works; from the MAIN checkout, read by a process sitting
+elsewhere, it is `.git`, which resolves to a path that does not
+exist, and every strict case depending on it skips in silence.
+Demand `--path-format=absolute` for any path that outlives the cwd
+it was asked from.
+Both failures are silent, and both decide WHICH branch was under
+test. So a worktree lane's report names the branches its environment
+made reachable. And integration re-runs the suite in the MAIN
+checkout before anything is pushed — "no regression" measured in a
+worktree holds for the worktree.
 
 ## The integrity check that catches every config escape
 

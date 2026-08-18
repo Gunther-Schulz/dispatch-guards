@@ -52,6 +52,28 @@ are dropped with a one-line reason.
   Basis: dev-notes/dispatch-OBSERVATIONS.md, 2026-08-17 sender-half
   entry (slot 3b) — its own pre-formulated exit was this booking.
 
+- **PARKED 2026-08-18 — a report-form lane for UNDISPOSITIONED skips:
+  the count is computable, the disposition is not.** Slot (b) now
+  demands the full counts with every skip dispositioned
+  (`forms.md:18`, both tails, `executor/SKILL.md:60`); the prose half
+  is minted and applied. The mechanical half would extend
+  report-form-gate, which today checks slot PRESENCE only: a
+  report-shaped subagent message carrying `K skipped` with `K > 0` is
+  exactly computable, and that is the whole of what is computable.
+  **Named missing evidence, and why parked rather than ready:**
+  whether a DISPOSITION can be detected without false fires. The
+  candidate predicate — a skip count mentioned once and never again —
+  fires on the legitimate one-line form ("4 skipped, all
+  pre-existing and unrelated to this item"), which disposes correctly
+  inside the same sentence. A guard that fires on legitimate work
+  trains the override reflex that kills it (this repo's own rule: a
+  new lane ships default-warn and earns deny by fire rate, never by
+  assertion). What would decide it: real report bodies from the fire
+  log — how many carry skip counts at all, and in which of the two
+  shapes. Until that is measured, the report carries the disposition
+  and no lint claims to. Basis: this pass's mint decision, recorded
+  in `dev-notes/dispatch-OBSERVATIONS.md` under the drained entry.
+
 - **PARKED 2026-08-15 — the channel lanes read the PROMPT as a flat
   substring haystack, and three shapes slip through.** All found by a
   second fresh-context vet, each with a run control; none is a false

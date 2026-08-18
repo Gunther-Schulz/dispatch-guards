@@ -338,7 +338,14 @@ Mandatory parts (execution briefs):
     it over the manual recipe — same guarantees, less plumbing.
     Worktrees cost setup + integration and only pay where overlap is
     genuine — disjoint file sets in one working copy stay the
-    default.
+    default. Before choosing one, ask whether the work reaches
+    OUTSIDE its own repo — a sibling repo by relative path, an
+    absolute path, an installed copy. There a worktree is the WRONG
+    isolation rather than the expensive one: it silently decides
+    which branch of the code runs, and the lane reports green on the
+    branch nobody meant to test (sibling `worktree` SKILL, the
+    neighbourhood clause — single source, not copied here).
+    Serialize instead, or run the suite in the main checkout.
   - **The base commit is STATED in the brief, never discovered.**
     Stated means READ at compose time — `git -C <copy> rev-parse
     --short HEAD`, its output pasted — never recalled from an
@@ -672,6 +679,22 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   something else happens to wake, and a dead or stranded
   counterpart produces permanent silence indistinguishable from
   work.
+  The horizon does not survive the session that ARMED it. The timer
+  dies with its session, cleanly closed or not, and the channel dies
+  with it: SendMessage reaches a named agent only from the session
+  that spawned it, and a changed session identity makes it
+  unreachable outright (measured — "No agent named … is
+  reachable"). Nobody is then left who COULD demand the report. So a
+  session ending with a dispatch in flight converts the horizon into
+  a WRITTEN obligation in whatever the successor reads first —
+  handoff, start brief, ledger — naming the agent, its brief and its
+  base commit; and the successor discharges it at the ARTIFACT,
+  never at the sentence: is the commit there, is a report booked? A
+  stalled dispatch is indistinguishable from an open item, so the
+  disposition on finding nothing is not "still running" but LOST —
+  demand, re-brief, or book it void with a reason. A clean close is
+  no exception: the dispatch exception that excuses the CLOSE does
+  not excuse the DISPATCH.
   An incoming report is booked only once its SENDER resolves
   against this session's own dispatch list (agent id or brief
   name). A report from an unresolved sender is a FINDING —
@@ -682,6 +705,14 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
 - **Verify in the artifact, then integrate.** Run the tests, greps,
   renders YOURSELF before push/merge/publish. An agent's "done" is a
   claim, not a fact. (Source: site corpus dispatched-work rule.)
+  That run compares the SKIP count against the baseline, not only
+  passed and failed. A skip count risen against baseline is a
+  finding, never noise: it is the quiet direction of the question a
+  risen failure count asks loudly, and it is how a lane's own new
+  checks report never having run (measured: a passed-with-skips line
+  was booked as green, the skipped checks being exactly the ones
+  built to prove the item's core branch — noticed only because
+  unrelated tests went red beside them, never by the report form).
   The co-writer census (§1, the base-commit clause) runs again
   here, before the integrating push. Slot (f) is graded against the
   COMMIT TRAILER before it is booked: an agent's claim to
