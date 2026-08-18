@@ -120,20 +120,26 @@ where the neighbour exists).
 Path resolution splits the same way, and in the direction that
 flatters the worktree. A path is asked for in one process and
 resolved in another, and the two disagree about what it is relative
-TO: `git rev-parse --git-common-dir` answers RELATIVE to its own
+TO: `git rev-parse --git-common-dir` MAY answer relative to its own
 cwd, while any caller-side resolution (`realpath`, a language's
-`resolve()`) resolves against the CALLING process's cwd. Measured
-here — inside a worktree the answer comes back absolute and
-everything works; from the MAIN checkout, read by a process sitting
-elsewhere, it is `.git`, which resolves to a path that does not
-exist, and every strict case depending on it skips in silence.
-Demand `--path-format=absolute` for any path that outlives the cwd
-it was asked from.
+`resolve()`) resolves against the CALLING process's cwd. Which one
+happens is the environment's to decide, not the caller's — measured:
+inside a worktree the answer comes back absolute and everything
+works, while from the MAIN checkout it is `.git` at the root and
+`../../.git` two directories down, so a process resolving it from
+anywhere else lands on a path that does not exist and every strict
+case depending on it skips in silence. Demand
+`--path-format=absolute` for any path that outlives the cwd it was
+asked from — and demand it BEFORE the option it qualifies: `git
+rev-parse --git-common-dir --path-format=absolute` ignores the flag
+and hands back the relative answer, so tidying the flag to the end
+restores the bug without a word.
 Both failures are silent, and both decide WHICH branch was under
 test. So a worktree lane's report names the branches its environment
 made reachable. And integration re-runs the suite in the MAIN
-checkout before anything is pushed — "no regression" measured in a
-worktree holds for the worktree.
+checkout before anything is pushed (source: dispatch skill §4,
+verify in the artifact — this is its worktree case) — "no
+regression" measured in a worktree holds for the worktree.
 
 ## The integrity check that catches every config escape
 

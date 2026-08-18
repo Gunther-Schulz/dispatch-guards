@@ -282,7 +282,8 @@ data-file provision, §3b):
     read). Where the basis is a check you RAN, its full counts come
     with it, skips included and dispositioned: a skipped check did
     not run, and a verdict resting on one is could-not-verify, not
-    clean. A missing decision, file, or value is surfaced
+    clean (source: §2 slot (b), carried into a lane that has no
+    slots). A missing decision, file, or value is surfaced
     as a gap, never bridged with a guess. No repo writes, no
     interim messages.
 

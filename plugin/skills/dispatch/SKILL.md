@@ -683,18 +683,19 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   dies with its session, cleanly closed or not, and the channel dies
   with it: SendMessage reaches a named agent only from the session
   that spawned it, and a changed session identity makes it
-  unreachable outright (measured — "No agent named … is
-  reachable"). Nobody is then left who COULD demand the report. So a
-  session ending with a dispatch in flight converts the horizon into
-  a WRITTEN obligation in whatever the successor reads first —
-  handoff, start brief, ledger — naming the agent, its brief and its
-  base commit; and the successor discharges it at the ARTIFACT,
-  never at the sentence: is the commit there, is a report booked? A
-  stalled dispatch is indistinguishable from an open item, so the
-  disposition on finding nothing is not "still running" but LOST —
-  demand, re-brief, or book it void with a reason. A clean close is
-  no exception: the dispatch exception that excuses the CLOSE does
-  not excuse the DISPATCH.
+  unreachable outright (harness binding, as of 2026-08-18; measured
+  by a peer session, not reproduced here). Nobody is then left who
+  COULD demand the report. So a session ending with a dispatch in
+  flight converts the horizon into a WRITTEN obligation in whatever
+  the successor reads first — handoff, start brief, ledger. That
+  obligation carries its own DISCHARGE, not merely the agent, its
+  brief and its base commit: it TELLS the successor to settle the
+  question at the ARTIFACT rather than at the sentence — is the
+  commit there, is a report booked? Writing only the triple leaves
+  the discharge here, in a file a successor that dispatches nothing
+  never loads. A stalled dispatch is indistinguishable from an open
+  item, so the disposition on finding nothing is not "still running"
+  but LOST — demand, re-brief, or book it void with a reason.
   An incoming report is booked only once its SENDER resolves
   against this session's own dispatch list (agent id or brief
   name). A report from an unresolved sender is a FINDING —
