@@ -7,23 +7,6 @@ are dropped with a one-line reason.
 
 ## Open
 
-- **READY 2026-08-17 — 0.11.3 release-train grab-bag: two one-line
-  text fixes, bundle into the next release rather than forcing one.**
-  Design: two settled text edits, no code path touched.
-  (a) agent-model-gate.py docstring still reads "nesting itself
-  stays legal (3 layers by default)" — true of the gate, stale as
-  read on a site capping CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1;
-  amend to name the harness spawn-depth setting as the governing
-  knob a site may cap. (b) README "What this does not ship" gains
-  one line: the author additionally caps spawn depth to 1 as site
-  policy; the guards do not require it, sites adopting the
-  routing layer want it. Verifier: doc-drift check green plus a
-  reader test — both texts name the same env var; no behavior
-  change, no corpus extension needed. Done: lands with the next
-  version bump, whoever releases next (wave 2b desk is the
-  likely carrier). Origin: fable desk recommendation 2026-08-17,
-  operator "leave most to recommendations".
-
 - **READY 2026-08-17 — a marker-gated Stop lane for handed-off desks:
   report-enforcer's sibling one level up.** A session that received
   whole work over the peer channel composes its report as FINAL TEXT,
@@ -455,6 +438,18 @@ are dropped with a one-line reason.
   plugin outside this farm.
 
 ## Done
+
+- 2026-08-20 — **0.11.3 release-train grab-bag** (booked READY
+  2026-08-17): both halves shipped in `78ea1e5`, which the 0.11.3
+  pass's own ledger line says it carried ("Done-Kriterium lautet
+  wörtlich 'landet mit dem nächsten Version-Bump' und dieser Pass
+  ist der Bump"). Verified against the world, not the ledger:
+  `agent-model-gate.py:114` names
+  `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` as the governing knob, and
+  README:161-168 carries the "A spawn-depth cap" bullet. The entry
+  outlived its own build by three days — the stale-stored-brief
+  class, caught by re-reading premises against the source before
+  dispatching it.
 
 - 2026-08-17 — **three READY items built in the retirement pass**,
   each with its own checks (doc-drift green, skill_lint exit 0
