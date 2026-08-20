@@ -155,8 +155,20 @@ are dropped with a one-line reason.
   touched, no clause moves, and nothing is deleted: this is a
   provenance label over an existing body, which is exactly what makes
   it safe to do without a fresh-context vet.
+  THIRD ITEM, bundled here 2026-08-20 because it shares the realizing
+  FILE: `forms.md:52` trips skill_lint's dead-cite check —
+  "the report demanded (SendMessage)" reads as a section cite to the
+  linter, which finds no such heading. It is a false positive: the
+  parenthetical names a TOOL, not a section. Confirmed pre-existing —
+  the identical flag stands at the installed 0.11.3 (`9eda34b`), and
+  this file was untouched by the 2026-08-20 batch — so it was
+  dispositioned ACCEPTED at that release rather than fixed under a
+  release train. The fix is one word ("demanded via SendMessage"), and
+  it belongs in this entry's pass so the next release lints clean
+  instead of re-accepting a known flag, which is how a blocking check
+  gets trained into background noise.
   Write-set: `plugin/skills/dispatch/references/forms.md` (the
-  EXECUTION tail block only).
+  EXECUTION tail block, plus line 52's parenthetical).
   Verifier: `python3 tools/check-doc-drift.py` green (the EXECUTION
   tail is fixture-checked, so a tail edit that breaks the fixture goes
   red), the 69-column wrap block from CLAUDE.md's verify section, and
