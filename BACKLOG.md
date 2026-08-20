@@ -7,6 +7,83 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-20 — two unlabeled restatements in the forms.md
+  EXECUTION tail (corpus-harmony F7 + F13).** F7: the tail restates
+  the full pathspec / shared-index mechanism with no source label,
+  while its two block-neighbours in the same tail carry them ("§1
+  amend rule", "§4 ownership rule") — a reader cannot tell the
+  borrowed copy from the home statement, which is the label-over-body
+  class the corpus names. F13 is the same edit's neighbour: the
+  skip-count rule lives in four homes and the EXECUTION-tail copy is
+  the unlabeled one. Both dispositions are decided: add the matching
+  source label to each tail copy, no wording change to the mechanism
+  itself. Explicitly NOT in scope: the dispatcher-side
+  skip-vs-baseline rule in SKILL.md §4 — the reviewer and the Fable
+  desk both graded it a genuinely different act, and it keeps its own
+  statement.
+  Design (decided): append to each of the two tail restatements the
+  same source-label form its block-neighbours already use — a
+  parenthetical naming the section the clause borrows from, placed at
+  the end of the restated clause. The mechanism's own wording is not
+  touched, no clause moves, and nothing is deleted: this is a
+  provenance label over an existing body, which is exactly what makes
+  it safe to do without a fresh-context vet.
+  Write-set: `plugin/skills/dispatch/references/forms.md` (the
+  EXECUTION tail block only).
+  Verifier: `python3 tools/check-doc-drift.py` green (the EXECUTION
+  tail is fixture-checked, so a tail edit that breaks the fixture goes
+  red), the 69-column wrap block from CLAUDE.md's verify section, and
+  a reader test — each labeled clause names the section it borrows
+  from. Done when both labels are in the tail and the plugin is
+  released.
+  Execution note: `plugin/skills/` is operational corpus — the edit
+  runs `skill-craft` and its review checklist (repo CLAUDE.md), is
+  governed by `~/.claude/CLAUDE-maintenance.md`, and lands with a
+  ledger line. Not a structural restructure, so no fresh-context vet
+  is owed.
+  Basis: fresh-opus corpus-harmony review 2026-08-20, relayed by the
+  Fable desk; full body with both-side quotes in dotfiles
+  `claude/records/corpus-harmony-review-2026-08-20.jsonl` — read it
+  before editing (it was unpushed at relay time; confirm it landed).
+  Findings graded at the Fable desk, realizing writes are ours.
+
+- **PARKED 2026-08-20 — "site corpus" vs "operator corpus": one
+  referent, two terms, and a grep-audit on either misses the other
+  (corpus-harmony F12).** The dispatch SKILL.md declares the two
+  equivalent and then uses both, so any later sweep keyed on one term
+  silently under-reaches — the chosen-mark failure the grounding
+  module names, sitting inside our own corpus.
+  **Named missing evidence, and why parked rather than ready:** WHICH
+  term survives is undecided, and it is not ours alone to decide. The
+  vocabulary spans this repo's two skill files AND the operator's
+  dotfiles corpus, which cites the same referent from the other side;
+  picking a term here and sweeping only our half re-creates the split
+  one level up. Two things would settle it: the operator's or the
+  Fable desk's call on the surviving term, and a cross-repo hit count
+  for both terms so the sweep's size is known before it starts.
+  Until then the equivalence declaration stands and nothing is
+  half-renamed. Basis: same review record as the entry above.
+
+- **PARKED 2026-08-20 — a PDF-extraction recipe sits among the
+  executor's format-agnostic conduct rules (corpus-harmony F14).**
+  `plugin/skills/executor/SKILL.md` carries a qpdf / `grep -a` recipe
+  in a section otherwise stating conduct that holds whatever the
+  artifact's format. By the corpus's own ethic-versus-lens test the
+  recipe is lens-shaped: situational ("when doing X, watch for Y"),
+  which the calibration module routes to a lens or reference home
+  rather than to always-loaded text.
+  **Named missing evidence, and why parked rather than ready:** the
+  destination is undecided and the choice is not mechanical — a
+  `references/` file under the executor skill, a lens file outside
+  this repo, or deletion in favour of the fixing-module rule it
+  instantiates. Each has a different consumer and a different read
+  path, and a recipe moved to a home nobody loads is worse than one
+  sitting in the wrong section. What would decide it: whether any
+  session has actually reached for this recipe since it was minted
+  (the fire log and the journals can answer), plus the label back to
+  the fixing-module rule it instantiates, which the review names but
+  does not quote. Basis: same review record as the entries above.
+
 - **READY 2026-08-17 — a marker-gated Stop lane for handed-off desks:
   report-enforcer's sibling one level up.** A session that received
   whole work over the peer channel composes its report as FINAL TEXT,
