@@ -170,33 +170,65 @@ are dropped with a one-line reason.
   Basis: same review record as the entries above, plus the
   2026-08-20 journal grep relayed by the Fable desk.
 
-- **READY 2026-08-17 — a marker-gated Stop lane for handed-off desks:
-  report-enforcer's sibling one level up.** A session that received
-  whole work over the peer channel composes its report as FINAL TEXT,
-  which on that lane reaches no one — measured twice within one hour
-  on one desk, with the operator seeing only an idle session. §4 now
-  mandates a machine-readable `REPORT-CHANNEL: SendMessage <name>`
-  line in the handoff; this entry is the mechanical half.
-  Design (decided): a Stop hook fires only when ALL of — the
-  transcript carries a `REPORT-CHANNEL: SendMessage <name>` marker,
-  the ending turn composes substantial final text, and no SendMessage
-  to `<name>` occurred in that turn. Marker-gated, so a session that
-  never received such a handoff is silent by construction and the
-  false-fire profile is near zero. Ships default-warn like every new
-  lane.
-  Write boundary: a new `plugin/hooks/` script + its `hooks.json`
-  roster entry, README guard roster, `tools/corpus/guards.jsonl`
-  cases, doc-drift roster labels. No skill text — §4 already carries
-  the prose half.
-  Verifier: `--test` bite-test plus corpus cases, red-first against
-  the shipped predicate — the arms that must differ are (i) marker
-  present + final text + no send → fires, (ii) marker present + final
-  text + send in the same turn → silent, (iii) no marker → silent
-  whatever the turn did. Arm (iii) is the false-fire control.
-  Done when the bench and the bite-test cover all three arms and the
-  lane is registered in the README roster at mode warn.
-  Basis: dev-notes/dispatch-OBSERVATIONS.md, 2026-08-17 sender-half
-  entry (slot 3b) — its own pre-formulated exit was this booking.
+- **PARKED 2026-08-20 (was READY 2026-08-17; BUILT, then REVERTED at
+  `286484a`) — a marker-gated Stop lane for handed-off desks.** The
+  problem is unchanged and real: a session that received whole work
+  over the peer channel composes its report as FINAL TEXT, which on
+  that lane reaches no one — measured twice within one hour on one
+  desk, with the operator seeing only an idle session. §4 mandates a
+  machine-readable `REPORT-CHANNEL: SendMessage <name>` line; this
+  entry is still the mechanical half, and it is still worth building.
+  What changed is that the design in this entry was BUILT and shown
+  wrong on real input. It is re-parked rather than re-graded READY
+  because the repair is a design question, not a predicate tweak.
+  **WHY THE SHIPPED DESIGN FAILED — two measured premises, both
+  invisible to every fixture in its own suite. Whoever builds this
+  next starts from these, not from the design above.**
+  (1) *The ending-turn window excludes the very act it checks for.*
+  The design said "no SendMessage to `<name>` occurred in that turn",
+  implemented as "events after the last user-role event". But a
+  tool_result IS a user-role event: measured in one real transcript,
+  99 of 106 user-role events are tool_results, and all 7 SendMessage
+  calls are immediately followed by one. So the SendMessage can never
+  sit inside the window and the relief arm is unreachable in
+  production. Measured through the real hook: fixture shape (no
+  tool_result) + report sent → silent; REAL harness shape + report
+  sent → FIRES; never sent → FIRES. The guard could not tell a desk
+  that did its duty from one that did not.
+  (2) *The marker gate fires on ordinary corpus reading.* Scanning all
+  transcript text for the marker picks it up out of files a session
+  merely READ. Run over all 303 real transcripts on this machine: 15
+  fire, none of them a handoff — 14 capturing the literal placeholder
+  `<name|operator-terminal` straight out of the skill's own §4 clause,
+  including sessions in unrelated projects. The entry's claim of a
+  "near zero" false-fire profile was refuted by measurement, and arm
+  (iii), its declared false-fire control, models only "no marker
+  present" and cannot see this at all.
+  **Named missing evidence / the open design question:** how a Stop
+  hook distinguishes RECEIVING a handoff from READING text that
+  contains the marker — the spec's own literal form being the
+  dominant false-fire vector, and a dispatcher AUTHORING the line in
+  its own assistant text arming the sender rather than the receiver.
+  Candidate directions, none decided: key on a marker shape no
+  documentation can contain (a session-scoped token minted at handoff
+  time); read the marker only from an INCOMING message event rather
+  than from any text; or drop transcript-scanning entirely and have
+  the receiving session declare its channel in a state file. Each
+  needs a false-fire measurement over the same 303 transcripts before
+  it ships — that corpus is now the standing instrument for this
+  entry, and it is cheap to re-run.
+  Second missing piece: a correct ending-turn definition. Whatever it
+  becomes, it must be validated against a REAL transcript shape, not
+  a hand-built fixture — the fixture omitting the tool_result is what
+  made the dead arm look green.
+  Also true and worth keeping from the build: the harness-side facts
+  are sound (Stop carries `additionalContext`, the conversation
+  continues), so the LANE is viable; it is the predicate that was not.
+  Prior art is in git — `0b666fc` and its revert `286484a`.
+  Basis: dev-notes/dispatch-OBSERVATIONS.md 2026-08-17 sender-half
+  entry for the problem; fresh-context opus review 2026-08-20 for both
+  refutations, each reproduced at this desk through the real script
+  before the revert.
 
 - **PARKED 2026-08-18 — a report-form lane for UNDISPOSITIONED skips:
   the count is computable, the disposition is not.** Slot (b) now
