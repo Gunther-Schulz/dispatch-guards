@@ -7,6 +7,50 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-20 — audit every hook's `--test` for the
+  recompose-instead-of-invoke shape: a bite that rebuilds a function's
+  callees by hand cannot see that function lose its wiring.**
+  Measured instance: `brief-reminder`'s register-consult bite called
+  `check()`, `worktree_advisory()` and `register_lines()` separately
+  and hand-composed the result, so deleting the `lines +=
+  register_lines(payload)` call from `main()` left the bench (57/57),
+  the bench selftest, the hook's own `--test` and doc-drift ALL GREEN.
+  The feature could have died silently at any later edit. Fixed for
+  that one bite (`cc44a1c`, now red-proven), but the shape is generic
+  and the rest of the roster is UNAUDITED — the repair lane scoped its
+  claim to the two files it touched rather than asserting anything
+  about the others, which is why this is booked rather than assumed
+  closed.
+  Why the other nets cannot cover it: the bench classifies TYPE only
+  (deny/context/silent), so a lost advisory block still classifies as
+  `context`; doc-drift compares rosters, not behaviour; and the bench
+  selftest compares two runs that lose the block identically. Nothing
+  in the repo notices absence except a bite that runs the real entry
+  point.
+  Design (decided): for each hook in `plugin/hooks/*.py`, determine
+  whether its `--test` exercises `main()` end to end (stdin → stdout
+  subprocess, the shape `replay-bench.run_case` uses) for the output
+  its lanes actually emit, or only its component functions. Where it
+  only recomposes, add ONE end-to-end bite per emitted output — not a
+  rewrite of the existing bites, which keep their function-arm value.
+  Payloads come FROM `tools/corpus/guards.jsonl`, never hand-invented:
+  a constructed payload can be intercepted by a hook's own earlier
+  deny lanes before the output under test renders, which produces a
+  silent false negative that reads exactly like a dead feature (this
+  desk hit that trap on this very hook, 2026-08-20).
+  Write-set: `plugin/hooks/*.py` (`--test` blocks only; no predicate,
+  no lane, no docstring contract changed).
+  Verifier / red-first, per hook touched: delete the emitting call
+  site from `main()` in a scratch copy → the new bite must go RED;
+  restore → green. A bite that stays green under that deletion is not
+  a liveness net and does not count, whatever it asserts.
+  Done when every hook is either covered by an end-to-end bite or
+  recorded here as deliberately exempt with its reason, and the count
+  of each is stated rather than implied.
+  Basis: fresh-context review finding 4 (2026-08-20), its repair at
+  `cc44a1c`, and the repair lane's own candidate lesson naming the
+  shape as generic; the red-first proof re-run at this desk.
+
 - **READY 2026-08-20 — §1 brief rule: read the REAL instance before
   shipping a parser for a format the brief describes only in prose.**
   Earned twice in one batch, from opposite directions. The register
