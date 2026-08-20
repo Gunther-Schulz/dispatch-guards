@@ -7,6 +7,46 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-20 — `_dispatch_common.fire()` hardcodes
+  `hookEventName: "PreToolUse"`, so the next non-PreToolUse lane that
+  reaches for it ships a guard whose injection never lands.** Found by
+  the handoff-report-gate lane while building this repo's first Stop
+  guard: `fire()` sets the event name literally in BOTH its warn and
+  deny branches. Correct for every caller that exists today — all of
+  them are PreToolUse — and silently wrong for a Stop, SubagentStop or
+  PostToolUse lane, which is precisely the caller who has no reason to
+  suspect it. The lane avoided it by building a Stop-shaped emitter
+  locally (still routing through `guard_mode()` and `fire_log()`), and
+  correctly surfaced rather than patched a file outside its write set.
+  The failure shape is the expensive one: nothing errors, the guard
+  fires, the fire log records it, and the injection is simply dropped
+  by the harness — a dead guard reading as a live one.
+  Design (decided): `fire()` gains an explicit `event` parameter
+  DEFAULTING to `"PreToolUse"`, so every existing caller stays
+  byte-identical and no lane's behaviour moves. `handoff-report-gate`
+  then passes `event="Stop"` and its local emitter collapses onto the
+  common one, removing the duplicate. The default is what makes this
+  safe to land in one commit; a required parameter would touch every
+  caller for no gain.
+  Write-set: `plugin/hooks/_dispatch_common.py`,
+  `plugin/hooks/handoff-report-gate.py`.
+  Verifier / red-first: the discriminating pair is (i) the existing
+  bench stays at 61/61 with 0 mismatches — proving the default
+  preserved every current caller — and (ii) a bite asserting the
+  Stop lane's emitted `hookSpecificOutput.hookEventName` equals
+  `"Stop"`, which goes RED against a `fire()` without the parameter.
+  Both must hold; (i) alone would pass a change that broke the new
+  lane, and (ii) alone would pass one that broke the old ones.
+  Done when both hold and the local duplicate is gone.
+  Basis: sonnet-handoff-stop-lane closing report slot (e), 2026-08-20,
+  verified at `plugin/hooks/_dispatch_common.py` `fire()` by this desk.
+  RECORDED LIMIT on the premise: that the harness REQUIRES a matching
+  `hookEventName` for delivery rests on `report-enforcer.py`'s in-repo
+  bite convention, not on a measured harness behaviour. Right in the
+  safe direction either way, so it does not block — but it is a
+  convention being read as a binding, and a future session tightening
+  this should measure it rather than inherit it.
+
 - **READY 2026-08-20 — two unlabeled restatements in the forms.md
   EXECUTION tail (corpus-harmony F7 + F13).** F7: the tail restates
   the full pathspec / shared-index mechanism with no source label,
@@ -47,22 +87,54 @@ are dropped with a one-line reason.
   before editing (it was unpushed at relay time; confirm it landed).
   Findings graded at the Fable desk, realizing writes are ours.
 
-- **PARKED 2026-08-20 — "site corpus" vs "operator corpus": one
-  referent, two terms, and a grep-audit on either misses the other
-  (corpus-harmony F12).** The dispatch SKILL.md declares the two
-  equivalent and then uses both, so any later sweep keyed on one term
-  silently under-reaches — the chosen-mark failure the grounding
-  module names, sitting inside our own corpus.
-  **Named missing evidence, and why parked rather than ready:** WHICH
-  term survives is undecided, and it is not ours alone to decide. The
-  vocabulary spans this repo's two skill files AND the operator's
-  dotfiles corpus, which cites the same referent from the other side;
-  picking a term here and sweeping only our half re-creates the split
-  one level up. Two things would settle it: the operator's or the
-  Fable desk's call on the surviving term, and a cross-repo hit count
-  for both terms so the sweep's size is known before it starts.
-  Until then the equivalence declaration stands and nothing is
-  half-renamed. Basis: same review record as the entry above.
+- **READY 2026-08-20 (unparked same day — both named conditions met)
+  — "site corpus" vs "operator corpus": one referent, two terms, and
+  a grep-audit on either misses the other (corpus-harmony F12).** The
+  dispatch SKILL.md declares the two equivalent and then uses both, so
+  any later sweep keyed on one term silently under-reaches — the
+  chosen-mark failure the grounding module names, sitting inside our
+  own corpus.
+  This entry was parked hours earlier on two named absences; both are
+  now closed, so it is re-graded rather than left to rot at PARKED:
+  (1) WHICH term survives, and (2) whether the sweep crosses into the
+  operator's dotfiles corpus.
+  Design (decided): **"site corpus" survives; "operator corpus" is
+  replaced.** Three bases, the first two decisive: the skill's own
+  definition establishes that term ("Citations reading 'site corpus'
+  name the operating site's always-loaded rule layer") and a
+  definition owns its vocabulary; and it is the portable term for a
+  skill written to run at ANY site, where the alternative names one
+  particular site's owner. The counts corroborate rather than decide.
+  Scope, MEASURED AT THIS DESK, not inherited — per-file counts with a
+  positive control that the term is findable at all: SKILL.md 9/4,
+  forms.md 2/0, routing.md 1/1, executor/SKILL.md 1/1,
+  worktree/SKILL.md 0/0 → site 13, operator 6. So the sweep is 6
+  replacements, entirely inside this repo. The cross-repo worry that
+  parked it dissolves: the dotfiles corpus carries ZERO hits of either
+  term (Fable desk's grep over root + modules + maintenance — their
+  measurement, testimony grade, and the direction is safe: a false
+  zero there would only ADD work, never corrupt this sweep).
+  Two deliberate carve-outs, or the sweep over-reaches: the definition
+  sentence itself must keep BOTH terms, since it is what declares the
+  equivalence for any reader arriving with the old vocabulary; and the
+  two deployment-scoped governance footers that name the operator's
+  corpus as a specific deployment are not aliases of the general term
+  and stay as they are.
+  Write-set: `plugin/skills/dispatch/SKILL.md`,
+  `plugin/skills/dispatch/references/routing.md`,
+  `plugin/skills/executor/SKILL.md`.
+  Verifier: after the sweep, `grep -o "operator corpus"` over
+  `plugin/skills/` returns exactly the carve-outs named above and
+  nothing else — stated as a number before the edit, so the check
+  cannot be satisfied by whatever the sweep happens to leave. Plus
+  doc-drift green and the 69-column wrap block. Done when that count
+  matches and the plugin is released.
+  Execution note: operational corpus — runs `skill-craft`, governed by
+  `~/.claude/CLAUDE-maintenance.md`, lands with a ledger line.
+  Basis: corpus-harmony review 2026-08-20 (F12) for the finding; term
+  decision taken at THIS desk on the evidence above, not inherited as
+  a directive — a peer desk names facts, this repo's vocabulary is
+  this repo's call.
 
 - **PARKED 2026-08-20 — a PDF-extraction recipe sits among the
   executor's format-agnostic conduct rules (corpus-harmony F14).**
@@ -78,11 +150,25 @@ are dropped with a one-line reason.
   this repo, or deletion in favour of the fixing-module rule it
   instantiates. Each has a different consumer and a different read
   path, and a recipe moved to a home nobody loads is worse than one
-  sitting in the wrong section. What would decide it: whether any
-  session has actually reached for this recipe since it was minted
-  (the fire log and the journals can answer), plus the label back to
-  the fixing-module rule it instantiates, which the review names but
-  does not quote. Basis: same review record as the entries above.
+  sitting in the wrong section.
+  **HALF THE EVIDENCE ARRIVED 2026-08-20:** consumer-existence is now
+  measured — `grep -c qpdf claude/JOURNAL.md` = 0, i.e. the recipe has
+  never been reached for in the recorded operating history since it
+  was minted (Fable desk's measurement in their repo; testimony
+  grade, not re-run here). That is fire-silence, and it argues for the
+  two cheaper dispositions — a `references/` move with a label back to
+  the fixing-module rule, or retirement with the label alone — over
+  keeping always-loaded text alive for a consumer nobody has been.
+  **STILL PARKED, and honestly so:** fire-silence does not
+  discriminate between "nobody needed it" and "nobody knew it was
+  there", and those two point at opposite dispositions — retire versus
+  relocate-so-it-is-findable. What would settle it: whether any
+  session has hit the underlying PROBLEM (a PDF it could not read) and
+  solved it some other way, which the journals can answer and the
+  qpdf grep cannot. Until then this stays parked rather than being
+  retired on a silence that is consistent with both readings.
+  Basis: same review record as the entries above, plus the
+  2026-08-20 journal grep relayed by the Fable desk.
 
 - **READY 2026-08-17 — a marker-gated Stop lane for handed-off desks:
   report-enforcer's sibling one level up.** A session that received
