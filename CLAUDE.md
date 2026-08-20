@@ -82,6 +82,15 @@ them before any commit that touches hooks, skills, or the corpus.
 #    false-fire regressions.
 python3 tools/replay-bench.py
 
+# 1a. The bench's OWN isolation — the environment premises it pins.
+#     Its classification is TYPE-only, so a case's rendered CONTENT can
+#     move with an unpinned environment file while the counts stay green:
+#     measured 2026-08-20, every brief-reminder case was reading the
+#     operator's real ~/.claude/readiness.json. Red-proven by removing the
+#     pin (two failures: output identity, and a planted sentinel class
+#     reaching the render).
+python3 tools/replay-bench.py --test
+
 # 2. Per-guard bite-tests — the function-arm net, and the only net for
 #    the six guards the bench does not cover.
 for h in plugin/hooks/*.py; do

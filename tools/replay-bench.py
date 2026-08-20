@@ -106,6 +106,20 @@ def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str]:
         env["CLAUDE_DISPATCH_GUARDS_CONFIG"] = str(cfg)
     else:
         env["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+    # Same premise class as `cwd` below, found the hard way. The §6
+    # readiness register is an ENVIRONMENT premise the bench must pin,
+    # not inherit: brief-reminder renders the register's own rows into
+    # its advisory, so an unpinned run reads the OPERATOR's real
+    # ~/.claude/readiness.json and the bench's output moves with a file
+    # no case declares. What kept this invisible is that it does NOT
+    # disturb the match/mismatch counts — classification is type-only —
+    # so the bench stayed 61/61 green while exercising something it
+    # never declared. Measured 2026-08-20: one brief-reminder case's
+    # additionalContext carried three real register rows under the real
+    # HOME and the absence line under an empty one. Per-index path, so a
+    # future case can write its own register fixture there.
+    env["CLAUDE_DISPATCH_GUARDS_REGISTER"] = str(
+        tmp / f"register-{index}-absent.json")
 
     if "raw" in case:
         stdin = case["raw"]
@@ -135,7 +149,13 @@ def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str]:
     observed = classify(proc.returncode, proc.stdout)
     detail = (f"exit={proc.returncode} stdout={proc.stdout.strip()[:160]!r} "
               f"stderr={proc.stderr.strip()[:160]!r}")
-    return observed, detail
+    # The RAW stdout rides along as a third element, untruncated. `detail`
+    # cuts at 160 chars for readable mismatch output, which makes it
+    # useless as an identity basis — the isolation selftest below compared
+    # `detail` first and stayed green under its own mutation, because the
+    # register rows sit past the cut. A truncated view read as the whole
+    # body is the same blindness this pin exists to remove.
+    return observed, detail, proc.stdout
 
 
 def load_corpus(path: Path, hook_filter: str | None) -> list[dict]:
@@ -160,7 +180,87 @@ def load_corpus(path: Path, hook_filter: str | None) -> list[dict]:
     return cases
 
 
+def _test() -> int:
+    """Bite-test for the bench's OWN isolation — the premises it pins.
+
+    Graduated from a throwaway probe, per this repo's rule that a manual
+    investigation is unfinished while the check that produced its finding
+    does not exist. The finding (2026-08-20): `run_case` pinned CONFIG,
+    FIRELOG and CLAIMS but not the §6 readiness register, so every
+    brief-reminder case read the OPERATOR's real ~/.claude/readiness.json
+    and the bench's rendered output moved with a file no case declares.
+
+    Why the existing bench could not catch it, which is the whole reason
+    this arm exists: classification is TYPE-only (`deny`/`context`/
+    `silent`), so a case's CONTENT can swing wildly while the counts stay
+    61/61 green. A check that passes while exercising something it never
+    declared is the quiet direction of the premise-drift class, and only
+    a content-identity assertion sees it.
+
+    The arm is a discriminating PAIR: the same case is run under two
+    different HOMEs, one carrying a register with a distinctive class id
+    and one with none. Identical output = the premise is pinned. Without
+    the pin the two differ, which is the red this was built against.
+    """
+    import shutil
+    case = None
+    for c in load_corpus(DEFAULT_CORPUS, "brief-reminder.py"):
+        if c["expect"] == "context":
+            case = c
+            break
+    if case is None:                       # corpus shrank; say so, don't pass
+        print("replay-bench selftest: no brief-reminder 'context' case — "
+              "cannot verify isolation", file=sys.stderr)
+        return 2
+    outs = []
+    real_home = os.environ.get("HOME")
+    # ONE tmp dir across both arms, deliberately. The pinned register path
+    # is derived from tmp, and the absence line NAMES the resolved path —
+    # so a per-arm tmp dir makes the two outputs differ for a reason that
+    # belongs to the harness, not the artifact, and the arm goes red on a
+    # correctly pinned bench. Measured while building this: the setup was
+    # the instrument, exactly as the probe it replaces.
+    try:
+        with tempfile.TemporaryDirectory(prefix="rb-selftest-") as td:
+            for populated in (True, False):
+                home = tempfile.mkdtemp(prefix="rb-home-")
+                if populated:
+                    os.makedirs(os.path.join(home, ".claude"), exist_ok=True)
+                    with open(os.path.join(home, ".claude", "readiness.json"),
+                              "w", encoding="utf-8") as fh:
+                        json.dump({"prozesse": [{
+                            "id": "SELFTEST-SENTINEL-CLASS", "tier": "haiku",
+                            "status": "ready", "klasse": "isolation probe"}]},
+                            fh)
+                os.environ["HOME"] = home
+                outs.append(run_case(case, Path(td), 0))
+                shutil.rmtree(home, ignore_errors=True)
+    finally:
+        if real_home is not None:
+            os.environ["HOME"] = real_home
+    bad = 0
+    # Compare the RAW stdout (index 2), never `detail` (index 1): detail
+    # truncates at 160 chars and the register rows sit past the cut, so a
+    # detail-based comparison is green under the very defect this arm
+    # exists to catch — measured, not reasoned: the first version of this
+    # selftest passed its own mutate-the-pin-out proof.
+    if outs[0][2] != outs[1][2]:
+        bad += 1
+        print("FAIL [register isolation]: the same case rendered differently "
+              "under two HOMEs — the bench is reading a register no case "
+              "declares", file=sys.stderr)
+    if "SELFTEST-SENTINEL-CLASS" in outs[0][2]:
+        bad += 1
+        print("FAIL [register isolation]: the planted sentinel class reached "
+              "the rendered output", file=sys.stderr)
+    print("replay-bench selftest: isolation pinned" if not bad
+          else f"replay-bench selftest: {bad} FAILED")
+    return 1 if bad else 0
+
+
 def main() -> int:
+    if "--test" in sys.argv:
+        return _test()
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--corpus", default=str(DEFAULT_CORPUS),
                     help="corpus JSONL (default: tools/corpus/guards.jsonl)")
@@ -181,7 +281,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="replay-bench-") as td:
         tmp = Path(td)
         for i, case in enumerate(cases):
-            observed, detail = run_case(case, tmp, i)
+            observed, detail, _raw = run_case(case, tmp, i)
             results.append((case, observed, detail))
 
     by_hook: dict[str, list] = {}
