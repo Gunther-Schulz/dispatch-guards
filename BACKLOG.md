@@ -7,6 +7,76 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-20 — §1 brief rule: read the REAL instance before
+  shipping a parser for a format the brief describes only in prose.**
+  Earned twice in one batch, from opposite directions. The register
+  lane's first implementation assumed a bare dict keyed by class id;
+  the deployed `~/.claude/readiness.json` wraps its entries under a
+  `prozesse` key with sibling metadata keys, so that version would
+  have rendered `_hinweis`, `schema_version` and `lineup_stand` as
+  three certified classes. It found this by reading the real file —
+  and noted the sharper half itself: its two prescribed bites would
+  have stayed GREEN under the wrong implementation, because they used
+  its own wrong fixture shape. Same-parentage expectation, caught only
+  because the artifact existed to be read. This desk then made the
+  identical error twice in one hour probing that lane's work (guessed
+  `processes`, and invented a payload the hook's own deny lanes
+  intercept), which is the evidence that the rule belongs in the brief
+  form rather than in a lane's memory.
+  §1 already carries the neighbouring rule for EXTERNAL contracts
+  ("Schema-bearing external facts: raw source text only"). This is its
+  internal-artifact twin and belongs as a WIDENING of that bullet, not
+  as a new one: where the brief describes a data shape the executing
+  lane must parse, and a real instance exists on disk, the brief names
+  that instance as a mandatory read — and where none exists, the brief
+  says so, because "no fixture exists" is itself the fact that stops a
+  lane trusting its own guess.
+  Design (decided): widen the existing §1 bullet with one clause
+  naming the internal case and the both-ways requirement (name the
+  real instance, or state that none exists). No new bullet, no second
+  home — the external and internal halves are one rule about the same
+  failure.
+  Write-set: `plugin/skills/dispatch/SKILL.md` (the schema-bearing
+  bullet in §1's brief parts).
+  Verifier: doc-drift green, the 69-column wrap block, and a reader
+  test — the widened bullet covers the register case without naming
+  it. Done when the clause is in §1 and the plugin is released.
+  Execution note: operational corpus — runs `skill-craft`, governed by
+  `~/.claude/CLAUDE-maintenance.md`, lands with a ledger line. Bundles
+  naturally with the F7/F13 and F12 corpus entries; all three write
+  skill text and want one release, not three.
+  Basis: sonnet-register-context closing report slot (e) 2026-08-20,
+  its schema fix verified at `plugin/hooks/brief-reminder.py`
+  `_register_entries` and its container-shape bite red-proven at this
+  desk against the bare-dict implementation.
+
+- **RESIDUE 2026-08-20 — the machine doctor runs guard bites without
+  pinning `XDG_DATA_HOME`, so any bite that fires writes into the real
+  fire log. The realizing write is in dotfiles, which this copy does
+  not own.** Recorded here because the finding is ours and the fix is
+  not, and an obligation whose write boundary sits at another desk
+  stays named by the sender or it falls between the two.
+  The incident: two new bites in this repo appended 33 records to
+  `~/.local/share/claude/dispatch-guards-fires.jsonl`, 24 of them on a
+  lane that had never run against real work — corrupting the exact
+  instrument the warn→deny promotion reads. This repo's half is fixed
+  (per-bite `CLAUDE_DISPATCH_GUARDS_FIRELOG` pin plus an
+  `XDG_DATA_HOME` pin on the CLAUDE.md sweep loop, dispatched
+  2026-08-20). That half protects THIS repo's verify block only.
+  What remains, and why it is not ours: `bootstrap/doctor.py`'s
+  `_hook_test_env` redirects `XDG_STATE_HOME` and nothing else
+  (verified by reading it — the assertions around it pin
+  `XDG_STATE_HOME` explicitly and no `XDG_DATA_HOME` appears). The
+  fire log resolves from `XDG_DATA_HOME`, so every doctor sweep across
+  every repo with a firing bite leaks records. Ours was the repo that
+  noticed; the exposure is machine-wide.
+  Owner: the dotfiles desk. Relayed to it 2026-08-20 as fact traffic.
+  **The check that would reveal it, and who runs it at close:** count
+  records in the fire log before and after a full doctor run; a
+  non-zero delta with null session ids is the leak. This desk runs
+  that check before its next release and re-reports if the delta is
+  still non-zero — the residue is not discharged by having named it.
+
 - **READY 2026-08-20 — `_dispatch_common.fire()` hardcodes
   `hookEventName: "PreToolUse"`, so the next non-PreToolUse lane that
   reaches for it ships a guard whose injection never lands.** Found by
