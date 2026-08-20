@@ -304,6 +304,51 @@ if __name__ == "__main__":
         )
         assert deny_check({**main_s, "tool_input": {"command": _hd_unterminated}}) is None
 
+        # ── deny renderer: the chained-command note (BACKLOG
+        # 2026-08-11 — a Bash deny does not say that NOTHING in the
+        # command ran; the compound-command case bites). One render
+        # site in _dispatch_common (_deny_payload) serves every Bash
+        # gate, so the pair is exercised here — this file is swept by
+        # the doctor sweep, where _dispatch_common.py's own --test is
+        # not (excluded by basename). The pair is the point: a
+        # sentence that always appears proves nothing about the scan.
+        import contextlib
+        import io
+        from _dispatch_common import _CHAIN_NOTE, _deny_payload
+
+        _chained_payload = {**main_s, "tool_input": {
+            "command": "printf 'x' >> msg.txt && git commit -m x && git push"}}
+        _dp_chained = _deny_payload("r", source=_SOURCE,
+                                    payload=_chained_payload)
+        assert _CHAIN_NOTE in _dp_chained["hookSpecificOutput"][
+            "permissionDecisionReason"], _dp_chained
+        assert _CHAIN_NOTE in _dp_chained["systemMessage"], _dp_chained
+
+        _unchained_payload = {**main_s, "tool_input": {"command": "git push"}}
+        _dp_unchained = _deny_payload("r", source=_SOURCE,
+                                      payload=_unchained_payload)
+        assert _CHAIN_NOTE not in _dp_unchained["hookSpecificOutput"][
+            "permissionDecisionReason"], _dp_unchained
+        assert _CHAIN_NOTE not in _dp_unchained["systemMessage"], _dp_unchained
+
+        # done-criterion: the incident's own command shape, through the
+        # real fused-push deny lane end to end (deny_check() -> deny()).
+        _incident_cmd = ("printf '\\nTrailer\\n' >> msg.txt "
+                         "&& git commit -F msg.txt && git push")
+        _incident_payload = {**main_s, "tool_input": {"command": _incident_cmd}}
+        _incident_reason = deny_check(_incident_payload)
+        assert _incident_reason is not None, _incident_cmd
+        _buf = io.StringIO()
+        with contextlib.redirect_stdout(_buf):
+            try:
+                deny(_incident_reason, source=_SOURCE,
+                     payload=_incident_payload)
+            except SystemExit:
+                pass
+        _j = json.loads(_buf.getvalue())
+        assert _CHAIN_NOTE in _j["hookSpecificOutput"][
+            "permissionDecisionReason"], _j
+
         print("push-claim-reminder: all tests passed")
         sys.exit(0)
     sys.exit(main())

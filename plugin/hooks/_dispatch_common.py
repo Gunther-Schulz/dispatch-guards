@@ -62,7 +62,73 @@ def is_subagent(payload: dict) -> bool:
     return bool(payload.get("agent_id"))
 
 
-def _deny_payload(reason: str, source: str = "dispatch-guards") -> dict:
+# The 2026-08-11 incident (BACKLOG): a command chained `printf >>
+# msg.txt && git commit && git push` was denied WHOLE by
+# push-claim-reminder's fused-push lane. The deny text explained the
+# push rule correctly and said nothing about the two earlier links —
+# so the session re-ran the commit believing the trailer had been
+# appended, and only the repo's own commit-msg hook caught it. Fixed
+# text, one copy, so every Bash deny inherits it at once.
+_CHAIN_NOTE = (
+    "Nothing in this command ran — including any earlier links "
+    "that chained into the denied one. Re-check their effects before "
+    "assuming them."
+)
+
+
+def _has_chain_operator(cmd: str) -> bool:
+    """True iff `cmd` contains a shell chaining operator (`&&`, `||`,
+    `;`, or a bare newline) OUTSIDE quotes.
+
+    A conservative scan, not a shell parser: it tracks single/double
+    quote state and backslash escapes character by character, and on
+    any doubt — an unbalanced quote left open at end of string — it
+    returns True. The failure direction is toward telling the reader
+    more, never less: a docstring false-fire probe elsewhere in this
+    repo that instead bailed SILENT on an odd apostrophe count proved
+    nothing, which is the shape this function is built not to repeat.
+    Over-firing inside a command substitution or a heredoc body is
+    accepted residue — the sentence is harmless where it does not
+    strictly apply, unlike its silent omission."""
+    quote: str | None = None
+    i, n = 0, len(cmd)
+    while i < n:
+        c = cmd[i]
+        if quote == "'":
+            if c == "'":
+                quote = None
+            i += 1
+            continue
+        if quote == '"':
+            if c == "\\" and i + 1 < n:
+                i += 2
+                continue
+            if c == '"':
+                quote = None
+            i += 1
+            continue
+        # unquoted
+        if c in ("'", '"'):
+            quote = c
+            i += 1
+            continue
+        if c == "\\" and i + 1 < n:
+            i += 2
+            continue
+        if c == "\n" or c == ";":
+            return True
+        if c == "&" and cmd[i:i + 2] == "&&":
+            return True
+        if c == "|" and cmd[i:i + 2] == "||":
+            return True
+        i += 1
+    if quote is not None:
+        return True  # unbalanced quote: could not determine -> emit
+    return False
+
+
+def _deny_payload(reason: str, source: str = "dispatch-guards",
+                  payload: dict | None = None) -> dict:
     """Build the deny JSON. Source-tagged and dual-field by design:
     permissionDecisionReason reaches the MODEL, systemMessage the user's
     UI — a deny carrying only one of them leaves the other audience with
@@ -77,7 +143,17 @@ def _deny_payload(reason: str, source: str = "dispatch-guards") -> dict:
     the missing discriminator — the client documents "permission-rule" as
     covering hooks (verified in the shipped binary, 2.1.220), so it is
     working as designed. This tag is the only self-identification a guard
-    fire gets."""
+    fire gets.
+
+    payload, when it carries a Bash `tool_input.command` containing a
+    chaining operator, gets `_CHAIN_NOTE` appended to reason (never
+    replacing or reordering the lane's own text) — the single render
+    site every Bash deny lane passes through, so the note ships without
+    a per-hook copy to drift. No payload, or a command with no chaining
+    operator, leaves reason untouched."""
+    cmd = (payload or {}).get("tool_input", {}).get("command")
+    if isinstance(cmd, str) and _has_chain_operator(cmd):
+        reason = f"{reason} {_CHAIN_NOTE}"
     tagged = f"[{source}] {reason}"
     return {
         "systemMessage": tagged,
@@ -103,9 +179,11 @@ def deny(reason: str, source: str = "dispatch-guards",
     for one fire()-routed lane.
 
     payload is optional so a caller with no hook input still denies;
-    passing it is what fills session/agent/tool/shape in the record."""
+    passing it is what fills session/agent/tool/shape in the record,
+    and is also what lets _deny_payload append the chained-command
+    note when the denied command warrants it."""
     fire_log(source, "deny", reason, payload)
-    print(json.dumps(_deny_payload(reason, source)))
+    print(json.dumps(_deny_payload(reason, source, payload)))
     sys.exit(0)
 
 
@@ -198,7 +276,7 @@ def fire(reason: str, source: str = "dispatch-guards",
     mode = guard_mode(source, default_mode)
     fire_log(source, mode, reason, payload)
     if mode == "deny":
-        print(json.dumps(_deny_payload(reason, source)))
+        print(json.dumps(_deny_payload(reason, source, payload)))
     elif mode == "warn":
         print(json.dumps({
             "systemMessage": f"[{source}] WARN (staging): {reason}",
