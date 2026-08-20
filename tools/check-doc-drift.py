@@ -336,7 +336,13 @@ _DRAINED_HEADING = "## Abgeflossen"
 
 def check_observations_tail() -> list:
     """An observations carrier that has a drained section ends with its
-    LIVE section, and its last line is the append marker.
+    LIVE section, and no structural section opens after the append
+    marker.
+
+    What this does NOT assert, because the two would contradict: that
+    the marker is the file's last line. Appending happens at EOF, so
+    entries legitimately come to sit BELOW the marker; only a `## Offen`
+    or `## Abgeflossen` section opening there is a finding.
 
     Not a style rule — a measured failure, twice in one day and from
     opposite directions. The carrier first had `## Abgeflossen` in the
@@ -400,14 +406,18 @@ def check_observations_tail() -> list:
                        f"{drained[-1] + 1}) opens AFTER the last live one "
                        f"(line {live[-1] + 1}) — an entry appended at EOF "
                        f"lands in a drained section and reads as drained")
-        # Nothing FOLLOWS the marker — the invariant a line-window test
-        # only approximates: a window is meaningless on a short file, and
-        # this marker spans several lines itself. What must hold is that
-        # no section opens after it.
+        # No STRUCTURAL section follows the marker — the invariant a
+        # line-window test only approximates: a window is meaningless on
+        # a short file, and this marker spans several lines itself. What
+        # must hold is that no section opens after it.
+        # "Structural" is load-bearing and was learned by over-firing:
+        # an earlier `ln.startswith("#")` counted ENTRY headings too, and
+        # this carrier writes its entries as `## <date> — <title>`, so
+        # the very append the marker instructs fired the check. An entry
+        # after the marker strands nothing; a section does.
         marks = [i for i, ln in enumerate(lines) if _APPEND_MARKER in ln]
         headings_all = [i for i, ln in enumerate(lines)
-                        if drained_re.match(ln) or live_re.match(ln)
-                        or ln.startswith("#")]
+                        if drained_re.match(ln) or live_re.match(ln)]
         if not marks:
             out.append(f"{rel}: no append marker — the next writer has "
                        f"nothing telling them EOF is the live list")
@@ -516,6 +526,19 @@ def _test() -> int:
          True),
         ("marker present but not at the end (no blank lines)",
          f"# t\n{marker}\n## Abgeflossen\nd\n## Offen\nl\n", True),
+        # The FALSE-FIRE control, and the reason this predicate was
+        # narrowed: this carrier's own dominant entry form is
+        # `## <date> — <title>`, so an entry appended at EOF — exactly
+        # what the marker instructs — put a `#` line after it. Under
+        # `ln.startswith("#")` that fired on legitimate work (measured
+        # 2026-08-20 on a peer's appended entry). Only a STRUCTURAL
+        # section opening after the marker strands anything.
+        ("heading-form entry appended after the marker — legitimate",
+         f"# t\n\n## Abgeflossen\n\nd\n\n## Offen\n\nl\n\n{marker}\n\n"
+         f"## 2026-08-20 — ein neuer Eintrag\n\nbody\n", False),
+        ("drained section opened after the marker — still fires",
+         f"# t\n\n## Abgeflossen\n\nd\n\n## Offen\n\nl\n\n{marker}\n\n"
+         f"## Abgeflossen (Wartungs-Pass 2026-09-01)\n\nn\n", True),
         ("no drained section — skipped, not a finding",
          "# t\n\n## Offen\n\nlive only\n", False),
         ("prose naming the drained section without having one",

@@ -381,6 +381,51 @@ any clone is `git worktree list` + status, and a scratch-path
 worktree with a FOREIGN session id is a live co-writer whatever the
 tree says.
 
+**MERGE 2026-08-19, n=2 für diese Klasse — dieselbe Lücke eine Achse
+weiter: der Census ist ein ZEITPUNKT, der Mitschreiber ein VERLAUF.**
+Vorfall (cache-fix-Desk, zwei parallele Lanes, dotfiles-Kopie): der
+Compose-Zeit-Census lief wie vorgeschrieben — `git status --porcelain`
+(2 Dateien), `git worktree list` (1), `git log -1 --format=%cr`
+("11 hours ago") — und meldete eine ruhige Kopie. Zwanzig Minuten
+später committete der OPERATOR direkt in dieselbe Kopie (`8999f45`,
+12:15:25) und pushte. Der Census war zum Zeitpunkt seiner Ausführung
+KORREKT und danach still falsch; nichts weckte den Dispatcher.
+Was den Fehler dann festhielt statt aufzudecken, sind zwei Lesungen,
+die beide grün waren: (1) `git diff HEAD -- <datei>` war LEER, gelesen
+als "unverändert" — wahr über einen HEAD, der die Änderung inzwischen
+ENTHIELT; "identisch mit HEAD" ist keine Aussage über Veränderung,
+sobald HEAD sich bewegt, und ist damit ein Kriterium, das auf lebenden
+Zustand ankert. (2) `git log origin/main..HEAD` zeigte NUR die
+Lane-Commits — weil der Fremd-Commit bereits GEPUSHT war und origin
+mitgewandert ist. Beide Kommandos stehen in der Disziplin; keines
+sieht diesen Fall. Aufgedeckt hat es die LANE, nicht der Dispatcher,
+und zwar über den Inhalt (`git diff <fremd> <eigen> -- <datei>` leer)
+statt über Zeitstempel.
+Dritter Beleg derselben Wurzel in derselben Stunde, ohne git: eine
+bewegte mtime als Grenzverletzung gelesen, dann zwei RUHENDE mtimes
+als Lane-Stillstand gelesen (die Lane arbeitete durch). Ein
+Zustandsabruf beantwortet nie, ob ein EREIGNIS stattfand, und mtime
+beobachtet einen Schreibvorgang, nie eine Änderung und nie einen
+Schreiber.
+Vorformulierter Regel-Text, §1 Base-Commit-Klausel und §4
+Dispatcher-Pflichten, in dessen Register: **Der Census ist am
+Integrations-Seam ZU WIEDERHOLEN und liest den VERLAUF, nicht den
+Zustand: `git log <base>..HEAD` (nicht `origin/main..HEAD` — origin
+wandert mit einem pushenden Mitschreiber) plus `git log -1
+--format=%cr`. Jeder Commit darin wird EINZELN beansprucht; ein
+unbeanspruchter hält die Integration an. Und: die Abwesenheit einer
+Änderung wird nie gegen HEAD festgestellt, sondern gegen den im Brief
+GENANNTEN Basis-Commit — ein unveränderlicher Anker, während HEAD
+einer ist, den der Mitschreiber bewegt.** Die vorhandene Census-Regel
+bleibt wie sie ist; sie deckt den Zeitpunkt, dieser Zusatz die
+Strecke.
+Konsument + Abfluss-Seam: der Wartungs-Pass unter der
+OBSERVATIONS-Quote; Zielstellen §1 (Base-Commit-Klausel) und §4
+(Verify-in-the-artifact-Pflicht). Nichts ging verloren — die
+Pathspec-Form hielt, der Fremd-Commit reiste nicht unter der Nachricht
+der Lane mit; die Klasse kostete Diagnose-Zeit und eine an den
+Operator ausgelieferte Entwarnung, die falsch war.
+
 ## 2026-08-07 — dispositions-as-brief graduated; two §1 note candidates
 
 **ANGEWANDT (vor diesem Pass)** — Kandidat 2 ist nach §1
@@ -2445,3 +2490,48 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   WARN (beide Arme muessen differieren). KONSUMENT + ABFLUSS-NAHT:
   naechster Bau am `writer-reservation-gate` bzw. naechste
   dispatch-guards-Maintenance-Runde.
+  **n=3 am 2026-08-19** (cache-fix-Desk, Lane `sonnet-backlog-close-home`,
+  Commit `d2f9520` in `~/dev/Gunther-Schulz/dotfiles`): der WARN nannte
+  `~/dev/vendor/claude-code-cache-fix` — die PRIMAERE cwd der
+  dispatchenden Session — als umstrittene Arbeitskopie, waehrend der
+  Commit korrekt per Pathspec in dotfiles lag. Dritte Instanz, dritte
+  RICHTUNG derselben Wurzel: die beiden 08-18-Faelle liefen aus einer
+  dotfiles-Session in ein Fremdrepo, dieser aus einer cache-fix-Session
+  in dotfiles — die Ziel-Aufloesung folgt also der Session, nicht dem
+  Kommando, unabhaengig davon, welches Repo welche Rolle hat. Der
+  vorformulierte Fix oben deckt diesen Fall unveraendert ab; nichts
+  daran zu aendern, nur der Zaehler und die Fundstelle.
+  Was die Klasse hier zusaetzlich kostet, und es ist das Argument fuer
+  den Bau statt fuer weiteres Zaehlen: der Agent hat den WARN korrekt
+  als fehlgeleitet gemeldet und NICHT gehandelt — dreimal in Folge hat
+  jetzt die Disziplin des Executors den Waechter aufgefangen, statt
+  umgekehrt. Ein Waechter, der auf seine eigene Ignorierung angewiesen
+  ist, um nicht zu schaden, ist die feuert-auf-Nicht-Defekt-Form im
+  Endstadium.
+
+## 2026-08-20 — native worktree isolation cuts the SESSION repo; sibling-repo dispatch from a non-git cwd fails loudly at spawn
+
+- **Incident + basis:** a dispatcher whose cwd was a non-git project
+  folder dispatched a build targeting a sibling repo (dotfiles) with
+  `isolation: "worktree"` — harness error "Cannot create agent
+  worktree: not in a git repository", one retry cost. The
+  agent-dispatch PreToolUse advisory already documents the class
+  (its classes 1–3: session-repo cut, sibling-repo provisioning,
+  sibling-under-isolation reclaim hazard) — but it arrives WITH the
+  call it would have prevented, so it can only inform the retry,
+  never the first attempt.
+- **Class:** brief-composition guidance gap (SKILL.md §1 worktree
+  recipe) — the recipe's "prefer native isolation" sentence does not
+  say WHOSE repo native isolation cuts.
+- **Pre-formulated fix text** (for §1, the worktree recipe's
+  harness note): "Native isolation cuts a worktree of the SESSION's
+  repo (the cwd), never the brief's target repo — from a non-git
+  cwd it fails at spawn, and for a SIBLING-repo brief it is the
+  wrong isolation even when it succeeds: provision the target copy
+  yourself, or dispatch without isolation under shared-copy
+  discipline."
+- **Consumer + drain seam:** the maintenance pass (quota-triggered)
+  applies or discards; consumer of the fix is any dispatcher
+  composing a sibling-repo brief. Note: this file carried a foreign
+  uncommitted entry at append time — this entry is left uncommitted
+  with it (shared-file commit serialization).
