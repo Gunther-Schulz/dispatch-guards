@@ -50,33 +50,6 @@ are dropped with a one-line reason.
   `_register_entries` and its container-shape bite red-proven at this
   desk against the bare-dict implementation.
 
-- **RESIDUE 2026-08-20 — the machine doctor runs guard bites without
-  pinning `XDG_DATA_HOME`, so any bite that fires writes into the real
-  fire log. The realizing write is in dotfiles, which this copy does
-  not own.** Recorded here because the finding is ours and the fix is
-  not, and an obligation whose write boundary sits at another desk
-  stays named by the sender or it falls between the two.
-  The incident: two new bites in this repo appended 33 records to
-  `~/.local/share/claude/dispatch-guards-fires.jsonl`, 24 of them on a
-  lane that had never run against real work — corrupting the exact
-  instrument the warn→deny promotion reads. This repo's half is fixed
-  (per-bite `CLAUDE_DISPATCH_GUARDS_FIRELOG` pin plus an
-  `XDG_DATA_HOME` pin on the CLAUDE.md sweep loop, dispatched
-  2026-08-20). That half protects THIS repo's verify block only.
-  What remains, and why it is not ours: `bootstrap/doctor.py`'s
-  `_hook_test_env` redirects `XDG_STATE_HOME` and nothing else
-  (verified by reading it — the assertions around it pin
-  `XDG_STATE_HOME` explicitly and no `XDG_DATA_HOME` appears). The
-  fire log resolves from `XDG_DATA_HOME`, so every doctor sweep across
-  every repo with a firing bite leaks records. Ours was the repo that
-  noticed; the exposure is machine-wide.
-  Owner: the dotfiles desk. Relayed to it 2026-08-20 as fact traffic.
-  **The check that would reveal it, and who runs it at close:** count
-  records in the fire log before and after a full doctor run; a
-  non-zero delta with null session ids is the leak. This desk runs
-  that check before its next release and re-reports if the delta is
-  still non-zero — the residue is not discharged by having named it.
-
 - **READY 2026-08-20 — `_dispatch_common.fire()` hardcodes
   `hookEventName: "PreToolUse"`, so the next non-PreToolUse lane that
   reaches for it ships a guard whose injection never lands.** Found by
@@ -732,6 +705,35 @@ are dropped with a one-line reason.
   plugin outside this farm.
 
 ## Done
+
+- 2026-08-20 — **the machine doctor leaked guard-bite fires into the
+  real fire log; found here, fixed in dotfiles, verified here.** Booked
+  as cross-repo RESIDUE the same day and discharged the same day.
+  The incident: two new bites in this repo appended 33 records to
+  `~/.local/share/claude/dispatch-guards-fires.jsonl`, 24 of them on a
+  lane that had never run against real work — corrupting the exact
+  instrument the warn→deny promotion reads. This repo's half (per-bite
+  `CLAUDE_DISPATCH_GUARDS_FIRELOG` pin plus an `XDG_DATA_HOME` pin on
+  the CLAUDE.md sweep loop) protects this repo's verify block only.
+  The machine-wide half was `bootstrap/doctor.py`'s `_hook_test_env`,
+  which redirected `XDG_STATE_HOME` and nothing else while the fire log
+  resolves from `XDG_DATA_HOME` — so every doctor sweep across every
+  repo with a firing bite leaked. Ours was the repo that noticed; the
+  exposure was machine-wide.
+  Fixed by the dotfiles desk (`818329c`: `XDG_DATA_HOME` and
+  `XDG_CACHE_HOME` pinned into the same throwaway root beside
+  `XDG_STATE_HOME`).
+  **Verified HERE by executing their function, not by booking their
+  report** — the peer's "done" is a claim like any other: called
+  `_hook_test_env(<temp root>)` and confirmed all three XDG roots
+  resolve inside the throwaway, then resolved the fire-log path under
+  that env and confirmed it is not the real log. Their own evidence
+  (full doctor run, record count 2380 before and after, delta 0) is
+  consistent with it and is theirs, not re-run here.
+  Standing check retained for the next release, since a fix verified
+  once is not a fix verified forever: fire-log record count before and
+  after a full doctor run; a non-zero delta with null session ids is
+  the leak returning.
 
 - 2026-08-20 — **0.11.3 release-train grab-bag** (booked READY
   2026-08-17): both halves shipped in `78ea1e5`, which the 0.11.3
