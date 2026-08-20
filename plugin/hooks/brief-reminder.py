@@ -474,6 +474,109 @@ def check(payload: dict) -> str | None:
     return reminder_text()
 
 
+def _register_path() -> str:
+    """Resolves the §6 CLASS register path — never the per-repo
+    READINESS.json, which carries only exclusions/deviations (§6).
+    `CLAUDE_DISPATCH_GUARDS_REGISTER` overrides, mirroring the
+    `_dispatch_common` idiom (fire-log/config env overrides): bites
+    and the bench point this at a fixture or a nonexistent path
+    without ever touching the operator's real
+    `~/.claude/readiness.json`."""
+    env = os.environ.get("CLAUDE_DISPATCH_GUARDS_REGISTER")
+    if env:
+        return os.path.expanduser(env)
+    return os.path.expanduser("~/.claude/readiness.json")
+
+
+_REGISTER_ROW_MAX = 100
+_REGISTER_ABSENT_LINE = (
+    "Tier-readiness register (dispatch skill \xa76): no readiness "
+    "register was readable at {path} — treat as NO certified "
+    "classes verified, not as a clean register.")
+_REGISTER_EMPTY_LINE = (
+    "Tier-readiness register (dispatch skill \xa76): register at "
+    "{path} readable, zero certified classes.")
+
+
+def _register_row(class_id: str, entry) -> str:
+    """One `id \xb7 tier \xb7 status \xb7 klasse` row (BACKLOG
+    2026-08-11 entry's row format), truncated to _REGISTER_ROW_MAX so
+    a long klasse one-liner cannot blow up the block. A malformed
+    ENTRY (not a dict, or missing a subfield) degrades that field to
+    '?' rather than raising — only a malformed/unreadable FILE
+    degrades to the explicit absence line; one bad entry must not
+    blank the whole register consult."""
+    if not isinstance(entry, dict):
+        entry = {}
+    tier = entry.get("tier") or "?"
+    status = entry.get("status") or "?"
+    klasse = entry.get("klasse") or ""
+    head = f"{class_id} \xb7 {tier} \xb7 {status} \xb7 "
+    row = head + klasse
+    if len(row) <= _REGISTER_ROW_MAX:
+        return row
+    budget = max(_REGISTER_ROW_MAX - len(head) - 1, 0)
+    return head + klasse[:budget] + "…"
+
+
+def _register_entries(data) -> list | None:
+    """Extracts the class-entry list from a parsed register document,
+    or None if the document's shape is not the register's.
+
+    The real, deployed global register (`dotfiles/claude/readiness.json`,
+    read directly to ground this function — no schema fixture exists
+    in this repo or in §6's prose) wraps its entries in a top-level
+    object under a `prozesse` (German: "processes") key, each entry
+    carrying its OWN `id` field — never a bare dict keyed by class id,
+    which was this function's first (unverified) shape and would have
+    rendered the wrapper's own metadata keys (`_hinweis`,
+    `schema_version`, `lineup_stand`) as if they were classes. §6's
+    prose ("one entry per class with target tier, status, probe
+    evidence, fingerprint") describes the ENTRY fields, not the
+    container — this is the container, confirmed against the one real
+    instance rather than assumed."""
+    if not isinstance(data, dict):
+        return None
+    entries = data.get("prozesse")
+    if not isinstance(entries, list):
+        return None
+    return entries
+
+
+def register_lines(payload: dict) -> list[str]:
+    """The §6 tier-readiness register's own rows, in front of the
+    dispatcher's eyes at the one moment the tier choice is made
+    (BACKLOG 2026-08-11 entry — the register consult otherwise has no
+    mechanism at the moment it is owed). Scoped like the reminder
+    line itself: Agent/Task dispatches only.
+
+    Informational only: never a deny, never a predicate over the
+    brief text — the hook cannot know the work's class, and guessing
+    one would be the false-fire class the corpus forbids. Absent,
+    unreadable, or malformed register -> one explicit line, never
+    silence and never an empty block: a missing register that renders
+    as nothing reads as "no certified classes", the
+    could-not-verify-as-verified failure the entry names. Malformed
+    JSON, or JSON that parses but is not the register's own
+    `{"prozesse": [...]}` shape (see _register_entries), takes the
+    same absence line — both are the same could-not-verify."""
+    if payload.get("tool_name") not in ("Agent", "Task"):
+        return []
+    path = _register_path()
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError, ValueError):
+        return [_REGISTER_ABSENT_LINE.format(path=path)]
+    entries = _register_entries(data)
+    if entries is None:
+        return [_REGISTER_ABSENT_LINE.format(path=path)]
+    if not entries:
+        return [_REGISTER_EMPTY_LINE.format(path=path)]
+    return [_register_row(e.get("id") or "?" if isinstance(e, dict)
+                          else "?", e) for e in entries]
+
+
 def worktree_advisory_text() -> str:
     return (
         "Worktree isolation — base advisory: harness-cut worktrees have "
@@ -538,9 +641,10 @@ def main() -> int:
     if missing_commit_plan(payload):
         fire(missing_commit_plan_warn_text(), source=_SOURCE,
              payload=payload, default_mode="warn")
-    # One additionalContext field per hook call: the advisory rides
-    # the reminder line rather than replacing it.
+    # One additionalContext field per hook call: the advisory and the
+    # register rows ride the reminder line rather than replacing it.
     lines = [t for t in (check(payload), worktree_advisory(payload)) if t]
+    lines += register_lines(payload)
     if lines:
         print(json.dumps({
             "hookSpecificOutput": {
@@ -1183,6 +1287,206 @@ if __name__ == "__main__":
         # (iii) the advisory never blocks and never displaces the
         # existing reminder — both lanes answer on the same call
         assert check(wt_call) is not None
+
+        # ── Tier-readiness register consult (register_lines) ───────
+        # BACKLOG 2026-08-11 entry: "the §6 register consult has no
+        # mechanism at the moment it is owed". Env override mirrors
+        # _dispatch_common's fire-log/config idiom so this suite (and
+        # the bench) never reads the operator's real
+        # ~/.claude/readiness.json. Reset after each case so a bite
+        # left pointing at a fixture cannot leak into the next.
+        _reg_tmpdir = _tf.mkdtemp()
+        _agent_call = {"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X."}}
+
+        def _with_register(path, call=None):
+            # `call or _agent_call` would treat an EMPTY dict call
+            # (a real scope-negative case below) as falsy and swap in
+            # the default payload — the sentinel must be identity,
+            # not truthiness.
+            if call is None:
+                call = _agent_call
+            os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"] = path
+            try:
+                return register_lines(call)
+            finally:
+                del os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"]
+
+        # Fixture shape is the REAL global register's own shape
+        # (`dotfiles/claude/readiness.json`, read directly to ground
+        # _register_entries — no schema fixture exists anywhere in
+        # THIS repo or in §6's prose): a top-level object wrapping the
+        # class list under `prozesse`, each entry carrying its own
+        # `id` — never a bare dict keyed by class id, which was this
+        # suite's first (unverified) fixture shape and which the real
+        # file's own metadata keys (`_hinweis`, `schema_version`,
+        # `lineup_stand`) would have been misread as class ids under.
+        def _prozesse(*entries):
+            return {"schema_version": 2, "prozesse": list(entries)}
+
+        # (i) THE red-first case: a fixture register carrying two
+        # classes must show both rows. Red-proven against the
+        # pre-change module (a copy of the whole hooks dir at the
+        # parent commit, run as a live subprocess against this exact
+        # payload+env): it showed NEITHER row, because the predicate
+        # did not exist at all — this hook read no register.
+        _two_class_reg = os.path.join(_reg_tmpdir, "readiness.json")
+        with open(_two_class_reg, "w") as f:
+            json.dump(_prozesse(
+                {"id": "enumeration-fixed-schema",
+                 "tier": "haiku", "status": "ready",
+                 "klasse": "fixed-schema enumeration over a "
+                           "closed value set"},
+                {"id": "guard-checker-bau",
+                 "tier": "sonnet", "status": "eval-open",
+                 "klasse": "guard/checker build against the "
+                           "fire-log corpus"},
+            ), f)
+        _two_rows = _with_register(_two_class_reg)
+        assert len(_two_rows) == 2, _two_rows
+        assert any("enumeration-fixed-schema" in r for r in _two_rows)
+        assert any("haiku" in r for r in _two_rows)
+        assert any("ready" in r for r in _two_rows)
+        assert any("guard-checker-bau" in r for r in _two_rows)
+        assert any("sonnet" in r for r in _two_rows)
+        assert any("eval-open" in r for r in _two_rows)
+
+        # (ii) register path pointing at a nonexistent file -> the
+        # explicit absence line, not an empty block.
+        _gone_reg = os.path.join(_reg_tmpdir, "gone.json")
+        _absent = _with_register(_gone_reg)
+        assert len(_absent) == 1, _absent
+        assert "no readiness register was readable" in _absent[0]
+        assert _gone_reg in _absent[0]
+
+        # (iii) malformed JSON at a real path -> same absence line
+        # class as (ii), never a crash and never an empty block.
+        _bad_reg = os.path.join(_reg_tmpdir, "bad.json")
+        with open(_bad_reg, "w") as f:
+            f.write("{not valid json")
+        _malformed = _with_register(_bad_reg)
+        assert len(_malformed) == 1, _malformed
+        assert "no readiness register was readable" in _malformed[0]
+
+        # (iv) a JSON file whose top level is not an object (a list,
+        # a bare string) is the same could-not-verify as malformed.
+        _list_reg = os.path.join(_reg_tmpdir, "list.json")
+        with open(_list_reg, "w") as f:
+            json.dump(["not", "a", "dict"], f)
+        _list_result = _with_register(_list_reg)
+        assert len(_list_result) == 1, _list_result
+        assert "no readiness register was readable" in _list_result[0]
+
+        # (iv-b) THE regression this fix closes: a top-level OBJECT
+        # (so isinstance-dict passes) whose `prozesse` key is absent
+        # or not a list — exactly the real global register's own
+        # metadata-only keys (_hinweis, schema_version, lineup_stand)
+        # under the FIRST, unverified fixture shape, which read those
+        # keys as class ids. Must be the absence line, never garbage
+        # rows built from wrapper metadata.
+        _no_prozesse_reg = os.path.join(_reg_tmpdir, "no-prozesse.json")
+        with open(_no_prozesse_reg, "w") as f:
+            json.dump({"_hinweis": "metadata, not a class",
+                      "schema_version": 2, "lineup_stand": "2026-07-31"}, f)
+        _no_prozesse = _with_register(_no_prozesse_reg)
+        assert len(_no_prozesse) == 1, _no_prozesse
+        assert "no readiness register was readable" in _no_prozesse[0]
+        assert "_hinweis" not in _no_prozesse[0]
+        assert "schema_version" not in _no_prozesse[0]
+        _prozesse_not_list_reg = os.path.join(
+            _reg_tmpdir, "prozesse-not-list.json")
+        with open(_prozesse_not_list_reg, "w") as f:
+            json.dump({"prozesse": "not-a-list"}, f)
+        assert "no readiness register was readable" in _with_register(
+            _prozesse_not_list_reg)[0]
+
+        # (v) a valid but EMPTY register (zero certified classes) is
+        # a different answer from could-not-verify — it must not
+        # collapse to silence either, or an empty register reads
+        # exactly like an absent one.
+        _empty_reg = os.path.join(_reg_tmpdir, "empty.json")
+        with open(_empty_reg, "w") as f:
+            json.dump(_prozesse(), f)
+        _empty_result = _with_register(_empty_reg)
+        assert len(_empty_result) == 1, _empty_result
+        assert "zero certified classes" in _empty_result[0]
+        assert "no readiness register was readable" not in _empty_result[0]
+
+        # (vi) a malformed ENTRY (not itself a dict, inside `prozesse`)
+        # degrades that row to '?' fields rather than raising or
+        # blanking the whole register.
+        _bad_entry_reg = os.path.join(_reg_tmpdir, "bad-entry.json")
+        with open(_bad_entry_reg, "w") as f:
+            json.dump(_prozesse(
+                "not-a-dict",
+                {"id": "fine-class", "tier": "opus", "status": "ready"},
+            ), f)
+        _mixed = _with_register(_bad_entry_reg)
+        assert len(_mixed) == 2, _mixed
+        assert any(r.startswith("? \xb7 ? \xb7 ? \xb7") for r in _mixed), \
+            _mixed
+        assert any(r.startswith("fine-class \xb7 opus \xb7 ready \xb7")
+                  for r in _mixed), _mixed
+
+        # (vi-b) an entry missing `id` (but a real dict) also degrades
+        # to '?' for the id column alone, not a crash.
+        _no_id_reg = os.path.join(_reg_tmpdir, "no-id.json")
+        with open(_no_id_reg, "w") as f:
+            json.dump(_prozesse(
+                {"tier": "opus", "status": "ready", "klasse": "no id"}), f)
+        _no_id = _with_register(_no_id_reg)
+        assert len(_no_id) == 1
+        assert _no_id[0].startswith("? \xb7 opus \xb7 ready \xb7"), _no_id
+
+        # (vii) row truncation: a long klasse one-liner is cut, the
+        # whole row stays <= _REGISTER_ROW_MAX, and id/tier/status
+        # survive intact.
+        _long_reg = os.path.join(_reg_tmpdir, "long.json")
+        with open(_long_reg, "w") as f:
+            json.dump(_prozesse({
+                "id": "a-class", "tier": "sonnet", "status": "ready",
+                "klasse": "x" * 300}), f)
+        _long_rows = _with_register(_long_reg)
+        assert len(_long_rows) == 1
+        assert len(_long_rows[0]) <= _REGISTER_ROW_MAX, len(_long_rows[0])
+        assert _long_rows[0].startswith("a-class \xb7 sonnet \xb7 ready \xb7")
+
+        # (viii) scope: register_lines is silent on non-Agent/Task
+        # tools, and on parse-garbage payloads, whatever the register
+        # holds — it must never be the ONLY thing that fires.
+        assert _with_register(_two_class_reg,
+                              {"tool_name": "Bash",
+                               "tool_input": {"command": "ls"}}) == []
+        assert _with_register(_two_class_reg, {}) == []
+        # Task tool is in scope, same as check()'s own gating
+        assert len(_with_register(_two_class_reg,
+                                  {"tool_name": "Task",
+                                   "tool_input": {}})) == 2
+
+        # (ix) the env override is what points at a fixture at all —
+        # without it, the default path is the operator's real file,
+        # never touched by this suite (isolation, mirrors
+        # _dispatch_common's fire-log/config idiom).
+        assert "CLAUDE_DISPATCH_GUARDS_REGISTER" not in os.environ
+        assert _register_path() == os.path.expanduser(
+            "~/.claude/readiness.json")
+
+        # (x) integration: main()'s additionalContext carries the
+        # register rows alongside the existing reminder line, on a
+        # real end-to-end Agent call via the module's public check()
+        # + register_lines() composition (main() itself exits the
+        # process, so this exercises the same two functions it
+        # composes rather than forking a subprocess here — the
+        # subprocess-level proof is the red/green probe already run
+        # for this change, pasted in the report).
+        os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"] = _two_class_reg
+        _combined = [t for t in (check(_agent_call),
+                                 worktree_advisory(_agent_call)) if t]
+        _combined += register_lines(_agent_call)
+        del os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"]
+        assert check(_agent_call) in _combined
+        assert any("enumeration-fixed-schema" in c for c in _combined)
+        assert any("guard-checker-bau" in c for c in _combined)
 
         print("brief-reminder: all tests passed")
         sys.exit(0)
