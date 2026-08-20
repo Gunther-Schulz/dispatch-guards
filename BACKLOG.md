@@ -287,6 +287,35 @@ are dropped with a one-line reason.
   needs a false-fire measurement over the same 303 transcripts before
   it ships — that corpus is now the standing instrument for this
   entry, and it is cheap to re-run.
+  **THREE BOUNDS ON THAT NUMBER, and they are part of the instrument,
+  not footnotes to it.** "15 of 303" is a FLOOR, not a count, and a
+  later session reading it as the total would grade a repaired lane
+  against a number that was never the total:
+  (1) It is `check()` evaluated at each transcript's FINAL state only
+      — the state a Stop hook sees at the last turn. Any EARLIER turn
+      whose window carried enough assistant text after the last
+      user-role event could fire too, in a transcript already carrying
+      the marker. That question was never asked. The per-turn form is
+      the real count: replay each transcript prefix-wise at every
+      point where an assistant event is followed by no further
+      user-role event in the turn, and count distinct firing turns.
+      NOT RUN — named as the gap rather than bridged, because the
+      revert decision does not turn on it: the floor already refutes
+      "near zero", and a floor understates, so the direction is
+      conservative.
+  (2) It counts transcripts under `~/.claude/projects` on ONE machine.
+      Per-machine floor, not a population figure.
+  (3) It was taken against `0b666fc`'s marker predicate. After a
+      redesign the number is NOT comparable — it becomes a new
+      baseline, and comparing across predicates would be the
+      transfer-test error (a measurement carried outside the
+      mechanism that produced it).
+  So the instrument is: the corpus plus the per-turn method, re-run
+  from scratch against whatever predicate is proposed, with its own
+  fresh baseline. Not the number 15.
+  Basis for the bounds: the same fresh-context reviewer, sent as a
+  follow-up after its report — it named the scope limit on its own
+  measurement unprompted, which is why the number is usable at all.
   Second missing piece: a correct ending-turn definition. Whatever it
   becomes, it must be validated against a REAL transcript shape, not
   a hand-built fixture — the fixture omitting the tool_result is what
