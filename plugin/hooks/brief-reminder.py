@@ -496,6 +496,9 @@ _REGISTER_ABSENT_LINE = (
 _REGISTER_EMPTY_LINE = (
     "Tier-readiness register (dispatch skill \xa76): register at "
     "{path} readable, zero certified classes.")
+_REGISTER_HEADER_LINE = (
+    "Tier-readiness register (dispatch skill \xa76): id \xb7 tier "
+    "\xb7 status \xb7 klasse")
 
 
 def _register_row(class_id: str, entry) -> str:
@@ -559,7 +562,12 @@ def register_lines(payload: dict) -> list[str]:
     could-not-verify-as-verified failure the entry names. Malformed
     JSON, or JSON that parses but is not the register's own
     `{"prozesse": [...]}` shape (see _register_entries), takes the
-    same absence line — both are the same could-not-verify."""
+    same absence line — both are the same could-not-verify. A
+    POPULATED register additionally gets a header row
+    (_REGISTER_HEADER_LINE) naming the column vocabulary ahead of the
+    bare `id · tier · status · klasse` rows — the absence and empty
+    lines are already self-labelled; the populated case previously
+    was not."""
     if payload.get("tool_name") not in ("Agent", "Task"):
         return []
     path = _register_path()
@@ -573,8 +581,9 @@ def register_lines(payload: dict) -> list[str]:
         return [_REGISTER_ABSENT_LINE.format(path=path)]
     if not entries:
         return [_REGISTER_EMPTY_LINE.format(path=path)]
-    return [_register_row(e.get("id") or "?" if isinstance(e, dict)
-                          else "?", e) for e in entries]
+    return [_REGISTER_HEADER_LINE] + [
+        _register_row(e.get("id") or "?" if isinstance(e, dict)
+                     else "?", e) for e in entries]
 
 
 def worktree_advisory_text() -> str:
@@ -1343,7 +1352,8 @@ if __name__ == "__main__":
                            "fire-log corpus"},
             ), f)
         _two_rows = _with_register(_two_class_reg)
-        assert len(_two_rows) == 2, _two_rows
+        assert len(_two_rows) == 3, _two_rows  # header + 2 class rows
+        assert _two_rows[0] == _REGISTER_HEADER_LINE, _two_rows
         assert any("enumeration-fixed-schema" in r for r in _two_rows)
         assert any("haiku" in r for r in _two_rows)
         assert any("ready" in r for r in _two_rows)
@@ -1422,7 +1432,8 @@ if __name__ == "__main__":
                 {"id": "fine-class", "tier": "opus", "status": "ready"},
             ), f)
         _mixed = _with_register(_bad_entry_reg)
-        assert len(_mixed) == 2, _mixed
+        assert len(_mixed) == 3, _mixed  # header + 2 rows
+        assert _mixed[0] == _REGISTER_HEADER_LINE, _mixed
         assert any(r.startswith("? \xb7 ? \xb7 ? \xb7") for r in _mixed), \
             _mixed
         assert any(r.startswith("fine-class \xb7 opus \xb7 ready \xb7")
@@ -1435,8 +1446,9 @@ if __name__ == "__main__":
             json.dump(_prozesse(
                 {"tier": "opus", "status": "ready", "klasse": "no id"}), f)
         _no_id = _with_register(_no_id_reg)
-        assert len(_no_id) == 1
-        assert _no_id[0].startswith("? \xb7 opus \xb7 ready \xb7"), _no_id
+        assert len(_no_id) == 2  # header + 1 row
+        assert _no_id[0] == _REGISTER_HEADER_LINE, _no_id
+        assert _no_id[1].startswith("? \xb7 opus \xb7 ready \xb7"), _no_id
 
         # (vii) row truncation: a long klasse one-liner is cut, the
         # whole row stays <= _REGISTER_ROW_MAX, and id/tier/status
@@ -1447,9 +1459,10 @@ if __name__ == "__main__":
                 "id": "a-class", "tier": "sonnet", "status": "ready",
                 "klasse": "x" * 300}), f)
         _long_rows = _with_register(_long_reg)
-        assert len(_long_rows) == 1
-        assert len(_long_rows[0]) <= _REGISTER_ROW_MAX, len(_long_rows[0])
-        assert _long_rows[0].startswith("a-class \xb7 sonnet \xb7 ready \xb7")
+        assert len(_long_rows) == 2  # header + 1 row
+        assert _long_rows[0] == _REGISTER_HEADER_LINE, _long_rows
+        assert len(_long_rows[1]) <= _REGISTER_ROW_MAX, len(_long_rows[1])
+        assert _long_rows[1].startswith("a-class \xb7 sonnet \xb7 ready \xb7")
 
         # (viii) scope: register_lines is silent on non-Agent/Task
         # tools, and on parse-garbage payloads, whatever the register
@@ -1461,7 +1474,7 @@ if __name__ == "__main__":
         # Task tool is in scope, same as check()'s own gating
         assert len(_with_register(_two_class_reg,
                                   {"tool_name": "Task",
-                                   "tool_input": {}})) == 2
+                                   "tool_input": {}})) == 3  # header + 2
 
         # (ix) the env override is what points at a fixture at all —
         # without it, the default path is the operator's real file,
@@ -1471,22 +1484,70 @@ if __name__ == "__main__":
         assert _register_path() == os.path.expanduser(
             "~/.claude/readiness.json")
 
-        # (x) integration: main()'s additionalContext carries the
-        # register rows alongside the existing reminder line, on a
-        # real end-to-end Agent call via the module's public check()
-        # + register_lines() composition (main() itself exits the
-        # process, so this exercises the same two functions it
-        # composes rather than forking a subprocess here — the
-        # subprocess-level proof is the red/green probe already run
-        # for this change, pasted in the report).
-        os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"] = _two_class_reg
-        _combined = [t for t in (check(_agent_call),
-                                 worktree_advisory(_agent_call)) if t]
-        _combined += register_lines(_agent_call)
-        del os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"]
-        assert check(_agent_call) in _combined
-        assert any("enumeration-fixed-schema" in c for c in _combined)
-        assert any("guard-checker-bau" in c for c in _combined)
+        # (x) LIVENESS NET: main() actually WIRES register_lines()
+        # into its emitted additionalContext, exercised END TO END as
+        # a real subprocess (stdin payload -> stdout JSON), the way
+        # tools/replay-bench.py's run_case() does it — never a
+        # hand-recomposition of main()'s pieces.
+        #
+        # Root cause this replaces (review 861241a..286484a, finding
+        # 4): the PRIOR version of this bite called check() +
+        # worktree_advisory() + register_lines() directly and
+        # composed `_combined` itself, so deleting
+        # `lines += register_lines(payload)` from main() left every
+        # net green — the bench (61/61), the bench's own selftest,
+        # this suite's former (x), and doc-drift — because none of
+        # them ran main()'s actual wiring, only its pieces. Red-proven
+        # by deleting that line from main() and re-running this bite
+        # (reported alongside the implementation, restored after).
+        #
+        # A corpus 'context'-expecting payload is used deliberately: a
+        # non-compliant brief (missing tail/sections) is DENIED before
+        # the register block ever renders — a trap this very dispatch
+        # fell into while first drafting a synthetic payload by hand,
+        # so the payload is read from the real corpus instead.
+        import subprocess as _sp
+        _guards_corpus = os.path.normpath(os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            "..", "..", "tools", "corpus", "guards.jsonl"))
+        _e2e_case = None
+        with open(_guards_corpus, encoding="utf-8") as _cf:
+            for _cline in _cf:
+                _cline = _cline.strip()
+                if not _cline or _cline.startswith("#"):
+                    continue
+                _cc = json.loads(_cline)
+                if (_cc.get("hook") == "brief-reminder.py"
+                        and _cc.get("expect") == "context"
+                        and "payload" in _cc
+                        and "cwd" not in _cc.get("payload", {})):
+                    _e2e_case = _cc
+                    break
+        assert _e2e_case is not None, (
+            "no cwd-free brief-reminder.py 'context' corpus case found "
+            "— cannot build the liveness bite")
+        _e2e_reg = os.path.join(_tf.mkdtemp(), "readiness.json")
+        with open(_e2e_reg, "w") as f:
+            json.dump(_prozesse({
+                "id": "LIVENESS-NET-SENTINEL", "tier": "haiku",
+                "status": "ready", "klasse": "end-to-end wiring probe"}), f)
+        _e2e_env = dict(os.environ)
+        _e2e_env["CLAUDE_DISPATCH_GUARDS_REGISTER"] = _e2e_reg
+        _e2e_env["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+        _e2e_env["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = os.path.join(
+            _tf.mkdtemp(), "fires.jsonl")
+        _e2e_proc = _sp.run(
+            [sys.executable, os.path.realpath(__file__)],
+            input=json.dumps(_e2e_case["payload"]), env=_e2e_env,
+            capture_output=True, text=True)
+        assert _e2e_proc.returncode == 0, _e2e_proc
+        _e2e_out = json.loads(_e2e_proc.stdout)
+        _e2e_ctx = _e2e_out["hookSpecificOutput"]["additionalContext"]
+        # the reminder line AND the register block both ride the one
+        # additionalContext field main() emits
+        assert "brief check" in _e2e_ctx, _e2e_ctx
+        assert _REGISTER_HEADER_LINE in _e2e_ctx, _e2e_ctx
+        assert "LIVENESS-NET-SENTINEL" in _e2e_ctx, _e2e_ctx
 
         print("brief-reminder: all tests passed")
         sys.exit(0)

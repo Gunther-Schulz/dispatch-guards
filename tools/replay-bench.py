@@ -17,9 +17,11 @@ pair), and its end-to-end coverage lives inside its own `--test`,
 which can seed that state. The bench never seeds state.
 
 Isolation: every run pins CLAUDE_DISPATCH_GUARDS_CONFIG,
-CLAUDE_DISPATCH_GUARDS_FIRELOG and CLAUDE_DISPATCH_GUARDS_CLAIMS into
-a per-run temp dir, so a bench run never reads the site config and
-never appends to the real fire log or claims store.
+CLAUDE_DISPATCH_GUARDS_FIRELOG, CLAUDE_DISPATCH_GUARDS_CLAIMS and
+CLAUDE_DISPATCH_GUARDS_REGISTER into a per-run temp dir, so a bench
+run never reads the site config or the operator's real
+~/.claude/readiness.json, and never appends to the real fire log or
+claims store.
 
 Corpus format (JSONL, one case per line):
 
@@ -91,8 +93,8 @@ def classify(returncode: int, stdout: str) -> str:
     return "error"
 
 
-def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str]:
-    """Run one corpus case; return (observed_kind, detail)."""
+def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str, str]:
+    """Run one corpus case; return (observed_kind, detail, raw_stdout)."""
     hook = HOOKS / case["hook"]
     if not hook.exists():
         return "error", f"no such hook: {hook}"

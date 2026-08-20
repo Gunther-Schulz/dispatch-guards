@@ -92,11 +92,21 @@ python3 tools/replay-bench.py
 python3 tools/replay-bench.py --test
 
 # 2. Per-guard bite-tests — the function-arm net, and the only net for
-#    the six guards the bench does not cover.
-for h in plugin/hooks/*.py; do
-  [ "$(basename $h)" = "_dispatch_common.py" ] && continue
-  python3 "$h" --test || echo "FAILED: $h"
-done
+#    the six guards the bench does not cover. Run in a subshell that
+#    redirects XDG_DATA_HOME to a fresh temp dir: fire_log_path()
+#    falls back to $XDG_DATA_HOME/claude/dispatch-guards-fires.jsonl
+#    whenever a bite calls deny()/fire() without pinning
+#    CLAUDE_DISPATCH_GUARDS_FIRELOG itself — this is the belt-and-
+#    braces net for the bite someone forgets to pin (a per-bite pin
+#    protects the one remembered; this protects the one that is not),
+#    never a substitute for pinning it.
+(
+  export XDG_DATA_HOME="$(mktemp -d)"
+  for h in plugin/hooks/*.py; do
+    [ "$(basename $h)" = "_dispatch_common.py" ] && continue
+    python3 "$h" --test || echo "FAILED: $h"
+  done
+)
 
 # 3. The devbook-form detector's own tests.
 python3 plugin/skills/executor/scripts/check_devbook_form.py --test

@@ -308,10 +308,20 @@ if __name__ == "__main__":
         # 2026-08-11 — a Bash deny does not say that NOTHING in the
         # command ran; the compound-command case bites). One render
         # site in _dispatch_common (_deny_payload) serves every Bash
-        # gate, so the pair is exercised here — this file is swept by
-        # the doctor sweep, where _dispatch_common.py's own --test is
-        # not (excluded by basename). The pair is the point: a
-        # sentence that always appears proves nothing about the scan.
+        # gate, so the pair is exercised here — this bite belongs in
+        # THIS file because it walks the incident's own lane
+        # (push-claim-reminder's fused-push deny) end to end through
+        # deny_check() -> deny(), not because of any basename
+        # exclusion: the machine doctor's plugin-hooks sweep discovers
+        # bite files by CONTENT (the literal string "--test"), no
+        # basename filter — _dispatch_common.py's own --test block
+        # says so of itself ("Auto-discovered by the doctor's
+        # content-based --test scan like every guard file"), so it IS
+        # swept there. The basename exclusion is a property of THIS
+        # REPO's CLAUDE.md verify loop (step 2: `[ "$(basename $h)" =
+        # "_dispatch_common.py" ] && continue`), never of the doctor.
+        # The pair is the point: a sentence that always appears proves
+        # nothing about the scan.
         import contextlib
         import io
         from _dispatch_common import _CHAIN_NOTE, _deny_payload
@@ -333,21 +343,51 @@ if __name__ == "__main__":
 
         # done-criterion: the incident's own command shape, through the
         # real fused-push deny lane end to end (deny_check() -> deny()).
+        # deny() -> fire_log() appends a record via _dispatch_common's
+        # fire_log_path(), which resolves the OPERATOR's real fire log
+        # (~/.local/share/claude/dispatch-guards-fires.jsonl) unless
+        # CLAUDE_DISPATCH_GUARDS_FIRELOG is pinned — and this bite runs
+        # on every verify sweep, so an unpinned deny() here appended to
+        # the real log on every --test run (review 861241a..286484a,
+        # finding 3). Pin it to a per-bite temp path and assert the
+        # record lands THERE, never merely that deny() "ran".
         _incident_cmd = ("printf '\\nTrailer\\n' >> msg.txt "
                          "&& git commit -F msg.txt && git push")
         _incident_payload = {**main_s, "tool_input": {"command": _incident_cmd}}
         _incident_reason = deny_check(_incident_payload)
         assert _incident_reason is not None, _incident_cmd
-        _buf = io.StringIO()
-        with contextlib.redirect_stdout(_buf):
-            try:
-                deny(_incident_reason, source=_SOURCE,
-                     payload=_incident_payload)
-            except SystemExit:
-                pass
+        import tempfile as _itf
+        _incident_firelog = os.path.join(_itf.mkdtemp(), "fires.jsonl")
+        _prior_firelog_env = os.environ.get("CLAUDE_DISPATCH_GUARDS_FIRELOG")
+        os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = _incident_firelog
+        try:
+            _buf = io.StringIO()
+            with contextlib.redirect_stdout(_buf):
+                try:
+                    deny(_incident_reason, source=_SOURCE,
+                         payload=_incident_payload)
+                except SystemExit:
+                    pass
+        finally:
+            if _prior_firelog_env is None:
+                os.environ.pop("CLAUDE_DISPATCH_GUARDS_FIRELOG", None)
+            else:
+                os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = _prior_firelog_env
         _j = json.loads(_buf.getvalue())
         assert _CHAIN_NOTE in _j["hookSpecificOutput"][
             "permissionDecisionReason"], _j
+        # the fire record landed at the PINNED path — proves the pin
+        # is what routes it, not merely that some write happened
+        assert os.path.exists(_incident_firelog), (
+            "deny() did not write the fire record to the pinned "
+            "CLAUDE_DISPATCH_GUARDS_FIRELOG path — it is reading the "
+            "default resolution instead")
+        _incident_lines = [json.loads(ln) for ln in
+                           open(_incident_firelog, encoding="utf-8")]
+        assert len(_incident_lines) == 1, _incident_lines
+        assert _incident_lines[0]["guard"] == "push-claim-reminder", \
+            _incident_lines[0]
+        assert _incident_lines[0]["mode"] == "deny", _incident_lines[0]
 
         print("push-claim-reminder: all tests passed")
         sys.exit(0)
