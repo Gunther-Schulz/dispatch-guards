@@ -256,6 +256,11 @@ EXECUTION tail (any dispatch that writes):
     trailer is "present in the tree, not mine"; a `.git/config`
     write counts as a repo write, (g) what was NOT verified,
     (h) sources actually read, of those the brief named.
+    Every claim about something OUTSIDE your own work — a file you
+    did not write, a mechanism, another repo, a tool's behavior —
+    names the read that opened it, or carries "inferred,
+    unverified"; a recommendation resting on an unopened claim
+    carries the grade too.
     Drain your inbox before sending, and between parts of a
     multi-part report: every dispatcher message received up to send
     time is dispositioned or named as unhandled.
@@ -304,7 +309,12 @@ data-file provision, §3b):
     with it, skips included and dispositioned: a skipped check did
     not run, and a verdict resting on one is could-not-verify, not
     clean (source: §2 slot (b), carried into a lane that has no
-    slots). A missing decision, file, or value is surfaced
+    slots). Every claim about something OUTSIDE your own work — a
+    file you did not write, a mechanism, another repo, a tool's
+    behavior — names the read that opened it, or carries "inferred,
+    unverified"; a recommendation resting on an unopened claim
+    carries the grade too (source: §2, the report-provenance rule).
+    A missing decision, file, or value is surfaced
     as a gap, never bridged with a guess. No repo writes, no
     interim messages.
 
