@@ -2535,3 +2535,41 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   composing a sibling-repo brief. Note: this file carried a foreign
   uncommitted entry at append time — this entry is left uncommitted
   with it (shared-file commit serialization).
+
+## 2026-08-23 — the report-provenance rule reaches the dispatcher but not the executing agent: no clause in the pasted tails
+
+- **Incident + basis:** the §2 report form gained a per-line
+  provenance rule this session (forms.md §2 preamble) — every report
+  line asserting external state is OPENED or graded "inferred,
+  unverified". Its motivating incident: a lane's derived claim about
+  an unopened mechanism rode its measured claims' standing into a
+  recommendation the dispatcher relayed to the operator as fact. The
+  rule landed in §2's prose only. The dispatch skill declares its
+  consumer as "the dispatching session, any tier" (SKILL.md, consumer
+  line), and the vehicle that reaches the EXECUTING agent is the
+  pasted tail — which carries a compressed clause for every other §2
+  rule that binds the agent (skip disposition, trailer, inbox drain,
+  gap rule) and none for this one. Delivery walk, per skill-craft
+  review item 14: brief-composition → delivered (forms.md, hook-forced
+  load); tail paste → NOT delivered; agent composing its report →
+  delivered only via executor SKILL.md §7's pointer, i.e. only for an
+  agent running the executor skill; dispatcher grading → delivered.
+- **Class:** rule-delivery gap — a rule whose obligated party is
+  reached by a different artifact than the one the rule landed in.
+  Same shape as the channel and payload rules before they were
+  tailed ("have reached executing agents only as gate denials, at
+  doubled composition cost", forms.md §2).
+- **Pre-formulated fix text** (one line for the EXECUTION tail and
+  one for the READ-ONLY tail, at each block's HEAD per the
+  brief-tail boilerplate rule): "Any line about something you did
+  not write or run — a file, a mechanism, another repo, a tool's
+  behavior — names the read that opened it, or carries 'inferred,
+  unverified'. A recommendation resting on an unopened claim carries
+  it too."
+- **Consumer + drain seam:** the next dispatch-guards maintenance
+  round, or any pass already editing forms.md's tails; the tail edit
+  is a doc-drift subject (`check-doc-drift.py`, EXECUTION tail
+  fixture in `brief-reminder.py`), so the fixture moves with it.
+  Held out of the landing change deliberately: the brief that landed
+  the rule scoped placement to §2's preamble or a marked rule after
+  the slot list, and named the tails out of scope.
