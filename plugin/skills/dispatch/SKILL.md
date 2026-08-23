@@ -742,6 +742,27 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   disposition-ID set difference empty before the table closes:
   anneal-framework development-process.md practice 11; source
   label.)
+- **A claim is opened before it is REPEATED, not only before it is
+  merged.** The scope is what a dispatched agent or a peer asserts
+  about something OUTSIDE its own work — a file it did not write, a
+  mechanism, another repo, a tool's behavior — and any recommendation
+  resting on one: opened before it travels onward, by one command
+  that reads the thing, whose output goes with the claim. Unopened,
+  it travels WITH its grade ("the agent reports X, unverified") and
+  never as a finding. The trigger is RELAY, not integration:
+  repeating a claim to the operator, to another agent, or into a
+  booking puts it where someone acts on it, and one arriving ungraded
+  is indistinguishable from a measurement. What hides it is that a
+  report's measurements and its inferences arrive in ONE register, so
+  an inference inherits the standing of the measurements around it;
+  the tell is a claim whose evidence would have to name a file the
+  agent's write set never included. Refuting one is half the repair —
+  an agent re-asserts, unchanged, a claim nobody told it was wrong —
+  so the refutation goes back down the lane while it is still
+  resumable, carried by the close message above. §2's sending-side
+  grade makes this read cheap by naming what to open; this read is
+  what catches the ungraded claim from every sender not running that
+  form — a peer session, an older agent, a human report.
 - **Verdict stages route to tier ≥ producer, capped at the operator's
   reviewer default; under-bar output redoes one tier up.**
   Producer = the highest tier whose judgment is in the
