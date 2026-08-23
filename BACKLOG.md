@@ -760,6 +760,35 @@ are dropped with a one-line reason.
   waits. Trigger unchanged: an actual decision to publish/share the
   plugin outside this farm.
 
+
+- **READY — A file handoff between two live writers is evidenced by a commit
+  hash, never by a stated intention.** §1 states one-writer-per-working-copy
+  and says nothing about how a handoff is EVIDENCED, so the boundary is
+  carried by whatever the two parties say to each other.
+  Incident, 2026-08-23, measured: a dispatcher and its lane collided THREE
+  times in one day in the same two files. Each undertaking was sincere and
+  each was broken within the hour, including one made in a message whose own
+  text read "that region is untouched by me and is yours" — written while the
+  sender had the file open. Zero of the three were prevented by either
+  party's stated intention; all three were caught AFTER the fact by pathspec
+  commits plus per-hunk authorship checks, which is a property of how they
+  happened to commit rather than of any boundary. Cost: two drafts thrown
+  away, both written against regions already being changed.
+  The shape is the corpus's own anchored-trigger rule met at a two-writer
+  seam — an obligation with no artifact decays silently, and the moment a
+  directive is composed is exactly the moment its author has the file open.
+  Design decided: the party releasing a file COMMITS first and names the
+  HASH in the handoff message; the receiver verifies a clean tree before its
+  first edit. A clean tree and a named hash are observable; "I will not write
+  to it" is not. Where two lanes must run concurrently on one file and
+  neither can commit, the honest answer is that they cannot — serialize.
+  Verifier: brief-reminder's own bite tests — a handoff message naming no
+  hash draws the advisory; one naming a hash does not.
+  Done-criterion: the clause in §1 beside the one-writer rule, and its bite
+  pair green.
+  Write-set: `plugin/skills/dispatch/SKILL.md` §1 (write-boundaries region),
+  and `plugin/hooks/brief-reminder.py` if the advisory lane is built with it.
+
 ## Done
 
 - 2026-08-20 — **the machine doctor leaked guard-bite fires into the
