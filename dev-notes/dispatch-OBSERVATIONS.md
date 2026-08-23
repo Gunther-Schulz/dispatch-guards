@@ -2508,6 +2508,17 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   umgekehrt. Ein Waechter, der auf seine eigene Ignorierung angewiesen
   ist, um nicht zu schaden, ist die feuert-auf-Nicht-Defekt-Form im
   Endstadium.
+  **n=4 am 2026-08-23** (Lane `opus-report-provenance`, drei Commits
+  f6b7d94/554e36c/dbdd81a in `~/dev/Gunther-Schulz/dispatch-guards`):
+  der WARN nannte `/home/g/wan2gp` — die cwd der DISPATCHENDEN
+  Session, ein Repo, das dieser Commit gar nicht beruehrt. Vierte
+  Instanz, vierte Konstellation: Session-cwd Repo A, Kommando-cwd
+  Repo B, und weder das eine noch das andere ist dotfiles. Bestaetigt
+  die 08-19-Diagnose ohne Zusatz — die Ziel-Aufloesung folgt der
+  Session, nie dem Kommando —, und der Agent hat den WARN wieder
+  gemeldet statt gehandelt: viermal in Folge faengt die
+  Executor-Disziplin den Waechter auf. Am vorformulierten Fix oben
+  ist nichts zu aendern, nur Zaehler und Fundstelle.
 
 ## 2026-08-20 — native worktree isolation cuts the SESSION repo; sibling-repo dispatch from a non-git cwd fails loudly at spawn
 
