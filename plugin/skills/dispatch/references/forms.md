@@ -11,8 +11,29 @@ The brief prescribes this closing report; a dispatch without it is not
 done. **Precedence:** a project that defines its own report form (e.g. a
 project runbook's lettered sections) uses THAT form — this one is the
 default for projects without one, never a second form to fill in
-parallel. Every slot (a)–(g) must appear — "none" is a valid
-answer, silence is not; (h) rides the EXECUTION tail only:
+parallel.
+
+**Every report line asserting the state of something OUTSIDE the
+agent's own work — a file it did not write, a mechanism, another
+repo, a tool's behavior — is either OPENED, with the read named,
+or carried with its grade: "inferred, unverified"** (source: §1's
+per-line provenance rule, in the return direction). The grade
+follows the CLAIM, never the slot: (a), (b) and (f) carry their
+evidence by construction, so (c), (d), (e) and (g) are where an
+inference passes for an observation. A RECOMMENDATION resting on
+an unopened claim carries the grade too — it is what the
+dispatcher acts on. Form compliance is what hides an ungraded
+inference: (c) asks for gaps and nothing more, so one shaped like
+an observation fills it correctly, riding out among measurable
+claims that all hold. The grade is the AGENT's to write because
+the report is all its readers have: an ungraded external-state
+claim is relayed onward as fact, and whoever receives the relay
+cannot tell it from a measurement. What the DISPATCHER can tell
+is a line carrying neither a named read nor a grade — an
+incomplete report, demanded back like a missing slot.
+
+Every slot (a)–(g) must appear — "none" is a valid answer, silence
+is not; (h) rides the EXECUTION tail only:
 
   (a) items completed, with per-item evidence (file:line, test name)
   (b) checks/tests actually RUN, with their real output — the FULL
