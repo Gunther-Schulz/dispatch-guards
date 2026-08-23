@@ -770,10 +770,12 @@ are dropped with a one-line reason.
   each was broken within the hour, including one made in a message whose own
   text read "that region is untouched by me and is yours" — written while the
   sender had the file open. Zero of the three were prevented by either
-  party's stated intention; all three were caught AFTER the fact by pathspec
-  commits plus per-hunk authorship checks, which is a property of how they
-  happened to commit rather than of any boundary. Cost: two drafts thrown
-  away, both written against regions already being changed.
+  party's stated intention. Pathspec commits plus per-hunk authorship checks
+  protected the RECORD — no writer's hunks rode out under another's message —
+  and prevented NONE of the cost: two of the three collisions destroyed work,
+  a restatement and a lens edit, both written against regions already
+  changing. A mechanism that only cleans up after a collision is not a
+  boundary, which is the argument for this entry rather than against it.
   The shape is the corpus's own anchored-trigger rule met at a two-writer
   seam — an obligation with no artifact decays silently, and the moment a
   directive is composed is exactly the moment its author has the file open.
