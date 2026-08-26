@@ -2653,6 +2653,15 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   lane. The other four lanes reached the desk anyway, which is why the
   defect stayed invisible. Desk's own correction, same day, digest
   edited in place.
+- **Second instance, same day, n=2 (three lanes exposed, none
+  bitten):** the begehung desk (`begehung-c7`, opus) briefed three
+  router lanes for a Tier-1 eval with its OWN session name as the
+  report channel; SendMessage refused it in every lane, all three
+  fell back to `main` and said so, nothing lost. Same class from the
+  other side of the mailbox — the dispatcher wrote its peer-visible
+  name where the executor needed `main`. Recorded against the run,
+  not the skill under eval. Two desks, two mints of the same costume,
+  one day: the hook flag below is earning its slot.
 - **Class:** channel-line resolvability. The §2 channel line binds to
   `name` at dispatch time; what it must ALSO bind to is a target the
   EXECUTOR can resolve — the dispatcher's agent name where the
