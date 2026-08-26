@@ -2600,3 +2600,42 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   instruction, not as the instance — the instance drained the same
   day (see Abgeflossen, ANGEWANDT 2026-08-23) and would otherwise
   have taken the class with it.
+
+## 2026-08-26 — CLASS: the local push record confirms the comfortable answer; only the remote's push log says what a push carried
+
+- **Incident + basis, n=1** (cache-fix `main`, shared checkout, two
+  desks): a peer desk pushed at 10:41:50 local; the judgment desk had
+  committed `eee549c` ten seconds after the peer's `01eba49`, inside
+  the window the pre-push suite opened. The peer's push carried it.
+  The peer then VERIFIED it had not, with two executed checks: `git
+  merge-base --is-ancestor eee549c 01eba49` (false — asks whether the
+  foreign commit sits BELOW the pushed one; a commit that rides out
+  by landing ABOVE returns false by construction) and the range
+  printed by the pre-push hook (`9697603..01eba49`, resolved before
+  the suite ran). Its own `git reflog show origin/main` also read
+  `01eba49 … update by push`. The remote settled it the other way:
+  GitHub's PushEvent for that second records `9697603..eee549c`.
+  Basis: `gh api repos/<fork>/events` PushEvent log, read at the
+  judgment desk; the peer re-ran it and concurred.
+- **Class:** effect-site verification, push face. The §1 claim rule
+  already says the push set is the branch and the claim log runs as
+  its own invocation before the push; this instance is the CHECK
+  AFTER the push — every local instrument (ancestry test, hook
+  printout, `origin/main` reflog) records what the client believed
+  at some earlier instant, and all three return the comfortable
+  answer for exactly the case being ruled out. Executing an
+  instrument is not executing the right one.
+- **Pre-formulated fix text** (for §1's push-set bullet, one
+  sentence after "an unexpected commit halts the push"): "What a
+  push CARRIED is settled only at the remote — `gh api
+  repos/<o>/<r>/events` PushEvent `before..head` for that push, or
+  the remote branch's reflog where the host exposes one; the local
+  `origin/main` reflog and the pre-push hook's printed range record
+  the client's belief at hook time and read clean for a commit that
+  landed during the suite." Mechanizable slice: the
+  push-claim-reminder's post-push face could print the remote
+  range; unbuilt, and the window it closes is seconds wide — the
+  one-act rule (claim and push, uninterrupted, on a copy nobody else
+  commits to) is the real fix and already stated.
+- **Consumer + drain seam:** the next dispatch-guards maintenance
+  round applies the sentence to §1 or discards with a reason.
