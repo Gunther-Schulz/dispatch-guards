@@ -7,6 +7,41 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **PARKED 2026-08-26 — depth-2 dispatch: a desk-tier middle agent that
+  fans out, under the same hook-controlled robustness and operator
+  transparency as depth 1 (operator decision: worth trying; robust or
+  not at all).** Today `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`
+  (dotfiles `claude/settings.json:7`), so a fanning judgment desk must
+  be a PEER SESSION the operator opens and confirms by hand (measured
+  2026-08-26: the carrier-rework arc ran exactly that way — opus desk,
+  nine sonnet lanes — and worked; the cost was the operator's paste and
+  a second interactive session). Design, decided: allow depth 2, never
+  n, in ONE shape — a middle agent on the review tier (opus) that may
+  dispatch cheaper-tier leaves that are read-only or write-set-disjoint;
+  nothing deeper until the shape has run clean. Three conditions, each
+  a hook lane, not prose: (1) the middle agent's brief names every
+  leaf's write-set up front and the desk runs the disjointness join
+  once over the whole tree — the leaf gate denies a leaf whose write-set
+  is not in the parent brief; (2) leaf closing reports travel VERBATIM
+  to the desk as attachments to the middle report, never summarized —
+  the report-enforcer demands the attachment set equal the leaf list
+  (reports-of-reports is the forged-audit-entry shape the survey's
+  practitioners hit); (3) the desk's horizon is armed per LEAF from the
+  brief's leaf list, so a dead grandchild is not hidden behind the
+  middle agent's silence. Transparency: every leaf spawn passes the
+  same veto gate and model-in-name rule as a desk dispatch, and the
+  middle agent's spawn list is printed to the operator in the desk's
+  dispatching turn. Escalation rule unchanged: a middle agent never
+  spawns above its own tier. Missing evidence, named: the depth knob's
+  interaction with the agent-model-gate and the report-enforcer at
+  depth 2 (do the hooks see a grandchild's spawn at all? — the hook
+  input may not carry the caller's depth) — one planted depth-2
+  dispatch with the gates' fire log read, before any design lands.
+  NOT an API-docs investigation (operator: context-heavy; the local
+  probe answers it). Write-set: this plugin's hooks and §1/§4; dotfiles
+  `settings.json` (the knob). Trigger: the first wave of the
+  carrier-rework plan that needs a fanning middle agent, or the
+  operator asking.
 - **READY 2026-08-20 — audit every hook's `--test` for the
   recompose-instead-of-invoke shape: a bite that rebuilds a function's
   callees by hand cannot see that function lose its wiring.**
