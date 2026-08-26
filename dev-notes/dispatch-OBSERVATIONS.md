@@ -2674,3 +2674,15 @@ den Rückfall per Hand erfragen, bis der Mint steht.
 - **Consumer + drain seam:** the next dispatch-guards maintenance
   round applies the sentence to §2 (and the hook flag, if the pattern
   holds) or discards with a reason.
+- **Second instance, mirror direction (same day, n=2 for the class):**
+  the same desk sent TWO mid-flight messages to a named opus lane
+  (`opus-w1a-lifecycle`), both returning success; the lane's final
+  report states it received nothing at any point. Wave 0 was
+  subagent→dispatcher, this is dispatcher→subagent, so a mid-flight
+  correction is not safe in EITHER direction. Widened fix text for §1:
+  "A brief is complete at dispatch — a mid-flight correction may never
+  arrive, in either direction (measured both ways, 2026-08-26); what a
+  lane must know travels IN the brief, and a correction that matters is
+  a stop-and-redispatch, never a message the dispatcher assumes landed."
+  Mechanizable slice unchanged; the channel-resolution flag covers the
+  outbound half only.
