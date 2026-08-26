@@ -2684,7 +2684,11 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   work it meant to change. CORRECTED SAME DAY, in place: "a brief is
   complete at dispatch" is a promise a brief in a LIVE repo cannot
   keep — the same desk amended a brief in place three times after
-  dispatch, and all three messages missed the lane; the lane found the
+  dispatch, and all three messages missed the lane — measured across
+  three dispatches the same day: W1a's two arrived AFTER its report
+  (latency), W1b saw none during work, W1c received NONE of three, ever
+  (loss) — so the re-read point is not the better half but the only
+  half that has worked on this machine; the lane found the
   change only because it re-read the brief at HEAD before committing
   into a shared repo, a discipline it brought (finder: the W1c lane,
   `opus-w1c-lifecycle`, 2026-08-26). The rule that holds: a brief in a
