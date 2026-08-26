@@ -2801,6 +2801,9 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   round runs the reproduction, then applies the fix or records why the
   observed behaviour is intended.
 
+
+**Second sighting, same day, unverified.** `dotfiles-a7` recalled across a compaction that the gate fired naming a copy other than the one written; no artifact pointer survived. Consistent with this entry; counts as testimony until re-observed with the command text.
+
 ## 2026-08-26 — CLASS: a COMPOSED figure inside an EXECUTED digest inherits the digest's standing, and the relaying desk carries it unmarked
 
 **Incident + basis.** A peer desk's step digest (dotfiles-e0, wave 2
@@ -2859,3 +2862,41 @@ permission prompt regardless of allow rules; Read does not."
 **Consumer + drain seam.** The dispatch skill's next retirement pass;
 applies to every skill that says "load" of a plugin-cache file
 (skill-craft's pointer form: the pointer names the instrument too).
+
+## 2026-08-26 — CLASS: three guards over-fired on a session doing what the discipline instructs — the careful path is where the override reflex gets trained
+
+**Incident + basis.** OBSERVED by the wave-2 execution desk
+(`dotfiles-a7`, its four-slot file, booked here by the judgment desk;
+entries 2–4 observed in-context, entry 6 recalled across a compaction
+and held as unverified). (a) `restrict-bash-paths` blocked a read-only
+probe because shell `case` branch patterns in the command text parsed
+as path tokens; the same probe in Python passed; nothing was written.
+(b) `worktree-config-gate` warned `git -C <wt> config --get-all
+remote.origin.pushurl` — a pure READ run to VERIFY push denial — as a
+shared-config write, full remediation text. (c) `brief-reminder` WARNed
+a dispatch for lacking `## Commit plan` while the substance sat under
+"Commit convention" in prompt and brief file. Held, unverified: (d)
+brief-reminder rejecting a brief POINTER for a missing tail the named
+file carried — same axis as (c), merges into it if substantiated.
+None overridden; cost was attention and one rewritten probe.
+
+**Class.** Over-fire on legitimate work (corpus, Fixing: a check that
+fires on a non-defect trains the reader to discount red). Two
+sub-shapes: a TEXTUAL predicate that cannot tell a shell pattern from a
+path, or a read form from a write form (a, b); a STRUCTURAL predicate
+over a semantic requirement satisfiable under another name or in
+another place (c, d). (b) is the sharpest: the gate fires on the
+command that checks the guarantee it protects.
+
+**Pre-formulated rule text.** (a) exempt tokens in `case`/`esac`
+pattern position from the path scan, or docstring the shape as a known
+false fire with "rewrite the probe" as the repair. (b) exclude `--get`,
+`--get-all`, `--get-regexp`, `--list`, `-l` from the shared-config-write
+lane. (c) accept a declared synonym set (`Commit plan`, `Commit
+convention`, `Commits`) or say in the WARN that the check is
+HEADING-KEYED so the reader repairs the heading, not the substance.
+(d) none until substantiated.
+
+**Consumer + drain seam.** The three guards' next predicate change;
+the retirement pass. The over-fire count is the metric: n=3 in one
+session on the careful path.
