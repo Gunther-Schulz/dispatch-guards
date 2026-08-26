@@ -2753,3 +2753,29 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   applies the sentence to §1 or discards with a reason. Landed by the
   judgment desk on the peer desk's text (its write set excluded this
   repo).
+
+## 2026-08-26 — CLASS: the writer-reservation gate resolves the SHARED checkout for a commit made in a worktree
+
+- **Incident + basis, n=1 (WARN-only lane, nothing blocked):** wave-2
+  L1 of the lifecycle plugin ran in a cache-fix worktree on the
+  dispatch skill's own rung-2 isolation. Its pathspec commits in the
+  worktree drew the writer-reservation gate's WARN naming the SHARED
+  checkout's holder — the gate resolved the reservation for the main
+  working copy while the commit touched a different working tree with
+  its own index. In staging mode the lane would have DENIED a correct
+  commit on precisely the isolation the skill mandates. Reported by
+  the wave-2 desk (`dotfiles-a7`); recorded here by the judgment desk.
+- **Class:** reservation keyed to the repo, not to the working copy.
+  The lock's own rationale is "per working copy, not per path" — a
+  worktree IS a separate working copy (separate index, separate
+  HEAD), so a commit there cannot absorb the main copy's staged hunks,
+  which is the hazard the lock exists for.
+- **Pre-formulated fix text** — for the gate: resolve the reservation
+  key from `git rev-parse --git-dir` of the commit's own cwd (the
+  worktree's private gitdir), never from the common dir or the repo
+  root; a commit whose gitdir differs from the holder's is a different
+  working copy and passes. Bite: a planted worktree commit under a
+  held main copy → silent; the same commit in the main copy → WARN.
+- **Consumer + drain seam:** the next dispatch-guards maintenance
+  round applies it before the gate leaves staging mode, or records
+  why a worktree commit should still warn.
