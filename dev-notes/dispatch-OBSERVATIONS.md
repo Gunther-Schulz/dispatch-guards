@@ -2639,3 +2639,38 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   commits to) is the real fix and already stated.
 - **Consumer + drain seam:** the next dispatch-guards maintenance
   round applies the sentence to §1 or discards with a reason.
+
+## 2026-08-26 — CLASS: a report channel that names a PEER SESSION does not resolve from inside a subagent; the lane's own first-part "cannot resolve your channel" is a blocker, not a note
+
+- **Incident + basis, n=1 (five lanes exposed, one bitten):** a peer
+  desk (cache-fix-b4, opus) briefed five sonnet lanes with `Report
+  channel: SendMessage to claude-code-cache-fix-b4`. That is a SESSION
+  name; from inside a subagent it does not resolve. One lane said so in
+  part 1 of its report and routed to `team-lead`, where four parts plus
+  two re-sends sat unread; the desk demanded twice, then verified the
+  work at the artifact and reported the lane as never having reported —
+  correct work, wrong conclusion, in the direction that blames the
+  lane. The other four lanes reached the desk anyway, which is why the
+  defect stayed invisible. Desk's own correction, same day, digest
+  edited in place.
+- **Class:** channel-line resolvability. The §2 channel line binds to
+  `name` at dispatch time; what it must ALSO bind to is a target the
+  EXECUTOR can resolve — the dispatcher's agent name where the
+  dispatcher is itself an agent, `team-lead`/`main` where it is a
+  session. A session name in the line is a costume of the right form.
+  Second half: the escalation ladder (demand, demand, verify at the
+  artifact) is built for a STALLED lane and, run over a lane that
+  delivered to the wrong mailbox, manufactures a confident wrong
+  finding.
+- **Pre-formulated fix text** — for forms.md §2, the channel-line
+  block, one sentence after the named/unnamed pair: "The target named
+  is one the executing agent can RESOLVE: a peer session's name is not
+  — from inside a subagent the dispatcher is `team-lead` (or the
+  dispatching agent's own name); a first-part 'I cannot resolve your
+  channel' is a blocker the dispatcher answers before anything else,
+  never a note." Mechanizable slice: the brief-reminder hook can flag a
+  `Report channel: SendMessage to <x>` where `<x>` matches a session
+  name pattern (`<repo>-<2hex>`) rather than an agent/team name.
+- **Consumer + drain seam:** the next dispatch-guards maintenance
+  round applies the sentence to §2 (and the hook flag, if the pattern
+  holds) or discards with a reason.
