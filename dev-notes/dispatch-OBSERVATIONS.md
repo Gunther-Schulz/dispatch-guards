@@ -2685,10 +2685,21 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   complete at dispatch" is a promise a brief in a LIVE repo cannot
   keep — the same desk amended a brief in place three times after
   dispatch, and all three messages missed the lane — measured across
-  three dispatches the same day: W1a's two arrived AFTER its report
-  (latency), W1b saw none during work, W1c received NONE of three, ever
-  (loss) — so the re-read point is not the better half but the only
-  half that has worked on this machine; the lane found the
+  three dispatches the same day: every message ARRIVED, every one
+  HOURS after the work it was meant to redirect (W1a: after its
+  report; W1c: after its report and its own re-read). LATENCY, never
+  loss — corrected twice at the execution desk, which twice read a
+  lane's inbox line as a live measurement rather than a claim true at
+  composition time; the cure was one message to the live source, not
+  spent either time. The re-read point is the only half that has
+  worked in time on this machine. Trigger, improved by the W1c lane
+  against the version that flattered it: keyed to BEFORE EACH VERIFIER
+  RUN, not before each commit — a commit-keyed rule fires only in lanes
+  that commit into a shared tree and fires late; verifier-keyed it
+  fires in every lane (read-only and verifier lanes included) and
+  before the build; the commit stays as the backstop. The lane's own
+  catch was a WRITE-SAFETY habit (re-read HEAD before committing into a
+  shared public tree), not a reading discipline; the lane found the
   change only because it re-read the brief at HEAD before committing
   into a shared repo, a discipline it brought (finder: the W1c lane,
   `opus-w1c-lifecycle`, 2026-08-26). The rule that holds: a brief in a
@@ -2698,7 +2709,7 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   against a dead design. Cheap corroboration: the brief's own stated
   line count (243) was stale by seven within the session. Pre-formulated
   §1 text: "A brief committed into a live repo carries `Re-read: this
-  file at HEAD before each commit; a change is a gap to report, never
-  bridged.`" The misread's own lesson stands: an unverified negative
+  file at HEAD before each verifier run, and before each commit; a
+  change is a gap to report, never bridged.`" The misread's own lesson stands: an unverified negative
   that agrees with a suspicion already held is where the free probe is
   owed.
