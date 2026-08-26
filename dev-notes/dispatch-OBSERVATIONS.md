@@ -2754,28 +2754,49 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   judgment desk on the peer desk's text (its write set excluded this
   repo).
 
-## 2026-08-26 — CLASS: the writer-reservation gate resolves the SHARED checkout for a commit made in a worktree
+## 2026-08-26 — CLASS: the writer-reservation gate's Bash-lane WARN names the SESSION's held copy regardless of what the command touches (corrected in place the same hour — first written as a worktree→main resolution bug, which understates it)
 
-- **Incident + basis, n=1 (WARN-only lane, nothing blocked):** wave-2
-  L1 of the lifecycle plugin ran in a cache-fix worktree on the
-  dispatch skill's own rung-2 isolation. Its pathspec commits in the
-  worktree drew the writer-reservation gate's WARN naming the SHARED
-  checkout's holder — the gate resolved the reservation for the main
-  working copy while the commit touched a different working tree with
-  its own index. In staging mode the lane would have DENIED a correct
-  commit on precisely the isolation the skill mandates. Reported by
-  the wave-2 desk (`dotfiles-a7`); recorded here by the judgment desk.
-- **Class:** reservation keyed to the repo, not to the working copy.
-  The lock's own rationale is "per working copy, not per path" — a
-  worktree IS a separate working copy (separate index, separate
-  HEAD), so a commit there cannot absorb the main copy's staged hunks,
-  which is the hazard the lock exists for.
-- **Pre-formulated fix text** — for the gate: resolve the reservation
-  key from `git rev-parse --git-dir` of the commit's own cwd (the
-  worktree's private gitdir), never from the common dir or the repo
-  root; a commit whose gitdir differs from the holder's is a different
-  working copy and passes. Bite: a planted worktree commit under a
-  held main copy → silent; the same commit in the main copy → WARN.
+- **Incident + basis, two independent records, OBSERVATIONAL, not
+  reproduced headless:** (1) wave-2 L1 lane (opus, cache-fix
+  worktree): four WARN fires all naming the same held copy
+  (`…/vendor/claude-code-cache-fix`), two on commands that ran no git
+  at all (a `mktemp -d` probe), one on a commit in the LIFECYCLE
+  repo — the named copy was not the repository being committed to.
+  Reported by the wave-2 desk (`dotfiles-a7`) from the lane's
+  hook-context blocks re-read against its own record of each call.
+  (2) The judgment desk's own session (cwd cache-fix, held by another
+  session): every `cd <other-repo> && git commit … -- <path>` and
+  every `git push` in dotfiles and dispatch-guards that day drew the
+  same WARN naming cache-fix — n≈10 in the transcript. In staging
+  mode that lane would DENY commands having nothing to do with the
+  held copy, naming the wrong repo in the denial.
+- **What the source says, and it contradicts the observation:** the
+  docstring states the reservation is per-`git-dir` ("a worktree
+  reserves separately"); `commit_targets()` resolves a `cd` prefix
+  and returns "none" for a command with no `git commit`; the WARN
+  wrapper is `_dispatch_common.py:286`. Headless probes by the
+  judgment desk of the INSTALLED copy (byte-equal to source) with
+  three payload shapes — `mktemp -d`; `cd dotfiles && git commit`;
+  and the positive control, a plain `git commit` in the held cwd —
+  were ALL silent. The positive control's silence means the probe
+  environment did not reproduce the live condition, so the negatives
+  are could-not-verify, not exoneration. Root cause NOT established;
+  `_base_dir()` (payload cwd) and whatever runs before
+  `commit_targets()` in the live PreToolUse flow are where to start.
+- **Class:** a guard whose warning text is independent of the command
+  it warns about — a session-level lookup wearing a per-command
+  verdict's form. WARN-only today; the fix belongs BEFORE the lane
+  leaves staging.
+- **Reproduction step owed, first:** the gate under the live hook
+  environment (a real session with a foreign holder on its cwd copy)
+  with the three payloads above, stdout captured — the positive
+  control must WARN before any negative is read.
+- **Pre-formulated fix text**, conditional on the reproduction: the
+  Bash lane emits nothing unless `commit_targets()` returns "targets"
+  AND a target's git-dir carries a foreign reservation; a worktree's
+  git-dir is its own. Bite: planted worktree commit under a held main
+  copy → silent; non-git command in a held cwd → silent; plain commit
+  in the held cwd → WARN.
 - **Consumer + drain seam:** the next dispatch-guards maintenance
-  round applies it before the gate leaves staging mode, or records
-  why a worktree commit should still warn.
+  round runs the reproduction, then applies the fix or records why the
+  observed behaviour is intended.
