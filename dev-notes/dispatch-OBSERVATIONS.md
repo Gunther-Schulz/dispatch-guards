@@ -2680,7 +2680,21 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   both messages, which CROSSED its closing report — the documented
   async behaviour state tokens exist to date. n stays 1, the class
   stays outbound-only. Kept from the misread, on timing grounds the
-  forms already state: a brief is complete at dispatch, since a
-  mid-flight correction may arrive after the work it meant to change.
-  The misread's own lesson: an unverified negative that agrees with a
-  suspicion already held is exactly where the free probe is owed.
+  forms already state: a mid-flight correction may arrive after the
+  work it meant to change. CORRECTED SAME DAY, in place: "a brief is
+  complete at dispatch" is a promise a brief in a LIVE repo cannot
+  keep — the same desk amended a brief in place three times after
+  dispatch, and all three messages missed the lane; the lane found the
+  change only because it re-read the brief at HEAD before committing
+  into a shared repo, a discipline it brought (finder: the W1c lane,
+  `opus-w1c-lifecycle`, 2026-08-26). The rule that holds: a brief in a
+  live repo NAMES A RE-READ POINT — re-read the brief at HEAD before
+  each commit — a mechanism, where "assume no corrections" is a hope
+  that fails silently in the direction where the executor builds
+  against a dead design. Cheap corroboration: the brief's own stated
+  line count (243) was stale by seven within the session. Pre-formulated
+  §1 text: "A brief committed into a live repo carries `Re-read: this
+  file at HEAD before each commit; a change is a gap to report, never
+  bridged.`" The misread's own lesson stands: an unverified negative
+  that agrees with a suspicion already held is where the free probe is
+  owed.
