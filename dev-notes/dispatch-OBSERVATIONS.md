@@ -2722,3 +2722,34 @@ den Rückfall per Hand erfragen, bis der Mint steht.
   change is a gap to report, never bridged.`" The misread's own lesson stands: an unverified negative
   that agrees with a suspicion already held is where the free probe is
   owed.
+
+## 2026-08-26 — CLASS: a dispatcher-instrument defect surfaced by an executor gate — the falsifiable gate in front of any lane the desk cannot recompute
+
+- **Incident + basis, n=2 in one arc (corpus-ablation arc, dotfiles,
+  peer desk `dotfiles-0e`, opus):** a sonnet enumeration lane was
+  briefed with a mandatory instrument gate — six measured
+  line-vs-normalised pairs it had to reproduce before emitting. The
+  gate was DEFECTIVE: the dispatcher had compared lines-containing a
+  phrase against occurrences of it, two different quantities. The lane
+  computed exactly what was specced, got six equalities, HALTED
+  without emitting, and ran an unrequested control of its own
+  (newline→space only) that isolated the cause. Two dispatcher defects
+  were found this way — the bad control table and a record-boundary
+  rule reaching 12% of the target file — neither by dispatcher review,
+  both within one lane round-trip.
+- **Class:** dispatcher-instrument defect surfaced by an executor gate.
+  Generalises §1's instrument-positive clause from sweep-shaped work
+  to ANY output the dispatcher cannot independently recompute.
+- **Pre-formulated rule text** — for §1, beside the sweep-shaped
+  instrument-positive clause: "A brief whose output the dispatcher
+  cannot independently recompute carries a FALSIFIABLE INSTRUMENT GATE
+  the executor reproduces before emitting — a pre-measured pair with a
+  known mover and a known non-mover. A HALT on that gate is priced as
+  the gate working, never as a lane failure. The gate's own numbers
+  are the dispatcher's claim and as falsifiable as anything else in
+  the brief; the executor reports a discrepancy rather than adjusting
+  toward the stated expectation."
+- **Consumer + drain seam:** the next dispatch-guards retirement pass
+  applies the sentence to §1 or discards with a reason. Landed by the
+  judgment desk on the peer desk's text (its write set excluded this
+  repo).
