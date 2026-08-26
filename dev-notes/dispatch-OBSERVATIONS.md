@@ -2836,3 +2836,26 @@ persists across Bash calls and is not a scope."
 (`references/forms.md`) at the next retirement pass; the executor
 skill for the invocation binding. Both fire-earned: n=1 composed
 figure, n=1 wrong-repo verdict, same peer, same hour.
+
+## 2026-08-26 — CLASS: "load forms.md" leaves the tool open, and a Bash read of the plugin-cache path draws the config-directory prompt every time
+
+**Incident + basis.** Operator report: many sessions hit a permission
+prompt on `sed -n '/^## 2\./,/^## 3\./p' ~/.claude/plugins/cache/…/forms.md`
+when loading the §2 report form. Executed the same hour: settings.json
+allows `Bash(*)` and `Read`; the Read tool on the identical path draws no
+prompt. So the prompt is the harness's `.claude/`-path-shape protection on
+Bash command text (corpus, environment: the config-directory binding),
+not a missing allow rule, and allow rules do not lift it (n=many sessions).
+
+**Class.** A load instruction that names the source and not the
+instrument; the reader picks the shell habit, and the shell is the one
+executor the protection watches.
+
+**Pre-formulated rule text** (SKILL.md section map and forms.md head,
+wherever "load" appears): "Load with the Read tool. A Bash read (`sed`,
+`cat`, `grep`) of any path under `~/.claude/` draws the config-directory
+permission prompt regardless of allow rules; Read does not."
+
+**Consumer + drain seam.** The dispatch skill's next retirement pass;
+applies to every skill that says "load" of a plugin-cache file
+(skill-craft's pointer form: the pointer names the instrument too).
