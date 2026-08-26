@@ -2800,3 +2800,39 @@ den Rückfall per Hand erfragen, bis der Mint steht.
 - **Consumer + drain seam:** the next dispatch-guards maintenance
   round runs the reproduction, then applies the fix or records why the
   observed behaviour is intended.
+
+## 2026-08-26 — CLASS: a COMPOSED figure inside an EXECUTED digest inherits the digest's standing, and the relaying desk carries it unmarked
+
+**Incident + basis.** A peer desk's step digest (dotfiles-e0, wave 2
+dotfiles slice) carried five figures; four were executed output, one
+(`kind sweep`: "828 tracked files unregistered, 5 kinds claim 12") was
+composed — the verb had never been invoked. The judgment desk relayed
+all five to the operator in one sentence, unmarked. The peer caught it
+itself ten minutes later on running the verb (executed: 264 of 275,
+11 claimed — magnitude off ~3×); its FIRST run had also graded the
+wrong repo (cwd persisted inside the plugin checkout; `kind sweep`
+without `--repo` resolves the enclosing work tree — a clean, real
+verdict about the wrong subject). Basis: the two peer messages and the
+desk's operator message, this session, 2026-08-26 ~19:40Z.
+
+**Class.** The attachment costume (corpus, Grounding) at the REPORT
+seam: a derived or composed sentence attached to executed neighbours
+inherits their standing; the relay (corpus, desk-delegation: a relayed
+figure is marked machine-computed or estimate) fired on neither side
+because the figure did not PRESENT as an estimate. The wrong-repo
+half is the anchor rule (Fixing): a verb keyed to cwd measures whatever
+cwd is.
+
+**Pre-formulated rule text** (§2 report form, the figures clause):
+"Every figure in a digest names the command that produced it, inline
+or in a footnoted block; a figure with no command is written
+`(composed)`. A dispatcher relaying a figure carries the command or
+the mark with it." And for the executor skill's tool-invocation
+binding: "A repo-scoped CLI (`lifecycle`, and any verb resolving the
+enclosing work tree) is invoked with its explicit `--repo`/`-C`; cwd
+persists across Bash calls and is not a scope."
+
+**Consumer + drain seam.** The dispatch skill's §2 forms
+(`references/forms.md`) at the next retirement pass; the executor
+skill for the invocation binding. Both fire-earned: n=1 composed
+figure, n=1 wrong-repo verdict, same peer, same hour.
