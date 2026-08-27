@@ -555,6 +555,42 @@ Not fixed here: this is an observation from a consuming repo, and the
 lane's own docstring is canonical for its predicate. Reported per the
 skill's evolution rule rather than patched from outside.
 
+**n=2, 2026-08-27, AFTER the ANGEWANDT repair — which is the finding.**
+dotfiles wave-4 lane C1 (opus, guard/checker class): its first `git
+commit` was DENIED WHOLE because the literal two-token string `git
+push` appeared inside the commit MESSAGE, which described push
+round-trips through the hook it had just changed. Nothing in that
+command pushed anything. So the 2026-08-10 repair — key on the VERB
+position rather than the bare token — did NOT close this: `git push`
+IS the verb-position pattern, and it matched inside quoted message
+text. Narrowing a textual predicate cannot separate a command from a
+quoted body that describes one; only argv-level parsing can, and the
+2026-08-07 proposal already said `argv-level` while the applied fix
+stayed a string match. The docstring's two bite tests pin the OLD
+false-fire case and are silent on this one, so the guard read green
+through it.
+
+The cost this time is worse than the nuisance, and it is the thing to
+carry: the lane REWROTE ITS COMMIT MESSAGE to get past the matcher.
+That is a guard editing the permanent record to satisfy its own text
+predicate — the 2026-08-07 entry predicted "the guard taught message
+rewording rather than catching a fused push", and the second instance
+is that prediction executed on a repo's history. The training cost
+compounds: this lane was doing exactly what the discipline instructs
+(describing its verification honestly in the message), which is the
+careful-path over-fire the 2026-08-26 CLASS entry names.
+
+**Grade: READY repair, not an observation.** Predicate parses the
+command to argv and tests the verb position of each simple command,
+so a quoted or heredoc'd body is never scanned; the deny text
+distinguishes "a git push in this command" from "the word push inside
+a message"; and the bite battery gains BOTH of the measured
+false-fire payloads — the 2026-08-07 word-in-heredoc case AND this
+one, a `-m` message containing the literal `git push` — beside a
+must-not-move row for a genuine fused `git push … | tail` and for a
+compound push plus claim check, which the deny text alone cannot tell
+apart from the false fires.
+
 ## 2026-08-07 — a brief cut from a ranked-list head inherits the list's staleness
 
 **ANGEWANDT 2026-08-17, GEMERGT mit dem
