@@ -158,6 +158,21 @@ Mandatory parts (execution briefs):
   audit finding turned into a build step gets its cited line
   opened once, there — after it, the claim is executed by someone
   who cannot tell inherited from verified.
+  A GRANT is the same claim in a ruling's costume: a ruling that
+  AUTHORIZES an edit on the strength of a report's
+  characterization of an artifact ("degraded", "broken", "stale")
+  is a repo-state claim and takes the provenance grade — the desk
+  opens the artifact's definition (its --help, its tests, its
+  docstring) or grants conditionally: "if the definition agrees;
+  if not, report and do not edit". The refusal-with-evidence is
+  the correct executor behaviour and is graded as such, never as
+  a deviation. What hides it is that a grant presents as a
+  DECISION — executed, never graded — while the sentence under it
+  asserts the repo's state (measured: a one-line edit granted on
+  a digest's "DEGRADED" would have narrowed a full-tree
+  publication scan to a range scan; the scanner's own --help
+  documents the empty base the digest called degraded, and the
+  executor's definition-check is what caught it).
 - **Write boundaries.** Which paths the agent owns (one writer per
   working copy; parallel dispatches need disjoint, brief-named path
   sets — source: site corpus dispatched-work rule). On a SHARED copy
@@ -399,6 +414,16 @@ Mandatory parts (execution briefs):
     foreign commit. Re-reading the tip just before composing only
     NARROWS the window — a dispatcher cannot win a race against a
     live co-writer by reading faster.
+    Both reads establish COMMITTED state and have no state for
+    "someone is writing right now", so the arrival check gains a
+    THIRD read: `git status --porcelain` over the write set plus
+    the writer-reservation file (where the reservation gate is
+    deployed); a modified file in the write set or a live
+    reservation is a HALT, whatever the base check said (measured:
+    a re-dispatched lane's own unprompted status read caught a
+    reanimated predecessor mid-write — a file observably growing
+    between reads that the base check had just called clean,
+    because none of it was committed).
   - **The commit plan is ordered against the repo's guards.** In a
     repo with a payload-version guard, the brief states where the
     bump commit sits, sequenced from the guard's OWN comparison
@@ -598,6 +623,30 @@ Mandatory parts (execution briefs):
   (observed: dispatch runs with the register never opened). The
   consult keys on the procedure CLASS of the work in the TARGET
   repo, never on the dispatching session's cwd.
+  A brief under a registered class names the class devbook
+  SECTION's sha256 beside its path — computed the way the
+  register's fingerprint check documents it (from the `## <ID>`
+  heading to the next `## ` line or EOF, splitlines keepends,
+  joined, utf-8; the same function the doctor uses) — and the
+  register's probe-evidence line records that sha. A path
+  resolves LIVE, so the devbook is mutable under a running probe
+  (measured: a devbook amended under two minutes after a lane was
+  dispatched against it, the lane's grounding read falling inside
+  that window either way). The whole-file blob is NOT the pin: it
+  moves when any other section of the file changes and is not
+  comparable to the register's stored fingerprint — three objects
+  (file blob, section sha256, stored fingerprint) measured side
+  by side matched nowhere, and a pin that cannot be compared to
+  the thing it pins is decoration. The pin is checked against the
+  FILE's section hash, and a lane that took a rule from its
+  session INJECTION re-reads the file when the pin does not match
+  the injected text: a class devbook reaches a lane through TWO
+  channels — a snapshot fixed at session start and the live
+  file — which can disagree, with no signal to the lane that they
+  do (measured: an injection lacking an amended paragraph the
+  file carried). A probe whose brief carried no pin is booked
+  UNDETERMINED, with the dispatch timestamp beside the nearest
+  amendment's — never the plausible inference.
 
 **Brief skeleton (pasted, then filled).** The parts above are a
 checklist, not a shape: a free-composed brief satisfies them in
@@ -798,9 +847,19 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   the ask-tier only (agent-model-gate hook): hook input carries no
   caller model, so "above yourself" is not computable — the remainder
   is judgment.
-- **Additions extend ownership.** A follow-up instruction to a running
+- **Additions extend OWNERSHIP, not instruction.** A follow-up
+  instruction to a running
   agent extends its write ownership until its closing report covers
-  the addition — don't touch its paths meanwhile. A report already
+  the addition — don't touch its paths meanwhile. What it does NOT
+  do is reach the agent: ownership extends, but the addition
+  reaches the lane at its next turn boundary at the earliest (the
+  mailbox binding, references/forms.md §2), so an addition is a
+  boundary the DISPATCHER keeps, never a steer the lane can be
+  assumed to have received. Everything a lane could need mid-run
+  is therefore granted UP FRONT or not at all — the brief is the
+  complete instruction set — and where a lane must be steered
+  mid-flight, the carrier is the ARTIFACT: a committed item body
+  or file in its tree, never the mailbox. A report already
   IN FLIGHT when the extension was sent does not cover it: the
   crossing reads as a closed lane, and neither a grep nor `git
   status` observes a WRITER — each samples a moving state and
@@ -809,9 +868,12 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   of the lane's exclusive files and committed their working-tree
   state under its own trailer; the reservation gate had warned,
   naming the lane as holder, immediately before). Where a claim
-  gate fires and the holder looks dead, ASK the holder and wait for
-  the answer — one message against an unrecoverable
-  misattribution.
+  gate fires and the holder looks dead, ASK the holder — one
+  message against an unrecoverable misattribution — and read the
+  LISTING beside the ask: a lane's own line is a claim about the
+  PAST, only the agent listing says what it is doing NOW, and the
+  reply itself arrives at the lane's next turn boundary at the
+  earliest.
 - **Ownership ends at the booked report — on both sides.** Once the
   dispatcher has booked the closing report, the agent's write grant is
   over: an agent that discovers a post-report defect REPORTS it and
@@ -829,6 +891,26 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   the trigger for the post-report write it forbids (measured: a
   lane's only post-report commit followed its own lane-close
   message).
+  After a report is BOOKED the only message a lane receives is the
+  CLOSE, in that boundary form; every decision the report raised
+  travels to the NEXT lane's brief, never back to the reporter — a
+  decision reply is a build order to a lane whose grant text left
+  the door open (measured: a "decided, build it" reply delivered
+  at a turn boundary AFTER the closing report reanimated the lane,
+  which then built the design the ruling had struck; nothing
+  reached history, and only the successor lane's own status read
+  caught it mid-write). Before any dispatch and before any message
+  to a lane, the LISTING is read — a lane that reads `running`
+  under a booked report is a finding: the report line is a claim
+  about the PAST, only the listing says what the lane is doing
+  NOW. And a lane ended by TaskStop is NEVER messaged again, for
+  any reason, the close included: a send resumes a named agent
+  from its transcript, and a stopped lane's transcript ends on its
+  last live instruction, so the close re-issues "build". The
+  artifact — absent, reverted, no commit — is the record of its
+  termination; a close ordered to a stopped lane is a
+  state-dependent directive whose state is false, and refusing it
+  is correct.
 - **A handed-off run names its report CHANNEL, machine-readably.**
   Passing whole work to a peer session is neither a dispatch nor
   fact traffic: nothing returns by construction. The handoff

@@ -191,6 +191,37 @@ carries its final text to the dispatcher VERBATIM — including from
 an agent that called no tool at all, so delivery does not depend on
 the agent cooperating.
 
+Binding (as of 2026-08-27, same branch — DELIVERY, not direction):
+a mid-run message may not arrive before the turn ends. Measured:
+sends returning `success` throughout reached the lane only as BATCHED
+deliveries at its turn boundaries, none mid-turn, across a span
+holding several tool rounds and a multi-minute foreground wait.
+Three consequences, each with its own bite.
+(1) STEERING is not what the channel does: everything a lane could
+need is granted UP FRONT or not at all, and a mid-flight steer
+travels by ARTIFACT — a committed item body or file in its tree —
+never by mailbox. A dispatcher holding `success` receipts is
+WATCHING, not steering; the dispatch reads as steered only where
+the lane happened to land right anyway.
+(2) DEADLOCK: a lane that halts on a question and WAITS cannot be
+reached at all — it will not go idle because it is waiting, and the
+queue does not flush until it goes idle (measured: repeated
+go-messages, the listing showing `running` throughout, the lane
+reporting no message reached it each time). Stop it and re-dispatch
+with its interim groundwork carried — nothing is lost, and it costs
+less than any wait. Hence the rule the brief gives the lane: on a
+gap halt the ITEM, finish the remainder, report — never halt the
+LANE.
+(3) REANIMATION is the mirror: a message arriving AFTER the closing
+report resumes the lane and steers what should have been closed
+(SKILL.md §4, the booked-report rule).
+The receiving end cannot tell "nothing was sent" from "nothing has
+been DELIVERED yet" — both are silence from inside — so a lane's
+confident "no message reached me" is a false negative arriving with
+full conviction, and an absence claimed about this channel carries
+the grade its instrument earns. The one channel that has never
+failed is the dispatch PROMPT.
+
 Which lane to pick: NAME the dispatch when the session must talk
 across it — long builds, parallel fan-outs, teammates, anything
 worth resuming — accepting that its report arrives only if the
