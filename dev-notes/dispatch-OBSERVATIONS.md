@@ -26,6 +26,184 @@ deren Pass genau davon handelt. Gefunden von der Frisch-Kontext-Runde,
 von keinem Check.
 
 
+### ANGEWANDT 2026-08-27 (Lane `opus-a-skill-amendments`, wave 4)
+### — a dispatcher GRANT issued on the executor's LABEL
+
+Booked in `f123de0`, applied in this wave: the pre-formulated
+text stands in `plugin/skills/dispatch/SKILL.md` §1, at the end
+of the per-line provenance bullet — the grant rendered as a
+repo-state claim in a ruling's costume, with the
+conditional-grant form and the refusal-graded-as-correct
+sentence quoted across. De-particularized on landing per the
+maintenance doctrine (provenance: no dates, no named
+artifacts, no occasion counts in the corpus text). Entry body
+below, unchanged.
+
+**Incident + basis.** A peer desk's step-0 digest called a leak-scan
+run over `..HEAD` "DEGRADED" (the scanner printed a `degraded:` line
+because the base ref was empty). The judgment desk granted a one-line
+edit to the plugin's laws file replacing `..HEAD` with `<base>..HEAD`.
+The peer checked the scanner's `--help` before editing: an EMPTY base is
+the documented form ("<old> may be EMPTY"), two tests pin it, both green
+at the base sha. The granted edit would have NARROWED a full-tree scan
+of the publication guard to a range scan. Not executed; grant withdrawn
+on the peer's evidence (`dotfiles-2f`, lifecycle `4283d61`).
+
+**Class.** The definitions rule (corpus, Fixing) at the DISPATCHER's
+end: a wrongness claim asserts a deviation from the artifact's
+definition, and here the "wrongness" arrived as a status word in a
+digest — a label over a body the desk never opened. The costume is the
+GRANT: it presents as a decision (executed, not graded) while it is a
+repo-state claim wearing a ruling, so nothing prompted the read. The
+executor's own definition-check is what saved the check; an executor
+briefed to obey would have shipped it.
+
+**Pre-formulated rule text** (skill §4, dispatcher duties, or §1
+provenance): a ruling that AUTHORIZES an edit on the strength of a
+report's characterization of an artifact ("degraded", "broken",
+"stale") is a repo-state claim and takes the provenance grade — the
+desk opens the artifact's definition (its --help, its tests, its
+docstring) or grants conditionally: "if the definition agrees; if not,
+report and do not edit". The peer's refusal-with-evidence is the
+correct executor behaviour and is graded as such, never as a deviation.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+n=1, the executor caught it.
+
+### ANGEWANDT 2026-08-27 (Lane `opus-a-skill-amendments`, wave 4)
+### — the class devbook pin is the SECTION's sha256
+
+Booked in `771b4a8`, corrected in `da64e10` (the pin is the
+section sha256, not the whole-file blob), second half amended
+in `1078183` (the injection-vs-file two-channel divergence);
+applied in this wave to `plugin/skills/dispatch/SKILL.md` §1,
+appended to the readiness-register consult bullet. The §6 half
+of the text ("the register's probe-evidence line records that
+sha") rides in the same §1 sentence rather than being restated
+in §6 — one meaning, one home. Entry body below, unchanged.
+
+**Incident + basis.** Wave-3 lane A was dispatched at 11:28:59 with
+the guard/checker devbook named by path (dotfiles `CLAUDE.md`); the
+judgment desk amended that devbook's step 4 at 11:30:48 (`05ebcf4`),
+on lane C's finding. Lane A's grounding read falls inside the
+109-second window either way. The desk asked the lane a question it
+can answer without re-reading (did the passage it read contain the
+new paragraph's opening words); absent an answer the register line
+reads UNDETERMINED with both timestamps — never the plausible
+inference. Lane C (earlier, `120c733`) ran under the pre-amendment
+text, certain: the amendment exists because of what it measured.
+
+**Class.** The register (§6) stores a fingerprint taken at
+certification; a probe's brief names the devbook by path, which the
+lane resolves LIVE — the same live-on-write property the corpus
+records for hook files. "Which text did this probe run under" is
+therefore not answerable from the register, only from timing
+evidence gathered while the lane is alive, and a re-probe priced
+against the wrong text is the invalidation clause silently defeated.
+
+**Pre-formulated rule text** (§1 brief, §6 register): a brief under a
+registered class names the class devbook SECTION's sha256 beside its
+path — computed the way the register's fingerprint check documents
+it (from the `## <ID>` heading to the next `## ` line or EOF,
+splitlines keepends, joined, utf-8; the same function the doctor
+uses) — and the register's probe-evidence line records that sha.
+CORRECTED the same day: the first adopted form was the whole-file
+blob (`git rev-parse HEAD:<path>`), which moves when ANY other
+section of the file changes and is not comparable to the register's
+stored fingerprint — three objects (file blob, section sha256, stored
+fingerprint) were measured side by side and none matched; a pin that
+cannot be compared to the thing it pins is decoration. The register's
+stored hash on an `eval-open` entry is historical by its own
+declaration and is not a defect; a probe whose brief carried no
+pin is booked UNDETERMINED with the dispatch timestamp beside the
+nearest amendment's. Adopted by the judgment desk 2026-08-27; lane B
+of the same wave is the first brief carrying it.
+
+**Second half, measured on the next two lanes (same day).** Lane B's
+brief carried the pin (`f0c1fb7…`, the section's blob sha); the lane
+hashed the on-disk section and matched it — the pin worked one
+dispatch after adoption. But the `CLAUDE.md` INJECTED into the lane's
+session prompt did NOT carry the amended step-4 paragraph while the
+FILE did; lane A, asked the paragraph question, reported its copy
+came from the injection and was immutable from dispatch. So a class
+devbook reaches a lane through TWO channels — a snapshot fixed at
+session start and the live file — which can disagree, and a lane
+reading only its injection works from a stale rulebook with no signal
+that it is doing so. The pin is what makes the divergence detectable.
+Rule text: the pin is checked against the FILE's section hash, and a
+lane that took a rule from its injection re-reads the file when the
+pin does not match the injected text.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§6 schema); the `guard-checker-bau` entry's next status move.
+
+### ANGEWANDT 2026-08-27 (Lane `opus-a-skill-amendments`, wave 4)
+### — a post-report message REANIMATES a lane
+
+Booked in `0609f39`, amended in `9800011` (the TaskStop
+clause); applied in this wave at two sites in
+`plugin/skills/dispatch/SKILL.md`. §1's base-commit clause
+gains the THIRD arrival read — `git status --porcelain` over
+the write set plus the writer-reservation file, a HALT
+whatever the base check said. §4's "Ownership ends at the
+booked report" bullet gains the close-only rule, the
+decisions-travel-to-the-NEXT-brief rule, the listing read
+before any dispatch or message, and the never-message-a-
+TaskStopped-lane rule. Entry body below, unchanged.
+
+**Incident + basis.** Wave-3 desk `dotfiles-2f`: a "decided, build it"
+message to lane B was delivered at a turn boundary AFTER lane B had
+sent its closing report; the message's own text kept the grant open
+("your write grant stays open until your report is booked"), so the
+lane resumed and built lc-17 from the PRE-ruling design — 446
+insertions in `migrate.py`, the very sentence the judgment desk had
+struck. The desk, reading the report's "write grant closed" line as
+current, reported the lane finished and dispatched lane B2 for the
+same item. B2's prescribed arrival check (`merge-base --is-ancestor`
++ `log <base>..HEAD`) PASSED — lane B's work was uncommitted. B2 went
+further unprompted: `git status` showed the file modified, six size
+samples over ~30 s showed it growing, `.git/writer-reservation.json`
+named the holder with `claimed_at` 22 s old; it halted before
+writing. Containment: TaskStop, diffs saved to scratch, files
+restored by `git show HEAD:<path> >` (never checkout/restore/stash),
+caches cleared, index refreshed, status empty, blob sha equal — no
+commit made, nothing in history. Cost ~10 min of lane tokens.
+
+**Class.** Two. (a) The mailbox-delay entry above is about messages
+arriving too LATE to steer; this is its mirror — arriving after the
+report and steering what should have been closed. The skill's §4
+already says the close message resumes the agent; the incident shows
+EVERY message does, and a decision reply is a build order to a lane
+whose grant text leaves the door open. (b) The §1 base check
+establishes COMMITTED state and has no state for "someone is writing
+right now": three states between two reads, none of them a live
+co-writer. Underneath both: a lane's report line is a claim about
+the past; only the agent listing says what it is doing NOW — the
+desk itself named this as the rule it had applied to others all day.
+
+**Pre-formulated rule text.** §4: after a report is BOOKED, the only
+message a lane receives is the close, in the boundary form ("grant
+over; do not act; a later defect is reported"); every decision the
+report raised travels to the NEXT lane's brief, never back to the
+reporter. Before any dispatch or any message to a lane, the listing
+is read — a lane that reads `running` under a booked report is a
+finding. A lane ended by TaskStop is NEVER messaged again, for any
+reason, the close included: a send resumes a named agent from its
+transcript, and a stopped lane's transcript ends on its last live
+instruction — measured the same hour, when the judgment desk ordered
+a close to the stopped lane and the peer desk correctly refused it
+as a state-dependent directive whose state was false (the lane was
+ABSENT from the listing, its last instruction "build"); the artifact
+— absent, reverted, no commit — is the record of its termination. §1 arrival check gains a third read: `git status
+--porcelain` over the write set plus the writer-reservation file
+(where the reservation gate is deployed); a modified file in the
+write set or a live reservation is a HALT, whatever the base check
+said.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§1 arrival check, §4 close rule); n=1, caught by the arriving lane on
+first use of an unprescribed check.
+
 ### ANGEWANDT 2026-08-23 (Lane `opus-report-provenance`) — die
 ### Regel erreichte den Dispatcher, nicht den ausfuehrenden Agenten
 
@@ -2901,39 +3079,6 @@ HEADING-KEYED so the reader repairs the heading, not the substance.
 the retirement pass. The over-fire count is the metric: n=3 in one
 session on the careful path.
 
-## 2026-08-27 — CLASS: a dispatcher GRANT issued on the executor's LABEL for an artifact, never on the artifact's own definition
-
-**Incident + basis.** A peer desk's step-0 digest called a leak-scan
-run over `..HEAD` "DEGRADED" (the scanner printed a `degraded:` line
-because the base ref was empty). The judgment desk granted a one-line
-edit to the plugin's laws file replacing `..HEAD` with `<base>..HEAD`.
-The peer checked the scanner's `--help` before editing: an EMPTY base is
-the documented form ("<old> may be EMPTY"), two tests pin it, both green
-at the base sha. The granted edit would have NARROWED a full-tree scan
-of the publication guard to a range scan. Not executed; grant withdrawn
-on the peer's evidence (`dotfiles-2f`, lifecycle `4283d61`).
-
-**Class.** The definitions rule (corpus, Fixing) at the DISPATCHER's
-end: a wrongness claim asserts a deviation from the artifact's
-definition, and here the "wrongness" arrived as a status word in a
-digest — a label over a body the desk never opened. The costume is the
-GRANT: it presents as a decision (executed, not graded) while it is a
-repo-state claim wearing a ruling, so nothing prompted the read. The
-executor's own definition-check is what saved the check; an executor
-briefed to obey would have shipped it.
-
-**Pre-formulated rule text** (skill §4, dispatcher duties, or §1
-provenance): a ruling that AUTHORIZES an edit on the strength of a
-report's characterization of an artifact ("degraded", "broken",
-"stale") is a repo-state claim and takes the provenance grade — the
-desk opens the artifact's definition (its --help, its tests, its
-docstring) or grants conditionally: "if the definition agrees; if not,
-report and do not edit". The peer's refusal-with-evidence is the
-correct executor behaviour and is graded as such, never as a deviation.
-
-**Consumer + drain seam.** The next dispatch-skill maintenance pass;
-n=1, the executor caught it.
-
 ## 2026-08-27 — CLASS: a named subagent's mailbox delivers NOTHING mid-run — every dispatcher message arrived in one batch at the lane's turn boundary, after its closing report
 
 **Incident + basis.** Wave-3 desk `dotfiles-2f` (opus) sent six
@@ -3020,114 +3165,30 @@ also the harness-binding line in the skill's §2 (`as of` date on
 mailbox delivery). n=1 lane, six messages; the bite is reproducible
 by any named lane asked reply-only when its messages arrived.
 
-## 2026-08-27 — CLASS: a class devbook resolved by PATH is mutable under a running probe, so the register cannot say which text a probe ran under
-
-**Incident + basis.** Wave-3 lane A was dispatched at 11:28:59 with
-the guard/checker devbook named by path (dotfiles `CLAUDE.md`); the
-judgment desk amended that devbook's step 4 at 11:30:48 (`05ebcf4`),
-on lane C's finding. Lane A's grounding read falls inside the
-109-second window either way. The desk asked the lane a question it
-can answer without re-reading (did the passage it read contain the
-new paragraph's opening words); absent an answer the register line
-reads UNDETERMINED with both timestamps — never the plausible
-inference. Lane C (earlier, `120c733`) ran under the pre-amendment
-text, certain: the amendment exists because of what it measured.
-
-**Class.** The register (§6) stores a fingerprint taken at
-certification; a probe's brief names the devbook by path, which the
-lane resolves LIVE — the same live-on-write property the corpus
-records for hook files. "Which text did this probe run under" is
-therefore not answerable from the register, only from timing
-evidence gathered while the lane is alive, and a re-probe priced
-against the wrong text is the invalidation clause silently defeated.
-
-**Pre-formulated rule text** (§1 brief, §6 register): a brief under a
-registered class names the class devbook SECTION's sha256 beside its
-path — computed the way the register's fingerprint check documents
-it (from the `## <ID>` heading to the next `## ` line or EOF,
-splitlines keepends, joined, utf-8; the same function the doctor
-uses) — and the register's probe-evidence line records that sha.
-CORRECTED the same day: the first adopted form was the whole-file
-blob (`git rev-parse HEAD:<path>`), which moves when ANY other
-section of the file changes and is not comparable to the register's
-stored fingerprint — three objects (file blob, section sha256, stored
-fingerprint) were measured side by side and none matched; a pin that
-cannot be compared to the thing it pins is decoration. The register's
-stored hash on an `eval-open` entry is historical by its own
-declaration and is not a defect; a probe whose brief carried no
-pin is booked UNDETERMINED with the dispatch timestamp beside the
-nearest amendment's. Adopted by the judgment desk 2026-08-27; lane B
-of the same wave is the first brief carrying it.
-
-**Second half, measured on the next two lanes (same day).** Lane B's
-brief carried the pin (`f0c1fb7…`, the section's blob sha); the lane
-hashed the on-disk section and matched it — the pin worked one
-dispatch after adoption. But the `CLAUDE.md` INJECTED into the lane's
-session prompt did NOT carry the amended step-4 paragraph while the
-FILE did; lane A, asked the paragraph question, reported its copy
-came from the injection and was immutable from dispatch. So a class
-devbook reaches a lane through TWO channels — a snapshot fixed at
-session start and the live file — which can disagree, and a lane
-reading only its injection works from a stale rulebook with no signal
-that it is doing so. The pin is what makes the divergence detectable.
-Rule text: the pin is checked against the FILE's section hash, and a
-lane that took a rule from its injection re-reads the file when the
-pin does not match the injected text.
-
-**Consumer + drain seam.** The next dispatch-skill maintenance pass
-(§6 schema); the `guard-checker-bau` entry's next status move.
-
-## 2026-08-27 — CLASS: a message arriving AFTER a lane's report REANIMATES it — the delayed mailbox's mirror — and the committed-state base check cannot see the live writer it wakes
-
-**Incident + basis.** Wave-3 desk `dotfiles-2f`: a "decided, build it"
-message to lane B was delivered at a turn boundary AFTER lane B had
-sent its closing report; the message's own text kept the grant open
-("your write grant stays open until your report is booked"), so the
-lane resumed and built lc-17 from the PRE-ruling design — 446
-insertions in `migrate.py`, the very sentence the judgment desk had
-struck. The desk, reading the report's "write grant closed" line as
-current, reported the lane finished and dispatched lane B2 for the
-same item. B2's prescribed arrival check (`merge-base --is-ancestor`
-+ `log <base>..HEAD`) PASSED — lane B's work was uncommitted. B2 went
-further unprompted: `git status` showed the file modified, six size
-samples over ~30 s showed it growing, `.git/writer-reservation.json`
-named the holder with `claimed_at` 22 s old; it halted before
-writing. Containment: TaskStop, diffs saved to scratch, files
-restored by `git show HEAD:<path> >` (never checkout/restore/stash),
-caches cleared, index refreshed, status empty, blob sha equal — no
-commit made, nothing in history. Cost ~10 min of lane tokens.
-
-**Class.** Two. (a) The mailbox-delay entry above is about messages
-arriving too LATE to steer; this is its mirror — arriving after the
-report and steering what should have been closed. The skill's §4
-already says the close message resumes the agent; the incident shows
-EVERY message does, and a decision reply is a build order to a lane
-whose grant text leaves the door open. (b) The §1 base check
-establishes COMMITTED state and has no state for "someone is writing
-right now": three states between two reads, none of them a live
-co-writer. Underneath both: a lane's report line is a claim about
-the past; only the agent listing says what it is doing NOW — the
-desk itself named this as the rule it had applied to others all day.
-
-**Pre-formulated rule text.** §4: after a report is BOOKED, the only
-message a lane receives is the close, in the boundary form ("grant
-over; do not act; a later defect is reported"); every decision the
-report raised travels to the NEXT lane's brief, never back to the
-reporter. Before any dispatch or any message to a lane, the listing
-is read — a lane that reads `running` under a booked report is a
-finding. A lane ended by TaskStop is NEVER messaged again, for any
-reason, the close included: a send resumes a named agent from its
-transcript, and a stopped lane's transcript ends on its last live
-instruction — measured the same hour, when the judgment desk ordered
-a close to the stopped lane and the peer desk correctly refused it
-as a state-dependent directive whose state was false (the lane was
-ABSENT from the listing, its last instruction "build"); the artifact
-— absent, reverted, no commit — is the record of its termination. §1 arrival check gains a third read: `git status
---porcelain` over the write set plus the writer-reservation file
-(where the reservation gate is deployed); a modified file in the
-write set or a live reservation is a HALT, whatever the base check
-said.
-
-**Consumer + drain seam.** The next dispatch-skill maintenance pass
-(§1 arrival check, §4 close rule); n=1, caught by the arriving lane on
-first use of an unprescribed check.
+**Status 2026-08-27, wave-4 lane `opus-a-skill-amendments` — PARTLY
+APPLIED, stays open.** Landed: clause (1) grant-up-front and clause
+(3) steer-by-ARTIFACT, in `plugin/skills/dispatch/SKILL.md` §4, by
+re-scoping the "additions extend ownership" bullet this entry asked
+to re-scope — it now reads "Additions extend OWNERSHIP, not
+instruction", and its closing "ASK the holder and wait for the
+answer" was sharpened in the same edit, being a rule resting on the
+premise this entry kills. The channel fact itself landed as a dated
+binding in `references/forms.md` §2 (delivery at turn boundaries,
+the waiting-lane deadlock, reanimation), and that block carries
+clause (2)'s "halt the ITEM, never the LANE" as the lane-facing
+consequence. Clause (4) needed no edit.
+NOT LANDED: clause (2) in the EXECUTION TAIL of `references/forms.md`
+— the wave-4 brief's own site (i). The tail is mirrored by
+`EXECUTION_TAIL_BG` in `plugin/hooks/brief-reminder.py`, and
+`check_execution_tail_fixture` (tools/check-doc-drift.py) compares
+the two on normalized text, so ANY tail edit goes red. Proven, not
+reasoned: a scratch copy of the repo, its own doc-drift run green
+FIRST (arrangement check), the tail clause applied there, re-run →
+`[DRIFT] EXECUTION tail fixture`, first divergence at normalized
+char 1780, exit 1. The repairing write is the fixture literal under
+`plugin/hooks/`, outside this lane's write boundary. Seam: the next
+pass that owns BOTH the skill files and `plugin/hooks/` lands the
+tail clause and its fixture in ONE commit — they cannot be split
+without leaving the repo red between them. An entry whose remaining
+home lies outside the working copy is not drained; same shape as the
+RESIDUUM note under `## Offen`.
