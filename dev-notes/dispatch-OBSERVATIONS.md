@@ -3046,3 +3046,51 @@ pin does not match the injected text.
 
 **Consumer + drain seam.** The next dispatch-skill maintenance pass
 (§6 schema); the `guard-checker-bau` entry's next status move.
+
+## 2026-08-27 — CLASS: a message arriving AFTER a lane's report REANIMATES it — the delayed mailbox's mirror — and the committed-state base check cannot see the live writer it wakes
+
+**Incident + basis.** Wave-3 desk `dotfiles-2f`: a "decided, build it"
+message to lane B was delivered at a turn boundary AFTER lane B had
+sent its closing report; the message's own text kept the grant open
+("your write grant stays open until your report is booked"), so the
+lane resumed and built lc-17 from the PRE-ruling design — 446
+insertions in `migrate.py`, the very sentence the judgment desk had
+struck. The desk, reading the report's "write grant closed" line as
+current, reported the lane finished and dispatched lane B2 for the
+same item. B2's prescribed arrival check (`merge-base --is-ancestor`
++ `log <base>..HEAD`) PASSED — lane B's work was uncommitted. B2 went
+further unprompted: `git status` showed the file modified, six size
+samples over ~30 s showed it growing, `.git/writer-reservation.json`
+named the holder with `claimed_at` 22 s old; it halted before
+writing. Containment: TaskStop, diffs saved to scratch, files
+restored by `git show HEAD:<path> >` (never checkout/restore/stash),
+caches cleared, index refreshed, status empty, blob sha equal — no
+commit made, nothing in history. Cost ~10 min of lane tokens.
+
+**Class.** Two. (a) The mailbox-delay entry above is about messages
+arriving too LATE to steer; this is its mirror — arriving after the
+report and steering what should have been closed. The skill's §4
+already says the close message resumes the agent; the incident shows
+EVERY message does, and a decision reply is a build order to a lane
+whose grant text leaves the door open. (b) The §1 base check
+establishes COMMITTED state and has no state for "someone is writing
+right now": three states between two reads, none of them a live
+co-writer. Underneath both: a lane's report line is a claim about
+the past; only the agent listing says what it is doing NOW — the
+desk itself named this as the rule it had applied to others all day.
+
+**Pre-formulated rule text.** §4: after a report is BOOKED, the only
+message a lane receives is the close, in the boundary form ("grant
+over; do not act; a later defect is reported"); every decision the
+report raised travels to the NEXT lane's brief, never back to the
+reporter. Before any dispatch or any message to a lane, the listing
+is read — a lane that reads `running` under a booked report is a
+finding. §1 arrival check gains a third read: `git status
+--porcelain` over the write set plus the writer-reservation file
+(where the reservation gate is deployed); a modified file in the
+write set or a live reservation is a HALT, whatever the base check
+said.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§1 arrival check, §4 close rule); n=1, caught by the arriving lane on
+first use of an unprescribed check.
