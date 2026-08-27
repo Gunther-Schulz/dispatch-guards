@@ -2900,3 +2900,36 @@ HEADING-KEYED so the reader repairs the heading, not the substance.
 **Consumer + drain seam.** The three guards' next predicate change;
 the retirement pass. The over-fire count is the metric: n=3 in one
 session on the careful path.
+
+## 2026-08-27 — CLASS: a dispatcher GRANT issued on the executor's LABEL for an artifact, never on the artifact's own definition
+
+**Incident + basis.** A peer desk's step-0 digest called a leak-scan
+run over `..HEAD` "DEGRADED" (the scanner printed a `degraded:` line
+because the base ref was empty). The judgment desk granted a one-line
+edit to the plugin's laws file replacing `..HEAD` with `<base>..HEAD`.
+The peer checked the scanner's `--help` before editing: an EMPTY base is
+the documented form ("<old> may be EMPTY"), two tests pin it, both green
+at the base sha. The granted edit would have NARROWED a full-tree scan
+of the publication guard to a range scan. Not executed; grant withdrawn
+on the peer's evidence (`dotfiles-2f`, lifecycle `4283d61`).
+
+**Class.** The definitions rule (corpus, Fixing) at the DISPATCHER's
+end: a wrongness claim asserts a deviation from the artifact's
+definition, and here the "wrongness" arrived as a status word in a
+digest — a label over a body the desk never opened. The costume is the
+GRANT: it presents as a decision (executed, not graded) while it is a
+repo-state claim wearing a ruling, so nothing prompted the read. The
+executor's own definition-check is what saved the check; an executor
+briefed to obey would have shipped it.
+
+**Pre-formulated rule text** (skill §4, dispatcher duties, or §1
+provenance): a ruling that AUTHORIZES an edit on the strength of a
+report's characterization of an artifact ("degraded", "broken",
+"stale") is a repo-state claim and takes the provenance grade — the
+desk opens the artifact's definition (its --help, its tests, its
+docstring) or grants conditionally: "if the definition agrees; if not,
+report and do not edit". The peer's refusal-with-evidence is the
+correct executor behaviour and is graded as such, never as a deviation.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+n=1, the executor caught it.
