@@ -141,3 +141,19 @@ sys.exit(1 if bad else 0)"
 A guard change additionally extends `tools/corpus/guards.jsonl` — the
 bench scores only the cases the corpus enumerates, so an unextended
 corpus reports clean on an untested lane.
+
+## Carve-outs
+
+This repository is PUBLIC (`gh repo view`: visibility PUBLIC), so a
+push to `origin` is an outward act under the operator corpus's
+carve-out floor. Standing venue authorization, operator decision
+2026-08-27, stated first-hand to the judgment desk with the fact in
+front of them (the repo stays public; the held commits go): **a push
+of `main` to `origin` is authorized without asking**, under the
+repo's ordinary rules (claim log first, every outgoing commit
+claimed, never `--no-verify`). Outside this authorization, still the
+operator's own acts: the marketplace release (`/release-plugin`) and
+the plugin update on a machine (`claude plugin update
+dispatch-guards@dispatch-guards-marketplace` / `dot apply`). A
+session that finds this heading answers "may I push?" from it; a
+session that finds it missing asks.
