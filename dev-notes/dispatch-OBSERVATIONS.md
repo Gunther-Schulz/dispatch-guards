@@ -2980,7 +2980,13 @@ only `git show --stat`; it then ran the battery, every figure
 matched, and corrected the provenance anyway — a true claim asserted
 without its basis is indistinguishable, from the grader's side, from
 a checked one, and the grade would have rested on the lane grading
-itself. The instrument was not blind there; it was never run.
+itself. The instrument was not blind there; it was never run. By the
+wave's close the desk's own tally was SIX (a citation to a decision
+label that names a different ruling; a whole-file pin where the
+register keys on a section; an item quoted for words it does not
+contain) — every one caught by a lane, none by the desk first; the
+desk's own class statement: a claim passed on without opening the
+thing itself, hidden because the sentence is usually TRUE.
 
 **Terminal form, measured the same afternoon (lane B2).** A lane that
 halted on a question and WAITED could not be reached at all: the
