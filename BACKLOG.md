@@ -7,6 +7,67 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **PARKED 2026-08-27 (wave-4 peer desk) — this repo declares no
+  `## Carve-outs` heading, so every session re-derives from scratch
+  whether pushing it is an outward act.** Measured 2026-08-27:
+  `gh repo view` → `"isPrivate": false, "visibility": "PUBLIC"`,
+  while the sibling dotfiles repo is PRIVATE — so the corpus floor's
+  "a public-repo push is outward" binds here and not there, and the
+  distinction is invisible from inside a working copy. The wave-4
+  handoff named the marketplace release and the plugin update as the
+  operator's acts but did not reach the push; the judgment desk
+  derived a standing authorization from eight same-day pushes under
+  the operator's standing commit-means-push practice — a derivation,
+  not a declaration. Design, decided: a `## Carve-outs` heading in
+  this repo's `CLAUDE.md` recording the push to `origin` as a
+  STANDING VENUE authorization, with its basis and date, leaving the
+  marketplace release and the plugin update explicitly outside it.
+  Verifier: a fresh session reading only `CLAUDE.md` can answer
+  "may I push this repo?" without asking. Write-set:
+  `CLAUDE.md`. Done-criterion: the heading exists and names the
+  venue, the two excluded acts, and the authorizing record.
+  MISSING EVIDENCE (why parked, not ready): the operator's
+  first-hand confirmation is what turns a desk derivation into a
+  declaration — asked 2026-08-27, answered "push yes" but on the
+  stated premise "it's a private repo anyways", which is false for
+  THIS repo; a clean re-confirmation against the corrected fact is
+  the trigger.
+- **READY 2026-08-27 (wave-4 peer desk, lanes A and A2 independently)
+  — the `forms.md` EXECUTION tail and its byte-fixture cannot be
+  committed separately, and nothing says so.** `check_execution_tail_
+  fixture` (`tools/check-doc-drift.py`) compares the forms.md tail
+  against `EXECUTION_TAIL_BG` in `plugin/hooks/brief-reminder.py` on
+  normalized text, so ANY tail edit is red until the literal moves
+  with it. Two lanes each spent a scratch-copy round discovering
+  this; the first was briefed with a write set that excluded
+  `plugin/hooks/` and could not land its item at all. Design,
+  decided: one sentence in this repo's `CLAUDE.md` Verify prose —
+  a forms.md EXECUTION-tail edit and the `EXECUTION_TAIL_BG` literal
+  ride ONE commit, so a brief commissioning a split is a brief that
+  cannot land. Verifier: the sentence is present and names both
+  paths; a reader briefing that write set finds it before writing.
+  Write-set: `CLAUDE.md`. Done-criterion: the sentence exists and
+  names `references/forms.md` and `plugin/hooks/brief-reminder.py`
+  together. Evidence: lane A's red at normalized char 1780 (clause
+  at tail position), lane A2's at char 0 (clause at head) — same
+  coupling, and the OFFSET IS A FUNCTION OF PLACEMENT, not of the
+  defect, so an offset quoted from a prior lane's red is provenance
+  and never an expected value.
+- **PARKED 2026-08-27 (wave-4 peer desk, lane A2 gap 3) — §1's
+  `## Background` slot now states two overlapping demands in
+  adjacent lines.** Landed 2026-08-27 (`e582e9a`): "every Background
+  line in a brief carries the command and its hit inline, or the
+  word 'unverified'", sitting beside the pre-existing "each OPENED
+  at brief time, or graded 'from <source>, unverified'". Both are
+  correct and compatible; the new one is strictly the sharper
+  demand. Amendment-over-addition would merge them into one
+  sentence. The executing lane declined it as rule-text redesign
+  above its grant, correctly. MISSING EVIDENCE (why parked): whether
+  the merged sentence keeps BOTH demands' reach — the OPENED-at-
+  brief-time clause covers a line whose basis is a read rather than
+  a command, which a command-and-hit-only sentence would silently
+  narrow. The merge is a corpus edit under `CLAUDE-maintenance.md`
+  and needs its composition pass, not a lane.
 - **READY 2026-08-27 (operator decision, via the wave-3 judgment desk)
   — the observation carriers are English; three carry German today.**
   The operator's decision, restated: everything in their artifacts is
