@@ -3022,9 +3022,19 @@ evidence gathered while the lane is alive, and a re-probe priced
 against the wrong text is the invalidation clause silently defeated.
 
 **Pre-formulated rule text** (§1 brief, §6 register): a brief under a
-registered class names the class devbook's blob sha beside its path
-(`git rev-parse HEAD:<path>` at brief time), and the register's
-probe-evidence line records that sha; a probe whose brief carried no
+registered class names the class devbook SECTION's sha256 beside its
+path — computed the way the register's fingerprint check documents
+it (from the `## <ID>` heading to the next `## ` line or EOF,
+splitlines keepends, joined, utf-8; the same function the doctor
+uses) — and the register's probe-evidence line records that sha.
+CORRECTED the same day: the first adopted form was the whole-file
+blob (`git rev-parse HEAD:<path>`), which moves when ANY other
+section of the file changes and is not comparable to the register's
+stored fingerprint — three objects (file blob, section sha256, stored
+fingerprint) were measured side by side and none matched; a pin that
+cannot be compared to the thing it pins is decoration. The register's
+stored hash on an `eval-open` entry is historical by its own
+declaration and is not a defect; a probe whose brief carried no
 pin is booked UNDETERMINED with the dispatch timestamp beside the
 nearest amendment's. Adopted by the judgment desk 2026-08-27; lane B
 of the same wave is the first brief carrying it.
