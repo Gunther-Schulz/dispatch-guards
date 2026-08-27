@@ -78,140 +78,139 @@ enforcement structure. No capability patches as of minting.
 
 ## Abgeflossen
 
-Angewandte oder verworfene Einträge mit Beleg — der Eintrag WANDERT
-hierher (Form: `dev-notes/OBSERVATIONS-FORM.md`).
+Applied or dropped entries, with evidence — the entry MOVES here
+(form: `dev-notes/OBSERVATIONS-FORM.md`).
 
-### ANGEWANDT 2026-08-18 (Peer-Auftrag pbs-office-Desk) — beide
-### Hälften, plus ein vom Pass selbst gefundener dritter Defekt
+### APPLIED 2026-08-18 (peer assignment, pbs-office desk) — both
+### halves, plus a third defect found by the pass itself
 
-Der vorformulierte Text ist ins Skill übernommen, nicht zitiert:
-`worktree/SKILL.md:111` weitet die Isolations-Probe auf die
-NACHBARSCHAFT (Relativpfad-Nachbar → stiller Fallback-Zweig) und auf
-die Pfad-Auflösung, und schließt mit der positiven Pflicht — der
-Lane-Bericht nennt die erreichbaren Zweige, die Integration läuft im
-Haupt-Checkout. Die kleinere Ergänzung sitzt in
-`dispatch/SKILL.md:341` als VORFRAGE an der Rung-2-Entscheidung, per
-Quellen-Label auf den worktree-Skill, ohne zweite Kopie des
-Mechanismus.
+The pre-formulated text is absorbed into the skill, not quoted:
+`worktree/SKILL.md:111` widens the isolation probe to the
+NEIGHBORHOOD (a relative-path neighbor → a silent fallback branch)
+and to path resolution, and closes with the positive duty — the lane
+report names the branches it could reach, integration runs in the
+main checkout. The smaller addition sits in `dispatch/SKILL.md:341`
+as a PRE-QUESTION to the rung-2 decision, source-labeled to the
+worktree skill, without a second copy of the mechanism.
 
-DRITTER DEFEKT, von diesem Pass gefunden, nicht vom Eintrag:
-`worktree/SKILL.md:93` schrieb selbst `--git-common-dir` als
-Auflösungs-Weg für den Hook-Pfad vor — genau das Kommando, dessen
-cwd-Relativität Vorfall (b) misst. Das Skill trug die Falle in
-seiner eigenen Anweisung. Repariert zu `--absolute-git-dir` bzw.
-`--path-format=absolute --git-common-dir`, mit der Unterscheidung,
-welches der beiden welchen gitdir meint.
+THIRD DEFECT, found by this pass, not by the entry:
+`worktree/SKILL.md:93` itself prescribed `--git-common-dir` as the
+resolution path for the hook path — exactly the command whose
+cwd-relativity incident (b) measures. The skill carried the trap in
+its own instruction. Fixed to `--absolute-git-dir` or
+`--path-format=absolute --git-common-dir`, with the distinction of
+which of the two means which gitdir.
 
-BASIS, am laufenden git gemessen (nicht aus dem Eintrag übernommen):
-Haupt-Checkout cwd=root → `.git`, cwd=plugin/hooks → `../../.git`;
-im Worktree → bereits absolut; aus `/home/g` gelesen resolved die
-relative Form zu `/home/g/.git`, `exists: False`, die
-`--path-format=absolute`-Form auf den echten Pfad, `exists: True`.
-Das ist das diskriminierende Paar aus der Quelle, beide Richtungen.
-Probe-Worktree danach entfernt, Config-Hash vorher/nachher gleich.
+BASIS, measured against the running git (not taken from the entry):
+main checkout cwd=root → `.git`, cwd=plugin/hooks → `../../.git`; in
+a worktree → already absolute; read from `/home/g`, the relative
+form resolves to `/home/g/.git`, `exists: False`, the
+`--path-format=absolute` form to the real path, `exists: True`. That
+is the discriminating pair from the source, both directions. Probe
+worktree removed afterward, config hash equal before/after.
 
-### Ein Worktree ist eine ANDERE UMGEBUNG, und die Suite darin misst sie mit
+### A worktree is a DIFFERENT ENVIRONMENT, and the suite inside it measures against it
 
-**1. Vorfall + Basis.** Zwei Messungen an einem Abend (2026-08-18,
-pbs-office-Backlog-Welle; Journal `01NhRWdw-backlog-desk-1808`, Commits
-pbs-office `892ed44` gebaut / `10fb16c` nachgezogen).
+**1. Incident + basis.** Two measurements in one evening (2026-08-18,
+pbs-office backlog wave; journal `01NhRWdw-backlog-desk-1808`,
+commits pbs-office `892ed44` built / `10fb16c` followed up).
 
-(a) Eine Lane baute in einem pbs-office-Worktree unter dem Scratchpad und
-meldete „keine Regression" gegen ihre eigene Baseline. Im Haupt-Checkout
-fielen danach VIER Tests. Ursache: der Bau greift auf ein NACHBAR-Repo zu
-(`<repo>/../pbs-projekt/src`). Im Haupt-Checkout existiert der Nachbar, im
-Scratchpad-Worktree nicht — also lief bei der Lane durchgehend der
-Fallback-Zweig, und der Hauptzweig war schlicht nicht unter Prüfung. Die
-Lane hat das korrekt und vollständig berichtet; sie konnte es nur nicht
-sehen.
+(a) A lane built in a pbs-office worktree under the scratchpad and
+reported 'no regression' against its own baseline. FOUR tests then
+failed in the main checkout. Cause: the build accesses a NEIGHBOR
+repo (`<repo>/../pbs-projekt/src`). The neighbor exists in the main
+checkout, not in the scratchpad worktree — so the lane ran the
+fallback branch throughout, and the main branch was simply never
+under test. The lane reported this correctly and completely; it just
+could not see it.
 
-(b) Dieselbe Lane baute eine Ortsbestimmung, die in ihrer Umgebung
-funktionierte und im Haupt-Checkout STILL fehlschlug: `git rev-parse
---git-common-dir` antwortet relativ zu SEINEM cwd (`../../.git`), während
-`Path.resolve()` gegen den cwd des Python-Prozesses auflöst. Ergebnis aus
-`/home/g` gemessen: `/pbs-projekt/src` — existiert nicht, also skippten
-alle vier strengen Fälle stillschweigend und die Suite meldete grün.
-Gepaart belegt: alte Auflösung → nicht existierender Pfad, neue
-(`--path-format=absolute`) → der echte Pfad; nach dem Fix 0 Skips aus
-jedem cwd.
+(b) The same lane built a location resolution that worked in its own
+environment and SILENTLY failed in the main checkout: `git rev-parse
+--git-common-dir` answers relative to ITS OWN cwd (`../../.git`),
+while `Path.resolve()` resolves against the Python process's cwd.
+Result measured from `/home/g`: `/pbs-projekt/src` — does not exist,
+so all four strict cases silently skipped and the suite reported
+green. Shown paired: the old resolution → a nonexistent path, the
+new one (`--path-format=absolute`) → the real path; 0 skips from any
+cwd after the fix.
 
-**2. Klasse.** Nicht die geteilte Config und nicht die Hook-Reichweite —
-beide sind hier schon gebucht. Dies ist die UNTRACKED-Umgebung als
-still wirkende Prüf-Prämisse: der Skill sagt heute „a fresh worktree has
-no untracked state" und verlangt eine Isolations-Probe für das EIGENE
-Paket des Repos. Beide Vorfälle liegen daneben: (a) betrifft eine
-NACHBARSCHAFT, die der Worktree nicht hat, und (b) eine
-Pfad-Auflösung, die im Worktree anders ausgeht. Die vorhandene Probe
-hätte beide durchgewinkt. Gemeinsamer Kern: was der Worktree an
-Umgebung NICHT mitbringt, entscheidet mit, welcher Code-Zweig unter
-Prüfung steht — und die Abweichung meldet sich als GRÜN, nie als Fehler.
+**2. Class.** Not the shared config and not hook reach — both are
+already booked here. This is the UNTRACKED environment as a
+silently acting check premise: the skill today says 'a fresh
+worktree has no untracked state' and demands an isolation probe for
+the repo's OWN package. Both incidents sit beside that: (a) concerns
+a NEIGHBORHOOD the worktree does not have, and (b) a path resolution
+that comes out differently in the worktree. The existing probe
+would have waved both through. Common core: what environment the
+worktree does NOT bring along co-decides which code branch is under
+test — and the deviation reports itself as GREEN, never as a
+failure.
 
-**3. Vorformulierter Regel-/Fix-Text** (Ergänzung im Abschnitt „A fresh
-worktree has no untracked state", nach der Isolations-Probe):
+**3. Pre-formulated rule/fix text** (addition to the 'A fresh
+worktree has no untracked state' section, after the isolation
+probe):
 
-> Die Probe deckt das eigene Paket ab, nicht die NACHBARSCHAFT. Ein
-> Worktree liegt typisch außerhalb des Verzeichnisses, in dem der
-> Haupt-Checkout mit seinen Geschwister-Repos steht — jeder Code, der
-> ein Nachbar-Repo über einen relativen Pfad sucht (`../<repo>/src`),
-> nimmt dort stumm den Fallback-Zweig, und eine Suite, die beide Zweige
-> abdecken soll, prüft nur den, den ihre Umgebung erzwingt. Ebenso
-> antwortet `git rev-parse --git-common-dir` RELATIV zu seinem cwd;
-> `Path.resolve()` und `realpath` lösen gegen den cwd des AUFRUFENDEN
-> Prozesses auf, und die beiden fallen im Worktree auseinander — immer
-> `--path-format=absolute` verlangen. Beide Fehlschläge sind STILL:
-> der eine nimmt einen anderen Zweig, der andere skippt. Darum gehört in
-> jeden Bericht einer Worktree-Lane, welche ZWEIGE ihre Umgebung
-> überhaupt erreichbar gemacht hat — und die Integration verlangt einen
-> eigenen Suite-Lauf im Haupt-Checkout, bevor irgendetwas gepusht wird.
-> Ein „keine Regression" aus einem Worktree gilt für den Worktree.
+> The probe covers the repo's own package, not the NEIGHBORHOOD. A
+> worktree typically sits outside the directory where the main
+> checkout stands with its sibling repos — any code that looks for a
+> neighbor repo via a relative path (`../<repo>/src`) silently takes
+> the fallback branch there, and a suite meant to cover both
+> branches only exercises the one its environment forces. Likewise
+> `git rev-parse --git-common-dir` answers RELATIVE to its own cwd;
+> `Path.resolve()` and `realpath` resolve against the CALLING
+> process's cwd, and the two diverge inside a worktree — always
+> demand `--path-format=absolute`. Both failures are SILENT: one
+> takes a different branch, the other skips. That is why every
+> worktree lane's report must name which BRANCHES its environment
+> even made reachable — and integration demands its own suite run in
+> the main checkout before anything is pushed. A 'no regression'
+> from a worktree holds for the worktree.
 
-Zweite, kleinere Ergänzung (Dispatch-Skill §1, Worktree-Rezept): die
-Rung-2-Entscheidung braucht eine Vorfrage — greift der Bau auf etwas
-außerhalb des Repos zu (Nachbar-Repo, absolute Pfade, installierte
-Kopie)? Dann ist der Worktree die falsche Isolation, nicht die teure.
+Second, smaller addition (dispatch skill §1, worktree recipe): the
+rung-2 decision needs a pre-question — does the build access
+anything outside the repo (a neighbor repo, absolute paths, an
+installed copy)? Then the worktree is the WRONG isolation, not
+merely the expensive one.
 
-**4. Konsument + Abfluss-Naht.** Nächste dispatch-guards-Maintenance-Runde
-(Skill-Text `worktree` + Dispatch-Skill §1). Die Integrations-Hälfte ist
-bereits gelebte Praxis dieser Welle — der Haupt-Checkout-Lauf hat beide
-Defekte gefunden —, aber sie steht nirgends als Regel.
+**4. Consumer + drain seam.** The next dispatch-guards maintenance
+round (skill text `worktree` + dispatch skill §1). The integration
+half is already lived practice this wave — the main-checkout run
+found both defects — but it stands nowhere as a rule.
 
-### ABGEFLOSSEN 2026-08-17 (Wartungs-Pass, mit dem dispatch-Carrier
-### mitgezogen — dieser Träger schuldete nach Quote nichts)
+### DRAINED 2026-08-17 (maintenance pass, carried along with the
+### dispatch carrier — this carrier owed nothing per the quota)
 
-Vorschläge 1–3 sind gebaut, 5 verworfen, 4 bleibt geparkt — der
-Eintrag verlässt damit die lebende Liste, ohne dass die offene Frage
-verschwindet:
+Proposals 1–3 are built, 5 dropped, 4 stays parked — the entry
+leaves the live list without the open question disappearing:
 
-1. **Ownership** — realisiert als DEKLARATION statt Markierung:
-   `worktree_doctor.py` behandelt nur per `--owned PATH` erklärte
-   Worktrees als eigene, leitet Besitz nie aus Pfad-Form, Namens-
-   Präfix oder Branch ab (genau die Muster-Blindheit, die der
-   Vorschlag ausschloss); alles andere ist UNKNOWN und nie entfernbar.
-2. **Kein Force über schmutzige Worktrees** — das Werkzeug hat
-   überhaupt keinen Entfernungs-Pfad: es druckt das unforcierte
-   `git worktree remove <path>` als TEXT, DIRTY schlägt jede andere
-   Klassifikation.
-3. **Melden vor Handeln** — die drei Verdikte (clean / stale-found /
-   could-not-verify) sind die Ausgangs-Codes; UNREADABLE wird nie zu
-   etwas anderem gemacht.
-4. **Retirement-Trigger** — bleibt OFFEN mit unveränderter genannter
-   fehlender Evidenz (Fehlfeuer-Rate eines Kandidaten-Prädikats);
-   Heimat ist der BACKLOG-Eintrag PARKED 2026-08-08, nicht dieser
-   Träger.
-5. **Lane meldet ihren Worktree-Pfad** — VERWORFEN: der Dispatcher
-   legt den Worktree an und hält den Pfad per Konstruktion; die
-   Entfernung selbst ist im dispatch-Skill §1 als terminaler Akt
-   sequenziert.
+1. **Ownership** — realized as a DECLARATION rather than a marking:
+   `worktree_doctor.py` treats only worktrees declared via `--owned
+   PATH` as its own, never deriving ownership from path shape, name
+   prefix, or branch (exactly the pattern-blindness the proposal
+   ruled out); everything else is UNKNOWN and never removable.
+2. **No force over dirty worktrees** — the tool has no removal path
+   at all: it prints the unforced `git worktree remove <path>` as
+   TEXT, DIRTY beats every other classification.
+3. **Report before acting** — the three verdicts (clean /
+   stale-found / could-not-verify) are the exit codes; UNREADABLE is
+   never turned into anything else.
+4. **Retirement trigger** — stays OPEN with its named missing
+   evidence unchanged (the false-fire rate of a candidate
+   predicate); its home is the BACKLOG entry PARKED 2026-08-08, not
+   this carrier.
+5. **Lane reports its worktree path** — DROPPED: the dispatcher
+   creates the worktree and holds the path by construction; the
+   removal itself is sequenced in dispatch skill §1 as the terminal
+   act.
 
-**Fund desselben Passes, hier vermerkt, weil er diesen Träger
-betrifft:** die Cleanup-Sektion des Skills wies noch an, Reader-/
-Probe-Worktrees „at the booking of their findings" zu entfernen —
-die Reihenfolge, die die 0.10.25-Amendierung als verlierend
-identifiziert und in dispatch §1 korrigiert hatte, ohne diese vierte
-Heimat zu erreichen (geprüft: `git log -L` zeigt die Zeile seit
-38e9ae7 unverändert, `git show --stat 7a23673` nennt drei Dateien,
-diese nicht dabei). Jetzt: buchen, befragen, DANN entfernen. Beleg:
-dieser Commit.
+**A finding of this same pass, noted here because it touches this
+carrier:** the skill's cleanup section still instructed removing
+reader/probe worktrees 'at the booking of their findings' — the
+ordering the 0.10.25 amendment identified as losing and had
+corrected in dispatch §1, without reaching this fourth home
+(checked: `git log -L` shows the line unchanged since `38e9ae7`,
+`git show --stat 7a23673` names three files, this one not among
+them). Now: book, follow up, THEN remove. Evidence: this commit.
 
 ## 2026-08-08 — LIFECYCLE: nobody removes worktrees, and the sweep that does has no ownership predicate
 
@@ -302,7 +301,7 @@ the committed work survived; their retirement is a separate question.
 
 ## Offen
 
-Neue Beobachtungen ans Datei-Ende, unter diese Überschrift.
+New observations go at the file's end, under this heading.
 
 <!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
      die lebende Liste. Abgeflossenes steht OBERHALB. Der

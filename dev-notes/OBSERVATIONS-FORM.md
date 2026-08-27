@@ -1,51 +1,51 @@
-# OBSERVATIONS-Form — der Instrument-Lektions-Träger (Vorlage)
+# OBSERVATIONS form — the instrument-lesson carrier (template)
 
-Rolle: prozess-/werkzeugbezogene Schwächen, die im BETRIEB einer
-Session auffallen, landen im Repo des BESITZENDEN Instruments —
-Dispatch-Lektionen hier (`dispatch-OBSERVATIONS.md`), abw-Lektionen in
-pbs-abwaegung, Büro-Prozess im pbs-office-Backlog, Arbeits-Ethik (in
-jedem Projekt wahr) im Operator-Korpus. Nie ein globaler Pool: die eine
-Sammelliste, die jede Session verlängert und niemand leert, ist der
-gemessene Fehlschlag, den diese Form ersetzt (beobachtet
-vendor/claude-code-cache-fix: Auto-Buchung ohne Konsument, ohne
-Gradierung, ohne Dedup, ohne Abfluss-Trigger — inhaltlich richtige
-Einträge, funktional Müllhalde).
+Role: process-/tool-related weaknesses noticed while a session is
+OPERATING land in the repo of the OWNING instrument — dispatch
+lessons here (`dispatch-OBSERVATIONS.md`), abw lessons in
+pbs-abwaegung, office-process ones in the pbs-office backlog, work
+ethics (true in every project) in the operator corpus. Never a
+global pool: the one collection list that every session lengthens
+and nobody drains is the measured failure this form replaces
+(observed in vendor/claude-code-cache-fix: auto-booking with no
+consumer, no grading, no dedup, no drain trigger — content-correct
+entries, functionally a dump).
 
-## Eintrags-Form (vier Pflicht-Slots)
+## Entry form (four mandatory slots)
 
-1. **Vorfall + Basis** — was geschah, mit Fundstelle (Session/Journal/
-   Commit); Häufigkeit, wenn > 1. Der Zähler ist HERKUNFT für die
-   Feuerraten-Review, nie eine Zulassungs-Schwelle: n=1 genügt zum
-   Handeln (Operator-Entscheidung 2026-08-15; spiegelt
-   CLAUDE-maintenance „EINE Beobachtung genügt" — die
-   Feuerraten-Review ist Retirement-Maschinerie, kein Eingangstor).
-   Ein Aufschub bleibt legitim allein, wenn er auf GENANNTER
-   fehlender Evidenz sitzt; „erst mal sammeln, bis n reicht" ist
-   Drift im Kostüm der Sorgfalt.
-2. **Klasse** — die Fehlerklasse, nicht das Symptom. GLEICHE KLASSE =
-   MERGE in den bestehenden Eintrag (Zähler hoch, Fundstelle dazu),
-   nie ein Geschwister-Eintrag.
-3. **Vorformulierter Regel-/Fix-Text** — der Wortlaut, den der
-   Wartungs-Pass anwenden würde. Dieser Slot macht den Pass zum
-   mechanischen Anwenden+Prüfen statt zur Neu-Herleitung; ein Eintrag
-   ohne ihn ist eine halbe Buchung.
-4. **Konsument + Abfluss-Naht** — welcher Pass/welche Runde den
-   Eintrag anwendet (z. B. „nächste dispatch-guards-Maintenance-Runde",
-   „nächster Bau am Wächter X").
+1. **Incident + basis** — what happened, with a citation
+   (session/journal/commit); frequency, when > 1. The counter is
+   PROVENANCE for the fire-rate review, never an admission
+   threshold: n=1 suffices to act on (operator decision 2026-08-15;
+   mirrors CLAUDE-maintenance's "ONE observation suffices" — the
+   fire-rate review is retirement machinery, not an entry gate). A
+   deferral stays legitimate only when it sits on NAMED missing
+   evidence; "let's collect first, until n is enough" is drift in
+   prudence's costume.
+2. **Class** — the defect class, not the symptom. SAME CLASS = MERGE
+   into the existing entry (bump the counter, add the citation),
+   never a sibling entry.
+3. **Pre-formulated rule/fix text** — the wording the maintenance
+   pass would apply. This slot turns the pass into mechanical
+   applying+checking instead of re-derivation; an entry without it
+   is half a booking.
+4. **Consumer + drain seam** — which pass/round applies the entry
+   (e.g. "next dispatch-guards maintenance round", "next build
+   touching guard X").
 
-## Abfluss (Quote, nie Kalender)
+## Drain (quota, never calendar)
 
-Der Träger schuldet einen Wartungs-Pass, wenn Buchungen seit dem
-letzten Pass Anwenden+Verwerfen deutlich überholen (Faustgröße 3:1 —
-dieselbe Quote wie der Backlog-Retirement-Trigger im Operator-Korpus).
-Der Pass wendet den vorformulierten Text an ODER verwirft mit
-Ein-Zeilen-Begründung — beides ist ein Abgang, die Liste schrumpft.
-Angewandte/verworfene Einträge wandern in einen `## Abgeflossen`-
-Abschnitt mit Beleg (Commit/Begründung) — ein Fakt, eine Heimat.
+The carrier owes a maintenance pass when bookings since the last
+pass clearly outrun applying+dropping (rough tripwire 3:1 — the same
+quota as the backlog retirement trigger in the operator corpus). The
+pass applies the pre-formulated text OR drops it with a one-line
+reason — both are an exit, the list shrinks. Applied/dropped entries
+move into a `## Abgeflossen` section with evidence (commit/reason) —
+one fact, one home.
 
-## Erfassungs-Naht
+## Capture seam
 
-Das Sitzungsende trägt eine Präsenz-Zeile („Ernte: <Buchungen mit
-Heimat>" oder „Ernte: keine") — die fehlende Zeile ist sichtbar, das
-Urteil selbst bleibt Urteil. Site-Instanz: pbs-office RUNBOOK R13
-Schritt 3; Korpus-Rolle: Operator-CLAUDE.md, Accretion-Modul.
+The session's close carries a presence line ("Harvest: <bookings
+with a home>" or "Harvest: none") — the missing line is visible, the
+judgment itself stays judgment. Site instance: pbs-office RUNBOOK
+R13 step 3; corpus role: operator CLAUDE.md, accretion module.
