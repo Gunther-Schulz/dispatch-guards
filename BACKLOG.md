@@ -89,25 +89,59 @@ are dropped with a one-line reason.
   narrow. The merge is a corpus edit under `CLAUDE-maintenance.md`
   and needs its composition pass, not a lane.
 - **READY 2026-08-27 (operator decision, via the wave-3 judgment desk)
-  — the observation carriers are English; three carry German today.**
+  — the observation carriers are English. THE BULK IS DONE (`437159c`,
+  lane `sonnet-d2-carriers`); a NAMED residue of six lines remains.**
   The operator's decision, restated: everything in their artifacts is
-  English. Measured 2026-08-27, `grep -rlE '[äöüß]' hooks skills
-  dev-notes README.md` → hooks 0, skills 0, README 0;
-  `dev-notes/OBSERVATIONS-FORM.md` (20 lines),
-  `dev-notes/worktree-OBSERVATIONS.md` (50), `dev-notes/dispatch-
-  OBSERVATIONS.md` (553). Their consumer is the maintenance pass —
-  an agent — so the corpus's language rule binds (consumer fixes the
-  language). Design: translate the German entries in place, entry by
-  entry, preserving every incident's facts, dates, shas and quoted
-  command output verbatim (quoted material is the named exception);
-  one commit per file. Verifier: the same grep returns 0 over
-  `dev-notes/`, shown live first on one planted `ä`; the entry count
-  per file unchanged before and after (`grep -c '^## '`). Write-set:
-  the three files. Done-criterion: grep 0 with the positive shown,
-  entry counts equal, no sha or date changed (`git diff` filtered to
-  lines carrying a sha or date is empty). The sibling item for the
-  dotfiles hooks is booked there (`106075f`); the two sweeps are
-  independent and dispatch in parallel.
+  English. Originally measured 2026-08-27 as
+  `dev-notes/OBSERVATIONS-FORM.md` (20 German lines),
+  `worktree-OBSERVATIONS.md` (50), `dispatch-OBSERVATIONS.md` (553).
+  Their consumer is the maintenance pass — an agent — so the corpus's
+  language rule binds (consumer fixes the language).
+  AMENDED 2026-08-27 by the wave-4 peer desk after grading D2, and
+  the amendment is load-bearing twice over.
+  FIRST, THE ORIGINAL VERIFIER IS UNSATISFIABLE AND MUST NOT BE
+  RETRIED: it demanded `grep -rlE '[äöüß]' dev-notes` return 0, but
+  `tools/check-doc-drift.py` PARSES three German literals out of these
+  files — `_LIVE_HEADING = "## Offen"`, `_DRAINED_HEADING =
+  "## Abgeflossen"` (:333-334, matched by `drained_re`/`live_re`
+  :382-383) and `_APPEND_MARKER` (:332), plus ~8 `--test` fixtures
+  built from them. A lane chasing zero either breaks that checker or
+  halts. Proven by execution, not argued: D2 translated fully, watched
+  "observations tail" go red on an isolated copy, reverted the anchors
+  alone, and confirmed green both ways; an independent repo-wide
+  dependents grep with a positive control returned the same set.
+  SECOND, THE RESIDUE IS SMALLER THAN "THE ANCHORS" SUGGESTS. Only the
+  FIRST line of the append-marker comment carries a parsed literal
+  (measured per line with the three patterns applied individually:
+  2737 `_APPEND_MARKER`; 2738-2740 none). So lines 2-4 of that comment
+  in EACH of the two carriers — six lines total — are ordinary German
+  prose that nothing parses, and they are this item's remaining scope.
+  THE TRAP, and the reason this sentence is in the entry rather than
+  only in `c3e8fae`'s commit message: THE MARKER'S SENTENCE SPANS THE
+  WRAP. Line 2737 ends "dies ist" and 2738 opens "die lebende Liste" —
+  one sentence across four lines. A lane translating lines 2-4 only
+  produces a half-German sentence UNDER A CHECKER THAT STILL PASSES,
+  which is the worst outcome available: no signal that anything is
+  wrong. So the translation keeps the parsed phrase
+  `NEUE EINTRÄGE ANS DATEI-ENDE` byte-identical, and re-flows the
+  remainder of line 1 together with lines 2-4. Quoting that phrase
+  here is safe because `check_observations_tail` globs only
+  `dev-notes/*OBSERVATIONS*.md` (verified at the glob, not assumed) —
+  but writing it into either CARRIER plants a SECOND append marker,
+  since the check matches by substring over the whole file.
+  Write-set: `dev-notes/dispatch-OBSERVATIONS.md`,
+  `dev-notes/worktree-OBSERVATIONS.md` (the marker comment only).
+  Verifier: `python3 tools/check-doc-drift.py` 7/7 `[ok]` INCLUDING
+  "observations tail" and `--test` green — run before and after, the
+  before-run being what proves the arrangement; the append-marker
+  occurrence count per file is still exactly 1; entry counts per file
+  unchanged (`grep -c '^## '`); no sha or date changed (`git diff`
+  filtered to lines carrying a sha or date is empty). Done-criterion:
+  the only German remaining under `dev-notes/` is the three parsed
+  literals named above, enumerated in the closing report — NOT a grep
+  returning 0, which this item now records as impossible. The sibling
+  item for the dotfiles hooks is booked there (`106075f`); the two
+  sweeps are independent and dispatch in parallel.
 - **PARKED 2026-08-26 — depth-2 dispatch: a desk-tier middle agent that
   fans out, under the same hook-controlled robustness and operator
   transparency as depth 1 (operator decision: worth trying; robust or
