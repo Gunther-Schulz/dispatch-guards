@@ -7,6 +7,26 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-27 (judgment desk, from the wave-4 two-channel
+  finding) — `brief-reminder` demands a SECTION PIN on any brief that
+  names a class devbook.** Measured 2026-08-27, three lanes: the
+  `CLAUDE.md` injected at a lane's session start is a snapshot, the
+  file is live, and they disagreed under two lanes with no signal;
+  the third followed the file only because its brief carried the
+  section's sha256 (the register's documented fingerprint function).
+  Design, decided: the brief-reminder hook's Background predicate
+  gains a lane — a brief whose text names a path under a registered
+  class's `heimat` (read from `~/.claude/readiness.json`) without a
+  64-hex sha beside it WARNs "pin the devbook section (readiness
+  fingerprint) — the lane's injected copy may be stale"; a brief
+  naming no devbook path is untouched. Computable, near-zero false
+  fires: the predicate is path-in-register AND no-sha-in-brief.
+  Verifier: `--test` with the pair — a brief naming the devbook path
+  without a sha (fires), the same brief with the sha (silent), a
+  brief naming no registered path (silent); replay-bench unchanged.
+  Write-set: `plugin/hooks/brief-reminder.py`, its test, manifest
+  bump. Done-criterion: the three-arm test green, the skill's §1 pin
+  clause cites the hook as its mechanism.
 - **PARKED 2026-08-27 (wave-4 peer desk) — this repo declares no
   `## Carve-outs` heading, so every session re-derives from scratch
   whether pushing it is an outward act.** Measured 2026-08-27:
