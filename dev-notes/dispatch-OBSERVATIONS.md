@@ -3312,3 +3312,52 @@ a `killed` notification on it is a re-arm, never a no-op. Retire the
 **Consumer + drain seam.** The next dispatch-skill maintenance pass
 (§4 arming clause); the corpus Insurance bullet's "background timer"
 phrase, same fact.
+
+## 2026-08-27 — CLASS: a translation brief changed text the repo's own checker parses, and nothing in the brief form asked which literals were load-bearing
+
+**Incident + basis.** Peer desk `dotfiles-2f` briefed lane
+`sonnet-d2-carriers` to translate the three dev-notes observation
+carriers from German to English (write set: `dev-notes/` only). The
+brief named files, boundaries, verifier and grounding, and said
+nothing about which strings in those files something else PARSES.
+`tools/check-doc-drift.py` keys `check_observations_tail` on exactly
+two of them: `_LIVE_HEADING = "## Offen"` and `_DRAINED_HEADING =
+"## Abgeflossen"` (333-334), matched by `drained_re`/`live_re`
+(382-383), plus the `_APPEND_MARKER` constant (332) and roughly
+eight `--test` fixtures built from the same literals. That marker's
+text is deliberately NOT quoted verbatim here: the check matches it
+by substring over the whole file, so an exact quote would plant a
+SECOND append marker in the carrier it governs and move `marks[-1]`
+onto this entry. An observation about a literal cannot always carry
+the literal — read it at the cited line. The lane translated everything, watched "observations tail"
+go red on an isolated repo copy, reverted only the two anchors, and
+confirmed the pass both ways — an executed pair, not a read — and
+reported the keep as a deviation. The dispatcher's independent
+dependents search (repo-wide grep on the two literals, positive
+control non-zero) returned the same set: agreement on a shared
+coordinate, not one instrument's green.
+
+**Class.** The dependents question, which the corpus already carries
+for names, types and value sets, does not fire when the thing being
+changed is PROSE — a heading, a marker, a section title that a
+checker reads. A translation, a section rename, a reflow all present
+as editing text for humans, so nothing prompts "what parses this?".
+Here the check went red at the end, which is the cheap direction;
+where no check exists the anchor drifts and the mechanism keying on
+it stops firing while still reading green.
+
+**Pre-formulated rule text** (§1, the brief's write-boundary block):
+where a brief changes the TEXT of a file the target repo's own
+tooling parses, it names the dependents search as a step — grep the
+repo's checkers and tools for literal strings drawn from the write
+set BEFORE the first edit, with a positive control. Each anchor found
+is dispositioned in the brief: kept with the reason stated, or moved
+in the same change together with its checker. Where the write
+boundary excludes that checker, "keep the anchor" is the only
+available answer and the brief says so, rather than leaving the lane
+to discover it by going red.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§1, the brief form's write-boundary block). Single home here: the
+dotfiles guard/checker devbook only meets this if a translation lane
+is ever run under it.
