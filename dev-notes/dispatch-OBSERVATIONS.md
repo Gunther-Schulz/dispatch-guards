@@ -3180,3 +3180,81 @@ HEADING-KEYED so the reader repairs the heading, not the substance.
 **Consumer + drain seam.** The three guards' next predicate change;
 the retirement pass. The over-fire count is the metric: n=3 in one
 session on the careful path.
+
+## 2026-08-27 — CLASS: a Background line's ASSURANCE reads as its basis — six dispatcher claims shipped true-sounding and unopened, all lane-caught; the form is the fix
+
+**Incident + basis.** Wave-3 peer desk (opus): six grounding failures
+in one wave, each a claim passed on without opening the thing itself
+— a zero-hit grep over a path that did not exist, a hook probe whose
+payload could not fire the guard it claimed to check, "verified by
+me" over a lane's own figures, a citation to a decision label naming
+a different ruling, a whole-file pin where the register keys on a
+section, an item quoted for words it does not contain. Two of the six
+were TRUE as sentences and unfounded as claims. Every one was caught
+by the executing lane, none by the desk first (wave-3 closing digest,
+lesson 1; JOURNAL 2026-08-27). The judgment desk's mid-wave form
+change: every Background line carries the command and its hit
+inline, or the word "unverified" — landed in §1's skeleton at
+`e582e9a` (wave 4, lane A2); this is that site's carrier entry.
+
+**Class.** §1's provenance rule already says each line is OPENED at
+brief time; what it lacked was a FORM whose absence is visible — a
+pledge to open relapses, an inline hit does not (corpus, Grounding:
+only a form whose absence is visible binds). The executor reads the
+provenance, never the assurance.
+
+**Pre-formulated rule text.** Landed (§1 skeleton, `e582e9a`). Open
+half, booked in BACKLOG (PARKED, wave-4 A2 gap 3): the new sentence
+and the pre-existing "OPENED at brief time, or graded unverified"
+sentence overlap; the merge is a corpus edit under
+`CLAUDE-maintenance.md` and must keep the read-based basis's reach.
+
+**Consumer + drain seam.** The fire-rate review: does the next wave's
+desk ship an unopened Background line, and does a lane catch it.
+
+## 2026-08-27 — CLASS: the writer-reservation WARN names a DIFFERENT working copy than the one being committed
+
+**Incident + basis.** n=2, two repos, one day (wave-4 peer desk
+`dotfiles-2f`, lane B0): committing in dispatch-guards, the gate
+WARNed naming the DOTFILES working copy and the judgment desk's
+session as holder; lane B0 saw the same on its lifecycle commits.
+The WARN text reads as though it concerns the copy being committed;
+it does not — it reports a reservation elsewhere on the machine.
+
+**Class.** An instrument's label wider than its predicate (corpus,
+Grounding): the reader takes "held" as "THIS copy is held" and either
+halts a lane that is free, or learns to discount the warning where it
+is right. Held unverified until the hook's source is read: whether
+the gate enumerates all reservations or resolves the wrong git dir.
+
+**Pre-formulated rule text.** The WARN names the copy it is about in
+its first line, and says in words that it is NOT the copy being
+committed where that is so; a `--test` bite plants a reservation on a
+sibling copy and asserts the wording. Read the source first — the
+fix follows the mechanism, not the symptom.
+
+**Consumer + drain seam.** The reservation gate's next predicate
+change; the retirement pass.
+
+## 2026-08-27 — CLASS: a check over a carrier whose entries MOVE anchors on body text, never on a heading
+
+**Incident + basis.** Wave-4 lane A2: its own quote-fidelity battery
+anchored on the observation entry's HEADING; the drain step rewrites
+that heading as it moves the entry, so the check died on the very act
+it was grading. The lane named the silent direction: a heading that
+merely SHIFTED would have left the check reading a narrower slice and
+reporting the same green. Sibling finding, same lane: a red's
+divergence OFFSET is a function of the clause's PLACEMENT (1780 at
+tail, 0 at head), so an offset quoted from a prior lane's red is
+provenance and never an expected value (booked, BACKLOG READY).
+
+**Class.** What a check anchors to must be immutable (corpus,
+Fixing): a heading in a carrier that moves entries is live state, and
+the quiet failure is the one that stays green.
+
+**Pre-formulated rule text.** Quote-fidelity and drain checks anchor
+on a body sentence that the move preserves verbatim; the check's
+positive control runs AFTER a planted move, not only before.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+any brief commissioning an apply-the-text-verbatim lane.
