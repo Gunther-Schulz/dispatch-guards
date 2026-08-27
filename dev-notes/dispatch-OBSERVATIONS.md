@@ -305,6 +305,50 @@ also the harness-binding line in the skill's §2 (`as of` date on
 mailbox delivery). n=1 lane, six messages; the bite is reproducible
 by any named lane asked reply-only when its messages arrived.
 
+**ADDENDUM 2026-08-27 (wave-4 peer desk `dotfiles-2f`) — n RAISED TO
+THREE LANES, and the desk supplied the third instance against
+itself.** Merged here rather than filed as a sibling: same class.
+Lane `opus-lifecycle-bundle`, four messages, and lane
+`opus-lc44-48-49`, one — both asked reply-only afterwards, both
+reading their own transcripts. Each reports the same shape as lane C:
+delivery in ONE batch at a turn boundary AFTER the closing report
+was sent, zero mid-turn. The class is CONFIRMED, not extended, and
+the framing correction is the judgment desk's: an arrival at the end
+of a lane's own send series is what "batched at turn boundaries"
+already predicts, so only the PER-LANE verdict was ever in question.
+TIMING, because the desk first mis-read this as a broader mechanism:
+its sends to the bundle lane are stamped 17:24:20 and 17:25:26 in its
+own transcript, and that lane's writer-reservation claim — an agent
+tool action — is stamped 17:36:41, its report 17:40:58. So the
+messages sat across a long stretch of the lane's ordinary tool
+rounds. That does NOT widen the rule; it says the flush point is the
+lane going idle, not each tool round, which is what "zero mid-turn"
+means at this grain.
+THE PER-LANE VERDICT IS REFUTED. The desk had concluded "that lane's
+mailbox is dead", STOPPED the lane on that basis, and committed its
+work itself (lifecycle `cbfaee6`, whose message says "because its
+mailbox failed"). The channel had not failed; it delivered at the
+boundary. The lane's own "INBOX drained, nothing received since the
+brief" was true at compose time and stale within moments — exactly
+the retraction lane C made in this entry's own body.
+THE DISPATCHER-SIDE TWIN, which is what this addendum is for. The
+entry's second half says the RECEIVING end cannot tell "nothing was
+sent" from "nothing delivered yet". The mirror bites harder: the
+SENDING end cannot tell "not delivered" from "delivered and
+unacknowledged" — and a lane's own inbox line reads as the receiving
+end's testimony, which is precisely what makes it convincing enough
+to act on. The desk held THIS ENTRY, booked the same day, and still
+drew the false negative from the same evidence shape, then took an
+irreversible-ish action (stop the lane, absorb its uncommitted work)
+on a channel claim it had no instrument for. The settling instrument
+is the receiver's TRANSCRIPT, one reply-only question, seconds cheap
+— and it is available before the stop, not only after it. Rule text
+to carry at the next pass: a channel verdict is read off the
+receiver's transcript, never off a report line about its inbox, and
+never off the sender's silence; where a lane must be stopped, the
+stop does not need the channel verdict as its reason and should not
+borrow one.
+
 ### APPLIED 2026-08-23 (Lane `opus-report-provenance`) — the
 ### rule reached the dispatcher, not the executing agent
 
