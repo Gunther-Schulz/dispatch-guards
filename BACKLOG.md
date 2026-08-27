@@ -7,6 +7,52 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-27 (wave-4 peer desk, from lane `opus-lc44-48-49`'s
+  finding on an instrument it does not own) — `report-form-gate`
+  scores a message ABOUT a report as a report, and its obvious repair
+  is unsafe.** `_SLOT_RE = re.compile(r"\(([a-h])\)")`
+  (report-form-gate.py:55) matches slot markers ANYWHERE in the text,
+  so a message that merely ENUMERATES the slot letters — "slots
+  (a)-(h) are all landed; part 5/7 carried gaps (c)" — reaches
+  `REPORT_MIN_SLOTS` and is graded a report missing `(b)`. Executed by
+  the desk, gate run on real payloads: the ping FIRES (`WARN
+  (staging)`, missing `(b)`), a real seven-slot report is SILENT, a
+  plain message is SILENT. This is the backlog doctrine's own recorded
+  shape one level over — a checker matching vocabulary by
+  word-presence over free prose fires on text that merely DISCUSSES
+  the vocabulary; carrier checkers anchor on the slot's POSITION.
+  WHY IT MATTERS ENOUGH TO FIX BEFORE THE LANE GOES LIVE: the message
+  it would deny is exactly the crossed-directive PING that §2's
+  state-token convention tells a lane to send INSTEAD of re-sending a
+  report. A lane whose ping is denied has two exits, both wrong —
+  re-send the whole report, or go silent. The gate would manufacture
+  the re-sends it exists to shrink.
+  THE PROPOSED REPAIR IS REFUTED, and this is the load-bearing half:
+  the lane suggested anchoring at line start (`^\(b\)`). Counter-arm
+  executed by the desk before booking, per the dotfiles devbook's
+  rule that a booked guard design is a behaviour claim — a
+  line-start-only anchor finds ONE slot in a genuine single-paragraph
+  report ("(a) done. (b) 275 OK. (c) none. …"), drops below
+  `REPORT_MIN_SLOTS`, and the gate goes SILENT on a real report. It
+  repairs the reported fire and discards coverage: the exact
+  which-case-that-used-to-deny-does-this-now-allow failure.
+  DESIGN, DECIDED, and verified against five arms before booking:
+  match a slot marker only at LINE START or after sentence-ending
+  punctuation — `(?:^|(?<=[.;:!?]\s))\s*(?:-\s*)?\(([a-h])\)` with
+  `re.M`. Measured: ping QUIET, prose-mention ping QUIET, inline
+  one-paragraph report SHAPED, line-start report SHAPED, report
+  missing `(b)` SHAPED and fires. The loose form gets arm 1 wrong;
+  the line-start form gets arm 3 wrong; this form gets all five right.
+  Verifier: those five arms as gate-level payload tests (the real
+  binary over stdin, not the predicate alone), plus the false-fire
+  probe the dotfiles devbook prescribes for a textual predicate — run
+  the gate against its OWN docstring and against this entry's text;
+  both must stay quiet, and both are free, adversarial, in-domain.
+  Write-set: `plugin/hooks/report-form-gate.py` and its bites.
+  Done-criterion: the five arms pass at gate level, the two
+  self-matching probes are quiet, and the existing report-form bites
+  stay green. Source: the lane reported this rather than acting on it,
+  correctly — the file is outside any lane's box.
 - **READY 2026-08-27 (judgment desk, from the wave-4 two-channel
   finding) — `brief-reminder` demands a SECTION PIN on any brief that
   names a class devbook.** Measured 2026-08-27, three lanes: the
