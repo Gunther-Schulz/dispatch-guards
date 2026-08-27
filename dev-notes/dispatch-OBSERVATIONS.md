@@ -3337,3 +3337,35 @@ in: a reader set for the file answers a different question.
 §1's write-boundary section, beside the realization-surfaces rule which
 already resolves DESIGN prose to files and stops short of resolving
 SYMBOLS to their readers.
+
+## 2026-08-27 — CLASS: the prescribed horizon instrument — a background `sleep` whose exit re-invokes the session — was killed externally four times in one day
+
+**Incident + basis.** Judgment desk `claude-code-cache-fix-d8`, one
+session, ~9 background timers armed per §4 ("a `sleep <horizon>`
+whose exit re-invokes the session"). Four were reported `killed` by
+the harness within seconds to minutes of arming (task ids bngvdvjnv,
+buy90ntfi, bx864f7rl, bjbg38reo; two of them back-to-back at 12:12),
+none by this desk; five ran to completion. No pattern established
+(not the command form, not the timing); the desk switched to the
+`Monitor` tool (a polling loop emitting events, exiting on its own
+horizon), which was not killed once across ~10 arms. Mechanism
+unestablished.
+
+**Class.** The dead-lane detector itself dying silently — an armed
+horizon that is killed reads, from the desk's side, exactly like one
+that has not fired yet, so the wait it guards becomes unbounded
+without any signal. The one thing that separated the two here was
+the kill NOTIFICATION arriving; where it does not, the horizon is
+gone and nobody knows.
+
+**Pre-formulated rule text** (§4, the arming clause): the horizon
+instrument is a Monitor-style poll that emits an event on the
+artifact's every move AND on the horizon (so a live lane re-arms
+silently and a dead one fires), armed with a timeout; a bare
+background `sleep` is the fallback only where Monitor is absent, and
+a `killed` notification on it is a re-arm, never a no-op. Retire the
+`sleep` wording or mark it "observed killed 4/9, 2026-08-27".
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§4 arming clause); the corpus Insurance bullet's "background timer"
+phrase, same fact.
