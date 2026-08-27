@@ -3022,5 +3022,20 @@ pin is booked UNDETERMINED with the dispatch timestamp beside the
 nearest amendment's. Adopted by the judgment desk 2026-08-27; lane B
 of the same wave is the first brief carrying it.
 
+**Second half, measured on the next two lanes (same day).** Lane B's
+brief carried the pin (`f0c1fb7…`, the section's blob sha); the lane
+hashed the on-disk section and matched it — the pin worked one
+dispatch after adoption. But the `CLAUDE.md` INJECTED into the lane's
+session prompt did NOT carry the amended step-4 paragraph while the
+FILE did; lane A, asked the paragraph question, reported its copy
+came from the injection and was immutable from dispatch. So a class
+devbook reaches a lane through TWO channels — a snapshot fixed at
+session start and the live file — which can disagree, and a lane
+reading only its injection works from a stale rulebook with no signal
+that it is doing so. The pin is what makes the divergence detectable.
+Rule text: the pin is checked against the FILE's section hash, and a
+lane that took a rule from its injection re-reads the file when the
+pin does not match the injected text.
+
 **Consumer + drain seam.** The next dispatch-skill maintenance pass
 (§6 schema); the `guard-checker-bau` entry's next status move.
