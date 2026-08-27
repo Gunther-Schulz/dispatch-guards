@@ -3085,7 +3085,14 @@ over; do not act; a later defect is reported"); every decision the
 report raised travels to the NEXT lane's brief, never back to the
 reporter. Before any dispatch or any message to a lane, the listing
 is read — a lane that reads `running` under a booked report is a
-finding. §1 arrival check gains a third read: `git status
+finding. A lane ended by TaskStop is NEVER messaged again, for any
+reason, the close included: a send resumes a named agent from its
+transcript, and a stopped lane's transcript ends on its last live
+instruction — measured the same hour, when the judgment desk ordered
+a close to the stopped lane and the peer desk correctly refused it
+as a state-dependent directive whose state was false (the lane was
+ABSENT from the listing, its last instruction "build"); the artifact
+— absent, reverted, no commit — is the record of its termination. §1 arrival check gains a third read: `git status
 --porcelain` over the write set plus the writer-reservation file
 (where the reservation gate is deployed); a modified file in the
 write set or a live reservation is a HALT, whatever the base check
