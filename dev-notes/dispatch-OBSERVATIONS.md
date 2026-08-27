@@ -2982,11 +2982,25 @@ without its basis is indistinguishable, from the grader's side, from
 a checked one, and the grade would have rested on the lane grading
 itself. The instrument was not blind there; it was never run.
 
+**Terminal form, measured the same afternoon (lane B2).** A lane that
+halted on a question and WAITED could not be reached at all: the
+desk sent the go four times, `ListAgents` showed `running`
+throughout, the lane reported "no dispatcher message has reached me"
+each time — it would not go idle because it was waiting, and the
+queue would not flush until it went idle. A lane blocking on the
+mailbox can never be unblocked through the mailbox. The artifact
+channel (a GO committed to the repo's ledger) was not looked at
+either. The desk stopped it and re-dispatched (B3) with B2's six
+interim reports carried as pre-done groundwork; nothing lost, nothing
+repeated. The one channel that never failed is the dispatch PROMPT.
+
 **Pre-formulated rule text** (§1 brief, §4 duties): (1) everything a
 lane could need mid-run is granted UP FRONT or not at all — the
 brief is the complete instruction set; (2) the brief states the
 channel fact: a mid-run message may not arrive before the turn ends;
-on a gap HALT AND REPORT, never wait for an answer; (3) where a lane
+on a gap HALT THE ITEM, FINISH THE REMAINDER, REPORT — never halt the
+LANE, since "halt and wait" is not a survivable state for a subagent
+and re-dispatching with the groundwork carried beats any wait; (3) where a lane
 must be steered mid-flight, the carrier is the ARTIFACT — a committed
 item body or file in its tree — never the mailbox; (4) the
 expected-return horizon stays the dead-lane instrument, unchanged.
