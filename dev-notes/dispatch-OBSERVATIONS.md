@@ -2936,15 +2936,19 @@ n=1, the executor caught it.
 
 ## 2026-08-27 — CLASS: a named subagent's mailbox delivers NOTHING mid-run — every dispatcher message arrived in one batch at the lane's turn boundary, after its closing report
 
-**Incident + basis.** Wave-3 desk `dotfiles-2f` (opus) sent five
+**Incident + basis.** Wave-3 desk `dotfiles-2f` (opus) sent six
 SendMessages to a running named lane (opus, lane C, lifecycle
 `120c733`) across ~40 minutes — a write-set grant, a superseded item
-id, a version-bump grant, two corrections. Every send returned
-`success`. The lane, asked reply-only after its report: all five
-arrived simultaneously, in a single delivery, AFTER it had sent all
-five parts of its closing report; zero reached it during grounding,
-four red-first arrangements, the build, a blocked commit, a ~9-minute
-foreground wait. The lane landed correctly only because it read the
+id, a version-bump grant, corrections. Every send returned
+`success`. The lane, asked reply-only after its report (final count,
+corrected from its own first answer of five): six messages, TWO
+deliveries, both batched at turn boundaries, zero mid-turn — through
+grounding, four red-first arrangements, the build, two bite proofs, a
+blocked commit, and a ~9-minute foreground wait that was the ideal
+window for one to land. The lane also retracted its own report line
+"no message reached me at any point": true at the instant written,
+stated with a finality it had not earned — a claim about a channel it
+had no instrument to observe. The lane landed correctly only because it read the
 superseded item's write-set out of the dispatcher's COMMIT in the
 tree — the artifact carried what the channel did not. Mechanism
 unestablished (held at the harness and flushed at a boundary, or
@@ -2958,7 +2962,18 @@ assumes delivery mid-run. The dispatcher holds `success` receipts the
 whole way and is WATCHING, not steering; the dispatch reads as
 steered because the lane happened to land. On a lane whose only
 carrier for the steer was the message, the miss would have been
-silent.
+silent. The second half, the lane's own and the one that bites: the
+receiving end cannot distinguish "nothing was sent" from "nothing
+has been delivered YET" — both are silence from inside — so a lane
+states the absence confidently in its report and the dispatcher
+reads a false negative that arrived with full conviction. The delay
+is the defect; the indistinguishability is why it propagates into
+the record instead of being caught. One shape, three instances in
+one lane that day: a grep over a path that did not exist (stderr,
+empty stdout read as zero hits), a hook probe whose payload could
+not fire the guard it claimed to check, and this — an instrument
+that cannot register its target returns exactly what a true absence
+returns (the corpus's Non-events rule, at the channel grain).
 
 **Pre-formulated rule text** (§1 brief, §4 duties): (1) everything a
 lane could need mid-run is granted UP FRONT or not at all — the
@@ -2975,5 +2990,5 @@ already composed does not cover it.
 
 **Consumer + drain seam.** The next dispatch-skill maintenance pass;
 also the harness-binding line in the skill's §2 (`as of` date on
-mailbox delivery). n=1 lane, five messages; the bite is reproducible
+mailbox delivery). n=1 lane, six messages; the bite is reproducible
 by any named lane asked reply-only when its messages arrived.
