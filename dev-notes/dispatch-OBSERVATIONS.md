@@ -2992,3 +2992,35 @@ already composed does not cover it.
 also the harness-binding line in the skill's §2 (`as of` date on
 mailbox delivery). n=1 lane, six messages; the bite is reproducible
 by any named lane asked reply-only when its messages arrived.
+
+## 2026-08-27 — CLASS: a class devbook resolved by PATH is mutable under a running probe, so the register cannot say which text a probe ran under
+
+**Incident + basis.** Wave-3 lane A was dispatched at 11:28:59 with
+the guard/checker devbook named by path (dotfiles `CLAUDE.md`); the
+judgment desk amended that devbook's step 4 at 11:30:48 (`05ebcf4`),
+on lane C's finding. Lane A's grounding read falls inside the
+109-second window either way. The desk asked the lane a question it
+can answer without re-reading (did the passage it read contain the
+new paragraph's opening words); absent an answer the register line
+reads UNDETERMINED with both timestamps — never the plausible
+inference. Lane C (earlier, `120c733`) ran under the pre-amendment
+text, certain: the amendment exists because of what it measured.
+
+**Class.** The register (§6) stores a fingerprint taken at
+certification; a probe's brief names the devbook by path, which the
+lane resolves LIVE — the same live-on-write property the corpus
+records for hook files. "Which text did this probe run under" is
+therefore not answerable from the register, only from timing
+evidence gathered while the lane is alive, and a re-probe priced
+against the wrong text is the invalidation clause silently defeated.
+
+**Pre-formulated rule text** (§1 brief, §6 register): a brief under a
+registered class names the class devbook's blob sha beside its path
+(`git rev-parse HEAD:<path>` at brief time), and the register's
+probe-evidence line records that sha; a probe whose brief carried no
+pin is booked UNDETERMINED with the dispatch timestamp beside the
+nearest amendment's. Adopted by the judgment desk 2026-08-27; lane B
+of the same wave is the first brief carrying it.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§6 schema); the `guard-checker-bau` entry's next status move.
