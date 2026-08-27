@@ -3361,3 +3361,48 @@ to discover it by going red.
 (§1, the brief form's write-boundary block). Single home here: the
 dotfiles guard/checker devbook only meets this if a translation lane
 is ever run under it.
+
+## 2026-08-27 — CLASS: an accepted deviation updates the lane's report and leaves the SOURCE ENTRY's done-criterion standing, now falsified
+
+**Incident + basis.** The carriers-English backlog entry
+(`BACKLOG.md`, READY 2026-08-27) specified its verifier as
+`grep -rlE '[äöüß]' dev-notes` returning 0. Lane
+`sonnet-d2-carriers` then proved by execution that three German
+literals must STAY, because `check_observations_tail` parses them
+(`check-doc-drift.py:332-334, 382-383`, plus ~8 `--test` fixtures):
+full translation red on an isolated copy, anchors-only revert green,
+confirmed both ways. The lane reported this correctly as a DEVIATION
+under slot (d), the dispatcher accepted it and graded the lane, and
+the source entry was not touched — so from the moment D2 landed
+(`437159c`) the entry carried a done-criterion nothing could satisfy.
+Found only because the judgment desk asked for an unrelated routing
+fix to the same entry; amended at `eefffda`. Nobody was going to
+re-read it otherwise: the item was, correctly, considered handled.
+
+**Class.** The deviation form points at the BRIEF — "deviations from
+the brief, each with its reason" — and the brief is derived from an
+entry that no step re-opens. So a fact strong enough to overturn the
+spec lands in a report, is accepted, and the entry that will generate
+the NEXT brief keeps the overturned criterion. The failure is silent
+in the worst way: the stale criterion reads perfectly reasonable, so
+the next lane chases it and its halt or its broken checker presents
+as LANE error rather than entry error. This is the spec-sentence
+versus verifier-sentence disagreement one level out from code — and
+the accepting desk is the only party that ever holds both halves at
+once, which is why no lane can catch it.
+
+**Pre-formulated rule text** (§4, the dispatcher's integration acts):
+an accepted deviation RE-ASKS THE SOURCE ENTRY'S DONE-CRITERION
+before the lane is booked closed. The integration names the source
+entry, and either states that its criterion survives the deviation or
+amends it in the SAME commit that books the lane. Where the source is
+a lifecycle item the id is known and this is a refusal at the write
+path; where it is prose, §4 carries it. Accepting a deviation without
+that step books a lane closed and leaves a trap for the next one.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§4). Scheduled companion, so this entry is not the only mover: the
+judgment desk booked the sweep as wave-5 head item (vi) (dotfiles
+`49d8e68`) — one discovery lane over all four carriers for verifiers
+predating a deviation recorded against them. Deliberately not run
+during wave 4, which is still closing.
