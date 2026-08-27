@@ -3258,3 +3258,46 @@ positive control runs AFTER a planted move, not only before.
 
 **Consumer + drain seam.** The next dispatch-skill maintenance pass;
 any brief commissioning an apply-the-text-verbatim lane.
+
+## The brief's scope sentence is a dependents claim, and nothing prompts the search
+
+**Incident + basis.** Wave-4 lane C1 (dotfiles, 2026-08-27). The brief
+specified growing a constant's value set — `RECORD_PFADE` in
+`git/hooks/pre-push` — and asserted "Nothing else changes. No new
+constants, no refactor, no fallback paths." The dispatcher never ran a
+dependents search on the SYMBOL. One existed:
+`tools/commit-provenance.py` reads `pp.RECORD_PFADE` in production and
+RESTATED its length as `"of 3"` in two selftest assertions, so the
+specced change turned the shared tree red at `./dot test` and the lane
+had to halt at its write boundary and return it as a question. The
+search that closes it is one command —
+`grep -rn --no-ignore-files 'RECORD_PFADE' . --exclude-dir=.git` — run
+afterwards by the dispatcher, 4 code hits outside the owning file, all
+in the one dependent. Sibling fact, same incident: the dispatcher HAD
+measured a 34-file reader set for the same carrier hours earlier and
+listed that very file in it, and still did not connect it — a
+dependents list for the CARRIER is not a dependents list for the
+SYMBOL, and holding the first is what made the second feel done.
+
+**Class.** Changes to anything others depend on break silently wherever
+dependents were not search-established first (corpus, Grounding). The
+corpus states the rule at the CHANGE, and the tell it names is the
+change landing without its search — but under a dispatch the change
+lands at the executor while the scope claim is made in the BRIEF,
+hours earlier and in a different voice. A brief sentence reads as the
+dispatcher's own decision, and decisions are executed rather than
+checked (dispatch skill §1, the provenance rule's FORM half), so the
+one line asserting the blast radius is exactly the line no one grades.
+
+**Pre-formulated rule text.** A brief that changes a NAME, TYPE, SHAPE,
+VALUE SET or MEANING carries the dependents search for that symbol —
+command and hits — in the brief itself, and each hit is dispositioned
+in the write-set or named as out of scope with its reason. A bare
+"nothing else changes" is the search skipped, visible in the brief. The
+search is keyed on the SYMBOL, never on the artifact the symbol lives
+in: a reader set for the file answers a different question.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+§1's write-boundary section, beside the realization-surfaces rule which
+already resolves DESIGN prose to files and stops short of resolving
+SYMBOLS to their readers.
