@@ -7,6 +7,26 @@ are dropped with a one-line reason.
 
 ## Open
 
+- **READY 2026-08-27 (operator decision, via the wave-3 judgment desk)
+  — the observation carriers are English; three carry German today.**
+  The operator's decision, restated: everything in their artifacts is
+  English. Measured 2026-08-27, `grep -rlE '[äöüß]' hooks skills
+  dev-notes README.md` → hooks 0, skills 0, README 0;
+  `dev-notes/OBSERVATIONS-FORM.md` (20 lines),
+  `dev-notes/worktree-OBSERVATIONS.md` (50), `dev-notes/dispatch-
+  OBSERVATIONS.md` (553). Their consumer is the maintenance pass —
+  an agent — so the corpus's language rule binds (consumer fixes the
+  language). Design: translate the German entries in place, entry by
+  entry, preserving every incident's facts, dates, shas and quoted
+  command output verbatim (quoted material is the named exception);
+  one commit per file. Verifier: the same grep returns 0 over
+  `dev-notes/`, shown live first on one planted `ä`; the entry count
+  per file unchanged before and after (`grep -c '^## '`). Write-set:
+  the three files. Done-criterion: grep 0 with the positive shown,
+  entry counts equal, no sha or date changed (`git diff` filtered to
+  lines carrying a sha or date is empty). The sibling item for the
+  dotfiles hooks is booked there (`106075f`); the two sweeps are
+  independent and dispatch in parallel.
 - **PARKED 2026-08-26 — depth-2 dispatch: a desk-tier middle agent that
   fans out, under the same hook-controlled robustness and operator
   transparency as depth 1 (operator decision: worth trying; robust or
