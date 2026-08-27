@@ -3348,8 +3348,13 @@ buy90ntfi, bx864f7rl, bjbg38reo; two of them back-to-back at 12:12),
 none by this desk; five ran to completion. No pattern established
 (not the command form, not the timing); the desk switched to the
 `Monitor` tool (a polling loop emitting events, exiting on its own
-horizon), which was not killed once across ~10 arms. Mechanism
-unestablished.
+horizon), which was not killed once across ~10 arms. Mechanism,
+supplied by the peer desk from its own side the same evening: its
+`pkill -f "sleep NNN"` to DISARM a spent horizon killed the calling
+shell twice (exit 144) — the kills cluster on the retirement of a
+spent timer, not on arming or firing, so the failure is in how a
+timer is disarmed on a shared machine, and a timer dead at arming and
+one dead at disarm are indistinguishable from the waiting end.
 
 **Class.** The dead-lane detector itself dying silently — an armed
 horizon that is killed reads, from the desk's side, exactly like one
