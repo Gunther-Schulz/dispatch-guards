@@ -271,6 +271,10 @@ supplement sent between parts 2/3 and 3/3).
 
 EXECUTION tail (any dispatch that writes):
 
+    A mid-run message may not arrive before the turn ends: on a gap
+    HALT THE ITEM, FINISH THE REMAINDER, REPORT — never halt the
+    LANE, since "halt and wait" is not a survivable state for a
+    subagent (source: §2, the delivery binding).
     Closing report (mandatory; the project's own report form if it
     defines one, else the §2 form here — never both; "none" is a
     valid slot answer, silence is not): (a) items completed w/

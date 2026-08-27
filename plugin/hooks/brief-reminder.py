@@ -768,6 +768,11 @@ if __name__ == "__main__":
         # referenced from the detection constants, so the test
         # doesn't share parentage with what it's meant to catch.
         EXECUTION_TAIL_BG = (
+            "A mid-run message may not arrive before the turn ends: "
+            "on a gap HALT THE ITEM, FINISH THE REMAINDER, REPORT — "
+            "never halt the LANE, since \"halt and wait\" is not a "
+            "survivable state for a subagent (source: \xa72, the "
+            "delivery binding).\n"
             "Closing report (mandatory; the project's own report form "
             "if it defines one, else the \xa72 form here — never "
             "both; \"none\" is a valid slot answer, silence is not): "

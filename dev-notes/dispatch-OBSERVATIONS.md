@@ -204,6 +204,108 @@ said.
 (§1 arrival check, §4 close rule); n=1, caught by the arriving lane on
 first use of an unprescribed check.
 
+### ANGEWANDT 2026-08-27 (wave-4 lane A2, the EXECUTION-tail
+### remainder) — a named subagent's mailbox delivers NOTHING
+### mid-run
+
+Booked in `4c85fd1`, amended in `391ac1b` (the terminal form);
+clauses (1), (3) and the §4 re-scope applied in `a3111b2`, the
+channel fact as a dated binding in `references/forms.md` §2.
+Clause (2) landed in this lane at the EXECUTION tail's HEAD in
+`references/forms.md` — the salience position, not beside the
+existing gap sentence — with `EXECUTION_TAIL_BG`
+(`plugin/hooks/brief-reminder.py`) moved in the SAME commit, the
+two being coupled by `check_execution_tail_fixture` on normalized
+text. The restatement carries a source label to §2's delivery
+binding, that block being the rule's other home. Clause (4)
+needed no edit. Fully applied; the entry moves. Entry body below,
+unchanged.
+
+
+**Incident + basis.** Wave-3 desk `dotfiles-2f` (opus) sent six
+SendMessages to a running named lane (opus, lane C, lifecycle
+`120c733`) across ~40 minutes — a write-set grant, a superseded item
+id, a version-bump grant, corrections. Every send returned
+`success`. The lane, asked reply-only after its report (final count,
+corrected from its own first answer of five): six messages, TWO
+deliveries, both batched at turn boundaries, zero mid-turn — through
+grounding, four red-first arrangements, the build, two bite proofs, a
+blocked commit, and a ~9-minute foreground wait that was the ideal
+window for one to land. The lane also retracted its own report line
+"no message reached me at any point": true at the instant written,
+stated with a finality it had not earned — a claim about a channel it
+had no instrument to observe. The lane landed correctly only because it read the
+superseded item's write-set out of the dispatcher's COMMIT in the
+tree — the artifact carried what the channel did not. Mechanism
+unestablished (held at the harness and flushed at a boundary, or
+delivered on turn end — neither side has an instrument); observed
+fact only.
+
+**Class.** A channel premise under §4: "additions extend ownership",
+"a follow-up instruction to a running agent", "ask the holder and
+wait for the answer", the lane-close message — every mid-run steer
+assumes delivery mid-run. The dispatcher holds `success` receipts the
+whole way and is WATCHING, not steering; the dispatch reads as
+steered because the lane happened to land. On a lane whose only
+carrier for the steer was the message, the miss would have been
+silent. The second half, the lane's own and the one that bites: the
+receiving end cannot distinguish "nothing was sent" from "nothing
+has been delivered YET" — both are silence from inside — so a lane
+states the absence confidently in its report and the dispatcher
+reads a false negative that arrived with full conviction. The delay
+is the defect; the indistinguishability is why it propagates into
+the record instead of being caught. One shape, three instances in
+one lane that day: a grep over a path that did not exist (stderr,
+empty stdout read as zero hits), a hook probe whose payload could
+not fire the guard it claimed to check, and this — an instrument
+that cannot register its target returns exactly what a true absence
+returns (the corpus's Non-events rule, at the channel grain). A
+fourth, the same day and self-reported: the desk wrote "verified by
+me at the artifact" over a lane's own battery figures, having run
+only `git show --stat`; it then ran the battery, every figure
+matched, and corrected the provenance anyway — a true claim asserted
+without its basis is indistinguishable, from the grader's side, from
+a checked one, and the grade would have rested on the lane grading
+itself. The instrument was not blind there; it was never run. By the
+wave's close the desk's own tally was SIX (a citation to a decision
+label that names a different ruling; a whole-file pin where the
+register keys on a section; an item quoted for words it does not
+contain) — every one caught by a lane, none by the desk first; the
+desk's own class statement: a claim passed on without opening the
+thing itself, hidden because the sentence is usually TRUE.
+
+**Terminal form, measured the same afternoon (lane B2).** A lane that
+halted on a question and WAITED could not be reached at all: the
+desk sent the go four times, `ListAgents` showed `running`
+throughout, the lane reported "no dispatcher message has reached me"
+each time — it would not go idle because it was waiting, and the
+queue would not flush until it went idle. A lane blocking on the
+mailbox can never be unblocked through the mailbox. The artifact
+channel (a GO committed to the repo's ledger) was not looked at
+either. The desk stopped it and re-dispatched (B3) with B2's six
+interim reports carried as pre-done groundwork; nothing lost, nothing
+repeated. The one channel that never failed is the dispatch PROMPT.
+
+**Pre-formulated rule text** (§1 brief, §4 duties): (1) everything a
+lane could need mid-run is granted UP FRONT or not at all — the
+brief is the complete instruction set; (2) the brief states the
+channel fact: a mid-run message may not arrive before the turn ends;
+on a gap HALT THE ITEM, FINISH THE REMAINDER, REPORT — never halt the
+LANE, since "halt and wait" is not a survivable state for a subagent
+and re-dispatching with the groundwork carried beats any wait; (3) where a lane
+must be steered mid-flight, the carrier is the ARTIFACT — a committed
+item body or file in its tree — never the mailbox; (4) the
+expected-return horizon stays the dead-lane instrument, unchanged.
+Retire or re-scope the §4 "additions extend ownership" clause to
+what it can still mean: ownership extends, but the addition reaches
+the lane at its next turn boundary at the earliest, and a report
+already composed does not cover it.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+also the harness-binding line in the skill's §2 (`as of` date on
+mailbox delivery). n=1 lane, six messages; the bite is reproducible
+by any named lane asked reply-only when its messages arrived.
+
 ### ANGEWANDT 2026-08-23 (Lane `opus-report-provenance`) — die
 ### Regel erreichte den Dispatcher, nicht den ausfuehrenden Agenten
 
@@ -3078,117 +3180,3 @@ HEADING-KEYED so the reader repairs the heading, not the substance.
 **Consumer + drain seam.** The three guards' next predicate change;
 the retirement pass. The over-fire count is the metric: n=3 in one
 session on the careful path.
-
-## 2026-08-27 — CLASS: a named subagent's mailbox delivers NOTHING mid-run — every dispatcher message arrived in one batch at the lane's turn boundary, after its closing report
-
-**Incident + basis.** Wave-3 desk `dotfiles-2f` (opus) sent six
-SendMessages to a running named lane (opus, lane C, lifecycle
-`120c733`) across ~40 minutes — a write-set grant, a superseded item
-id, a version-bump grant, corrections. Every send returned
-`success`. The lane, asked reply-only after its report (final count,
-corrected from its own first answer of five): six messages, TWO
-deliveries, both batched at turn boundaries, zero mid-turn — through
-grounding, four red-first arrangements, the build, two bite proofs, a
-blocked commit, and a ~9-minute foreground wait that was the ideal
-window for one to land. The lane also retracted its own report line
-"no message reached me at any point": true at the instant written,
-stated with a finality it had not earned — a claim about a channel it
-had no instrument to observe. The lane landed correctly only because it read the
-superseded item's write-set out of the dispatcher's COMMIT in the
-tree — the artifact carried what the channel did not. Mechanism
-unestablished (held at the harness and flushed at a boundary, or
-delivered on turn end — neither side has an instrument); observed
-fact only.
-
-**Class.** A channel premise under §4: "additions extend ownership",
-"a follow-up instruction to a running agent", "ask the holder and
-wait for the answer", the lane-close message — every mid-run steer
-assumes delivery mid-run. The dispatcher holds `success` receipts the
-whole way and is WATCHING, not steering; the dispatch reads as
-steered because the lane happened to land. On a lane whose only
-carrier for the steer was the message, the miss would have been
-silent. The second half, the lane's own and the one that bites: the
-receiving end cannot distinguish "nothing was sent" from "nothing
-has been delivered YET" — both are silence from inside — so a lane
-states the absence confidently in its report and the dispatcher
-reads a false negative that arrived with full conviction. The delay
-is the defect; the indistinguishability is why it propagates into
-the record instead of being caught. One shape, three instances in
-one lane that day: a grep over a path that did not exist (stderr,
-empty stdout read as zero hits), a hook probe whose payload could
-not fire the guard it claimed to check, and this — an instrument
-that cannot register its target returns exactly what a true absence
-returns (the corpus's Non-events rule, at the channel grain). A
-fourth, the same day and self-reported: the desk wrote "verified by
-me at the artifact" over a lane's own battery figures, having run
-only `git show --stat`; it then ran the battery, every figure
-matched, and corrected the provenance anyway — a true claim asserted
-without its basis is indistinguishable, from the grader's side, from
-a checked one, and the grade would have rested on the lane grading
-itself. The instrument was not blind there; it was never run. By the
-wave's close the desk's own tally was SIX (a citation to a decision
-label that names a different ruling; a whole-file pin where the
-register keys on a section; an item quoted for words it does not
-contain) — every one caught by a lane, none by the desk first; the
-desk's own class statement: a claim passed on without opening the
-thing itself, hidden because the sentence is usually TRUE.
-
-**Terminal form, measured the same afternoon (lane B2).** A lane that
-halted on a question and WAITED could not be reached at all: the
-desk sent the go four times, `ListAgents` showed `running`
-throughout, the lane reported "no dispatcher message has reached me"
-each time — it would not go idle because it was waiting, and the
-queue would not flush until it went idle. A lane blocking on the
-mailbox can never be unblocked through the mailbox. The artifact
-channel (a GO committed to the repo's ledger) was not looked at
-either. The desk stopped it and re-dispatched (B3) with B2's six
-interim reports carried as pre-done groundwork; nothing lost, nothing
-repeated. The one channel that never failed is the dispatch PROMPT.
-
-**Pre-formulated rule text** (§1 brief, §4 duties): (1) everything a
-lane could need mid-run is granted UP FRONT or not at all — the
-brief is the complete instruction set; (2) the brief states the
-channel fact: a mid-run message may not arrive before the turn ends;
-on a gap HALT THE ITEM, FINISH THE REMAINDER, REPORT — never halt the
-LANE, since "halt and wait" is not a survivable state for a subagent
-and re-dispatching with the groundwork carried beats any wait; (3) where a lane
-must be steered mid-flight, the carrier is the ARTIFACT — a committed
-item body or file in its tree — never the mailbox; (4) the
-expected-return horizon stays the dead-lane instrument, unchanged.
-Retire or re-scope the §4 "additions extend ownership" clause to
-what it can still mean: ownership extends, but the addition reaches
-the lane at its next turn boundary at the earliest, and a report
-already composed does not cover it.
-
-**Consumer + drain seam.** The next dispatch-skill maintenance pass;
-also the harness-binding line in the skill's §2 (`as of` date on
-mailbox delivery). n=1 lane, six messages; the bite is reproducible
-by any named lane asked reply-only when its messages arrived.
-
-**Status 2026-08-27, wave-4 lane `opus-a-skill-amendments` — PARTLY
-APPLIED, stays open.** Landed: clause (1) grant-up-front and clause
-(3) steer-by-ARTIFACT, in `plugin/skills/dispatch/SKILL.md` §4, by
-re-scoping the "additions extend ownership" bullet this entry asked
-to re-scope — it now reads "Additions extend OWNERSHIP, not
-instruction", and its closing "ASK the holder and wait for the
-answer" was sharpened in the same edit, being a rule resting on the
-premise this entry kills. The channel fact itself landed as a dated
-binding in `references/forms.md` §2 (delivery at turn boundaries,
-the waiting-lane deadlock, reanimation), and that block carries
-clause (2)'s "halt the ITEM, never the LANE" as the lane-facing
-consequence. Clause (4) needed no edit.
-NOT LANDED: clause (2) in the EXECUTION TAIL of `references/forms.md`
-— the wave-4 brief's own site (i). The tail is mirrored by
-`EXECUTION_TAIL_BG` in `plugin/hooks/brief-reminder.py`, and
-`check_execution_tail_fixture` (tools/check-doc-drift.py) compares
-the two on normalized text, so ANY tail edit goes red. Proven, not
-reasoned: a scratch copy of the repo, its own doc-drift run green
-FIRST (arrangement check), the tail clause applied there, re-run →
-`[DRIFT] EXECUTION tail fixture`, first divergence at normalized
-char 1780, exit 1. The repairing write is the fixture literal under
-`plugin/hooks/`, outside this lane's write boundary. Seam: the next
-pass that owns BOTH the skill files and `plugin/hooks/` lands the
-tail clause and its fixture in ONE commit — they cannot be split
-without leaving the repo red between them. An entry whose remaining
-home lies outside the working copy is not drained; same shape as the
-RESIDUUM note under `## Offen`.
