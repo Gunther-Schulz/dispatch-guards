@@ -666,7 +666,9 @@ satisfied by construction:
     - <file> — <which part, and what it settles>
 
     ## Background (established; verify at the cited lines)
-    <facts the executor may trust — each OPENED at brief time, or
+    <every Background line in a brief carries the command and its
+    hit inline, or the word "unverified".
+    Facts the executor may trust — each OPENED at brief time, or
     graded "from <source>, unverified"; a claim about the target
     repo's CURRENT state is grepped by the DISPATCHER before the
     brief ships — the executor's arrival check run one round trip
