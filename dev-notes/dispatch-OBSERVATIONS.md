@@ -2933,3 +2933,47 @@ correct executor behaviour and is graded as such, never as a deviation.
 
 **Consumer + drain seam.** The next dispatch-skill maintenance pass;
 n=1, the executor caught it.
+
+## 2026-08-27 — CLASS: a named subagent's mailbox delivers NOTHING mid-run — every dispatcher message arrived in one batch at the lane's turn boundary, after its closing report
+
+**Incident + basis.** Wave-3 desk `dotfiles-2f` (opus) sent five
+SendMessages to a running named lane (opus, lane C, lifecycle
+`120c733`) across ~40 minutes — a write-set grant, a superseded item
+id, a version-bump grant, two corrections. Every send returned
+`success`. The lane, asked reply-only after its report: all five
+arrived simultaneously, in a single delivery, AFTER it had sent all
+five parts of its closing report; zero reached it during grounding,
+four red-first arrangements, the build, a blocked commit, a ~9-minute
+foreground wait. The lane landed correctly only because it read the
+superseded item's write-set out of the dispatcher's COMMIT in the
+tree — the artifact carried what the channel did not. Mechanism
+unestablished (held at the harness and flushed at a boundary, or
+delivered on turn end — neither side has an instrument); observed
+fact only.
+
+**Class.** A channel premise under §4: "additions extend ownership",
+"a follow-up instruction to a running agent", "ask the holder and
+wait for the answer", the lane-close message — every mid-run steer
+assumes delivery mid-run. The dispatcher holds `success` receipts the
+whole way and is WATCHING, not steering; the dispatch reads as
+steered because the lane happened to land. On a lane whose only
+carrier for the steer was the message, the miss would have been
+silent.
+
+**Pre-formulated rule text** (§1 brief, §4 duties): (1) everything a
+lane could need mid-run is granted UP FRONT or not at all — the
+brief is the complete instruction set; (2) the brief states the
+channel fact: a mid-run message may not arrive before the turn ends;
+on a gap HALT AND REPORT, never wait for an answer; (3) where a lane
+must be steered mid-flight, the carrier is the ARTIFACT — a committed
+item body or file in its tree — never the mailbox; (4) the
+expected-return horizon stays the dead-lane instrument, unchanged.
+Retire or re-scope the §4 "additions extend ownership" clause to
+what it can still mean: ownership extends, but the addition reaches
+the lane at its next turn boundary at the earliest, and a report
+already composed does not cover it.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+also the harness-binding line in the skill's §2 (`as of` date on
+mailbox delivery). n=1 lane, five messages; the bite is reproducible
+by any named lane asked reply-only when its messages arrived.
