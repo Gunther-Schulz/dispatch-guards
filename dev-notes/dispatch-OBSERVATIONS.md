@@ -2973,7 +2973,14 @@ one lane that day: a grep over a path that did not exist (stderr,
 empty stdout read as zero hits), a hook probe whose payload could
 not fire the guard it claimed to check, and this — an instrument
 that cannot register its target returns exactly what a true absence
-returns (the corpus's Non-events rule, at the channel grain).
+returns (the corpus's Non-events rule, at the channel grain). A
+fourth, the same day and self-reported: the desk wrote "verified by
+me at the artifact" over a lane's own battery figures, having run
+only `git show --stat`; it then ran the battery, every figure
+matched, and corrected the provenance anyway — a true claim asserted
+without its basis is indistinguishable, from the grader's side, from
+a checked one, and the grade would have rested on the lane grading
+itself. The instrument was not blind there; it was never run.
 
 **Pre-formulated rule text** (§1 brief, §4 duties): (1) everything a
 lane could need mid-run is granted UP FRONT or not at all — the
