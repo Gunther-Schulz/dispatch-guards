@@ -2981,6 +2981,45 @@ fallback by hand until the mint lands.
 - **Consumer + drain seam:** the next dispatch-guards maintenance
   round applies the sentence to §2 (and the hook flag, if the pattern
   holds) or discards with a reason.
+
+- **Third instance, 2026-08-28, n=3 — AND IT REFUTES THIS ENTRY'S OWN
+  PRE-FORMULATED FIX.** Wave-5 peer desk `dotfiles-a7` (opus) briefed
+  an opus lane with `Report channel: SendMessage to the dispatcher` —
+  a ROLE WORD, the third bad spelling after a session name and a peer
+  name. The lane inferred a recipient from a plausible-sounding agent
+  name and sent 3 messages to a SIBLING LANE, then 7 to `team-lead`.
+  It reached the desk only after a send to `dotfiles-a7` ERRORED with
+  the resolving answer: "this process's own main session … address the
+  main conversation as `main` instead."
+  **The correction to the fix text above: `team-lead` DOES NOT
+  RESOLVE.** This entry's pre-formulated sentence offers "from inside a
+  subagent the dispatcher is `team-lead` (or the dispatching agent's
+  own name)"; applied literally it reproduces this incident, because
+  seven sends to `team-lead` reached nobody. The address that works
+  from inside a subagent is `main`.
+- **The quiet half, which is the worse one and is new at n=3.** The
+  n=2 begehung case had SendMessage REFUSE the bad target in every
+  lane — the loud direction, nothing lost. Here all ten misdirected
+  sends returned `success: true` with a routing line naming the target,
+  and the lane reasonably read ten receipts as ten deliveries. A
+  receipt proves the message was WRITTEN to an inbox, never that it
+  reached the intended reader. So a misaddressed channel is not
+  reliably self-announcing, and "no error" is not evidence of arrival.
+  The available probe is one deliberate send whose ERROR carries the
+  right address — cheap, and available from the lane's first turn.
+- **Second mechanism gap, lane-side:** `ListAgents` is not available to
+  a subagent, so the standing "lane existence is a per-session PROBE"
+  rule has no instrument on that side of the boundary. The probe a
+  subagent DOES have is the erroring send.
+- **Revised pre-formulated fix, superseding the sentence above:** the
+  brief carries the report address in the form THE EXECUTOR MUST TYPE.
+  For a subagent of a main session that is `main` — not the desk's
+  peer-visible session name (`<repo>-<2hex>`), not `team-lead`, and
+  not a role word like "the dispatcher". Mechanizable slice, widened:
+  the brief-reminder hook flags a `Report channel:` target that is a
+  session-name pattern, the literal `team-lead`, or a bare role phrase
+  containing "dispatcher" with no addressable token — all three are
+  measured non-resolvers now.
 - **Retracted same day (not a second instance): a "no messages
   received" line in a lane's final part was read as a
   dispatcher→subagent delivery failure; the lane had in fact received
