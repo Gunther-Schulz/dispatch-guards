@@ -2382,6 +2382,102 @@ anyway. It belongs in the executor skill.
    round (SKILL.md §1 commit-plan paragraph); quota drain per the
    OBSERVATIONS rule.
 
+## 2026-08-27 — CLASS: a Background line's ASSURANCE reads as its basis — six dispatcher claims shipped true-sounding and unopened, all lane-caught; the form is the fix
+
+**Incident + basis.** Wave-3 peer desk (opus): six grounding failures
+in one wave, each a claim passed on without opening the thing itself
+— a zero-hit grep over a path that did not exist, a hook probe whose
+payload could not fire the guard it claimed to check, "verified by
+me" over a lane's own figures, a citation to a decision label naming
+a different ruling, a whole-file pin where the register keys on a
+section, an item quoted for words it does not contain. Two of the six
+were TRUE as sentences and unfounded as claims. Every one was caught
+by the executing lane, none by the desk first (wave-3 closing digest,
+lesson 1; JOURNAL 2026-08-27). The judgment desk's mid-wave form
+change: every Background line carries the command and its hit
+inline, or the word "unverified" — landed in §1's skeleton at
+`e582e9a` (wave 4, lane A2); this is that site's carrier entry.
+
+**Class.** §1's provenance rule already says each line is OPENED at
+brief time; what it lacked was a FORM whose absence is visible — a
+pledge to open relapses, an inline hit does not (corpus, Grounding:
+only a form whose absence is visible binds). The executor reads the
+provenance, never the assurance.
+
+**Pre-formulated rule text.** Landed (§1 skeleton, `e582e9a`). Open
+half, booked in BACKLOG (PARKED, wave-4 A2 gap 3): the new sentence
+and the pre-existing "OPENED at brief time, or graded unverified"
+sentence overlap; the merge is a corpus edit under
+`CLAUDE-maintenance.md` and must keep the read-based basis's reach.
+
+**Consumer + drain seam.** The fire-rate review: does the next wave's
+desk ship an unopened Background line, and does a lane catch it.
+
+drained → `43f2a99` (wave-5 head item (ii)) — the critique pass, both
+halves. Executor §1 rule 1 now names the ARTIFACT the check already
+implied: the lane's FIRST return is one message naming the unopened
+Background line and the two contradicting brief lines. Dispatch §1
+commissions it and names its channel, so the ABSENCE of that message
+is dispatcher-visible. Revised in place rather than added as a new
+numbered rule — renumbering would have falsified the "conduct rule 5"
+cross-reference in the dotfiles devbook. The open half this entry
+booked in BACKLOG (the merge of the two overlapping §1 provenance
+sentences) is untouched and still open.
+
+## 2026-08-27 — CLASS: an accepted deviation updates the lane's report and leaves the SOURCE ENTRY's done-criterion standing, now falsified
+
+**Incident + basis.** The carriers-English backlog entry
+(`BACKLOG.md`, READY 2026-08-27) specified its verifier as
+`grep -rlE '[äöüß]' dev-notes` returning 0. Lane
+`sonnet-d2-carriers` then proved by execution that three German
+literals must STAY, because `check_observations_tail` parses them
+(`check-doc-drift.py:332-334, 382-383`, plus ~8 `--test` fixtures):
+full translation red on an isolated copy, anchors-only revert green,
+confirmed both ways. The lane reported this correctly as a DEVIATION
+under slot (d), the dispatcher accepted it and graded the lane, and
+the source entry was not touched — so from the moment D2 landed
+(`437159c`) the entry carried a done-criterion nothing could satisfy.
+Found only because the judgment desk asked for an unrelated routing
+fix to the same entry; amended at `eefffda`. Nobody was going to
+re-read it otherwise: the item was, correctly, considered handled.
+
+**Class.** The deviation form points at the BRIEF — "deviations from
+the brief, each with its reason" — and the brief is derived from an
+entry that no step re-opens. So a fact strong enough to overturn the
+spec lands in a report, is accepted, and the entry that will generate
+the NEXT brief keeps the overturned criterion. The failure is silent
+in the worst way: the stale criterion reads perfectly reasonable, so
+the next lane chases it and its halt or its broken checker presents
+as LANE error rather than entry error. This is the spec-sentence
+versus verifier-sentence disagreement one level out from code — and
+the accepting desk is the only party that ever holds both halves at
+once, which is why no lane can catch it.
+
+**Pre-formulated rule text** (§4, the dispatcher's integration acts):
+an accepted deviation RE-ASKS THE SOURCE ENTRY'S DONE-CRITERION
+before the lane is booked closed. The integration names the source
+entry, and either states that its criterion survives the deviation or
+amends it in the SAME commit that books the lane. Where the source is
+a lifecycle item the id is known and this is a refusal at the write
+path; where it is prose, §4 carries it. Accepting a deviation without
+that step books a lane closed and leaves a trap for the next one.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass
+(§4). Scheduled companion, so this entry is not the only mover: the
+judgment desk booked the sweep as wave-5 head item (vi) (dotfiles
+`49d8e68`) — one discovery lane over all four carriers for verifiers
+predating a deviation recorded against them. Deliberately not run
+during wave 4, which is still closing.
+
+drained → `43f2a99` (wave-5 head item (vi), PROSE HALF ONLY) —
+dispatch §4 carries this entry's pre-formulated text as a dispatcher
+duty: an accepted deviation re-asks its source entry's done-criterion,
+the integration naming the entry and either stating that its criterion
+survives or amending it in the SAME commit that books the lane. The
+MECHANISM half — the refusal at the write path where the source is a
+tracked item and its id is known — is NOT built: it lands in the
+lifecycle repo, outside that change's write set, and stays owed.
+
 ## Offen
 
 Live entries — the list appends grow. What stands here has not left
@@ -3238,48 +3334,6 @@ HEADING-KEYED so the reader repairs the heading, not the substance.
 the retirement pass. The over-fire count is the metric: n=3 in one
 session on the careful path.
 
-## 2026-08-27 — CLASS: a Background line's ASSURANCE reads as its basis — six dispatcher claims shipped true-sounding and unopened, all lane-caught; the form is the fix
-
-**Incident + basis.** Wave-3 peer desk (opus): six grounding failures
-in one wave, each a claim passed on without opening the thing itself
-— a zero-hit grep over a path that did not exist, a hook probe whose
-payload could not fire the guard it claimed to check, "verified by
-me" over a lane's own figures, a citation to a decision label naming
-a different ruling, a whole-file pin where the register keys on a
-section, an item quoted for words it does not contain. Two of the six
-were TRUE as sentences and unfounded as claims. Every one was caught
-by the executing lane, none by the desk first (wave-3 closing digest,
-lesson 1; JOURNAL 2026-08-27). The judgment desk's mid-wave form
-change: every Background line carries the command and its hit
-inline, or the word "unverified" — landed in §1's skeleton at
-`e582e9a` (wave 4, lane A2); this is that site's carrier entry.
-
-**Class.** §1's provenance rule already says each line is OPENED at
-brief time; what it lacked was a FORM whose absence is visible — a
-pledge to open relapses, an inline hit does not (corpus, Grounding:
-only a form whose absence is visible binds). The executor reads the
-provenance, never the assurance.
-
-**Pre-formulated rule text.** Landed (§1 skeleton, `e582e9a`). Open
-half, booked in BACKLOG (PARKED, wave-4 A2 gap 3): the new sentence
-and the pre-existing "OPENED at brief time, or graded unverified"
-sentence overlap; the merge is a corpus edit under
-`CLAUDE-maintenance.md` and must keep the read-based basis's reach.
-
-**Consumer + drain seam.** The fire-rate review: does the next wave's
-desk ship an unopened Background line, and does a lane catch it.
-
-drained → `43f2a99` (wave-5 head item (ii)) — the critique pass, both
-halves. Executor §1 rule 1 now names the ARTIFACT the check already
-implied: the lane's FIRST return is one message naming the unopened
-Background line and the two contradicting brief lines. Dispatch §1
-commissions it and names its channel, so the ABSENCE of that message
-is dispatcher-visible. Revised in place rather than added as a new
-numbered rule — renumbering would have falsified the "conduct rule 5"
-cross-reference in the dotfiles devbook. The open half this entry
-booked in BACKLOG (the merge of the two overlapping §1 provenance
-sentences) is untouched and still open.
-
 ## 2026-08-27 — CLASS: the writer-reservation WARN names a DIFFERENT working copy than the one being committed
 
 **Incident + basis.** n=2, two repos, one day (wave-4 peer desk
@@ -3455,57 +3509,3 @@ to discover it by going red.
 (§1, the brief form's write-boundary block). Single home here: the
 dotfiles guard/checker devbook only meets this if a translation lane
 is ever run under it.
-
-## 2026-08-27 — CLASS: an accepted deviation updates the lane's report and leaves the SOURCE ENTRY's done-criterion standing, now falsified
-
-**Incident + basis.** The carriers-English backlog entry
-(`BACKLOG.md`, READY 2026-08-27) specified its verifier as
-`grep -rlE '[äöüß]' dev-notes` returning 0. Lane
-`sonnet-d2-carriers` then proved by execution that three German
-literals must STAY, because `check_observations_tail` parses them
-(`check-doc-drift.py:332-334, 382-383`, plus ~8 `--test` fixtures):
-full translation red on an isolated copy, anchors-only revert green,
-confirmed both ways. The lane reported this correctly as a DEVIATION
-under slot (d), the dispatcher accepted it and graded the lane, and
-the source entry was not touched — so from the moment D2 landed
-(`437159c`) the entry carried a done-criterion nothing could satisfy.
-Found only because the judgment desk asked for an unrelated routing
-fix to the same entry; amended at `eefffda`. Nobody was going to
-re-read it otherwise: the item was, correctly, considered handled.
-
-**Class.** The deviation form points at the BRIEF — "deviations from
-the brief, each with its reason" — and the brief is derived from an
-entry that no step re-opens. So a fact strong enough to overturn the
-spec lands in a report, is accepted, and the entry that will generate
-the NEXT brief keeps the overturned criterion. The failure is silent
-in the worst way: the stale criterion reads perfectly reasonable, so
-the next lane chases it and its halt or its broken checker presents
-as LANE error rather than entry error. This is the spec-sentence
-versus verifier-sentence disagreement one level out from code — and
-the accepting desk is the only party that ever holds both halves at
-once, which is why no lane can catch it.
-
-**Pre-formulated rule text** (§4, the dispatcher's integration acts):
-an accepted deviation RE-ASKS THE SOURCE ENTRY'S DONE-CRITERION
-before the lane is booked closed. The integration names the source
-entry, and either states that its criterion survives the deviation or
-amends it in the SAME commit that books the lane. Where the source is
-a lifecycle item the id is known and this is a refusal at the write
-path; where it is prose, §4 carries it. Accepting a deviation without
-that step books a lane closed and leaves a trap for the next one.
-
-**Consumer + drain seam.** The next dispatch-skill maintenance pass
-(§4). Scheduled companion, so this entry is not the only mover: the
-judgment desk booked the sweep as wave-5 head item (vi) (dotfiles
-`49d8e68`) — one discovery lane over all four carriers for verifiers
-predating a deviation recorded against them. Deliberately not run
-during wave 4, which is still closing.
-
-drained → `43f2a99` (wave-5 head item (vi), PROSE HALF ONLY) —
-dispatch §4 carries this entry's pre-formulated text as a dispatcher
-duty: an accepted deviation re-asks its source entry's done-criterion,
-the integration naming the entry and either stating that its criterion
-survives or amending it in the SAME commit that books the lane. The
-MECHANISM half — the refusal at the write path where the source is a
-tracked item and its id is known — is NOT built: it lands in the
-lifecycle repo, outside that change's write set, and stays owed.
