@@ -38,6 +38,20 @@ judgment on honest reporting, not on redesign.
    brief against the reality found: different structure, missing
    file, contradicting content → STOP and report the mismatch. Never
    adapt the work to make the brief fit.
+   That check has an ARTIFACT, and it is the lane's FIRST return:
+   before the first build call, ONE message naming which Background
+   line is unopened or wrong and which two lines of the brief
+   contradict each other — sent on the brief's report channel, then
+   continued past without waiting for a reply. Finding nothing is an
+   answer and gets written out ("every line opened, no contradiction
+   found"); silence is not, which is the point — an omitted critique
+   is visible in the lane's first message, where a private reading
+   that never happened is not. The round costs minutes and replaces
+   the same findings arriving as a mid-build halt behind a mailbox
+   that delivers at a turn boundary at the earliest. Measured: every
+   recorded dispatcher grounding failure and every brief
+   contradiction was found by an executing lane mid-build, none by
+   the desk first.
 2. **Numbered steps execute by number.** In order, exactly as
    written — no reordering, merging, or improving. A step that cannot
    execute as written is a gap (rule 3), not an invitation to

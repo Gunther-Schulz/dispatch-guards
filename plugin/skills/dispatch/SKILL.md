@@ -551,6 +551,22 @@ Mandatory parts (execution briefs):
   decision, file, or value is reported as a gap, never bridged with a
   plausible guess — a gap filled silently is designed at the executing
   tier, the exact failure the tier choice was meant to avoid.
+- **The critique pass is commissioned, and its channel named.**
+  Every brief — small ones included — asks for ONE message before
+  the lane's first build call: which Background line it finds
+  unopened or wrong, and which two lines of the brief contradict
+  each other, returned on the tail block's channel and then
+  continued past without waiting for a reply. The receiving duty
+  travels by skill (executor §1) and binds whether or not a brief
+  asks; commissioning it HERE is what makes its ABSENCE a
+  dispatcher-visible finding rather than a lane's private reading.
+  What it grades is the dispatcher's own grounding, which is why
+  the dispatcher cannot run it: every recorded brief contradiction
+  and unopened Background line was caught by an executing lane
+  mid-build, none by the desk first. Bought at the head it costs
+  minutes; unbought it arrives as a mid-build halt behind a
+  mailbox that reaches the lane at a turn boundary at the earliest
+  (§4, additions extend ownership).
 - **Criteria state OUTCOMES first, sites second.** In the settled
   design, name the observable the change must produce, then the
   known sites — never the sites alone: a site list reaches exactly
@@ -793,6 +809,25 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   disposition-ID set difference empty before the table closes:
   anneal-framework development-process.md practice 11; source
   label.)
+- **An accepted deviation re-asks its SOURCE ENTRY's
+  done-criterion, in the commit that books the lane.** A deviation
+  proven against the brief arrives in report slot (d) and is graded
+  there — and leaves the ENTRY the brief was derived from standing
+  with a criterion the proof just made unsatisfiable. Nothing
+  re-opens that entry: the item reads handled, so the next lane
+  chases the stale criterion, and its halt or its broken checker
+  presents as LANE error rather than entry error. So the
+  integration NAMES the source entry and either states that its
+  criterion survives the deviation or amends it in the SAME commit
+  that books the lane. Where the source is a tracked work item its
+  id is known and the re-ask belongs at the write path as a
+  refusal; where the source is prose, this rule carries it. The
+  accepting desk is the only party holding both halves at once,
+  which is why no lane catches this one (measured: an entry whose
+  verifier demanded a zero-hit scan of a carrier, accepted-deviation
+  evidence having just shown several of the strings that scan
+  matches load-bearing; found only when an unrelated edit reopened
+  the entry).
 - **A claim is opened before it is REPEATED, not only before it is
   merged.** The scope is what a dispatched agent or a peer asserts
   about something OUTSIDE its own work — a file it did not write, a
@@ -924,6 +959,25 @@ the READ-ONLY tail (references/forms.md) — not this skeleton.
   desk: reports composed as final text, the operator seeing only
   an idle session and asking the driving desk where they were).
   The receiving side's mirror is the armed horizon above.
+- **A handed-off run declares BUILD or DISCOVERY at its head,** in
+  the same block as its report channel, and a BUILD run closes at
+  least as many items as it opens. Undeclared, a run drifts into
+  discovery and books what it finds — measured at ten items booked
+  against four fixed on one run, with the carrier's own
+  capture-dominated retirement trigger firing on the next.
+  Discovery runs are legitimate and say so: the declaration is what
+  makes the closing count a verdict against a stated grade instead
+  of a number read off the carrier afterwards and argued about.
+- **Every digest carries rulings issued / rulings reversed on
+  measurement, per desk.** Two counts, read off the run's own
+  record — the rulings a desk made, and those a lane or a peer desk
+  overturned by measuring — never recalled: what is being counted
+  is exactly the defect that makes the recollection wrong, so a
+  remembered rate reads low by construction. The pair is a
+  measurement before it is an argument; a rate still high after
+  rulings are written as a condition plus the measurement that
+  decides it is what opens the question of who holds the seat, and
+  a single run's figure opens nothing.
 
 ## 5. Mechanical guards (global; prose rules are best-effort, hooks are not)
 
