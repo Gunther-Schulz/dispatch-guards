@@ -1007,6 +1007,40 @@ are dropped with a one-line reason.
   Write-set: `plugin/skills/dispatch/SKILL.md` §1 (write-boundaries region),
   and `plugin/hooks/brief-reminder.py` if the advisory lane is built with it.
 
+- **READY 2026-08-28 (wave-5 peer desk `dotfiles-a7`, found while
+  verifying item S) — the 69-column wrap check in `CLAUDE.md` §Verify
+  is VACUOUS once the work is committed.** Its command diffs against
+  `HEAD` (`git diff -U0 HEAD -- plugin/skills/dispatch
+  plugin/skills/executor`), so it grades the WORKING TREE only. On a
+  clean tree it reads 0 diff bytes and prints `wrap: clean` — a
+  pass-shaped number over nothing checked, which the dotfiles
+  three-answers rule forbids by name. Measured 2026-08-28 at
+  `8edbadb`, both arms: against `HEAD` on a clean tree, `diff bytes:
+  0` then `wrap: clean`; re-pointed at the base, `added lines graded:
+  68` then `wrap: clean (vs base)`. Same verdict word, one arm
+  grading 68 lines and the other grading nothing. This is exactly the
+  check every reviewer trusts LAST, after the commit, which is when
+  it has stopped looking.
+  Its sibling defect, same §Verify block: item S's dispatcher
+  transcribed FIVE of the six commands into a brief and the dropped
+  one was THIS check — the only one whose diff scope is the lane's own
+  write set. A verifier list copied out of §Verify wants its COUNT
+  checked against the source, because a dropped check is invisible
+  from inside the list: everything listed goes green and the report
+  reads complete.
+  Verifier: the check run twice on a clean tree — once as written
+  against `HEAD`, once against a base that predates real edits — must
+  give DIFFERENT results where over-69 lines exist in the range, and
+  the as-written arm must not report `clean` while grading zero
+  bytes. Red-first: plant one 80-column line in a committed range and
+  show the as-written arm still says `wrap: clean`.
+  Write-set: `CLAUDE.md` §Verify item 4.
+  Done-criterion: the command names an explicit comparison base
+  rather than `HEAD`, or it states could-not-verify when its diff is
+  empty. Silence and a pass-shaped `clean` over zero bytes are not
+  options.
+
+
 ## Done
 
 - 2026-08-20 — **the machine doctor leaked guard-bite fires into the
