@@ -3230,6 +3230,17 @@ sentence overlap; the merge is a corpus edit under
 **Consumer + drain seam.** The fire-rate review: does the next wave's
 desk ship an unopened Background line, and does a lane catch it.
 
+drained → `43f2a99` (wave-5 head item (ii)) — the critique pass, both
+halves. Executor §1 rule 1 now names the ARTIFACT the check already
+implied: the lane's FIRST return is one message naming the unopened
+Background line and the two contradicting brief lines. Dispatch §1
+commissions it and names its channel, so the ABSENCE of that message
+is dispatcher-visible. Revised in place rather than added as a new
+numbered rule — renumbering would have falsified the "conduct rule 5"
+cross-reference in the dotfiles devbook. The open half this entry
+booked in BACKLOG (the merge of the two overlapping §1 provenance
+sentences) is untouched and still open.
+
 ## 2026-08-27 — CLASS: the writer-reservation WARN names a DIFFERENT working copy than the one being committed
 
 **Incident + basis.** n=2, two repos, one day (wave-4 peer desk
@@ -3450,3 +3461,12 @@ judgment desk booked the sweep as wave-5 head item (vi) (dotfiles
 `49d8e68`) — one discovery lane over all four carriers for verifiers
 predating a deviation recorded against them. Deliberately not run
 during wave 4, which is still closing.
+
+drained → `43f2a99` (wave-5 head item (vi), PROSE HALF ONLY) —
+dispatch §4 carries this entry's pre-formulated text as a dispatcher
+duty: an accepted deviation re-asks its source entry's done-criterion,
+the integration naming the entry and either stating that its criterion
+survives or amending it in the SAME commit that books the lane. The
+MECHANISM half — the refusal at the write path where the source is a
+tracked item and its id is known — is NOT built: it lands in the
+lifecycle repo, outside that change's write set, and stays owed.
