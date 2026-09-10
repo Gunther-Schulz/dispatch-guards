@@ -3509,3 +3509,40 @@ to discover it by going red.
 (§1, the brief form's write-boundary block). Single home here: the
 dotfiles guard/checker devbook only meets this if a translation lane
 is ever run under it.
+
+## 2026-09-10 — CLASS: a skill swept for fire-rate has no stated rule population, so two careful sweeps cannot agree on what they swept
+
+**Incident + basis.** Corpus fire-rate review, window 08-06→09-10
+(dotfiles `docs/directives/fire-rate-review-2026-09-10.md`; close
+digest at the review desk `dotfiles-6d`, graded at `statiker-f0`).
+Two lanes independently swept `plugin/skills/executor/SKILL.md`
+for per-rule dispositions and returned DIFFERENT populations from
+careful readings: 13 rules (§1's 7 + §3's 5 devbook-form elements
++ §2's 1) against 9 (§1's 7 + §2's 1 + line 112's embedded bold
+sub-rule, §3 excluded with the stated reason that its elements
+spec what a DEVBOOK contains, not executor conduct). The review
+desk read the structure at the artifact and graded BOTH counts
+defensible — the population is genuinely ambiguous. No verdict
+moved (every row in both readings is FIRED or
+NO-OCCASION-not-retirement), but a sweep whose population is
+ambiguous cannot assert coverage: its invariant reconciles
+against a count the sweeper chose, not one the artifact declares.
+
+**Class.** The coverage-assertion form of the restated-basis
+problem, one level up: a fire-rate sweep's completeness claim
+needs a comparison basis the GRADED SOURCE declares, and a skill
+that never states its own rule population forces every sweeper to
+mint one — two honest sweeps then differ and neither is wrong.
+
+**Pre-formulated rule text** (executor SKILL.md, a one-line
+declaration; generalizes to any skill the fire-rate review
+sweeps): the skill states its own rule population — a count with
+the enumeration rule that produces it ("N rules: §1's numbered
+list + §2's principle; §3 specs the devbook artifact, not
+conduct") — so a sweep's coverage invariant reconciles against
+the artifact's own declaration, and a population dispute is a
+finding about the skill, never about the sweep.
+
+**Consumer + drain seam.** The next executor-skill maintenance
+pass (the declaration lands there); the next fire-rate review's
+sweep briefs cite the declared population instead of minting one.
