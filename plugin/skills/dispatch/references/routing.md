@@ -1,5 +1,9 @@
 # Tier routing evidence — which tier a dispatch takes
 
+_The `## Site overlay` section at the end carries the operating
+site's bindings and standing decisions; it wins on conflict with
+the portable evidence here._
+
 Reference of the `dispatch` skill (operational corpus — see
 SKILL.md's governance header). Consumer: the dispatching session,
 any tier, at the moment a dispatch's MODEL is chosen — and, for
@@ -102,13 +106,93 @@ The evidence:
   instructed "double-check yourself" prose everywhere (source: the
   operator corpus' fresh-context verification rule, Insurance).
 
-Site-overlay slots this file expects but cannot fill: the ranked
-model table with its staleness stamp; which model each role names;
-pool/cost bindings (what the operator actually pays, which pools
-are capped); standing exceptions ("model X only as operator-named
-exception", denied models); and the always-loaded SEAM conventions
-that fire before this skill loads — the route line naming
-"dispatching to <model> — <tier basis>" or "inline: <why>", the
-intake gauge, and the brief-family dispatch default. Those live in
-the site corpus by necessity: an inline route never loads this
-skill at all.
+Site-overlay slots — the ranked model table with its staleness
+stamp, which model each role names, pool/cost bindings, standing
+exceptions — are filled by the `## Site overlay` section below
+(relocated from the site corpus 2026-09-10 on the corpus-relocation
+ablation's verdict; record: dotfiles
+claude/records/corpus-relocation-2026-09-10/). Still corpus-side by
+necessity: the always-loaded SEAM conventions that fire before this
+skill loads — the route line naming "dispatching to <model> — <tier
+basis>" or "inline: <why>", the intake gauge, the brief-family
+dispatch default, and the standing tier defaults — an inline route
+never loads this skill at all (the ablation's intake arms held on
+those retained lines alone).
+
+## Site overlay — this installation's bindings (win on conflict)
+
+Consumed at dispatch-compose and tier-choice moments, which this
+skill's gate-forced load precedes. The site corpus keeps the
+intake-seam conventions and the standing defaults (sonnet for
+brief-covered execution and discovery; site roles: cheapest daily
+tier = sonnet, review tier = opus, top tier = fable) and points
+here for everything below.
+
+### Cost model, rankings, lineup
+
+Glossary: **intelligence** = how hard a problem the model handles
+unsupervised. **taste** = code quality, API design, UI/UX, copy.
+**cost** = what the operator actually pays (Claude sub; no
+Codex/OpenAI currently): per-token price rises sonnet → opus →
+fable, but fable draws a separately capped pool (as of 2026-07-27:
+50% of the weekly sub limit); other tiers draw the slack remainder
+— so cross-tier token comparisons are the wrong currency: a
+dispatch spending a multiple of the inline token volume still
+relieves the capped pool, and on a fable session fable-tokens-spent
+is the routing cost.
+Rankings 1–10, higher = better on every column.
+Lineup as of 2026-09-10: the set now names Fable 5.1
+(`claude-fable-5-1`) while live sessions still run
+`claude-fable-5` — the row below prices the fable TIER and both
+ids resolve to it, so this is a set that GAINED a member, never a
+rename. Rankings as of 2026-07-18; opus row's
+bar-clearance corroborated in operation (as of 2026-08-06);
+re-check when
+the model set or the payment model (sub → API) changes. The
+sonnet–opus gap carries a measured domain split (2026-08-08;
+paired probes, pre-registered criteria, arms not blind, n=1 per
+shape): brief-covered execution tied across the gap while the
+fresh-context verdict opened it (≥2, the blocking finding
+opus-side only) — the intelligence number prices unsupervised
+judgment, not briefed execution; the site corpus's sonnet
+execution default and the opus verdict default below are its
+operational rendering.
+
+| model     | intelligence | taste |
+|-----------|--------------|-------|
+| fable-5   | 9            | 9     |
+| opus-5    | 7            | 8     |
+| sonnet-5  | 5            | 7     |
+
+### Fable dispatches — the reviewer default
+
+OPUS is the default fresh-context reviewer even on fable-authored
+bounded artifacts (operator decision) — opus-tier fresh review has
+caught a blocking defect in a fable-authored artifact, and the one
+paired fable-vs-opus measurement to date had the opus arm
+out-bitting the fable arm (single domain, arms not blind). A fable
+dispatch is an operator-named exception, not a tier default; the
+top-tier context/cost facts and the fan-out width rule are in the
+portable half above.
+
+### Haiku — the register's certification basis
+
+No gate denies haiku and none asks — the register, not a veto, is
+what places it. Certified as of 2026-08-10: fixed-schema
+enumeration, on a paired haiku-vs-sonnet probe over identical §3b
+briefs with criteria committed before any arm output, tied at full
+marks for a third of the sonnet price. Outside a certified class
+haiku is not the default — a misroute there is prose-governed, not
+blocked.
+
+### Veto-gates — conduct at the dialog
+
+The plugin's veto-gates pause fable dispatches, Workflow launches,
+and config writes for a one-click operator veto; subagent pushes
+are denied outright — the dispatcher pushes after verification. A
+gate receives a decision already made and stated; deferring the
+decision to the dialog is the failure. The decision-complete bar,
+the gaps-surfaced-beat-gaps-filled rule, and the conventions that
+keep the veto cheap (the model rides the NAME, fan-outs state
+count × tier, the chosen model named in the turn's final message)
+are canonical in SKILL.md §1.
