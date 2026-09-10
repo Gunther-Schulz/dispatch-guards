@@ -3573,3 +3573,40 @@ mechanically readable state), and if no structural predicate carries it,
 the resolution is DON'T BUILD: the 2,238 words stay always-loaded. This
 narrows the pre-formulated fix above — its handoff-classifier clause is
 dead under the constraint unless the operator reverses it.
+
+## 2026-09-10 — CLASS: the dispatcher is a co-writer too — mid-batch dispatcher acts inside a lane-held copy broke the lane's gate state and the dispatcher's own instrument
+
+1. **Incident + basis** (two, same class, one day, statiker
+   seam-bundle lane `sonnet-mint-lane-0283`, session statiker-cc):
+   (a) the dispatcher pushed its own unrelated commits mid-batch;
+   the push set is the branch, so the lane's already-claimed
+   version-bump commit published with it, origin's manifest caught
+   up to HEAD's version, and the machine-wide payload gate's
+   unpushed-batch exemption died — every remaining item commit of
+   the lane false-fired (lane report verbatim in session record;
+   hook predicate read at dotfiles git/hooks/pre-commit:162-174;
+   fix booked dotfiles df-156). The §1 claim check was FOLLOWED —
+   it verifies outgoing commits are intended, not that publishing
+   them now is safe for an in-flight lane. (b) the dispatcher ran
+   the lane's test suite in the lane-held working copy while the
+   lane was live-editing it: three consecutive runs returned 6
+   failed / 482 passed / 468 passed on what looked like one tree —
+   an unstable instrument read as flaky tests, resolved only by
+   ListAgents showing the lane running.
+2. **Class** — dispatcher-side action inside a lane's held copy
+   mid-flight: a push that changes remote-derived gate state, or an
+   execution that reads half-written files. The writer-reservation
+   gate covers commits only; pushes and executions are ungated, and
+   the push variant is invisible to the dispatcher because claiming
+   the outgoing commits FEELS like the whole duty.
+3. **Pre-formulated rule/fix text** — for the dispatch skill §4
+   (dispatcher duties), beside the push-set bullet: "A push on a
+   copy a lane still holds is deferred to the lane's close unless
+   the lane's remaining commits cannot depend on remote state
+   (version gates compare against origin: a mid-batch push moves
+   their comparison basis). The same hold binds executing the
+   lane's write-set — a suite run in a lane-held copy measures a
+   half-written tree; run checks after the lane's series lands or
+   in a frozen worktree."
+4. **Consumer + drain seam** — next dispatch-guards maintenance
+   round (skill §4 edit); the hook half drains at dotfiles df-156.
