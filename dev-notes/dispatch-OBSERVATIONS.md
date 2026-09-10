@@ -3546,3 +3546,22 @@ finding about the skill, never about the sweep.
 **Consumer + drain seam.** The next executor-skill maintenance
 pass (the declaration lands there); the next fire-rate review's
 sweep briefs cite the declared population instead of minting one.
+
+2026-09-10 — CLASS: gate-coverage boundary limits corpus relocation.
+Incident + basis: the corpus-relocation ablation (dotfiles
+claude/records/corpus-relocation-2026-09-10/) derived its candidate set
+against this plugin's hooks.json and found the dispatch-skill-gate matcher
+(Agent|Task|Workflow) leaves SendMessage handoffs outside the forced skill
+load — 2,238 words of peer-channel conduct (delegation protocol, peer
+traffic, horizon mechanics) therefore cannot move behind the skill and stay
+always-loaded. Class: gate-coverage boundary as a relocation constraint.
+Pre-formulated fix text: extend the dispatch-skill-gate matcher to
+SendMessage calls whose payload is handoff-shaped (a GO, a queue pointer, a
+message after which the peer is expected to act — membership by function per
+the site corpus peer-traffic rule), so the forced load covers the peer
+lane's compose moment; false-fire risk: plain fact-traffic sends must NOT
+demand the load, so the predicate needs a handoff classifier — if that
+predicate is not computable with near-zero false fires, this stays prose
+and the 2,238 words stay in the corpus. Consumer + drain seam: the next
+dispatch-guards design pass; ALSO gated on the operator's CULL state for
+new governance machinery in the site corpus (operator GO required there).
