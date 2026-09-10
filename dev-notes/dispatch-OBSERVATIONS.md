@@ -3565,3 +3565,11 @@ predicate is not computable with near-zero false fires, this stays prose
 and the 2,238 words stay in the corpus. Consumer + drain seam: the next
 dispatch-guards design pass; ALSO gated on the operator's CULL state for
 new governance machinery in the site corpus (operator GO required there).
+CONSTRAINT (operator decision, first-hand 2026-09-10, statiker-f0: "i want
+as little heuristic chat triggers as possible"): a classifier or heuristic
+read over peer-message CONTENT is off the table for this gate — acceptable
+variants are structural predicates only (tool name, first-use-per-session,
+mechanically readable state), and if no structural predicate carries it,
+the resolution is DON'T BUILD: the 2,238 words stay always-loaded. This
+narrows the pre-formulated fix above — its handoff-classifier clause is
+dead under the constraint unless the operator reverses it.
