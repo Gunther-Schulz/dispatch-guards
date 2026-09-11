@@ -3610,3 +3610,39 @@ dead under the constraint unless the operator reverses it.
    in a frozen worktree."
 4. **Consumer + drain seam** — next dispatch-guards maintenance
    round (skill §4 edit); the hook half drains at dotfiles df-156.
+
+## Mailbox delivery can lag a lane's idle cycles; idle notices then testify to a stale wait
+
+1. **Incident + basis** — 2026-09-11, dotfiles session
+   (leadtest/lc-45 arc): a dispatcher's decision message
+   (SendMessage, success ack) was not delivered to its lane
+   across TWO of the lane's idle cycles — the lane's idle
+   notices, composed after the send, still said "waiting on
+   team-lead's decision". The dispatcher, per the deadlock rule,
+   stopped the lane to integrate at the desk — and the artifact
+   then showed the lane HAD received the ruling and committed
+   (lifecycle e98c3a4) in the window between its last stale
+   notice and the TaskStop. Separately, the same arc's two
+   grader lanes each reported their first SendMessage report
+   undelivered despite success acks and re-sent on demand.
+2. **Class** — the skill's delivery binding (§2: batched at turn
+   boundaries) understates the observed lag: delivery can miss
+   turn boundaries too, and a lane's own idle-notice text is
+   composed BEFORE queued mail flushes, so it testifies about a
+   state the queue has already changed. Stop-then-integrate is
+   correct and safe — but the stop can race a just-delivered
+   order, so the desk's integration act must be idempotent
+   against the lane having executed (measured: the desk's bump
+   script asserted on the pre-state and failed loud instead of
+   double-bumping — that assert is what made the race harmless).
+3. **Pre-formulated text** — for the skill's delivery binding:
+   "An idle notice is testimony about the lane's state at
+   compose time, not about the queue: mail can arrive after it.
+   Before acting on 'still waiting', read the ARTIFACT. A
+   stop-and-integrate after undelivered sends is right, and the
+   desk's integration step is written to fail loud if the lane
+   already executed (assert the pre-state before mutating) — the
+   race between a late delivery and the stop is otherwise
+   silent double-execution."
+4. **Consumer + drain seam** — next dispatch-guards maintenance
+   round (skill §2/§4 delivery-binding edit).
