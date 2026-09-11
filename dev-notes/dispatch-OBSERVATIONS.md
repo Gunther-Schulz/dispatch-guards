@@ -3635,6 +3635,17 @@ dead under the constraint unless the operator reverses it.
    notice and the TaskStop. Separately, the same arc's two
    grader lanes each reported their first SendMessage report
    undelivered despite success acks and re-sent on demand.
+   Addendum 2026-09-11, statiker session (statiker-4d, 0.2.87/0.2.88
+   laps), n=3 more: (a) lane sonnet-lap-0287 received the desk's
+   critique reply (a commit-order and red-first directive) only after
+   its closing report; (b) lane sonnet-lapA-0288 wrote a five-part
+   closing report without reading two queued fix messages, then acted
+   on the earlier, superseded one; (c) the desk's STOP message crossed
+   that lane's already-landed revert commit (a8d9d28). Each directive
+   stated its precondition ("valid while …"), so each late arrival
+   was reported, not executed — the precondition form is what kept
+   all three harmless. The recorded cost: a dozen desk and lane turns
+   spent on messages that crossed state.
 2. **Class** — the skill's delivery binding (§2: batched at turn
    boundaries) understates the observed lag: delivery can miss
    turn boundaries too, and a lane's own idle-notice text is
@@ -3764,3 +3775,42 @@ dead under the constraint unless the operator reverses it.
 4. **Consumer + drain seam** — the next dispatch-guards maintenance
    round (forms.md §2 tails, and brief-reminder wherever it renders
    them); quota drain per the OBSERVATIONS rule.
+
+## 2026-09-11 — CLASS: a horizon poll that prints on every artifact move turns healthy progress into desk wake-ups
+
+1. **Incident + basis** — 2026-09-11, statiker session (statiker-4d),
+   from the operator's "next steps" question to the 0.2.88 release:
+   37 monitor notifications re-invoked the desk, and 28 of them only
+   announced that a lane had committed — each a full desk turn
+   re-billing the session prefix with nothing to act on (counted from
+   the session transcript). The two real catches made on commit events
+   (three skipped rows in one lap; a stray uncommitted edit) came from
+   the desk's own sweeps, which the lane's closing report would have
+   triggered anyway, and the one early correction they produced crossed
+   that report in the mailbox (see the mailbox-lag entry above).
+2. **Class** — the wait instrument's EMISSION rule, not its horizon:
+   the desk's Monitor scripts printed each new commit, and the harness
+   turns every printed line into a notification that re-invokes the
+   session. §4 says only that the waiter arms a timer; nothing says
+   what the poll may print. The operator corpus carries both readings
+   side by side: Insurance :59-60 "a POLL that emits on the artifact's
+   every move and on the horizon itself" and :91-92 "a changing
+   artifact re-arms silently at zero interruption" — the first, read
+   literally, produced the wake-ups; the second is the intended
+   conduct.
+3. **Pre-formulated fix text** — §4, after "the waiter ARMS the horizon
+   at the moment the wait begins": "Where the lane's artifact is
+   observable (commits, files), the poll tracks movement SILENTLY:
+   movement resets the horizon and prints nothing. It prints only when
+   the horizon passes with no movement, when the lane signals
+   completion, or on an anomaly it can compute (a write outside the
+   lane's boundary, a push, HEAD moving backwards). Every printed line
+   re-invokes the session and re-bills its prefix, so a per-move print
+   is a wake-up with nothing to act on." Bench case: a poll over a copy
+   that receives three commits prints nothing, then prints exactly once
+   when the horizon elapses with no fourth.
+4. **Consumer + drain seam** — the next dispatch-guards maintenance
+   round (§4, the horizon bullet). The corpus wording at Insurance
+   :59-60 is the corpus maintainer's, surfaced to the operator the same
+   day rather than booked here, since corpus maintenance does not read
+   this file.
