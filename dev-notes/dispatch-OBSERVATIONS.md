@@ -1797,6 +1797,11 @@ Evidence: this commit.
 
 ## 2026-08-14 — the harness block against report files did not catch a German name: `*-bericht.md` went through
 
+**CORRECTED 2026-09-11** — class mis-attributed: this lane took
+a 6010-char payload-gate deny at 15:54:25 whose text prescribes a
+FILE, and wrote a 6011-byte one. See the 2026-09-11 payload-gate
+entry in the live list.
+
 **APPLIED 2026-08-17** — forms.md §2, harness-binding paragraph:
 the block is measured against ONE namespace and is no fallback for a
 different working language; there, the brief names the assigned data
@@ -1871,6 +1876,11 @@ commit.
    the OBSERVATIONS rule.
 
 ## 2026-08-16 — the report-file ban at the END of the READ-ONLY tail reads as plumbing, not as binding (statiker beat-the-books, session 11)
+
+**CORRECTED 2026-09-11** — "position is the only variable
+changed" does not hold: message size was uncontrolled, and the
+payload gate's deny prescribes a file (52 denies that day). See
+the 2026-09-11 payload-gate entry in the live list.
 
 **APPLIED 2026-08-17** — the READ-ONLY tail now opens with the ban
 plus its named consequence, the scratch assignment sits beside it,
@@ -3646,3 +3656,64 @@ dead under the constraint unless the operator reverses it.
    silent double-execution."
 4. **Consumer + drain seam** — next dispatch-guards maintenance
    round (skill §2/§4 delivery-binding edit).
+
+## 2026-09-11 — CLASS: the payload gate's deny text prescribes the report FILE the READ-ONLY tail forbids; lanes obey the gate, and two applied entries mis-classed it
+
+1. **Incident + basis** — 2026-09-11, dotfiles session
+   300cbe7b: three sonnet discovery lanes (`sonnet-lucas-talk`,
+   `sonnet-anthropic-dials`, `sonnet-anthropic-selection`), each
+   carrying the READ-ONLY tail verbatim (it opens "NO REPORT
+   FILE"), each wrote a findings file into the session scratchpad
+   and sent a pointer message. The fire log explains all three:
+   `message-payload-gate` denied each lane's first SendMessage
+   (17305 / 4818 / 17183 chars; a second deny at 3006 for
+   `sonnet-anthropic-dials`), and the deny text
+   (plugin/hooks/message-payload-gate.py:54-61) reads "Write the
+   full result to a FILE, then send a SHORT message: the key
+   findings plus the file path." A foreign session's
+   `sonnet-repair-0285` took the same deny the same hour (3844
+   chars). Log total: 1427 payload-gate denies across 709 lanes
+   since 2026-08-06, every one mode deny (python count over
+   ~/.local/share/claude/dispatch-guards-fires.jsonl).
+   Retro-check of the two APPLIED entries on this ban: the
+   2026-08-14 `*-bericht.md` lane (`sonnet-ready-inventar`) took
+   a 6010-char payload deny at 15:54:25 and wrote a 6011-byte
+   file — the gate's remedy, not a missed harness block. The
+   2026-08-16 placement entry names position as the only
+   variable changed; message size was uncontrolled, and the log
+   holds 52 payload-gate denies that day (not tied to that run's
+   lanes — the entry does not name them).
+2. **Class** — two homes prescribe opposite remedies at one
+   seam: the gate (file plus short pointer, grounded in context
+   economy) against the tails and their reminder text (split
+   into labeled parts, "do NOT write a report FILE
+   (harness-blocked for subagents)": forms.md:304-305 and :337,
+   brief-reminder.py:804-805 and :980, report-form-gate.py:9).
+   The mechanism speaks at the moment of sending, so it wins
+   every time; moving prose inside the brief cannot outvote a
+   deny. Splitting also defeats the gate's own rationale — N
+   parts inject the same volume — and §4 already books a split
+   report from its FILE. The "harness-blocked" clause is now
+   contradicted four times (three English names today, one
+   German on 08-14); what the harness blocks, if anything, is
+   unmeasured. Side finding: "YOUR OWN scratchpad, never the
+   dispatcher's" names no distinct place — all three files
+   landed under this session's scratchpad path, which §1 says
+   parallel agents share; both older entries booked that as a
+   deviation.
+3. **Pre-formulated fix text** — ONE remedy, worded from one
+   shared constant in the gate's deny text, both forms.md §2
+   tails, brief-reminder and report-form-gate: "Findings over
+   the size gate go to the brief's ASSIGNED findings file (named
+   by the dispatcher, lane slug in the name); the message carries
+   the key findings, at most 3000 chars, plus that path. No other
+   file." Every discovery brief then assigns that path (§1,
+   untracked outputs). Drop "harness-blocked for subagents"
+   unless re-measured with a planted REPORT.md written by a
+   subagent. Bench case: a brief-reminder render and a
+   payload-gate deny name the same remedy, asserted on the
+   shared constant rather than on prose.
+4. **Consumer + drain seam** — next dispatch-guards maintenance
+   round (hook text, forms.md §2 tails, brief-reminder; the guard
+   change extends tools/corpus/guards.jsonl). The two APPLIED
+   entries carry a correction line pointing here.
