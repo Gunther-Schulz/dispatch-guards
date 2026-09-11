@@ -3717,3 +3717,50 @@ dead under the constraint unless the operator reverses it.
    round (hook text, forms.md §2 tails, brief-reminder; the guard
    change extends tools/corpus/guards.jsonl). The two APPLIED
    entries carry a correction line pointing here.
+
+## 2026-09-11 — CLASS: "YOUR OWN scratchpad" names no place — every lane writes the session scratchpad, so bare-named scratch collides across lanes and with the dispatcher's own
+
+1. **Incident + basis** — 2026-09-11, dotfiles session (notify-suite
+   review lap). Two opus verifier dispatches overlapping in time
+   (opus-notify-review, then opus-notify-review-2), both carrying the
+   READ-ONLY tail's "Transient probe scratch goes in YOUR OWN
+   scratchpad, never the dispatcher's", both wrote under this
+   session's scratchpad path. The second lane overwrote the first
+   lane's `probe.py` at 18:23 and then deleted it, killing the re-run
+   pointer for five of the first report's findings (reported by the
+   first lane; confirmed on disk: `probe.py` absent, its `drip.py`,
+   `ns/` and eight `probe-*` directories present). It also wrote into
+   the dispatcher's own `ns-old/` (mtime 18:18:40, same as its new
+   `ns-new/`). No booked verdict rested on the lost file: the
+   dispatcher had reproduced or re-tested every finding. Earlier
+   instances, each booked only as a side finding or as a lane
+   deviation: 2026-08-14, fork result files overwritten in the shared
+   scratchpad (entry "report booking does not check the SENDER");
+   2026-08-14 and 2026-08-16, files "in the DISPATCHER's scratchpad
+   instead of its own" (entries on the `*-bericht.md` block and on the
+   tail's ban placement); 2026-09-11, "names no distinct place"
+   (payload-gate entry). n=5.
+2. **Class** — the tail assigns a PLACE the harness does not provide:
+   for these named mailbox lanes the subagent's scratchpad was the
+   dispatching session's scratchpad path, so "your own" and "the
+   dispatcher's" are one directory. The §1 untracked-outputs bullet
+   (the lane slug in every name under a shared scratch root) is the
+   rule that would have held; the tail's wording is what tells a lane
+   it needs no slug, and two older entries graded lanes against a
+   place distinction that does not exist.
+3. **Pre-formulated fix text** — forms.md §2, READ-ONLY and EXECUTION
+   tails, replacing "Transient probe scratch goes in YOUR OWN
+   scratchpad, never the dispatcher's": "Scratch: the session
+   scratchpad is SHARED with the dispatcher and every other lane.
+   Everything you write there goes under `<scratchpad>/<your agent
+   name>/` — never a bare filename at its top level — and nothing
+   outside that directory is yours to modify or delete." §1, beside
+   the untracked-outputs bullet: the dispatcher fills that directory
+   name from the dispatch's own `name`, the same value the channel
+   line binds to. Re-grade the 2026-08-14 and 2026-08-16 "wrong
+   scratchpad" deviations as collisions the brief invited, not lane
+   disobedience. Bench case: the rendered tail contains the per-lane
+   directory clause and not the "YOUR OWN scratchpad" sentence.
+4. **Consumer + drain seam** — the next dispatch-guards maintenance
+   round (forms.md §2 tails, and brief-reminder wherever it renders
+   them); quota drain per the OBSERVATIONS rule.
