@@ -3887,3 +3887,34 @@ is read top-down by a reader acting on what it has read so far."
 pass over §1 (the skeleton edit and the bullet amendment above are
 both mechanical applications of slot 3). Drains by the retirement
 quota with the rest of this carrier.
+
+## 2026-09-12 — spent horizon timers not disarmed at the wait's end (n=2, one desk, one day)
+
+**Incident + basis.** Two stale wakes in one judgment-desk session
+(dotfiles-85): the ack-horizon Monitor for a peer kickoff fired ~25
+min after the ack had arrived and been acted on; the wave-1-plan
+horizon Monitor fired ~40 min after the plan digest had been graded
+and wave 2 authorized. Both were one-shot sleep Monitors; both
+waits had ENDED with their artifact's arrival; neither was stopped
+in the arrival turn. Each fire cost a paid wake with nothing to act
+on — the exact waste the poll emission rule prices.
+
+**Class.** The disarm rule exists (Insurance: "a wait that ENDS
+disarms its timer in the same turn") and was LOADED — the failure
+is the trigger's shape: the disarm moment coincides with the
+arrival of a rich artifact (a digest demanding grading and rulings),
+and composing the response displaces the disarm every time. Same
+displacement mechanism as the incoming-demand rule, one instrument
+down.
+
+**Pre-formulated fix text** (for §4's wait/arming conduct, or the
+corpus Insurance bullet, whichever drains first): "On the awaited
+artifact's arrival, the timer's disarm is the FIRST act of the
+handling turn, before any grading or reply — the arrival turn's
+opening tool call, not its closing one; a disarm deferred behind
+composition is the displacement class and loses to it."
+
+**Consumer + drain.** Dispatching/judgment desks running armed
+horizons; drains on this carrier's normal quota into §4 or the
+corpus Insurance bullet (amendment-over-addition: the sentence
+already exists, this adds the ordering anchor).

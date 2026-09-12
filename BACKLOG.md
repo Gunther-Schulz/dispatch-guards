@@ -1195,3 +1195,21 @@ are dropped with a one-line reason.
   survive by being one of those. Both went red first — the case
   list caught `mysql -phunter2`, where the attached short-flag
   value passes any looks-like-a-flag pattern.
+
+- **READY 2026-09-12 — _dispatch_common.py flagged by the pre-commit
+  x-bit/shebang guard: mode 100755, no shebang, and the guard claims
+  hooks.json execs it directly.** If that claim is true the hook is
+  dead-at-launch in production (/bin/sh would run a Python docstring);
+  if false, the guard's population sweep over-includes a library file
+  and fires on every commit (check-that-fires-on-a-non-defect class).
+  Either branch is a defect; which one decides the fix site. Verify:
+  read installed hooks.json for a _dispatch_common entry; then either
+  fix the wiring + shebang (payload change, version bump) or narrow
+  the guard's population to files hooks.json actually names.
+  Write-set: plugin/hooks/_dispatch_common.py or the pre-commit
+  guard's population derivation + hooks.json. Done-criterion: guard
+  green on a dev-notes-only commit AND either the entry removed from
+  hooks.json's exec set or the file launchable by /bin/sh (shebang +
+  x-bit consistent). Evidence: pre-commit fire on dev-notes-only
+  commit, this date; discovered blocking an unrelated commit,
+  bypassed --no-verify (audited).
