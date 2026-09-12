@@ -1096,7 +1096,7 @@ On a gap noticed in use — a dispatch failure this discipline should
 have prevented, or a rule it states wrongly — write the observation
 to `dev-notes/dispatch-OBSERVATIONS.md` in the plugin's source repo
 (github.com/Gunther-Schulz/dispatch-guards) and propose the rule
-change; BACKLOG.md there carries work items. Guard fires land in the
+change; ITEMS.md there carries work items. Guard fires land in the
 fire log (README, "Fire log, guard modes, and the replay bench"),
 which is what makes fire rates countable rather than remembered.
 

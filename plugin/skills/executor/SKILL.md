@@ -191,7 +191,7 @@ On a gap noticed in use — an execution failure this conduct layer
 should have prevented, or a rule it states wrongly — write the
 observation to `dev-notes/executor-OBSERVATIONS.md` in the plugin's
 source repo (github.com/Gunther-Schulz/dispatch-guards) and propose
-the rule change; BACKLOG.md there carries work items.
+the rule change; ITEMS.md there carries work items.
 
 Where this skill is deployed as the operator's corpus half, it is
 OPERATIONAL CORPUS with the operator CLAUDE.md and the sibling

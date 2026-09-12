@@ -62,18 +62,12 @@ are not — this repo carries both sides, and the split is the design.
 - `ITEMS-DONE.md` — the closure home: moved bodies with their
   `closed-reason`/`closed-ref`, plus the pre-migration archive
   held verbatim.
-- `BACKLOG.md` — FROZEN legacy carrier, superseded by `ITEMS.md`.
-  Never appended to and never edited: the migration report pins it
-  by blob (`bb93897`) and all 31 migrated items cite line ranges
-  into that exact content, so an edit here silently invalidates
-  every citation. Retained rather than deleted only because two
-  PUBLISHED payload pointers still name it
-  (`plugin/skills/dispatch/SKILL.md:1099`,
-  `plugin/skills/executor/SKILL.md:194`); retargeting those is a
-  skill edit — skill-craft invocation plus a release — not a
-  migration act, so deletion follows that release (item dg-32).
-  Two consumers are declared EXEMPT, both historical: `LEDGER.md`
-  and `dev-notes/dispatch-OBSERVATIONS.md` name it inside dated
+- `BACKLOG.md` (deleted 2026-09-12) — the legacy carrier `ITEMS.md`
+  superseded. Item citations into it resolve against the blob the
+  migration report pins (`bb93897`,
+  `docs/audits/migration-report-2026-09-12.md`): `git cat-file -p
+  bb93897`, never a working-tree read. `LEDGER.md` and
+  `dev-notes/dispatch-OBSERVATIONS.md` name it inside dated
   records, where naming the carrier that was live at the time is
   correct rather than stale.
 - `dev-notes/` — the maintenance layer, never loaded by operational
