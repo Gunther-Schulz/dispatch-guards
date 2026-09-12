@@ -17,6 +17,23 @@ blocker-moot: regrade: fill goal, write-set, done-criterion and evidence, or dro
 closed-reason: 2026-09-12 Resolved by a THIRD answer neither branch named: the guard was RIGHT by its own design. Direction B (exec bit, no shebang) deliberately sweeps every 0755 file under a payload root, per the docstring a drain-wave lane updated the same day, motivated by the measured 2026-08-17 incident where a lane copied THIS file's 0755-no-shebang pattern to a new library and hung a session on `./file --test`. So neither of the entry's branches held: hooks.json does not exec it (executed grep over the installed hooks.json: 16 entries, this file absent) AND the guard does not over-include. The mode was the defect; the file now carries 100644 and the guard goes green. Basis: LEDGER.md:180, judgment desk, 2026-09-12.
 closed-ref: 69cead0
 
+## dg-32
+grade: DONE
+requirement: 6 tracked file(s) still name the migrated carrier(s) `BACKLOG.md`. A consumer left pointing at a carrier nobody writes any more reads as current until someone notices, and nobody is scheduled to — record: the migration report
+goal: tend
+write-set: CLAUDE.md, LEDGER.md, dev-notes/dispatch-OBSERVATIONS.md, plugin/skills/dispatch/SKILL.md, plugin/skills/executor/SKILL.md, tools/check-doc-drift.py
+done-criterion: no tracked file outside the migration's own outputs names `BACKLOG.md`, or each remaining one is recorded as a declared exemption
+evidence: tracked files naming `BACKLOG.md` at migration time: CLAUDE.md, LEDGER.md, dev-notes/dispatch-OBSERVATIONS.md, plugin/skills/dispatch/SKILL.md, plugin/skills/executor/SKILL.md, tools/check-doc-drift.py
+blocked-by: NONE
+amend-reason: 2026-09-12 The migration's residue item named 6 consumers as one undifferentiated write-set. The executed sweep splits them: 4 need no payload change and are resolved or exempt here, and only the 2 published SKILL.md pointers remain — which is a different KIND of work (a gated skill edit + release), not a smaller amount of the same. Also records why BACKLOG.md is frozen rather than deleted: its blob is pinned by the report and 31 items cite line ranges into it, so it cannot be edited, and it cannot be deleted while published payload still points at it.
+amended-write-set: 2026-09-12 plugin/skills/dispatch/SKILL.md:1099, plugin/skills/executor/SKILL.md:194 — plus the plugin.json version bump and the marketplace pin the release needs, and the deletion of BACKLOG.md once both pointers are retargeted
+amended-done-criterion: 2026-09-12 both published SKILL.md pointers name ITEMS.md, the release has shipped, and BACKLOG.md is deleted — OR each remaining namer is a declared exemption in CLAUDE.md
+amended-evidence: 2026-09-12 consumer sweep executed 2026-09-12 over the 6 tracked namers the migration listed. RESOLVED 4: CLAUDE.md retargeted to ITEMS.md in this same change; tools/check-doc-drift.py:376 is a DOCSTRING mention only — its glob is dev-notes/*OBSERVATIONS*.md and it never reads BACKLOG.md (executed: 7/7 [ok], no drift); LEDGER.md (2 hits) and dev-notes/dispatch-OBSERVATIONS.md (6 hits) declared exempt as historical — and 2 of those 6 name OTHER repos' files entirely (the cache-fix fork's BACKLOG.md at :1252, pbs-office's FEATURE-BACKLOG.md at :1827), i.e. substring false positives in the migration's own consumer list. REMAINING 2: the published payload pointers.
+amended-blocked-by: 2026-09-12 decision this is a skill edit: CLAUDE.md Discipline requires a skill-craft invocation (pre-edit hook enforced) and a skill-craft:release-plugin release with an operator /reload-plugins handoff, which is a release act on the machinery desk's cadence, not a migration act
+blocker-moot: this is a skill edit: CLAUDE.md Discipline requires a skill-craft invocation (pre-edit hook enforced) and a skill-craft:release-plugin release with an operator /reload-plugins handoff, which is a release act on the machinery desk's cadence, not a migration act
+closed-reason: 2026-09-12 Both published pointers name ITEMS.md (50c40b6, released as 0.11.11) and BACKLOG.md is deleted (2fee60d) — the amended done-criterion's first branch, met in full. Citation resolution stays via the report-pinned blob bb93897 (git cat-file), recorded in CLAUDE.md's role entry.
+closed-ref: 50c40b6, 2fee60d
+
 ## Archive (pre-migration)
 
 
