@@ -1,2 +1,4 @@
 __pycache__/
 *.py[co]
+!.claude/lifecycle.json
+ITEMS.md.lock
