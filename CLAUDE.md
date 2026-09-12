@@ -54,8 +54,28 @@ are not — this repo carries both sides, and the split is the design.
   "no `LEDGER.md`" deviation — that deviation's own revisit condition
   ("if multi-session work here starts re-deriving settled ground")
   fired when multi-session corpus work began running in this repo.
-- `BACKLOG.md` — parked items (each with its named missing evidence)
-  and ready items (decision-complete, dispatchable).
+- `ITEMS.md` — the work-item carrier (lifecycle plugin; the
+  declaration is `.claude/lifecycle.json`). Parked items carry
+  their named missing evidence, ready items are decision-complete
+  and dispatchable. Closures MOVE to `ITEMS-DONE.md`; nothing
+  closes in place. Migrated from `BACKLOG.md` on 2026-09-12.
+- `ITEMS-DONE.md` — the closure home: moved bodies with their
+  `closed-reason`/`closed-ref`, plus the pre-migration archive
+  held verbatim.
+- `BACKLOG.md` — FROZEN legacy carrier, superseded by `ITEMS.md`.
+  Never appended to and never edited: the migration report pins it
+  by blob (`bb93897`) and all 31 migrated items cite line ranges
+  into that exact content, so an edit here silently invalidates
+  every citation. Retained rather than deleted only because two
+  PUBLISHED payload pointers still name it
+  (`plugin/skills/dispatch/SKILL.md:1099`,
+  `plugin/skills/executor/SKILL.md:194`); retargeting those is a
+  skill edit — skill-craft invocation plus a release — not a
+  migration act, so deletion follows that release (item dg-32).
+  Two consumers are declared EXEMPT, both historical: `LEDGER.md`
+  and `dev-notes/dispatch-OBSERVATIONS.md` name it inside dated
+  records, where naming the carrier that was live at the time is
+  correct rather than stale.
 - `dev-notes/` — the maintenance layer, never loaded by operational
   files: per-skill observation journals
   (`dispatch-OBSERVATIONS.md`, `executor-OBSERVATIONS.md`,

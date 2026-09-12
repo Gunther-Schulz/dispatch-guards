@@ -5,6 +5,18 @@
 
 schema: 2
 
+## dg-31
+grade: DONE
+requirement: PARKED 2026-09-12 — _dispatch_common.py flagged by the pre-commit x-bit/shebang guard: mode 100755, no shebang, and the guard claims hooks.json execs it directly — record: BACKLOG.md:1042
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:1042-1061
+blocked-by: NONE
+blocker-moot: regrade: fill goal, write-set, done-criterion and evidence, or drop
+closed-reason: 2026-09-12 Resolved by a THIRD answer neither branch named: the guard was RIGHT by its own design. Direction B (exec bit, no shebang) deliberately sweeps every 0755 file under a payload root, per the docstring a drain-wave lane updated the same day, motivated by the measured 2026-08-17 incident where a lane copied THIS file's 0755-no-shebang pattern to a new library and hung a session on `./file --test`. So neither of the entry's branches held: hooks.json does not exec it (executed grep over the installed hooks.json: 16 entries, this file absent) AND the guard does not over-include. The mode was the defect; the file now carries 100644 and the guard goes green. Basis: LEDGER.md:180, judgment desk, 2026-09-12.
+closed-ref: 69cead0
+
 ## Archive (pre-migration)
 
 
