@@ -1733,6 +1733,44 @@ closes no horizon. Evidence: this commit.
    round (forms.md channel-line block + §1 write boundaries); quota
    drain per the OBSERVATIONS rule.
 
+### MERGE 2026-09-12 — 3rd incident, the RECEIVER side: an absolute session name is unresolvable from inside a subagent
+
+1. **Incident + basis:** the lifecycle drain desk (dotfiles-b8)
+   briefed four read-only sonnet subagent lanes with a channel
+   line naming its own session name as the report address. Two of
+   the four hit the wall independently — a subagent resolves only
+   `main`/`team-lead`, never a session name — and both worked
+   around it correctly. Reported by that desk to this one
+   (dispatch-guards' copy holder) with the fix direction already
+   named; relayed measurement, not re-executed here — the 2-of-4
+   recurrence is the dispatcher's own count.
+2. **Class:** the same class, third side. Incident 1 was the
+   BOOKING side (attribution of arriving reports), incident 2 the
+   GENERATING side (a relative name inherited by forks), and this
+   is the RECEIVER side: this entry's own pre-formulated fix —
+   name the recipient ABSOLUTELY — cures inheritance ambiguity
+   and is itself unresolvable where the receiver is a SUBAGENT,
+   whose address space holds only its parent aliases. Absolute
+   naming was the two-incident approximation; the invariant under
+   all three is that the channel line is written in the
+   RECEIVER's address space.
+3. **Pre-formulated rule text** (forms.md, channel-line block,
+   REPLACING the absolute-naming sentence from incident 2 before
+   it drains): 'The channel line names an address the RECEIVER
+   can resolve from its own position, verified against the
+   receiver kind: a SUBAGENT resolves only `main`/`team-lead`
+   (its parent), so its line says the final text IS the report or
+   names `main` — never a session name; a FORK inherits context,
+   so its line names its creator ABSOLUTELY by agent name, never
+   "the dispatcher"; a CROSS-SESSION peer takes the absolute
+   session name from ListAgents. A line correct in the sender's
+   address space and dead in the receiver's fails only at report
+   time, as silence or cross-talk.'
+4. **Consumer + drain seam:** same as the host entry — the
+   forms.md channel-line block; the two pre-formulated texts
+   drain TOGETHER as one rewrite, since applying incident 2's
+   text alone would re-mint this incident.
+
 ## 2026-08-14 — fork skills are the residual spawn channel under the cap, and a fork is self-review by construction
 
 **APPLIED 2026-08-17** — §4 verdict routing: a `context: fork`
