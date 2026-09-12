@@ -776,7 +776,7 @@ are dropped with a one-line reason.
   question). Until measured, the gate's coverage claim is scoped to
   tool-mediated writes, and that scope belongs in its docstring.
 
-- **RE-GRADED 2026-08-17 — the built half is gone; only the trigger
+- **PARKED 2026-08-17 — the built half is gone; only the trigger
   is still parked.** `worktree_doctor.py` ships proposals 1–3
   (ownership DECLARED via `--owned` and never inferred, no removal
   path at all, the three reporting verdicts), and the observation
@@ -1039,6 +1039,24 @@ are dropped with a one-line reason.
   rather than `HEAD`, or it states could-not-verify when its diff is
   empty. Silence and a pass-shaped `clean` over zero bytes are not
   options.
+- **PARKED 2026-09-12 — _dispatch_common.py flagged by the pre-commit
+  x-bit/shebang guard: mode 100755, no shebang, and the guard claims
+  hooks.json execs it directly.** If that claim is true the hook is
+  dead-at-launch in production (/bin/sh would run a Python docstring);
+  if false, the guard's population sweep over-includes a library file
+  and fires on every commit (check-that-fires-on-a-non-defect class).
+  Either branch is a defect; which one decides the fix site. Verify:
+  read installed hooks.json for a _dispatch_common entry; then either
+  fix the wiring + shebang (payload change, version bump) or narrow
+  the guard's population to files hooks.json actually names.
+  Write-set: plugin/hooks/_dispatch_common.py or the pre-commit
+  guard's population derivation + hooks.json. Done-criterion: guard
+  green on a dev-notes-only commit AND either the entry removed from
+  hooks.json's exec set or the file launchable by /bin/sh (shebang +
+  x-bit consistent). Evidence: pre-commit fire on dev-notes-only
+  commit, this date; discovered blocking an unrelated commit,
+  bypassed --no-verify (audited).
+
 
 
 ## Done
@@ -1196,20 +1214,3 @@ are dropped with a one-line reason.
   list caught `mysql -phunter2`, where the attached short-flag
   value passes any looks-like-a-flag pattern.
 
-- **READY 2026-09-12 — _dispatch_common.py flagged by the pre-commit
-  x-bit/shebang guard: mode 100755, no shebang, and the guard claims
-  hooks.json execs it directly.** If that claim is true the hook is
-  dead-at-launch in production (/bin/sh would run a Python docstring);
-  if false, the guard's population sweep over-includes a library file
-  and fires on every commit (check-that-fires-on-a-non-defect class).
-  Either branch is a defect; which one decides the fix site. Verify:
-  read installed hooks.json for a _dispatch_common entry; then either
-  fix the wiring + shebang (payload change, version bump) or narrow
-  the guard's population to files hooks.json actually names.
-  Write-set: plugin/hooks/_dispatch_common.py or the pre-commit
-  guard's population derivation + hooks.json. Done-criterion: guard
-  green on a dev-notes-only commit AND either the entry removed from
-  hooks.json's exec set or the file launchable by /bin/sh (shebang +
-  x-bit consistent). Evidence: pre-commit fire on dev-notes-only
-  commit, this date; discovered blocking an unrelated commit,
-  bypassed --no-verify (audited).
