@@ -3888,7 +3888,7 @@ pass over §1 (the skeleton edit and the bullet amendment above are
 both mechanical applications of slot 3). Drains by the retirement
 quota with the rest of this carrier.
 
-## 2026-09-12 — spent horizon timers not disarmed at the wait's end (n=2, one desk, one day)
+## 2026-09-12 — spent horizon timers not disarmed at the wait's end (n=3, two desks, one day)
 
 **Incident + basis.** Two stale wakes in one judgment-desk session
 (dotfiles-85): the ack-horizon Monitor for a peer kickoff fired ~25
@@ -3918,3 +3918,74 @@ composition is the displacement class and loses to it."
 horizons; drains on this carrier's normal quota into §4 or the
 corpus Insurance bullet (amendment-over-addition: the sentence
 already exists, this adds the ordering anchor).
+
+**Third instance, same day, different desk — and it compounds with a
+second defect (statiker-df, 2026-09-12).** The `0.2.89 review horizon`
+Monitor (baseline `494dbe5`, 35 min) fired ~2h after the review lane
+had returned its ten findings, been graded, dispositioned, and
+superseded by a repair lap. Same shape as the two above: the wait ENDED
+on a rich artifact — a ten-finding review demanding a fail-closed
+ruling — and the disarm lost to the composing. What makes this instance
+worth the merge is what the stale timer FIRED WITH: not a plain
+horizon expiry but `ANOMALY at minute 34: the working tree is DIRTY
+under a read-only review lane`. The dirty tree was the DISPATCHER's own
+two record edits, landing in the shared copy hours after the lane it
+watched had finished. So the anomaly predicate was anchored to live,
+mutating shared state — the check-anchor rule's false-alarm direction
+(corpus Fixing: "criteria anchored to live, mutating state decay into
+false alarms") — and the compound is the cost: a spent timer that
+should not have been running fired a finding-shaped false positive
+about a lane that no longer existed, and it reads as a real anomaly for
+exactly as long as it takes to open the tree. A disarmed timer produces
+no false anomaly, which is why the fix stays the disarm rather than a
+better predicate; but where such a predicate is armed on a SHARED copy
+at all, it is keyed to the lane's OWN write set, never to tree
+cleanliness — the dispatcher writes records in that copy by design and
+is not an anomaly.
+
+## 2026-09-12 — a lane's injected gitStatus is a stale instrument the critique pass reads as current repo state
+
+**Incident + basis.** `sonnet-repair-0289` (statiker repo) opened its
+critique pass with a candidate contradiction: the brief's Background
+said "manifest at 0.2.89, batch UNPUSHED, exemption armed", while the
+gitStatus block injected into that lane's context showed
+`8d65478 0.2.88 released: pin 0.2.87 -> 0.2.88` among recent commits
+with no later bump visible. The lane flagged it before opening the
+manifest — correct conduct, and the flag was a false positive.
+Refuted at the artifact by the dispatcher: working-tree
+`plugin/.claude-plugin/plugin.json` at `0.2.89`, `origin/main` at
+`0.2.88`, `git log --oneline origin/main..HEAD | wc -l` → 43, the bump
+commit `4325cbd` sitting above the truncated head gitStatus prints.
+Cost: one round trip. The lane continued without waiting, so nothing
+stalled.
+
+**Class.** The harness's gitStatus block is a SESSION-START SNAPSHOT
+carrying a TRUNCATED commit head, and it arrives in the register of
+current repo state — same two-channel divergence the corpus already
+names for CLAUDE.md injection vs. the live file (Shell and privilege,
+the two-channels binding), one artifact over: injected snapshot vs.
+live repo. It bites hardest on an UNPUSHED BATCH, where the facts a
+brief rests on (a version bump, a base commit, "nothing pushed") are
+precisely the ones sitting above the snapshot's horizon. Both failure
+directions are live: the lane doubts a true premise and spends a round
+trip, or — the silent one — a lane that does not ask resolves the
+conflict in the snapshot's favour and builds on a state the repo left
+behind.
+
+**Pre-formulated fix text** (for §1's provenance rules, where the
+brief's Background lines are governed): "A Background line asserting a
+repo state the lane's injected gitStatus could contradict — a manifest
+or package version, a base commit, an unpushed-batch premise, a branch
+position — carries its executed read INLINE and says that the injected
+gitStatus is a session-start snapshot with a truncated commit head, so
+the lane can tell the snapshot from the artifact instead of grading one
+against the other. The tell at compose time: the brief's premise lives
+in commits above `origin/<branch>`."
+
+**Consumer + drain.** Dispatchers briefing lanes on a working copy
+with unpushed commits (the statiker maintenance arc's standing
+condition, and any batched release lap); drains on this carrier's
+normal quota into §1's per-line provenance rule by amendment — the
+rule already demands the opened read, this names the instrument that
+makes an ungraded line actively misleading rather than merely
+unverified.
