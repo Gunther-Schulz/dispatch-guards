@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 4
+added: 5
 compacted: 0
 
 ## dg-1
@@ -307,4 +307,13 @@ goal: general-maintenance
 write-set: plugin/skills/dispatch/references/forms.md
 done-criterion: the dispatch skill STATES the step rather than leaving it derived: section 3b or 4 says in its own text that an enumeration which already exists is not re-routed, so a reader reaches it by reading rather than by inference. Red-first: a grep of the current skill text for that step returns nothing while the behaviour is nonetheless expected of dispatchers
 evidence: RELOCATED from dotfiles df-125 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE — the item's own red-first reproduces: a sweep of plugin/skills/dispatch/ for 'already exists/enumerated' returned ZERO, with 'enumeration' (8 hits in forms.md) as positive control proving the instrument reached the text. Original body: dotfiles claude/BACKLOG.md:1012-1021.
+blocked-by: NONE
+
+## dg-37
+grade: READY
+requirement: enumeration and matrix briefs: the bucket field carries the BARE TOKEN and nothing else; all qualification goes in the evidence field. forms.md §3b declares closed vocabularies but never field-exclusivity, and the gap let a lane decorate the enum — the one real FAIL-OPEN in a 25-row matrix was invisible to every tally, caught by a Counter, invisible to a read — record: dotfiles claude/records/df151-matrices-2026-09-12.md
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/forms.md,plugin/.claude-plugin/plugin.json,LEDGER.md
+done-criterion: forms.md §3b carries the bare-token sentence; ships in a version bump per the release flow; the JOURNAL line rides the same session in dotfiles per the dispatch-guards convention
+evidence: 2026-09-12, df-151 discovery wave: lane B wrote its reasoning INTO the enum field under a brief that declared the vocabulary but not exclusivity; the carrier doctrine's open-vocabulary decay reproduced in a data file. Matrices and reading caveat preserved at dotfiles claude/records/. Booked by the judgment desk after the drainage desk's cost-test veto correctly refused a dotfiles-side booking (wrong reader path) and correctly refused --source operator on a desk's ask (testimony, not the decision). Write-set collides with dg-35/dg-36 — the three bundle into one forms.md release
 blocked-by: NONE
