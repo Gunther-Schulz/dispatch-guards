@@ -231,6 +231,24 @@ Mandatory parts (execution briefs):
     pathspec isolates against other files, never against a
     co-writer's hunks inside a named one — which makes
     serialization the remedy rather than the preference.
+    The co-writer these rules under-bind is the DISPATCHER. Every
+    enumeration in this section names third parties — peer
+    session, operator, scheduled job, agent, human — and the desk
+    composing
+    the boundary reads itself as that boundary's AUTHOR rather
+    than a party inside it, so its own uncommitted hunks sit in
+    the lane's write set while the brief putting them there is
+    still being written. The loss runs one way and announces
+    nothing: the lane's pathspec commit carries the desk's hunks
+    under the LANE's message and trailer, after which the desk's
+    `git status` reads clean and the work is indistinguishable
+    from work it never did (measured: a rewrite of the very file
+    the brief assigned, absorbed whole; found only by reading the
+    lane's commit body, and unpicking it then needed the
+    explicit-hash reset above). A boundary the desk means to
+    keep writing inside is not a boundary: the desk's edits to the
+    lane's paths are COMMITTED before the brief ships, or those
+    paths leave the write set.
   - **Deployment-coupled is a different question from LIVE ON
     WRITE.** A file on an execution path resolved by PATH rather
     than by import — a git hook under `core.hooksPath`, a
