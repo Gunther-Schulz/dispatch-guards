@@ -888,6 +888,21 @@ crossover rule of thumb (~30 tool calls per lane, a formula rather
 than a constant, measured by `tools/lane-cost.py`) → §1 'What rides
 ONE lane'. Evidence: this commit.
 
+**Write-side half APPLIED 2026-09-12** — the 2026-08-17
+application landed the read-only half only: the transferred
+"token spend is identical either way" sentence, confirmed at
+source by correction (1) below, had survived in the ONE-lane
+clause's WRITE-side text, still licensing one-item-per-lane
+fan-outs. Re-scoped to its parallel-vs-queued mechanism, and the
+write-side bundling default landed beside it (disjoint small
+items share a lane below the crossover, sequential, per-item
+commits and per-item red-first arrangements; one review round
+per wave). Operator-reported companion incident: an in-session
+backlog drain running a full review per minor item (2026-09-11).
+Corpus complement same day: calibration priced-units pull-seam
+clause, routing route-line lane-count sizing (dotfiles 5bcd338).
+Evidence: this commit.
+
 **Incident + basis.** Peer testimony (opus desk, pbs-office wave,
 2026-08-15), relayed via the peer channel; basis is that session's
 own transcript, NOT verified here — recorded at recollection grade.

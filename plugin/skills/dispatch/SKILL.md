@@ -517,20 +517,40 @@ Mandatory parts (execution briefs):
   here; the corpus routing module keeps the veto principle and
   points here) — details and enforcement: the agent-model-gate
   hook (§5).
-- **What rides ONE lane.** Two items bundle when they share a
-  realizing FILE and one mechanism — the fix is a single edit
+- **What rides ONE lane.** Two items MUST bundle when they share
+  a realizing FILE and one mechanism — the fix is a single edit
   wearing two entry numbers, and splitting it gives two lanes the
-  same edit to make. They split when each carries its own
-  red-first arrangement: a bundle then entangles verdicts (the
-  bundled-changes fact, corpus Fixing) and buys only waiting,
-  since token spend is identical either way and elapsed time is
-  not. A shared tool, an adjacent topic, or a common owner are
-  not bundling reasons — and the mapping is decided before the
-  lanes are named, because deciding it means reading each item's
-  realizing file, which is also what catches an item whose work
-  already landed (measured: four of five proposed
-  lanes were already built, found only when the bundling question
-  forced the files open).
+  same edit to make. Disjoint items DEFAULT to bundling while
+  each is small against a lane's fixed load (system prompt +
+  corpus + brief + closing report, re-paid per lane): sequential
+  in one lane, per-item commits and per-item red-first
+  arrangements keeping per-change attribution (corpus Fixing,
+  bundled changes — its entangled-verdicts cost binds DIAGNOSIS,
+  where which edit did what is the question, so diagnosis never
+  bundles). What forces a split is the crossover, not item
+  count: a lane expected past it re-reads its own prefix dearer
+  than a marginal lane's startup (crossover rule and measuring
+  tool: the read-only clause below), and elapsed time argues a
+  split only for
+  items big enough to pay their lane. "Token spend is identical
+  either way" compares parallel against queued scheduling of the
+  SAME lanes and says nothing about lane count — transferred to
+  the bundling question it licenses one-item-per-lane fan-outs
+  whose fixed load dwarfs their items. A shared tool, an
+  adjacent topic, or a common owner are still not bundling
+  reasons — the write-set join and the sizing above are — and
+  the mapping is decided before the lanes are named, because
+  deciding it means reading each item's realizing file, which is
+  also what catches an item whose work already landed (measured:
+  four of five proposed lanes were already built, found only
+  when the bundling question forced the files open). One seam
+  later the same pricing binds VERIFICATION: the wave's review
+  round runs ONCE over the integrated landed set, per-item
+  verdicts inside it — a per-lane round only where a dependent
+  lane consumes the verdict before the wave closes (corpus
+  Fixing, bundled changes; Calibration, the consuming moment);
+  a lane whose role IS a verdict stage is that round, not an
+  extra one.
   A READ-ONLY fan-out has no write boundaries to join, so three
   terms size it instead: a lane's fixed load (system prompt +
   corpus + brief, re-paid per agent) stays small against its work —
