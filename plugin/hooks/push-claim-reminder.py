@@ -88,8 +88,20 @@ _SOURCE = "dispatch-guards/push-claim-reminder"
 # Heredoc bodies never reach this pattern (strip_heredoc_bodies
 # runs first).
 _CMD_POS = r"(?:^|[;&|]\s*|(?<!\\)\n\s*)"
-_FUSED_PUSH_RE = re.compile(_CMD_POS + r"git\s+push\b")
-_FUSED_COMPANION_RE = re.compile(_CMD_POS + r"git\s+(?:commit|log)\b")
+# The git word itself: transparent wrapper words may precede it in
+# command position (`timeout 580 git push`, `command git push`) and
+# global flags may sit between `git` and the subcommand
+# (`git -C $L log`, `git -c k=v commit`). Both forms are measured
+# misses (2026-09-12: three fused pushes sailed past while the
+# pattern demanded a bare `git push`/`git log` at command position).
+# Enumerated-tell caveat, recorded: wrappers beyond timeout/command
+# (env, nice, nohup…) stay outside this class until measured — the
+# pattern can only enumerate, and each addition is a deliberate act.
+_WRAP = r"(?:(?:timeout\s+\S+|command)\s+)*"
+_GIT_WORD = r"git(?:\s+-C\s+\S+|\s+-c\s+\S+)*\s+"
+_FUSED_PUSH_RE = re.compile(_CMD_POS + _WRAP + _GIT_WORD + r"push\b")
+_FUSED_COMPANION_RE = re.compile(
+    _CMD_POS + _WRAP + _GIT_WORD + r"(?:commit|log)\b")
 
 # Heredoc opener: `<<` (optionally `<<-`) then the delimiter word,
 # bare or single/double quoted. No space is allowed between the
@@ -347,6 +359,40 @@ if __name__ == "__main__":
             "EOF\n"
         )
         assert deny_check({**main_s, "tool_input": {"command": _hd_nl_push_body}}) is None
+        # (xiii) wrapper words and git global flags — the SECOND
+        # population gap of 2026-09-12, found because the first fix's
+        # explanation was refuted by the transcript: three inline
+        # fused pushes (drain desk, byte-exact below) carried
+        # `git -C $VAR log` as the claim and `timeout 580 git push`
+        # as the push, and BOTH patterns demanded the bare words.
+        # Red on 0.11.9 AND 0.11.12 (measured per side); the probe
+        # set that validated 0.11.12 shared its author's spelling —
+        # instruments sharing an author repeat one blind spot.
+        _wrap_C = ('L=/home/g/dev/Gunther-Schulz/lifecycle; echo "=== claim'
+                   ' the log first, per the carve-out\'s own words ==="; git'
+                   ' -C $L log --oneline origin/main..main; echo "==='
+                   ' push ==="; cd $L && timeout 580 git push origin main'
+                   ' 2>&1 | tail -12; echo "exit=${pipestatus[1]}"')
+        assert deny_check({**main_s, "tool_input": {"command": _wrap_C}}) is not None
+        _wrap_F = ('D=/home/g/dev/Gunther-Schulz/dotfiles; echo "=== claim'
+                   ' outgoing ==="; git -C $D log --oneline'
+                   ' origin/main..main; cd $D && timeout 580 git push'
+                   ' origin main 2>&1 | tail -3; echo "exit=${pipestatus[1]}"')
+        assert deny_check({**main_s, "tool_input": {"command": _wrap_F}}) is not None
+        _wrap_E = ('git -C $L commit -F $S/msg6.txt -- ITEMS.md 2>&1 |'
+                   ' tail -2; echo "=== claim outgoing ==="; git -C $L log'
+                   ' --oneline origin/main..main; cd $L && timeout 580 git'
+                   ' push origin main 2>&1 | tail -4;'
+                   ' echo "exit=${pipestatus[1]}"')
+        assert deny_check({**main_s, "tool_input": {"command": _wrap_E}}) is not None
+        # must-NOT-move rows for the widening: a wrapped or -C push
+        # with no companion stays reminder-only; a wrapped non-push
+        # command beside a push companion-less stays silent; stash
+        # push stays local
+        assert deny_check({**main_s, "tool_input": {"command": "timeout 580 git push origin main"}}) is None
+        assert deny_check({**main_s, "tool_input": {"command": "git -C /x push origin main"}}) is None
+        assert deny_check({**main_s, "tool_input": {"command": "timeout 30 git status && git push"}}) is None
+        assert deny_check({**main_s, "tool_input": {"command": "git -C /x stash push && ls"}}) is None
 
         # ── deny renderer: the chained-command note (BACKLOG
         # 2026-08-11 — a Bash deny does not say that NOTHING in the
