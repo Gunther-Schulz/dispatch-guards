@@ -3829,3 +3829,61 @@ dead under the constraint unless the operator reverses it.
    :59-60 is the corpus maintainer's, surfaced to the operator the same
    day rather than booked here, since corpus maintenance does not read
    this file.
+
+## 2026-09-12 — CLASS: the commissioned critique pass sits at the brief's TAIL, so three of three lanes sent it after building
+
+**1. Incident + basis.** One dispatcher (statiker-df, statiker repo,
+2026-09-12), three independent lanes, three separately written briefs,
+all composed from §1's parts list: `sonnet-st34-tools`,
+`sonnet-st35-arming`, `sonnet-st32-registry`. **All three sent the
+commissioned critique pass AFTER implementation**, each disclosing it
+unprompted as a deviation. n=3 in one day, and the lanes' own
+diagnoses converge: "reading the brief's Grounding basis feels
+continuous with starting to build" (st-35), and "it sits after
+Verifier/Write boundaries, where grounding+building momentum has
+already started — the fix is to make it physically the first
+actionable instruction" (st-32 registry). The dispatcher's briefs each
+placed it as the final section, after Commit plan — because §1
+prescribes the critique pass in prose but the **brief skeleton has no
+slot for it at all**, so its position is re-decided per brief and
+lands wherever the composer finishes.
+
+Value was NOT lost in these three (each critique still found real
+defects — a six-vs-seven item-count contradiction, three wrong
+Background lines, a verifier sequence whose arms could not run in the
+stated order). What was lost is the pass's *purpose*: bought at the
+head it costs minutes and steers the build; sent after it, it is a
+correct report about work already committed.
+
+**2. Class.** A load-bearing pre-build obligation placed at a
+container's TAIL de-binds regardless of its wording — the reader has
+already begun the work the obligation was meant to precede. Identical
+in shape to the measured skill-craft finding (a load-bearing rule
+inside an invariant block: 2 violations at tail position, full
+compliance after moving it to the block's head, wording unchanged),
+and to this carrier's own payload-gate entry, where lanes obeyed the
+text that reached them at the moment of acting.
+
+**3. Pre-formulated fix text.** In §1's brief skeleton, give the
+critique pass a named slot at the HEAD — immediately after the
+Title/Working copy/Base check/Scratch block and BEFORE
+`## Grounding basis` — with its consequence named:
+
+    ## First message — send this BEFORE reading anything but this brief
+    Which Background line is unopened or wrong, and which two lines of
+    this brief contradict each other? Send it on the report channel,
+    then continue without waiting for a reply. Sent after your first
+    edit, it is a report about work already done — which is the
+    failure it exists to prevent.
+
+And in §1's "The critique pass is commissioned, and its channel named"
+bullet, append: "Its POSITION is part of the commission: at the
+skeleton's head, before the grounding section. Placed after the
+verifier or the write boundaries it reliably arrives post-build —
+measured 3/3 on one dispatcher's batch, 2026-09-12 — because a brief
+is read top-down by a reader acting on what it has read so far."
+
+**4. Consumer + drain seam.** The dispatch skill's next maintenance
+pass over §1 (the skeleton edit and the bullet amendment above are
+both mechanical applications of slot 3). Drains by the retirement
+quota with the rest of this carrier.
