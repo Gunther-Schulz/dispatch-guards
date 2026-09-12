@@ -3941,6 +3941,58 @@ pass over §1 (the skeleton edit and the bullet amendment above are
 both mechanical applications of slot 3). Drains by the retirement
 quota with the rest of this carrier.
 
+**Second site, same mechanism, opposite end of the work (n=2, one
+desk, one session, 2026-09-12/13; wan2gp-71).** The same de-binding
+was measured on a PRE-CLOSE obligation, in a different container:
+the pasted EXECUTION tail's clause "A check that got backgrounded is
+AWAITED before the closing report (TaskOutput block=true on its task
+id) — ending your turn orphans it". Both lanes received that tail
+VERBATIM and both ended their turn on a wake-up that could not come.
+`sonnet-video-meta` closed with "I'll wait for the monitor's
+notification before sending the closing report" — the monitor was the
+DISPATCHER's, watching the lane's files, with no channel to the lane;
+it sat idle until told to send. `sonnet-two-messages`, later the same
+session, armed its OWN monitor and ended its turn holding the report
+until it fired.
+
+The two chose DIFFERENT wrong mechanisms, which is the discriminating
+detail: this is not ignorance of `TaskOutput`, it is the absence of a
+positive act at the close. Both lanes obeyed every other clause of
+the same tail — pathspec commits, no `add`, no `--amend`, write
+boundary respected, inbox drained — so the container was read. What
+failed is specifically the clause whose firing moment is "I am about
+to end my turn", the one moment at which a lane has no external
+prompt, inside a block that never varies and is therefore skimmed as
+plumbing.
+
+**Class, widened.** A load-bearing obligation at a container's TAIL
+de-binds regardless of wording, at EITHER end of the work: pre-build,
+where the reader has already begun what it was meant to precede, and
+PRE-CLOSE, where nothing will prompt the reader again. The pre-close
+half is the worse of the two, because its failure is silent and
+symmetric — a lane stopped on an awaited signal and a lane still
+working are indistinguishable from outside, and from the inside the
+lane believes it is waiting correctly.
+
+**Additional fix text, same slot 3.** In `references/forms.md` §2,
+the EXECUTION tail: move the awaited-check clause from the middle of
+the block to its FIRST line and render it positively, consequence
+named:
+
+    Your turn ENDS on a sent report. If a check is still running,
+    block on it (TaskOutput block=true on its task id) and stay in
+    this turn until it returns, or SEND an interim report now that
+    says so and names what remains. Nothing external will wake you:
+    a turn ended while waiting is a stop, and from outside it is
+    indistinguishable from work.
+
+Rationale for position, not just wording: this carrier's own
+tail-position finding and the skill-craft measurement it cites
+(2 violations at tail, full compliance after moving to the head,
+wording unchanged) both say the container's head is what binds.
+A wording-only fix here would be the third attempt at the same
+mechanism by a route already measured not to work.
+
 ## 2026-09-12 — spent horizon timers not disarmed at the wait's end (n=3, two desks, one day)
 
 **Incident + basis.** Two stale wakes in one judgment-desk session
