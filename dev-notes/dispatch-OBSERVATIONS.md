@@ -3989,3 +3989,64 @@ normal quota into §1's per-line provenance rule by amendment — the
 rule already demands the opened read, this names the instrument that
 makes an ungraded line actively misleading rather than merely
 unverified.
+
+## 2026-09-12 — a must-not-move arm reusing a named fixture cannot fire when the gate has a FLOOR the fixture never clears
+
+**Incident + basis.** My own brief for `opus-df151-step1` (dotfiles,
+df-151 step 1, the declared-deletion gate) commissioned six counter-arm
+rows, two of them — "a mass deletion of ITEMS.md in this repo still
+refuses" and "a mass deletion of BACKLOG.md in an UNMIGRATED repo still
+refuses" — built on the repo's existing `frz_repo` fixture, named in
+the brief by name. That fixture writes 40-line files
+(`git/hooks/pre-commit:3636-3639`, helper `md_zeilen` at :3485), while
+the gate under test continues at `weg_n <= MASS_DELETION_MIN` with
+`MASS_DELETION_MIN = 200` (:850, :899). Both arms would have returned
+the empty list whether or not the exemption being built existed — a
+green byte-identical to a working must-not-move row, on the two rows
+that carry the exemption's SCOPE conditions (the repo-identity check
+and the not-in-table check). The neighbouring block 16a in the same
+file solves the same problem with `md_zeilen(947)`, so the magnitude
+was one screen away. Caught by the lane's commissioned critique pass
+before its first build call, confirmed at the artifact by this desk
+rather than booked on the lane's word; the lane repaired the
+arrangement in scope (fixture size plus a positive control in the same
+fixture) and flagged rather than asked. n=1, cost zero — the critique
+pass paid for itself on its first use at this desk.
+
+**Class.** The brief specified each arm by its QUESTION and reused a
+fixture by NAME, and nothing in the brief form asks whether that
+fixture's MAGNITUDE reaches the checked predicate at all. It is the
+devbook's "a bite that stays GREEN needs its arrangement checked
+exactly as a red does" landing one level earlier — on the dispatcher's
+brief rather than on the executor's run — and a sibling of the
+2026-08-12 battery-invocation entry, which is the same failure from the
+INVOCATION side (selector and abort flags narrowing the instrument).
+The must-not-move row is where it bites hardest and hides best: its
+expected result is a NON-EVENT, so a dead arrangement and a working
+scope condition return the same silence, and the row's whole purpose is
+to certify that the change did not widen what the gate allows.
+Threshold gates are the general shape — any predicate with a floor, a
+ceiling, a minimum count, a ratio, or a size gate below which it
+declines to look.
+
+**Pre-formulated fix text** (SKILL.md §1, widening the bullet "A
+commissioned instrument's SEMANTICS are the dispatcher's to state",
+which already fixes ABSENCE mapping and COMPARISON grain — a third item
+beside them, not a new bullet): "And MAGNITUDE, wherever the checked
+predicate has a floor, ceiling or ratio below which it declines to
+look: an arm specified by its question and handed an existing fixture
+BY NAME inherits that fixture's size, which was chosen for a different
+predicate. A must-not-move row is where this is invisible — its
+expected result is a non-event, so an arrangement that could never
+reach the predicate returns exactly what a working scope condition
+returns. The brief states the magnitude that clears the threshold, or
+names the positive control that proves the arrangement live in the same
+fixture; the compose-time tell is a brief naming a fixture helper it
+did not size."
+
+**Consumer + drain.** Any dispatcher commissioning counter-arm or
+must-not-move rows against a gate with a numeric floor — the
+guard/checker-build class by construction, and every brief reusing a
+repo's existing test fixtures. Drains on this carrier's normal quota
+into §1 by amendment, as a third clause of the instrument-semantics
+bullet.
