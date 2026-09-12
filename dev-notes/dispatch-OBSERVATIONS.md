@@ -4155,3 +4155,78 @@ guard/checker-build class by construction, and every brief reusing a
 repo's existing test fixtures. Drains on this carrier's normal quota
 into §1 by amendment, as a third clause of the instrument-semantics
 bullet.
+
+## 2026-09-13 — devbook step 2 assumes the CLI can be safely exercised; a guard whose ONLY CLI path is a production write is uncovered
+
+**Incident + basis.** lc-73 (lifecycle drain desk dotfiles-b8, opus
+lane under `guard-checker-bau`): the devbook demands the red-first
+run at CLI altitude against the old binary, but the only CLI path
+reaching the refusal under test was `migrate --merge` — against the
+real target (statiker) a production write ingesting 25 closure
+bodies into another desk's carrier, forbidden by the lane's write
+boundary; `--report-only` does not reach the refusal. The lane
+returned the contradiction with evidence rather than inventing a
+route. Resolution, executed and verified: the red ran against a
+PINNED COPY of the production artifact — statiker at 865e0a2, each
+copied file sha256-equal to that commit's blobs — old binary 17,
+new 20, the delta naming the exact decayed entries. Relayed from
+the drain desk's closing digest; arrangement details in lifecycle's
+wave-directive pause note (b0b1639).
+
+**Class.** Devbook step 2's "the red runs the OLD binary on a real
+payload" silently assumes an exercisable CLI. Where the only route
+to the refusal IS the production write, the step as written forces
+a boundary violation or a unit-level red — the exact under-proof it
+forbids. The pinned-copy arrangement is the general resolution, and
+it needs its own premise check (sha256-equality to the pinned
+commit) or the copy is a new unproven arrangement.
+
+**Pre-formulated fix text** (dotfiles root CLAUDE.md, Registered
+procedure §2 — NOTE: editing that section resets guard-checker-bau
+to eval-open by fingerprint, so this drains deliberately, bundled
+with the next devbook amendment, never as a drive-by): "Where the
+only CLI route to the refusal is a PRODUCTION write, the red runs
+against a pinned copy of the production artifact, each file shown
+sha256-equal to the pinned commit's blobs before any red from it
+counts — the copy is an arrangement, and an unproven arrangement's
+red is indistinguishable from the defect's."
+
+**Consumer + drain seam.** The guard/checker devbook (dotfiles root
+CLAUDE.md §2), at its next amendment window; fingerprint-reset cost
+named above. Cross-repo consumer, so this entry stays here until
+that window opens.
+
+## 2026-09-13 — one-writer governs COMMITS; transient mutate-and-restore probes interleave invisibly on a shared copy
+
+**Incident + basis.** Same session, one lane, one file, two
+parties, both obeying one-writer: prove-rows (mutate-and-restore by
+design) ran while a suite graded the same checkout — three suite
+failures graded a momentarily mutated source, plus a stat-cache `M`
+over a byte-identical file. That is the LOUD direction. The QUIET
+direction, named by the lane after close: a bite arm reading
+"restored clean" over a co-writer's live mutation is
+byte-indistinguishable from a correct restore, and `git
+update-index --refresh` defeats the stat cache but not a concurrent
+writer. Relayed from the drain desk's closing digest; measured
+in-session, 2-party interleave on one path.
+
+**Class.** The one-writer rule's unit is the COMMIT, so every
+red-first bite, positive control, and prove-rows-style probe — real
+bytes in real tracked files for real seconds — sits outside it by
+construction. Two compliant parties interleave with neither
+instrument reporting it; each sees an inexplicable result and
+re-runs. Sibling of the devbook's bite-window clause (scope the
+injection narrowly), which bounds the window but never RESERVES it.
+
+**Pre-formulated rule text** (dispatch skill §4, the one-writer
+rule, widening): "A mutate-and-restore probe is a WRITE for this
+rule's purpose: for its window it takes the same exclusivity a
+commit takes — the copy's reservation where the gate is deployed,
+an announced probe window where it is not — and a verifier's
+verdict over a copy carrying another party's probe window is
+could-not-verify, never a result."
+
+**Consumer + drain seam.** Dispatch skill §4 amendment (this repo),
+normal quota drain; the devbook's step-4 bite clause gains a
+cross-reference in the same pass, priced with the fingerprint reset
+above so both CLAUDE.md edits ride one window.
