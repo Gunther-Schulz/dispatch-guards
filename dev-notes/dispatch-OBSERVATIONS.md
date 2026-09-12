@@ -3765,7 +3765,22 @@ dead under the constraint unless the operator reverses it.
    2026-08-14 and 2026-08-16, files "in the DISPATCHER's scratchpad
    instead of its own" (entries on the `*-bericht.md` block and on the
    tail's ban placement); 2026-09-11, "names no distinct place"
-   (payload-gate entry). n=5.
+   (payload-gate entry). 2026-09-12, dotfiles drainage desk (df-151
+   step 1): two lanes overlapping in time — `opus-df151-step1`
+   (build) and `sonnet-df151-triage` (read-only) — both briefed with
+   the tail's "YOUR OWN scratchpad" and no assigned names, both wrote
+   BARE names at the top level of the one session scratchpad
+   (`arm.py`, `a.txt`, `b.txt`, `old/`, `new/`, `clone/` from the
+   first; `all_matches.txt`, `classify.py`, `bare.txt`,
+   `anchored.txt` from the second). NOTHING COLLIDED — checked on
+   disk by the dispatcher — and that is the part worth booking: the
+   class's usual outcome is a NON-EVENT, so it under-reports by
+   construction and gets noticed only when two lanes happen to pick
+   the same obvious name. A dispatcher reading "no collision" as "the
+   briefs were fine" is reading luck as design; here the dispatcher
+   wrote both briefs having read this very rule's §1 counterpart and
+   still assigned no slugs, because the TAIL is what the brief pastes
+   and the tail says "your own". n=6.
 2. **Class** — the tail assigns a PLACE the harness does not provide:
    for these named mailbox lanes the subagent's scratchpad was the
    dispatching session's scratchpad path, so "your own" and "the
