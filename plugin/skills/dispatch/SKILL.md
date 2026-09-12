@@ -45,8 +45,9 @@ file, not in this one; the rest load on demand:
   model. The portable rules over tier roles; a site corpus's
   routing section overlays it with the concrete lineup and
   standing decisions, and wins on conflict.
-- §7 Codex / gpt-5.5 routing: `references/codex-routing.md` —
-  only when `command -v codex` succeeds.
+- §7 Codex routing (certified roles, harness bindings):
+  `references/codex-routing.md` — only when `command -v codex`
+  succeeds.
 
 Core finding (measured in operation, restamped 2026-08-02:
 dispatch-log counts 183 dispatches over six days, verified green
