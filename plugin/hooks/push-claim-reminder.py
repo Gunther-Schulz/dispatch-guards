@@ -79,8 +79,15 @@ from _dispatch_common import (deny, doc_ref, is_push_command,  # noqa: E402
 
 _SOURCE = "dispatch-guards/push-claim-reminder"
 
-# Command position: string start, or right after a shell separator.
-_CMD_POS = r"(?:^|[;&|]\s*)"
+# Command position: string start, right after a shell separator, or
+# at the head of a new line — the default shape of a multi-line Bash
+# tool call, and the form that published a foreign commit on
+# 2026-09-12 while the separator branches watched the rarer
+# spellings. An ESCAPED newline is a continuation, not command
+# position: the line's text is the previous command's argument.
+# Heredoc bodies never reach this pattern (strip_heredoc_bodies
+# runs first).
+_CMD_POS = r"(?:^|[;&|]\s*|(?<!\\)\n\s*)"
 _FUSED_PUSH_RE = re.compile(_CMD_POS + r"git\s+push\b")
 _FUSED_COMPANION_RE = re.compile(_CMD_POS + r"git\s+(?:commit|log)\b")
 
@@ -303,6 +310,43 @@ if __name__ == "__main__":
             "`git log origin/main..main && git push` in one command.\n"
         )
         assert deny_check({**main_s, "tool_input": {"command": _hd_unterminated}}) is None
+        # (xii) NEWLINE-separated fusion — the default shape of a
+        # multi-line Bash tool call, and the population gap that
+        # published a foreign commit (daneel d4b6ea3, 2026-09-12):
+        # the separator branches caught `;`/`&&` while the common
+        # spelling sat outside the class. Both fixtures byte-exact
+        # from the incident transcript; red on the pre-fix pattern
+        # (measured twice: incident desk and this one).
+        _nl_daneel = (
+            "cd /home/g/dev/Gunther-Schulz/daneel\n"
+            "git log origin/HEAD..HEAD --format='%h %an %s'\n"
+            "git push 2>&1 | tail -3"
+        )
+        assert deny_check({**main_s, "tool_input": {"command": _nl_daneel}}) is not None
+        _nl_qgis = (
+            "cd /home/g/dev/Gunther-Schulz/qgis-mcp\n"
+            "git log origin/HEAD..HEAD --format='%h %an %s'\n"
+            'echo "--- push ---"\n'
+            "git push 2>&1 | tail -3"
+        )
+        assert deny_check({**main_s, "tool_input": {"command": _nl_qgis}}) is not None
+        # must-NOT-move rows for the same change, in one run: the
+        # separator positives stay denied elsewhere above; a
+        # newline-separated command with no push stays silent
+        assert deny_check({**main_s, "tool_input": {"command": "git log origin/main..main\ngit status"}}) is None
+        # an ESCAPED newline is a continuation: the `git push` text is
+        # the previous command's argument, not command position
+        assert deny_check({**main_s, "tool_input": {"command": "git log origin/main..main; echo \\\ngit push"}}) is None
+        # a heredoc BODY carrying a newline-led `git push` is text
+        # being written — strip_heredoc_bodies removes it before the
+        # widened class can see it
+        _hd_nl_push_body = (
+            "git commit -F - <<'EOF'\n"
+            "release notes:\n"
+            "git push\n"
+            "EOF\n"
+        )
+        assert deny_check({**main_s, "tool_input": {"command": _hd_nl_push_body}}) is None
 
         # ── deny renderer: the chained-command note (BACKLOG
         # 2026-08-11 — a Bash deny does not say that NOTHING in the
