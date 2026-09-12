@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 0
+added: 4
 compacted: 0
 
 ## dg-1
@@ -272,3 +272,39 @@ write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:1010-1041
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
+
+## dg-33
+grade: READY
+requirement: `push-claim-reminder`'s REMINDER lane matches the raw command while the DENY lane strips heredoc bodies, so any commit whose MESSAGE mentions pushing draws a push advisory — record: dotfiles BACKLOG.md:2256-2293 (frozen legacy carrier, blob c95b4af2)
+goal: general-maintenance
+write-set: plugin/hooks/push-claim-reminder.py
+done-criterion: Both lanes read the same stripped command; the red is demonstrated over a stated green baseline; every existing `--test` case stays green; released and pinned, since a hook change reaches running sessions only through a release.
+evidence: RELOCATED from dotfiles df-61 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; authorization chain is relayed-under-standing-delegation, NOT stated first-hand at this desk). Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: deny lane calls is_fused_push(strip_heredoc_bodies(cmd)) at push-claim-reminder.py:177, while the reminder lane's check() calls is_push_command(cmd) on the raw command — no strip. Original body: dotfiles BACKLOG.md:2256-2293.
+blocked-by: NONE
+
+## dg-34
+grade: READY
+requirement: WORKFLOW-HARVEST SKILL: mine chat history for recurring task shapes and feed them into the runbook-to-certify-to-execute-cheap pipeline — record: dotfiles claude/BACKLOG.md:1051-1116 (frozen legacy carrier, blob 0e5fa2e2)
+goal: general-maintenance
+write-set: plugin/skills/ (new workflow-harvest skill), plugin/.claude-plugin/plugin.json
+done-criterion: skill shipped in a dispatch-guards version bump + one harvested runbook landed in its owning repo + verifier (1) evidence recorded
+evidence: RELOCATED from dotfiles df-127 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: plugin/skills/ contains only 'dispatch' (plus its siblings) and no harvest skill exists — the skill is unbuilt. The item's stated trigger (the executor-skill landing) has SHIPPED, so it is unblocked. Original body: dotfiles claude/BACKLOG.md:1051-1116.
+blocked-by: NONE
+
+## dg-35
+grade: READY
+requirement: The state-token rule covers CROSSED messages but not STANDSTILL: naming a peer a state as a barrier obliges an update when that state moves — record: dotfiles claude/BACKLOG.md:399-469 (frozen legacy carrier, blob 0e5fa2e2)
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/forms.md
+done-criterion: the extended state-token clause fires on the motivating incident (a named blocker with no stated end) and stays silent on an ordinary fact message, plus a JOURNAL line in the same commit
+evidence: RELOCATED from dotfiles df-102 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: forms.md:251-270 states the crossing half only; a targeted sweep for any clause obliging an update when a named barrier-state MOVES returned zero, with 'ping' (3 hits) as positive control proving the instrument reached the file. Original requirement verbatim (German, quoted as provenance): 'die State-Token-Regel deckt gekreuzte Nachrichten, aber nicht den STILLSTAND: wer einem Peer einen Zustand als Schranke nennt, schuldet ihm die Aktualisierung, wenn der Zustand sich bewegt'.
+blocked-by: NONE
+
+## dg-36
+grade: READY
+requirement: The dispatch skill leaves the 'an enumeration that already exists is not re-routed' step DERIVED rather than stated, so a reader reaches it only by inference — record: dotfiles claude/BACKLOG.md:1012-1021 (frozen legacy carrier, blob 0e5fa2e2)
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/forms.md
+done-criterion: the dispatch skill STATES the step rather than leaving it derived: section 3b or 4 says in its own text that an enumeration which already exists is not re-routed, so a reader reaches it by reading rather than by inference. Red-first: a grep of the current skill text for that step returns nothing while the behaviour is nonetheless expected of dispatchers
+evidence: RELOCATED from dotfiles df-125 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE — the item's own red-first reproduces: a sweep of plugin/skills/dispatch/ for 'already exists/enumerated' returned ZERO, with 'enumeration' (8 hits in forms.md) as positive control proving the instrument reached the text. Original body: dotfiles claude/BACKLOG.md:1012-1021.
+blocked-by: NONE
