@@ -4921,3 +4921,39 @@ reconstituted inside the guard. The fix direction above gains a
 requirement from it: the WARN names WHICH evidence grounds it
 (holder alive? claim renewed by what act, when?), so the three
 cases stop sharing one sentence.
+
+## 2026-09-13 — a brief's reservation-HALT clause contradicts its own shared-checkout clause, and on a declared multi-writer repo the HALT is the wrong key
+
+**Incident + basis.** The df-178 lane surfaced it as a gap
+(closing report c2, this desk's brief): line 12 declared any live
+foreign reservation a HALT while lines 114-115 prescribed the
+pathspec mitigation for "live co-writers" — under the first, the
+second can never apply, since a live co-writer IS a live foreign
+reservation whenever the claim mechanism sees them at all. The
+same brief's HALT fired at intake on a peer desk's claim in a
+repo whose OWN law declares multi-writer pathspec discipline
+(dotfiles CLAUDE.md); the lane held read-only until release, then
+re-ran the full gate — correct conduct over a contradictory spec.
+Second half, same lane, closing report e2: the HALT is
+time-bounded, not terminal — the reservation record is cheap to
+poll and its release observable, which turned a halted item into
+a finished one with no dispatcher round-trip.
+
+**Class.** A brief clause keyed to a MECHANISM's artifact
+(reservation presence) rather than to the fact it proxies (write
+overlap) contradicts the clause written for the fact, and
+over-fires wherever the repo's declared discipline already
+handles co-writers. Same over-firing family as the gate entry
+above, at the BRIEF layer.
+
+**Pre-formulated rule text** (brief-form, §1 write-boundary
+block): "On a repo whose own law declares multi-writer pathspec
+discipline, a live foreign reservation is a SERIALIZATION input,
+not a HALT: hold write-set writes while it stands (read-only and
+scratch work continue), poll the record, and proceed through the
+full intake gate on release — HALT only when the holder's write
+set overlaps yours or cannot be established."
+
+**Consumer + drain seam.** This desk's future guard-checker
+briefs immediately (applied from this entry forward); dispatch
+skill §1 amendment on the normal quota drain.
