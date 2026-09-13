@@ -4382,3 +4382,46 @@ on the same tail with "Claude Sonnet" filled).
 repo; normal quota drain. Until then: dispatcher-side, the tail's
 trailer line is composed with the concrete model name the moment
 the route line names the tier.
+
+## 2026-09-13 — authorship asserted without its discriminator, twice in one day, rule loaded and inert both times
+
+**Incident + basis.** Two desks, same machine, same day, same
+class, both retracted on measurement. (i) The drain desk read a
+commit's Co-Authored-By model name as an IDENTITY and accused the
+judgment desk of three boundary crossings; the discriminating
+session trailer was in its own terminal output, printed and
+unread; retracted after `git log --format='%(trailers)'` showed
+two different sessions (its own retraction message names the
+mechanism). (ii) A second desk read the session trailers of
+NEIGHBORING commits and let that provenance bleed onto three
+trailer-less lifecycle-CLI commits between them, asserting "your
+amend-reason" to the judgment desk as fact; conceded on the same
+measurement shape (its concession names the bleed). Both desks
+held the rule — the author trailer separates tiers and nothing
+finer — and neither applied it at the assertion moment: the rule
+fires when trailers are READ, and both incidents asserted
+authorship without a read. Judgment-desk session 746f6a5f
+(dotfiles), drain-wave day; the trailer-less-commit enabler is
+booked as dotfiles df-172 (CLI commits carry no session trailer).
+
+**Class.** Attribution asserted where the discriminator was absent
+or unread — the loaded rule is keyed to trailer-reading and the
+failure happens upstream of any read, so it cannot fire (anchored
+to a moment the failure path never produces). The costume both
+times: surrounding evidence (a model name, neighbors' trailers, a
+held reservation) supplies a plausible author, and plausibility
+ships as identity.
+
+**Pre-formulated rule text** (dispatch skill, the author-trailer
+rule, sharpen — anchor moved to the CLAIM): "An authorship claim
+about a specific commit carries its discriminator in the same
+breath: the commit's own session trailer read back, or the named
+holder asked. A model-name trailer, a neighboring commit's
+provenance, or a reservation naming a session are not
+discriminators for THIS commit; over a trailer-less commit the
+honest claim is 'author unrecoverable from the artifact', and the
+route is asking, not inferring."
+
+**Consumer + drain seam.** Dispatch skill amendment (this repo),
+normal quota drain; fire-rate provenance n=2 same-day for the
+existing trailer rule's inertness.
