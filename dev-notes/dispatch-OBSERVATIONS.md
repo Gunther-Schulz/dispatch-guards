@@ -4750,3 +4750,38 @@ target from itself reports the target running forever."
 **Consumer + drain seam.** Dispatch skill §4 amendment (this
 repo), normal quota drain; merge candidate with the existing
 wait/anchor entries at the pass rather than a third sibling.
+
+## 2026-09-13 — the push-claim gate false-fired on JS array code inside a heredoc; routed around, which is the trained-override tell
+
+**Incident + basis.** An executing lane's python heredoc contained
+the literal text of a JS call it was analyzing, and the subagent
+push-gate fired on that string inside the heredoc — nothing was
+pushing, nothing ran (earlier links of the chain included). The
+lane routed around it by writing the program to a scratch file and
+executing that: correct conduct, trivially available, and exactly
+the workaround habit that trains the override reflex the guard
+lanes exist to avoid. Relayed from lane opus-cf339-absence-scan,
+report part 4a lesson 2 (2026-09-13); the false-fire predicate is
+matching a method-call substring in a compound command's raw text
+rather than a push-shaped invocation.
+
+**Class.** A guard predicate over RAW command text matching a
+token that ordinary program-text payloads carry — the same
+raw-string-parse family as the mark recorder's shlex miss
+(dotfiles df-172) from the other direction: there a real commit
+went unclassified, here a non-push classified as one. Both are
+the assertion-site paraphrase-drift shape: a match over rendered
+text standing in for a parse.
+
+**Pre-formulated rule/fix text** (the gate's lane, next build
+touching it): the push-detection predicate anchors on a
+git-invocation shape (command word + subcommand token after shell
+splitting), never on a substring anywhere in the raw text; heredoc
+bodies are excluded from the scan the way quoted strings should
+be. Red pair: a heredoc carrying `x.push(` must NOT fire; a real
+`git push` in the same compound MUST.
+
+**Consumer + drain seam.** The gate's next build (this repo,
+hooks/); fire-log correlation at the next fire-rate review — a
+false-fire class with a trivial workaround under-reports itself,
+so the lane-report path (this entry) is its only reliable counter.
