@@ -5101,3 +5101,40 @@ ends and stale anyway; the report is what surfaced it)."
 **Consumer + drain seam.** This desk's registered-section edits
 immediately (applied from this entry forward); dispatch skill §6
 amendment on the normal quota drain.
+
+## 2026-09-13 — the stored-brief detector: run the entry's own done-criterion as a probe before treating the entry as a proof
+
+**Incident + basis.** lifecycle lc-38 (relayed by the drain desk
+with the worked example claimed as its own): the item's text
+described a live defect; a sibling item (lc-86) had removed that
+defect between the entry's grade date and its dispatch. The
+dispatching desk re-read the entry AND the ledger decision and
+treated "the decision is answered" as the premise check — while
+the premise that decided the item was whether the defect still
+REPRODUCED. The lane's grounding round ran the entry's own
+done-criterion as a probe, four minutes, and it answered the
+whole item: the criterion already passed, so the item was done
+and the build was the wrong act.
+
+**Class.** A stored entry's premise can be killed by a sibling
+landing between grade date and dispatch, and NEITHER entry can
+know — nobody holds both halves, which is why the stale-premise
+rule does not fire on its own here (the corpus's stored-brief
+bullet states the exposure; what it lacks is a cheap detector).
+Re-reading the entry and its citations confirms the entry's
+internal consistency, never its premise: the reasoning stays
+plausible while being refuted in the tree.
+
+**Pre-formulated rule text** (dispatch skill §1, beside the
+stored-entry provenance clause): "A stored entry's DONE-CRITERION
+doubles as its staleness detector: run it as a PROBE before
+treating the entry as a proof — at brief time, or as the lane's
+first act. Where the criterion already passes, the item is done
+and the build is the wrong act; the probe costs minutes and
+answers what no amount of re-reading the entry's reasoning can,
+because the reasoning stays plausible while the tree has moved."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment on the
+normal quota drain; both dispatching desks apply it from this
+entry forward (the drain desk is the worked example, at its own
+insistence).
