@@ -4866,7 +4866,14 @@ shape. CORRECTION folded in, same day, this desk: an earlier
 belief that a monitor's `git fetch` had renewed a reservation is
 refuted by the same source read — no Bash-side claim or renew
 path exists; the observed persistence was a stale file outliving
-its writer, i.e. F3's class, not a fetch-claims mechanism.
+its writer, i.e. F3's class, not a fetch-claims mechanism —
+making that desk the SECOND F3 instance (n=2, both read as
+liveness from the outside). Version reach, settled same day
+(dotfiles-b8, `diff -q`): the gate file is byte-identical between
+the installed 0.11.14 cache and the committed 0.11.16 mirror, so
+F1/F2 hold against the committed version too — no re-check owed
+at redesign time. The cache holds 0.11.7–0.11.14 while the mirror
+is at 0.11.16: the install is two versions behind, measured.
 
 **Class.** A protocol whose claim/warn/release are all derived
 from HARNESS TOOL EVENTS covers exactly the writers who use those
@@ -4896,4 +4903,9 @@ guard iteration (writer-reservation-gate redesign), normal quota
 drain. Grading carried from the reporter, verified here: F1/F2
 structural (read off the wiring), F3 observed live; frequency
 unestablished — one collision today, costing a wrong author in a
-lane's state model and a push-gate surprise.
+lane's state model and a push-gate surprise. F3's operational
+cost measured same day (b8, lc-91): a build lane found the dead
+lane's 55-minute-old claim on the shared copy and displaced its
+prover run to a `git archive HEAD` snapshot — correct conduct,
+real displaced work; the dispatcher re-ran the prover on the
+live copy to close the verification hole (63 PROVEN, 0 FAIL).
