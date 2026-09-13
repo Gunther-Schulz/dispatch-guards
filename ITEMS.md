@@ -347,3 +347,5 @@ write-set: plugin/skills/dispatch/references/codex-routing.md,plugin/.claude-plu
 done-criterion: codex-routing.md carries the certified role table with per-role yield figures and the sandbox bindings, each entry citing the statiker certification record as provenance; ships in a version bump
 evidence: operator ask 2026-09-13 (statiker session 1b204567): once the numbers are in, codex defaults get shipped; numbers now in: statiker dev-notes/codex-only-certification-2026-09-13.md at e4b33fa (results) and 833215c (transcript audit CLEAN, scores final)
 blocked-by: evidence ls /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models 2>/dev/null | grep -qi codex
+amend-reason: 2026-09-13 predicate repair: defaults/models is a FILE, the booked ls-pipe grepped its filename and could never fire (proven silent against the already-landed register d000ddc); re-keyed to content grep for the verify-role entries this item waits on; stays blocked pending c8's per-tier luna rewrite
+amended-blocked-by: 2026-09-13 evidence grep -qi 'verify' /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models
