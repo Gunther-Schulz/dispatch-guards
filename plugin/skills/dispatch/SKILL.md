@@ -1069,7 +1069,16 @@ all four hold:
    on the target tier, reviewed at tier ≥ producer (§4 for who the
    producer is), evidence recorded in the register entry. One probe
    certifies the class; full eval batteries are for certifying a
-   whole operating domain, not required here.
+   whole operating domain, not required here. The entry RECORDS
+   which bar that evidence met, in the register's `probe_bar`
+   field: pass@k (at least ONE of k attempts succeeded) or pass^k
+   (ALL k did), with k and a one-line basis. A recurring class is
+   operationally a pass^k requirement, so a single green probe is
+   a pass@1 basis for it, and a reader of a `ready` entry cannot
+   otherwise tell the two apart — the one-probe default stays an
+   honest cheap default only while its bar is legible. RAISING the
+   bar is a separate decision on the class's own fire record,
+   never inferred from this clause.
 4. **Not in the exclusion class** — a procedure whose failure would be
    silent AND outward-facing is never register-eligible, however well
    documented: the ex-ante brief cannot cover the unforeseen gap, and
@@ -1084,7 +1093,8 @@ silent pass-through.
 **The register** — machine-readable, two grains. The CLASS register
 is global: `~/.claude/readiness.json` — one entry per class with
 target tier, status (`ready` | `eval-open` | `excluded`), probe
-evidence (date + ref), and a fingerprint (hash or date) of the
+evidence (date + ref), the probe BAR (above), and a fingerprint
+(hash or date) of the
 class devbook text; consumers: the §1 consult at brief-writing and
 the machine-bootstrap doctor's fingerprint check. Per-repo
 `READINESS.json` at repo root carries only EXCLUSIONS (this repo's
