@@ -4909,3 +4909,15 @@ lane's 55-minute-old claim on the shared copy and displaced its
 prover run to a `git archive HEAD` snapshot — correct conduct,
 real displaced work; the dispatcher re-ran the prover on the
 live copy to close the verification hole (63 PROVEN, 0 FAIL).
+Third instance same afternoon, and the three are DIFFERENT
+failures wearing one warning (b8's framing, adopted): a dead
+holder's claim outliving it; a live-looking claim no mechanism
+had renewed; and a REAL main-session holder at 81 of 90 TTL
+minutes, where the warning is arguably correct — and arrives
+with no way to tell it from the other two. The third case is
+the redesign's priority: a reader who has seen two false alarms
+discounts the true one, which is the guard's own target failure
+reconstituted inside the guard. The fix direction above gains a
+requirement from it: the WARN names WHICH evidence grounds it
+(holder alive? claim renewed by what act, when?), so the three
+cases stop sharing one sentence.
