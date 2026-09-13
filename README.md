@@ -84,6 +84,27 @@ false-fire regressions. It is both the deny-arm regression net and
 the catch-rate/false-fire measurement; stateful guards
 (writer-claims) carry their e2e inside their own `--test` instead.
 
+## Optional site surfaces
+
+A fresh install needs **none of these**. All three fail open to
+working defaults — nothing below is required to run the guards; each
+just lets you shape them to your site.
+
+| Surface | Configures | When absent |
+|---|---|---|
+| `~/.claude/dispatch-guards.json` | tier policy — deny/ask tiers, guard modes, message/discovery thresholds (key-by-key reference: [Mechanism vs. policy](#mechanism-vs-policy), next section) | shipped defaults active: no tier denied, none forced to ask, every guard at its shipped mode |
+| `~/.claude/readiness.json` | which recurring procedures are certified for a cheaper tier (dispatch skill §6) | loud, per dispatch: `brief-reminder` states no register was readable, treat as NO certified classes — dispatches still run, just without a certified cheap-tier shortcut ([What this does not ship](#what-this-does-not-ship)) |
+| `references/routing.md`'s `## Site overlay` section | your concrete model lineup, cost/pool bindings, standing routing decisions ([a starter corpus](#a-starter-corpus--real-and-dated) below is a worked example; blank template: `references/routing-overlay-template.md`) | the portable tier-ROLE rules still apply — no concrete lineup, no stale numbers pretending to be yours |
+
+Check what your install is actually running on:
+
+```bash
+python3 plugin/hooks/_dispatch_common.py --doctor
+```
+
+It prints, one surface at a time, the path consulted and the
+effective state — reports only, never gates (exit 0 always).
+
 ## Mechanism vs. policy
 
 The plugin ships generic defaults (no tiers denied, none forced to ask,

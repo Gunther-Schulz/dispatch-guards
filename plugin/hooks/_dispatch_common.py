@@ -307,29 +307,42 @@ _DEFAULTS: dict = {
     "write_claim_ttl_hours": 6,
 }
 _POLICY_CACHE: dict | None = None
+_POLICY_META: dict | None = None
 
 
 def policy() -> dict:
-    global _POLICY_CACHE
+    global _POLICY_CACHE, _POLICY_META
     if _POLICY_CACHE is None:
         cfg = dict(_DEFAULTS)
         pfad = os.environ.get("CLAUDE_DISPATCH_GUARDS_CONFIG") or os.path.expanduser(
             "~/.claude/dispatch-guards.json")
+        read_ok = False
         try:
             with open(pfad, encoding="utf-8") as f:
                 loaded = json.load(f)
             if isinstance(loaded, dict):
                 cfg.update({k: loaded[k] for k in _DEFAULTS if k in loaded})
+            read_ok = True
         except (OSError, json.JSONDecodeError, ValueError):
             pass  # fail-open: defaults
         _POLICY_CACHE = cfg
+        _POLICY_META = {"path": pfad, "read": read_ok}
     return _POLICY_CACHE
+
+
+def _policy_meta() -> dict:
+    """Path consulted and whether it was successfully read — a side
+    effect of policy()'s own (sole) config read, never a second open().
+    Doctor's only consumer; guards have no use for it."""
+    policy()
+    return _POLICY_META
 
 
 def _reset_policy_cache() -> None:
     """Test helper: forget the cached config (used by --test bite-tests)."""
-    global _POLICY_CACHE
+    global _POLICY_CACHE, _POLICY_META
     _POLICY_CACHE = None
+    _POLICY_META = None
 
 
 def doc_ref(section: str) -> str:
@@ -554,6 +567,127 @@ def git_status_lines(directory: str, pathspec: str | None = None,
     if r.returncode != 0:
         return None
     return [ln for ln in r.stdout.splitlines() if ln.strip()]
+
+
+# ── Doctor (self-diagnosis; build dg-38) ──────────────────────────────────
+# `python3 _dispatch_common.py --doctor` reports the three OPTIONAL site
+# surfaces — site policy, the readiness register, the routing site
+# overlay — so a fresh install reads as unconfigured-and-working rather
+# than silently configured-with-someone-else's-bindings. Exit 0 always:
+# this REPORTS, it never gates.
+
+
+def _doctor_format_value(key: str, value) -> str:
+    if key == "guard_modes":
+        if not value:
+            return "none overridden"
+        return ", ".join(f"{g}: {m}" for g, m in sorted(value.items()))
+    return repr(value)
+
+
+def _doctor_site_policy() -> list:
+    """Site policy surface. Reuses policy()'s own (sole) config read via
+    _policy_meta() — no second open() of the config file."""
+    meta = _policy_meta()
+    cfg = policy()
+    out = [
+        "Site policy (dispatch-guards.json)",
+        f"  path consulted: {meta['path']}",
+    ]
+    if not meta["read"]:
+        out.append("  config file: not read (absent or unreadable)")
+        out.append("  shipped defaults active:")
+        for k in _DEFAULTS:
+            out.append(f"    {k}: {_doctor_format_value(k, cfg[k])}")
+    else:
+        out.append("  config file: read")
+        for k in _DEFAULTS:
+            tag = "overridden" if cfg[k] != _DEFAULTS[k] else "default"
+            out.append(f"    {k}: {_doctor_format_value(k, cfg[k])} ({tag})")
+    return out
+
+
+def _load_brief_reminder():
+    """brief-reminder.py imported by path — the hyphen rules out a plain
+    import (mirrors tools/check-doc-drift.py's `_brief_reminder`, the
+    only other cross-file load in this repo). Returns None rather than
+    raising: the doctor reports, it never gates on its own machinery."""
+    import importlib.util
+    here = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(here, "brief-reminder.py")
+    spec = importlib.util.spec_from_file_location(
+        "_brief_reminder_doctor", path)
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        return None
+    return module
+
+
+def _doctor_register() -> list:
+    """Readiness register surface. Path comes from brief-reminder's own
+    `_register_path` helper — no new path-resolution logic here."""
+    out = ["Tier-readiness register (readiness.json)"]
+    mod = _load_brief_reminder()
+    if mod is None or not hasattr(mod, "_register_path"):
+        out.append("  path consulted: could not resolve "
+                    "(brief-reminder.py not importable)")
+        return out
+    pfad = mod._register_path()
+    out.append(f"  path consulted: {pfad}")
+    if os.path.isfile(pfad):
+        out.append("  register file: present")
+    else:
+        out.append("  register file: absent")
+        out.append("  no certified classes — cheap-tier certification "
+                    "unavailable, dispatches still run")
+    return out
+
+
+def _doctor_routing_overlay() -> list:
+    """Routing site-overlay surface: whether routing.md's own
+    `## Site overlay` section is present in THIS installed payload —
+    resolved next to this file, never the caller's cwd, since hooks run
+    from the installed plugin cache."""
+    here = os.path.dirname(os.path.realpath(__file__))
+    routing_path = os.path.normpath(os.path.join(
+        here, "..", "skills", "dispatch", "references", "routing.md"))
+    template_path = os.path.normpath(os.path.join(
+        here, "..", "skills", "dispatch", "references",
+        "routing-overlay-template.md"))
+    out = ["Routing site overlay (dispatch skill references/routing.md)",
+           f"  file consulted: {routing_path}"]
+    try:
+        with open(routing_path, encoding="utf-8") as f:
+            present = "## Site overlay" in f.read()
+    except OSError:
+        out.append("  routing.md: not readable")
+        present = None
+    if present is True:
+        out.append("  site-overlay section: present")
+    elif present is False:
+        out.append("  site-overlay section: absent — portable tier-role "
+                    "rules only, no concrete lineup")
+    out.append(f"  fill in your own bindings via: {template_path}")
+    return out
+
+
+def run_doctor() -> int:
+    lines: list = []
+    lines += _doctor_site_policy()
+    lines.append("")
+    lines += _doctor_register()
+    lines.append("")
+    lines += _doctor_routing_overlay()
+    print("\n".join(lines))
+    return 0
+
+
+if __name__ == "__main__" and "--doctor" in sys.argv:
+    sys.exit(run_doctor())
 
 
 if __name__ == "__main__" and "--test" in sys.argv:
