@@ -9,13 +9,16 @@ and gpt-reserve); re-check on a CLI or lineup change.
 
 ## Certified roles
 
-Measured 2026-09-12 in pre-registered, desk-graded evals
-(evidence home: statiker `dev-notes/codex-pilot-2026-09-12.md`
-and its `READINESS.json`); statiker-measured, so outside that
-repo the entries are candidate-in-operation, graded by the
-fire-rate review. Certification is per (role, model): a pass
-never infers down the ladder, and a fail one tier down certifies
-nothing about the tier above.
+Measured 2026-09-12 (mechanical read, attack, implementation,
+reviewer) and 2026-09-13 (verify) in pre-registered, desk-graded
+evals (evidence home: statiker `dev-notes/codex-pilot-2026-09-12.md`
+and `dev-notes/codex-only-certification-2026-09-13.md`);
+statiker-measured, so outside that repo the entries are
+candidate-in-operation, graded by the fire-rate review.
+Certification is per (role, model): a pass never infers down the
+ladder, and a fail one tier down certifies nothing about the tier
+above. UNMEASURED cells read as unmeasured, never as fine — luna
+at attack/implementation, every codex tier at the desk role below.
 
 - **Mechanical read** (lint/sweep comprehension, extraction):
   gpt-5.6-luna, gpt-5.6-terra and gpt-6-astra all PASS at sonnet
@@ -34,9 +37,28 @@ nothing about the tier above.
   adjudicated finding set): codex audits STRUCTURE (name parity,
   set equality, real executed probes) and does not read
   CONTRACT — page prose against tool behavior. Reviews stay on
-  the site review tier.
-- Desk role: uncertified (eval-open; certify only when a
-  consuming run wants it).
+  the site review tier. Second provenance: terra graded a verify
+  requirement NOT-MET by grepping for its announcement text
+  rather than reading that the page defines it as met by an
+  R-line — the same structure-over-contract shape, at a new seam.
+- **Verify (FP5)** (run the checks, paste output, return a
+  per-requirement verdict): honesty floor HELD at every codex
+  tier — zero fabricated "met" across luna/terra/astra,
+  transcript-audited clean — but UNCOMPETITIVE on yield: of 9
+  requirements terra resolved 6, astra 3, luna 2 (Claude
+  comparison: sonnet 8, haiku 8 — both beat both codex tiers,
+  cheapest Claude matching the strongest). Report SAFETY and
+  YIELD as two figures, never one — only fabrication
+  disqualifies, low yield is a cost. Where a codex verify leg is
+  assigned, the tier is TERRA — not top, not cheapest: yield is
+  INVERTED (terra 6 > astra 3 > luna 2) and cost runs the same
+  way — luna spent the MOST tokens (69,525) for the FEWEST (2/9),
+  breaking "volume roughly tier-invariant per role" (holds for
+  attack/read-side, not verify).
+- Desk role: uncertified — a verdict-battery probe saturated at
+  1.00 across all three arms and two vendors and certifies
+  nobody; certify only when a consuming run wants it and a probe
+  that actually discriminates exists.
 
 ## Harness bindings (measured 2026-09-12)
 
@@ -59,7 +81,12 @@ nothing about the tier above.
   commits. A git WORKTREE cannot serve as a codex workspace at
   all (its `.git` lives out-of-tree); isolate with an
   archive-init copy, or a clone with refs stripped and
-  descendants pruned when history must resolve.
+  descendants pruned when history must resolve. Commit-bearing
+  work needs `-s danger-full-access` (executed triple with a
+  control) — state that loudly, a blast-radius fact, never a
+  config footnote: it is NO sandbox. `read-only` cannot execute
+  checks at all; a verify leg runs under `workspace-write` and
+  pays the depression below.
 - Suite runs inside the sandbox are depressed or blocked
   (pytest tmp-dir failures; failure counts that vanish outside
   the sandbox on the same tree). Grade suites outside the
