@@ -5089,7 +5089,14 @@ a live lane pin this section?' — the dispatch record is the only
 instrument for the pin set, and an item's subject matter answers
 a different question. The reply is cheap, the fork it prevents
 is not; the read-from-file binding in briefs is the NET for the
-miss, never the licence for skipping the ask."
+miss, never the licence for skipping the ask. And the ask closes
+only the edit-time question: a lane that read the section BEFORE
+the edit holds stale text however correct both desks were, and no
+ask reaches that window — the lane's REPORTED fingerprint is the
+one instrument that dates the two channels against each other
+(measured 2026-09-13: lc-38's lane reported the pre-amendment
+hash from a read that predated the landed edit, correct on both
+ends and stale anyway; the report is what surfaced it)."
 
 **Consumer + drain seam.** This desk's registered-section edits
 immediately (applied from this entry forward); dispatch skill §6
