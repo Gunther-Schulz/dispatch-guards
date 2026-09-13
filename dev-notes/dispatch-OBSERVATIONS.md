@@ -5003,3 +5003,52 @@ docs/directives) at the next wave start; dispatch skill §4
 amendment on the normal quota drain; applied by this desk's own
 sends from this entry forward.
 
+
+## 2026-09-13 — a brief targeting skill references omits the corpus gates the write-set trips
+
+**Incident + basis.** The dg-41 lane (and the dg-38 lane before it,
+same day) hit a machine-local same-turn gate on its first Edit
+under `plugin/skills/dispatch/references/`: skill-craft invocation
+plus a CLAUDE-maintenance.md read are demanded per turn before
+skill-payload edits. Neither brief named it; each lane lost turns
+discovering mid-build what the dispatcher already knew (lane
+reports, this date).
+
+**Class.** A brief's environment section covers the TARGET repo's
+guards but not the MACHINE's — write-set-triggered gates are
+invisible in the repo the brief grounds against, so the executor
+meets them as surprises however decision-complete the brief reads.
+
+**Pre-formulated rule text** (brief-composition, §1 adjacent): "A
+brief whose write-set touches a skill payload
+(`plugin/skills/*/…`) names the machine-local corpus gates the
+first edit will trip — the skill-craft in-turn invocation and the
+CLAUDE-maintenance read — as a grounding step, not left as a
+mid-build discovery."
+
+**Consumer + drain seam.** This desk's own briefs from this entry
+forward; §1 amendment candidate at the next forms/skill release
+batch (rides dg-35/36/37's seam).
+
+## 2026-09-13 — the mandated trailer drops silently in heredoc-composed commits
+
+**Incident + basis.** The dg-41 lane composed its commit message
+in a heredoc, appended no trailer, and noticed only after the
+commit landed — with amend correctly closed to it by the
+amend-gate, the repair had to travel to the dispatcher (dispatcher
+amended, e63ab6f). The tail mandates the trailer; nothing checks
+it before the commit call.
+
+**Class.** An obligation whose only enforcement is downstream
+claim-time reading (push-claim keys on the trailer) fails at
+compose time and is unrepairable by its author — the one writer
+who CAN fix it cheaply is barred from amend by design.
+
+**Pre-formulated rule text** (tail amendment, one line beside the
+trailer mandate): "Before the commit call, confirm the trailer is
+IN the composed message — a missing trailer is unrepairable at
+your seat, since amend is denied."
+
+**Consumer + drain seam.** The EXECUTION tail in
+references/forms.md at the next forms release batch (dg-35/36/37
+seam); this desk's briefs paste the amended tail from then on.
