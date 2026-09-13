@@ -3993,7 +3993,7 @@ wording unchanged) both say the container's head is what binds.
 A wording-only fix here would be the third attempt at the same
 mechanism by a route already measured not to work.
 
-## 2026-09-12 — spent horizon timers not disarmed at the wait's end (n=3, two desks, one day)
+## 2026-09-12 — spent horizon timers not disarmed at the wait's end (n=4, three desks)
 
 **Incident + basis.** Two stale wakes in one judgment-desk session
 (dotfiles-85): the ack-horizon Monitor for a peer kickoff fired ~25
@@ -4003,6 +4003,24 @@ and wave 2 authorized. Both were one-shot sleep Monitors; both
 waits had ENDED with their artifact's arrival; neither was stopped
 in the arrival turn. Each fire cost a paid wake with nothing to act
 on — the exact waste the poll emission rule prices.
+
+Fourth instance, third desk (dotfiles-c6, 2026-09-13): a 30-min
+Monitor armed for a peer's collision answer on a booked item fired
+~28 min after that peer had answered in full and the answer had been
+acted on — the desk had even ROUTED onward from it, to the party the
+answer named. Same displacement, and one detail sharpens the class:
+this desk had disarmed a DIFFERENT timer correctly minutes earlier
+(the discovery-lane horizon, stopped in the turn its last lane
+reported), so the rule was not merely loaded but actively obeyed on
+one instrument while the other went unstopped. What separated them
+is that the discovery timer's wait ended on a LANE REPORT — an
+artifact the desk was already grading, with the disarm in the same
+motion — while this one ended on an inbound PEER MESSAGE, which
+arrives mid-turn and gets answered rather than processed as an
+arrival. The trigger shape therefore has a second, quieter face: not
+only "a rich artifact displaces the disarm", but "an arrival that
+does not look like a deliverable is not read as the wait's END at
+all".
 
 **Class.** The disarm rule exists (Insurance: "a wait that ENDS
 disarms its timer in the same turn") and was LOADED — the failure
