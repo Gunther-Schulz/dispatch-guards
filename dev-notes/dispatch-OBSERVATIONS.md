@@ -5175,3 +5175,70 @@ obligation otherwise lacks."
 normal quota drain; both desks apply the count-in-digest form
 from this entry forward (fire-rate datum: n=2, one desk, one
 session, self-caught both times).
+
+## 2026-09-13 — a write set is incomplete until the brief has asked whether the change emits a new diagnostic ident
+
+**Incident + basis.** Lifecycle lc-112 (drain desk's digest, graded
+at the judgment desk): the lane shipped correct code, but the change
+emitted a NEW diagnostic ident whose registry file sat outside the
+lane's write boundary — so the lane left `--test` at FINDING and two
+arms red, unable to reach the file that closes them. The code was
+right; the write set was wrong, and nothing in the brief form asks
+the question that would have caught it at brief time.
+
+**Class.** Write-boundary resolution (the dispatch skill's
+"disjointness resolves to realization surfaces" clause) enumerates
+the files that realize the COMMISSIONED changes — but a change can
+also emit a SIDE ARTIFACT the design prose never names: a new
+diagnostic ident, an enum member, a registered key, anything a
+registry or roster elsewhere must learn about. That realization
+surface belongs to the change as much as the edited file does, and
+a boundary drawn without asking leaves the lane provably unable to
+finish green — the failure surfaces as red arms at close, priced as
+a round trip instead of one brief-time question.
+
+**Pre-formulated rule text** (dispatch skill §1, the write-boundary
+resolution clause): "A write set is incomplete until the brief has
+asked whether the change EMITS a new diagnostic ident, key, or
+member some registry must learn about — the registry file is a
+realization surface of the change, inside the boundary or named as
+the dispatcher's own residue. A lane that ships correct code and
+cannot reach the file that makes its checks green was boxed by this
+omission, not by its work."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment on the
+normal quota drain (measured: lc-112, one lane, correct code with
+two arms red at close).
+
+## 2026-09-13 — the mailbox's loss is asymmetric by message kind: a lost directive self-announces, a lost state update reports confidently wrong
+
+**Incident + basis.** Lifecycle lc-112: the dispatching desk sent
+the lane 3+ messages; at least one was lost in transit. The lane's
+closing report then named two gaps the desk's own record showed
+ALREADY CLOSED — the lane was not wrong about its snapshot, its
+snapshot was missing the update that closed them. Measured: 3
+delivered, ≥1 lost, two already-closed gaps reported as open.
+
+**Class.** Message loss is symmetric at the channel and asymmetric
+at the failure: a lost DIRECTIVE self-announces as inaction — the
+work does not appear, the horizon fires, somebody looks. A lost
+STATE UPDATE announces nothing: the receiver keeps operating on
+the stale state and reports its conclusions CONFIDENTLY, and the
+report reads as a finding rather than as staleness. The channel's
+existing safeguards (armed horizons, delivery acks) all key on the
+directive shape; nothing detects the state-update shape, because
+its failure is a plausible report, not a silence.
+
+**Pre-formulated rule text** (dispatch skill §4, beside the
+silence-handling duties): "State updates whose staleness would
+change what a lane REPORTS travel by ARTIFACT, never only by
+message — the lane re-reads the artifact at report time, so a lost
+message costs nothing. And a dispatcher grading a report checks
+each reported GAP against its OWN record before acting on it: a
+gap the record shows closed is a staleness finding about the
+channel, not a work item — measured as two already-closed gaps
+confidently reported open after a lost update."
+
+**Consumer + drain seam.** Dispatch skill §4 amendment on the
+normal quota drain (measured: lc-112, ≥1 of 3+ messages lost, two
+stale gaps in the closing report).
