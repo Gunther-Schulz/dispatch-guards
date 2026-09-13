@@ -4785,3 +4785,26 @@ be. Red pair: a heredoc carrying `x.push(` must NOT fire; a real
 hooks/); fire-log correlation at the next fire-rate review — a
 false-fire class with a trivial workaround under-reports itself,
 so the lane-report path (this entry) is its only reliable counter.
+
+## 2026-09-13 — outgoing-commit author anomaly invisible in the claim log
+
+- **Incident + basis:** a stray `git config user.email t@t; git config
+  user.name t` (a probe script's failed `cd` left it running in the
+  real dotfiles checkout) re-authored 24 commits `t <t@t>` across every
+  live writer, 23 pushed before detection (dotfiles 6fc5bee..0d4450a,
+  2026-09-13). The driving desk's own push-claim logs PRINTED the
+  anomalous author twice (`%an` = "t") and the desk read past it both
+  times — claim-log readers key on sha + subject; author is a dead
+  column with no salience.
+- **Class:** claim check blind to anomalous metadata fields; the
+  config write itself is the silent member of the failed-cd class
+  (nothing surfaces it until an artifact carries it).
+- **Pre-formulated fix:** push-claim-reminder gains an AUTHOR check —
+  each outgoing commit's author name/email compared against the
+  resolved expected identity (git config, global scope), WARN naming
+  the mismatching commits before the push. Near-zero false fires: the
+  expected set is the operator's own identity; lanes and desks commit
+  under it by construction.
+- **Consumer + drain seam:** the guard set's next design pass (dg
+  items); merges with any existing claim-check entry rather than a
+  sibling.
