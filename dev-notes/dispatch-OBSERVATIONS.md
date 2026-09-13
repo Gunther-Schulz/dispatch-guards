@@ -4279,3 +4279,53 @@ dispatch skill's own text.
 
 1. ROSTER × MODEL-GATE DEADLOCK for a teammate-dispatched verifier. Incident+basis: the sc-8 lane, mandated by its target repo to dispatch a fresh-context self-review before commit, was refused BOTH ways — named spawn ('Teammates cannot spawn other teammates — the team roster is flat') and unnamed generic spawn (agent-model-gate: every generic dispatch is NAMED; ENFORCED_TYPES covers every fit type, hooks/agent-model-gate.py:133); a fork is self-review by definition. Class: a repo-mandated verifier is structurally undispatchable from any teammate lane; the desk must run it, and no rule says so. Pre-formulated fix text: dispatch skill §4 escalation bullet gains one sentence — 'A verifier a repo's own rules mandate is dispatched by the DISPATCHER when the executing lane is a teammate: the flat roster and the model gate jointly bar every lane-side spawn, so the brief for such work names the desk as the review's dispatcher up front.' Consumer+drain: the next dispatch-skill amendment pass; fire log carries the two refusals.
 2. COMMIT PLAN WRITTEN WITHOUT THE GUARD READ (dispatcher's own defect, same lap). Incident+basis: the sc-8 brief said 'no manifest bump' without reading unbumped_plugins() — the lane's first commit bounced and cost a full directive round trip; §1's commit-plan bullet already mandates the read ('sequenced from the guard's OWN comparison basis (read it, not assumed)') and the slot demands the read beside the verdict. Class: existing rule, loaded-but-inert at brief-compose — the slot was filled with a verdict and no read. Pre-formulated fix text: none new — the rule exists; candidate sharpen only if it fires again: the brief-reminder hook's commit-plan lane could demand a read token ('hooks path read:'-style) for the BUMP slot the way it does for guards. Consumer+drain: fire-rate review; count this as firing one.
+
+## 2026-09-13 — a WATCH instrument's `git fetch` inside another party's copy is a write-shaped call presenting as a read; it claimed and renewed the writer reservation
+
+**Incident + basis.** A judgment desk armed an artifact horizon as
+a poll running `git -C <peer copy> fetch` every 60 s inside the
+working copy the arc directive assigned to the drain desk. The
+reservation gate's claim trigger classified each fetch as a
+write-shaped call, so the desk's reservation (first claimed by a
+directive commit) was RENEWED every minute for ~2.5 h while the
+desk wrote nothing — the drain desk's build lanes hit the WARN
+against a holder that was not writing, and the stale WARN became
+one input to a confident-wrong cross-desk accusation (retracted on
+trailer measurement the same hour). Neither desk had priced the
+fetch as a write: it presents as reading the remote. Judgment-desk
+session 746f6a5f (dotfiles), drain-wave arc, 2026-09-13; reservation
+file read back before release confirmed session id and TTL renewal.
+Same incident, fire-rate provenance for the reservation gate
+(staging WARN per its spec): 2 true fires the same day (a third
+desk's direct carrier commits — WARN correct, proceeded past on a
+pathspec-isolation reading later withdrawn), plus the stale-holder
+false-fire class above.
+
+**Class.** Exclusivity claimed by an instrument that only observes:
+the reservation's claim trigger keys on write-SHAPED commands, and
+a watch/poll built from repo-local git plumbing (`fetch`, and any
+maintenance verb that touches `.git/`) is write-shaped without
+being a write in the rule's sense. Two failures from one cause: the
+copy's owner is warned about a phantom co-writer (discount-reflex
+training), and the watcher holds an exclusivity token it never
+needed. Kin of, not same class as, the transient-probe entry above
+(that one: real writes needing MORE exclusivity; this one: a
+non-write claiming exclusivity it should not have).
+
+**Pre-formulated rule text** (dispatch skill §4, the wait/horizon
+conduct, addition beside the poll rule): "A horizon poll observes
+the artifact WITHOUT write-shaped calls in a copy another party
+owns: a remote is watched by `ls-remote` against the URL or by a
+fetch in the watcher's OWN clone, never by `fetch -C` into the
+watched copy — inside a reservation-gated copy such a call claims
+and renews the watcher's reservation, warning the owner about a
+holder that is not writing." Gate-side half (reservation lane,
+next build touching it): the claim classifier exempts
+read-intent plumbing (`fetch`, `ls-remote`, `rev-parse`, `log`,
+`status`) or keys on worktree/index mutation rather than command
+shape — with the counter-arm run both directions (a fetch must not
+claim; a commit must still claim).
+
+**Consumer + drain seam.** Dispatch skill §4 amendment (this repo),
+normal quota drain; the reservation gate's claim classifier at its
+next build, counter-arm per the guard devbook.
