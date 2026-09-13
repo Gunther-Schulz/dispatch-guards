@@ -5242,3 +5242,83 @@ confidently reported open after a lost update."
 **Consumer + drain seam.** Dispatch skill §4 amendment on the
 normal quota drain (measured: lc-112, ≥1 of 3+ messages lost, two
 stale gaps in the closing report).
+
+## 2026-09-13 — the write-boundary join is only as trustworthy as the slot it joins over: prose hides a cycle, short-but-pure paths read complete
+
+**Incident + basis.** Drain desk's pre-dispatch join over the
+lifecycle ready set, two catches before any lane opened, neither
+by a check (reported in b8's findings digest; graded here). (a)
+UNSCHEDULABLE CYCLE rendered as healthy work: lc-47 blocked on
+"the compaction verb does not exist yet"; lc-58's amended
+criterion demanded landing in the same change as lc-47. Each
+entry's render was correct alone — lc-58 read SCHEDULABLE, lc-47
+read READY-blocked — while neither could ever schedule. The cycle
+hid because lc-47's write-set was PROSE, so the join never
+collided the two (merged into lc-111 at the drain desk, not
+booked as a sibling). (b) The QUIET direction: lc-60's slot was
+pure paths and simply SHORT — lanes.py + firelog.py named, but
+the verb needs a parser entry in cli.py and its render lives in
+judgment.py. The join under-reports collisions and reads
+complete; no prose to spot.
+
+**Class.** The routing module's mapping-source rule derives the
+item→lane mapping from a join over write-boundary slots — so the
+join inherits every slot failure, and the two directions differ
+in visibility: a prose slot at least LOOKS unjoinable, while a
+short pure-paths slot looks exactly like a complete one. The
+same slot failure's LANE-side face was measured the same day
+(the ident-registry entry above: correct code, two arms red,
+boxed by the omission) — one slot defect, two consumers, neither
+seam checking completeness. The cycle case adds the blocker
+slot: an evidence predicate produced by the very change it gates
+is a coupling wearing a blocker's syntax, and both renders stay
+individually correct while jointly dead.
+
+**Pre-formulated rule text** (routing reference, the
+mapping-source line; drain-desk text for the blocker half
+verbatim): "The join over write-set slots names which items
+collide only where each slot lists a path to EVERY realization
+surface; a join over a slot that is prose, or pure-paths-but-
+short, under-reports and reads complete — the join's output
+carries the slot's grade, never better. And an evidence
+predicate whose truth is produced by the very change it gates is
+not a blocker, it is a coupling: render it as one item or an
+ordered pair, never as two entries each individually healthy."
+
+**Consumer + drain seam.** Routing-reference amendment on the
+normal quota drain (measured: two shapes in one join, drain
+desk, lifecycle ready set; the lane-side face same day in the
+entry above).
+
+## 2026-09-13 — a grounding-basis path that does not exist reads as the most ordinary line in the brief; a watcher's dead-baseline control caught it
+
+**Incident + basis.** Drain desk's lc-56 brief (reported in b8's
+findings digest; graded here): the grounding section named
+test/test_ledger.py as "the existing test idiom you extend". The
+file does not exist. Nothing in brief-writing surfaced it — the
+brief had already DISPATCHED. What fired was the lane watcher's
+dead-baseline assert (the baseline-is-its-own-positive-control
+rule): the named file hashed to ABSENT at arming. Corrected at
+the artifact, lane repointed.
+
+**Class.** §1's provenance rule grades repo-state claims, and a
+bare path in the grounding list IS one — "read this file" asserts
+existence plus the asserted role — but it wears the costume
+drawing least scrutiny: a file list reads as pointers, not as
+claims, so no line in it ever gets the grade. The catch came from
+an instrument built for a DIFFERENT failure (a dead lane watcher),
+which is the cross-instrument divergence detector working: a
+positive control that resolves its anchors at arming grades every
+path it is handed, whoever wrote it.
+
+**Pre-formulated rule text** (dispatch skill §1, the
+grounding-basis clause; drain-desk text verbatim): "a brief's
+grounding-basis paths are RESOLVED against the tree before
+dispatch — a named file that does not exist is a repo-state
+claim, and it reads as the most ordinary line in the brief."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment on the
+normal quota drain (measured: lc-56, caught post-dispatch by a
+watcher's arming control, not by brief-writing — the cost of the
+gap is one round trip plus a lane working under a false premise
+until the watcher armed).
