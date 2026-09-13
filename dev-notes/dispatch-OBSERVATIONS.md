@@ -4426,6 +4426,60 @@ route is asking, not inferring."
 normal quota drain; fire-rate provenance n=2 same-day for the
 existing trailer rule's inertness.
 
+## 2026-09-13 — CLASS: a red/green probe keyed on SEVERITY is satisfied by the fixture's own unrelated failure, and scores the old binary green
+
+**Incident + basis.** A guard/checker lane building a doctor verdict
+wrote its defect-visible probe as `any(WARN/FAIL)` over doctor's
+readiness rows. Its fixture pointed DOTFILES at a temp tree, so the
+register's deployed-path check emitted an unrelated FAIL — present on
+BOTH arms. The predicate was therefore satisfied by the old binary
+too, and the red/green pair scored the OLD side GREEN. Caught by the
+lane itself, only because the old side going green was unexpected;
+re-anchored on a row ABOUT the property (`"bar" in m and "k=0" in m`),
+after which old went red and new stayed green. Self-reported in the
+closing report rather than quietly repaired. Dispatcher-side note: the
+same shape is already recorded one layer down in doctor's own `_cnv`
+comment ("a needle merely naming the file is not a needle"), so this
+is that rule reproduced one layer out by a reader who had not met it.
+
+**Class.** Sibling of the payload-is-the-instrument entry: there the
+probe's PAYLOAD could not register the change; here the probe's
+PREDICATE cannot distinguish the change from the fixture's ambient
+noise. Both return byte-identically what a true absence returns, and
+both read as diligence. The generating condition is a fixture whose
+environment differs from the real target in some way the instrument's
+predicate is broad enough to catch — which is every fixture, since
+that difference is what makes it a fixture.
+
+**Pre-formulated rule text** (dotfiles class devbook, "## Registered
+procedure", step 2, beside the existing red-arm clauses): "A red/green
+arm is keyed on the ROW that asserts the property under test, never on
+a severity, a count, or `any(...)` over an output stream: a fixture
+differs from the real target by construction, and any difference loud
+enough to emit a row satisfies a severity predicate on BOTH arms. The
+old side going green is the tell, and it is only a tell if the
+arrangement predicted red — so the arm names, before it runs, which
+row it expects and on which side."
+
+Two smaller candidates from the same lane, same home: (i) the step-4
+docstring self-probe is written for TEXTUAL predicates and has no
+meaning for a structural one — the lane stated it not-applicable
+rather than running an unfalsifiable arrangement, and the clause could
+name which predicate kinds it binds; (ii) `isinstance(True, int)` is
+True in Python, so a JSON `true` certifies as an integer — pinned in
+that lane's battery, and worth a line wherever a JSON integer field is
+validated.
+
+**Consumer + drain seam.** THE REALIZING WRITE IS NOT IN THIS REPO:
+the guard/checker class devbook lives in dotfiles root CLAUDE.md, and
+amending it moves the section sha256, which resets `guard-checker-bau`
+to eval-open per §6 invalidation. That cost is why this is booked
+rather than applied inline — it wants batching with the next devbook
+amendment, not a fingerprint churn of its own. Obligation stays with
+the sender (dotfiles-c6) until it lands there; the check that would
+reveal it is `readiness-fingerprint-check` going stale against a
+devbook that gained this clause without a re-probe.
+
 ## 2026-09-13 — CLASS: the live-on-write clause enumerates FIRST-ORDER execution paths, so a file that is live only TRANSITIVELY reads as safe
 
 **Incident + basis.** A brief for a doctor/register build asserted as
