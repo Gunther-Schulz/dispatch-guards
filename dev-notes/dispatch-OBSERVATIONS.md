@@ -5222,6 +5222,16 @@ plain form eight in one file). The pre-formulated text gains its
 cheap discriminator: ask the emit-KIND, not just whether output is
 new.
 
+*Second face, same wave (drain desk's close report, lc-79):* a
+VOCABULARY addition is the same under-declaration one level up — a
+new value in a closed vocabulary needs every CONSUMER of that
+vocabulary in the write set (the renderers, checkers and counters
+that switch on it), and the consumer list is computable from the
+code the same way the roster requirement is. The class is
+therefore two-faced and both faces are checks, not judgment: a new
+diagnostic ident asks its registry; a new vocabulary value asks
+its consumers.
+
 ## 2026-09-13 — the mailbox's loss is asymmetric by BLOCKING, not by message kind: only a directive the lane would block on announces its loss
 
 (Amended same day: the first version keyed the asymmetry to
@@ -5447,3 +5457,42 @@ isolation, every arrangement holding).
 - Class: brief paraphrase-drift against the stored item body — the §1 files-listed-never-paraphrased rule reaching the dispatcher's OWN summary prose, which reads as instruction, not as a paraphrase to grade.
 - Pre-formulated rule text (for the brief form, §1): 'Where a brief summarizes a booked item's fix, the item's requirement text is BINDING and the brief's prose illustrative — the brief says so, and a contradiction between them is a grounding finding the lane reports, never a judgment call it makes quietly.'
 - Consumer + drain seam: the forms release batch (with dg-35/36/37 and the two 2026-09-13 entries already queued).
+
+## 2026-09-13 — cheap isolation defeats the one-lane clause: when parallelism stops costing, singletons become the default nobody chooses
+
+**Incident + basis.** Drain desk dotfiles-93's close-time
+self-grade (wave 1, reported in its four-question close review):
+lc-61, lc-80 and lc-118 ran as three singleton lanes where the
+one-lane clause says bundle — three disjoint small items, each
+small against a lane's fixed cold start, three cold starts paid
+for elapsed time the desk did not need. Its own diagnosis, adopted
+as the datum: "clone isolation made parallelism easy, which is
+exactly how that clause gets skipped." The desk had the join, read
+it correctly, proved disjointness — and still split, because
+nothing resisted.
+
+**Class.** The earlier identity-mapping entries blame an absent or
+unread join; this instance had a CORRECT join in hand and split
+anyway. The driver is economic, not informational: the one-lane
+clause's enforcement was always the FRICTION of safe parallelism
+(overlap risk, worktree setup), and per-lane clone isolation
+removes the friction without touching the fixed per-lane cold
+start — so the visible cost of splitting drops to zero while the
+real cost (N cold starts) is unchanged and invisible at dispatch
+time. Better isolation tooling therefore INCREASES identity-
+mapping pressure; the spend readout at close is the only surface
+where the cost reappears.
+
+**Pre-formulated rule text** (dispatch skill, the ONE-lane
+clause): "Isolation ease is not bundling license: a clone or
+worktree per lane removes the RISK of parallelism, never its
+per-lane fixed load — disjointness proves parallel is SAFE, the
+one-lane clause asks whether it is WORTH a cold start, and the
+two questions are answered separately. Small disjoint items
+default to one bundled lane; the split is what carries the named
+reason."
+
+**Consumer + drain seam.** Dispatch skill §1/§3 amendment on the
+normal quota drain (measured: wave 1, one desk, self-caught at its
+own close review — the close-time spend question's first live
+catch).
