@@ -4425,3 +4425,34 @@ route is asking, not inferring."
 **Consumer + drain seam.** Dispatch skill amendment (this repo),
 normal quota drain; fire-rate provenance n=2 same-day for the
 existing trailer rule's inertness.
+
+## 2026-09-13 — a denied fused command leaves a half-completed intent with no carrier
+
+**Incident + basis.** Session dotfiles-c6 (df24cc0c, self-reported
+in a push-set claim exchange with this desk, corroborated by the
+artifact): push-claim-reminder correctly DENIED a fused
+commit-and-push; the recovery re-ran only the commit half, and the
+push intent evaporated — commit 79d2183 sat unpushed ~40 min in
+the shared copy until a peer's claim question surfaced it. The
+guard worked exactly as designed; the gap is POST-denial: a deny
+that splits a compound intent voids BOTH halves, the session
+re-runs the half nearest the denial, and the other half becomes an
+obligation with no output — nothing observes "push still owed"
+(the unobserved-trigger class; whether the dotfiles unpushed
+Stop-hook could have caught a sibling-repo push is unverified
+here).
+
+**Class.** Guard-denial recovery drops the denied command's OTHER
+half. Generic to every deny over a compound form: the deny reads
+as being about the objectionable half, so the legitimate half is
+silently orphaned with it.
+
+**Pre-formulated fix.** In-message, zero new false fires (deny
+path only): the FUSED-PUSH deny text names the full recovery —
+"this denial voided BOTH halves of your command; re-run as TWO
+invocations: the claim log, then the push itself." Second rung
+only if the class re-fires: a Stop-hook sweep for unpushed
+commits in repos the session touched.
+
+**Consumer + drain seam.** push-claim-reminder's next build in
+this repo; normal quota drain.
