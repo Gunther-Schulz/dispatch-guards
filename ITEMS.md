@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 7
+added: 8
 compacted: 0
 
 ## dg-1
@@ -339,3 +339,12 @@ write-set: UNKNOWN
 done-criterion: UNKNOWN — set at design: whether the guard ships here or beside skill-craft's release machinery is the placement question, decided against both repos' guard rosters
 evidence: operator second-look ask 2026-09-13 (statiker session 1b204567); the guard's two real fires same date (sc-8 lane bounce, exemption sequence per dispatch skill commit-plan bullet); dotfiles git/hooks/pre-commit read by the sc-8 lane at :233, :2013-2030
 blocked-by: decision which repo homes the shipped guard, this plugin or skill-craft's release tooling, decided against both guard rosters
+
+## dg-40
+grade: READY
+requirement: decide the one-writer default flip: lanes isolated-by-default in worktrees with a typed shared-copy escape (the noodle AllowPrimaryCheckout shape, inverted) vs the current warn-gradient on a shared copy; record: statiker dev-notes/grokbot-space-comparison-2026-09-13.md, steal item 3
+goal: general-maintenance
+write-set: plugin/skills/dispatch/SKILL.md, plugin/hooks/, dev-notes/
+done-criterion: decision recorded with the reservation-gate fire tally since 2026-08-06 as its basis (absorption-class incidents caught vs missed vs silent); either the ladder default flips or the warn-gradient is re-affirmed with that tally cited
+evidence: writer-reservation-gate.py docstring: per-copy WARN, granularity rationale, motivating absorption incident 2026-08-06; comparison doc steal item 3
+blocked-by: evidence the next guard-set design pass opens (maintenance batches to a consuming seam) and the fire tally is computed there
