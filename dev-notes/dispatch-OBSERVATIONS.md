@@ -5403,3 +5403,10 @@ mechanizable slice — an in-file MUTATES_TRACKED_FILES marker a
 brief-composition check can refuse to pair with a baseline list —
 is a lifecycle item, booked at the drain desk by the two-exits
 rule.
+
+## 2026-09-13 — a brief's Fix-prose contradicted the item text it summarized, and following it literally would have re-shipped a reverted over-fire
+
+- Incident + basis: the doctor-bundle brief (statiker-fd desk, this date) restated df-168's fix as an UNSCOPED could-not-verify rule; built literally it reproduces the exact 6-of-7 false-positive over-fire becf593 reverted the day before. The lane caught the contradiction because the brief's own grounding section named the ITEMS.md requirement text as binding evidence; it built the item-consistent narrower version and reported the deviation (lane report slot d.2, commit 8dbfd3c).
+- Class: brief paraphrase-drift against the stored item body — the §1 files-listed-never-paraphrased rule reaching the dispatcher's OWN summary prose, which reads as instruction, not as a paraphrase to grade.
+- Pre-formulated rule text (for the brief form, §1): 'Where a brief summarizes a booked item's fix, the item's requirement text is BINDING and the brief's prose illustrative — the brief says so, and a contradiction between them is a grounding finding the lane reports, never a judgment call it makes quietly.'
+- Consumer + drain seam: the forms release batch (with dg-35/36/37 and the two 2026-09-13 entries already queued).
