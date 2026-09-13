@@ -121,6 +121,10 @@ those retained lines alone).
 
 ## Site overlay — this installation's bindings (win on conflict)
 
+Site overlay: fills the portable core's slots above; restates nothing
+— checked by ethos's `overlay-disjointness.py`, run against this
+file's core/overlay split.
+
 Consumed at dispatch-compose and tier-choice moments, which this
 skill's gate-forced load precedes. The site corpus keeps the
 intake-seam conventions and the standing defaults (sonnet for
