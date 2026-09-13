@@ -4347,3 +4347,38 @@ claim; a commit must still claim).
 **Consumer + drain seam.** Dispatch skill §4 amendment (this repo),
 normal quota drain; the reservation gate's claim classifier at its
 next build, counter-arm per the guard devbook.
+
+## 2026-09-13 — the unfilled `<model>` placeholder ships, and the lane fills it wrong
+
+**Incident + basis.** The ethos-prep execution brief (statiker meta
+session 1b204567) pasted the §2 execution tail with the trailer
+line still reading `Co-Authored-By: Claude <model> …` — the
+placeholder unfilled. The sonnet lane filled it with the
+DISPATCHER's model: both its commits (ethos 8f33156, 5b24acb)
+carry "Claude Fable 5" trailers, verified at the artifact via
+`git log --format=%(trailers)`. The dispatcher's compose error,
+not the lane's: forms.md already rules "fill `<model>` AND the
+channel line … at paste time".
+
+**Class.** A pasted-tail placeholder is invisible boilerplate at
+compose time — the very invariance that makes pasting safe makes
+an unfilled slot unnoticeable — and the fill the lane improvises
+corrupts the trailer-as-ownership instrument downstream: slot (f)
+claims, the writer-claims machinery, and any tier audit key on a
+model name that is now wrong (here: a sonnet lane's work reading
+as top-tier). Kin of the recorded nondeterministic-trailer issue
+(lanes omitting the trailer); this variant WRITES one, wrong,
+which is worse — present-and-wrong passes every presence check.
+
+**Pre-formulated fix.** Mechanical, meets the bar: brief-reminder
+(or a sibling PreToolUse(Agent) check) WARNs when the dispatch
+prompt contains a literal `<model>` (angle-bracket placeholder)
+anywhere in its text — computable, near-zero false fires (a
+legitimate brief has no reason to ship literal `<model>`), and
+the counter-pair is trivial (fires on this brief's text; silent
+on the same tail with "Claude Sonnet" filled).
+
+**Consumer + drain seam.** brief-reminder's next build in this
+repo; normal quota drain. Until then: dispatcher-side, the tail's
+trailer line is composed with the concrete model name the moment
+the route line names the tier.
