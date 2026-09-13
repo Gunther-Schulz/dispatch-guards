@@ -4248,6 +4248,24 @@ that exact prohibition and still take the file exit under output
 volume. Measured this session; the file was read and its content was
 good, which is what makes the deviation cheap to miss.
 
+Second occurrence, same day, different desk (dotfiles-c6, ECC
+reference read): lane `sonnet-ecc-enforcement`, same pasted
+read-only tail, returned a SendMessage of headline bullets plus a
+pointer to `<dispatcher-session-scratchpad>/ecc-enforcement-findings.md`
+(113 lines) and called the file "the deliverable" in its own
+message — the two sibling lanes on the identical tail are still
+out at time of writing. Its content was likewise good and properly
+graded, and the dispatcher booked from the file body. n=2 for the
+file exit under the current tail text. The lane also ANSWERED the
+scratch half when the deviation was put to it: the path it wrote
+to "was the one listed as mine in my system prompt" — corroborated
+at the artifact, since the file sits under the DISPATCHER's session
+id. That is entry 2026-09-11 ("YOUR OWN scratchpad names no place")
+measured from the lane's side rather than the desk's: the clause
+asks for a place the harness does not give the lane, so a compliant
+lane cannot satisfy it and a desk flagging it is flagging its own
+rule. The desk's flag was withdrawn on that half.
+
 **Class.** The ban is stated as a PROHIBITION with its reason
 ("reaches no one"), and the reason is false for a lane whose
 dispatcher shares a filesystem — the file DID reach the dispatcher,
