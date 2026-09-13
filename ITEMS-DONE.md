@@ -34,6 +34,21 @@ blocker-moot: this is a skill edit: CLAUDE.md Discipline requires a skill-craft 
 closed-reason: 2026-09-12 Both published pointers name ITEMS.md (50c40b6, released as 0.11.11) and BACKLOG.md is deleted (2fee60d) — the amended done-criterion's first branch, met in full. Citation resolution stays via the report-pinned blob bb93897 (git cat-file), recorded in CLAUDE.md's role entry.
 closed-ref: 50c40b6, 2fee60d
 
+## dg-38
+grade: DONE
+requirement: sane defaults for everything the plugin currently expects a new user to hand-create: ~/.claude/dispatch-guards.json site policy, ~/.claude/readiness.json register, the routing.md site overlay's lineup table. A fresh install today runs with those absent and the degradation is not designed: defaults should apply LOUDLY (doctor prints what is defaulted, gates state 'site policy absent, default X applied'), so deploying the stack or only parts of it is easy — absence loud or merely slower, never silently lossy (statiker's self-containment criterion, borrowed as the standard)
+goal: tend
+write-set: UNKNOWN
+done-criterion: UNKNOWN — set at design: likely in-plugin default policy + doctor lines + a site-overlay template with UNSET markers
+evidence: operator ask 2026-09-13 (statiker session 1b204567): 'dispatch guards should have sane defaults for the things it expects new users to set up manually so it is easy to deploy the stack or only parts of it'; the expected-manual set enumerated from SKILL.md §5 (site policy path) and §6 (readiness register) and references/routing.md (site overlay slots), reads of this date at the statiker desk
+blocked-by: NONE
+amend-reason: 2026-09-13 the design pass ran (sonnet probe, 2026-09-13): the plugin is already mostly sane-defaulted; the residual is doctor surfacing, an overlay template, and docs — decision made at the desk, item now READY
+amended-write-set: 2026-09-13 plugin/hooks (doctor/defaulted-surfaces line),plugin/skills/dispatch/references/routing.md (site-overlay UNSET template),README or install docs (the three-surfaces section)
+amended-done-criterion: 2026-09-13 the probe's facts (this date, lanes 8f5b4774/429039df) turned into three small builds: (1) the doctor prints a defaulted-surfaces summary — dispatch-guards.json absent means shipped defaults active, named per guard-mode; (2) the routing site overlay ships an UNSET-marker template beside the portable defaults, so a fresh install reads as unconfigured rather than configured-empty; (3) install docs name the three surfaces and each one's absence behavior. NOT needed, per the probe: new defaults machinery — dispatch-guards.json already fail-opens to shipped defaults (_dispatch_common.py:293-326) and readiness.json absence is already loud per-dispatch (brief-reminder.py:492-495); the gap was surfacing and template, never mechanism
+amended-blocked-by: 2026-09-13 NONE
+closed-reason: 2026-09-13 three builds landed: in-plugin --doctor (per-surface status, default/overridden marked), UNSET overlay template as sibling reference, README Optional-site-surfaces section; mechanism was already sane-defaulted, gap was surfacing
+closed-ref: fd4cc33
+
 ## Archive (pre-migration)
 
 
