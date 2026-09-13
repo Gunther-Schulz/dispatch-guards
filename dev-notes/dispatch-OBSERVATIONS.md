@@ -5322,3 +5322,54 @@ normal quota drain (measured: lc-56, caught post-dispatch by a
 watcher's arming control, not by brief-writing — the cost of the
 gap is one round trip plus a lane working under a false premise
 until the watcher armed).
+
+## 2026-09-13 — a mutating instrument in a brief's baseline list defeats the same brief's private-copy prohibition: the list wins
+
+**Incident + basis.** Fifth occurrence today of prove-rows walking
+a shared live tree (drain desk's lane watcher, reported in b8's
+digest; graded here): FOREIGN WRITE fired on
+plugin/cli/lifecycle_core/lanes.py, then items.py, then retire.py
+— walk order — each byte-identical to HEAD by the time of the
+look (sha256 against `git show HEAD:<path>`, not git status; no
+damage, every restore byte-identical). Attribution holds because
+only two lanes were running and the lc-56 lane declined to run
+the tool live and said so in its grounding return. Four of the
+five occurrences trace to one structural cause: the dispatching
+brief lists `python3 tools/prove-rows.py` under "Verification —
+baselines", among unittest/audit/absence-scan. Both of today's
+briefs ALSO carried an explicit "any mutate-and-restore
+instrument runs in a private copy" paragraph — authored by the
+same desk that wrote the devbook sentence warning of exactly
+this — and the list won, twice.
+
+**Class.** Template-shaped, not reader-shaped. A baseline list is
+read as a sequence of commands to run on the tree as found, and a
+prohibition stated elsewhere in the same document does not reach
+into the list — the scope-sentence-was-the-defect shape one level
+up: not a too-narrow rule but a rule contradicted by the FORM of
+the document carrying it. A reader following the list is behaving
+correctly; the list is what is wrong. Instrument note, grading
+the watcher this carrier booked earlier today: the same per-lane
+own-files watcher caught this walk AND the false grounding-basis
+path — two distinct defect classes, one instrument, inside an
+hour. Its discriminating property is watching each lane's OWN
+files and treating everything else as foreign; a whole-repo
+watcher would have read the walk as lane liveness.
+
+**Pre-formulated rule text** (dispatch skill §1, brief
+composition; drain-desk text verbatim): "A MUTATING INSTRUMENT
+NEVER APPEARS IN A BRIEF'S BASELINE LIST. A baseline list is read
+as a sequence of commands to run on the tree as found; anything
+that writes to a tracked file belongs in its own labelled block
+with the private-copy requirement attached to the command itself,
+never in a list whose other members are read-only. A prohibition
+stated elsewhere in the same brief does not cure this — measured
+2026-09-13, two briefs carrying both the list and the
+prohibition, the list won."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment on the
+normal quota drain (n=5 in one day, 4 template-traced). The
+mechanizable slice — an in-file MUTATES_TRACKED_FILES marker a
+brief-composition check can refuse to pair with a baseline list —
+is a lifecycle item, booked at the drain desk by the two-exits
+rule.
