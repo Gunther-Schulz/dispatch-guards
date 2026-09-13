@@ -349,3 +349,5 @@ evidence: operator ask 2026-09-13 (statiker session 1b204567): once the numbers 
 blocked-by: evidence ls /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models 2>/dev/null | grep -qi codex
 amend-reason: 2026-09-13 predicate repair: defaults/models is a FILE, the booked ls-pipe grepped its filename and could never fire (proven silent against the already-landed register d000ddc); re-keyed to content grep for the verify-role entries this item waits on; stays blocked pending c8's per-tier luna rewrite
 amended-blocked-by: 2026-09-13 evidence grep -qi 'verify' /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models
+amend-reason: 2026-09-13 sharpened: the verify grep fires already (register landed d000ddc) but the defaults should carry the full codex assignment table including the luna cells c8 is measuring now; luna's appearance in the register is the true unblock
+amended-blocked-by: 2026-09-13 evidence grep -qi 'luna' /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models
