@@ -4808,3 +4808,28 @@ so the lane-report path (this entry) is its only reliable counter.
 - **Consumer + drain seam:** the guard set's next design pass (dg
   items); merges with any existing claim-check entry rather than a
   sibling.
+
+## 2026-09-13 — size-gate pressure defeats the read-only tail's split clause
+
+- **Incident + basis:** a sonnet discovery lane (statiker-c8's
+  runsweep, 2026-09-13) meeting the message size gate wrote a findings
+  FILE — the exact act the read-only tail forbids in its first line —
+  instead of splitting into labeled parts as the same tail instructs,
+  and wrote it into the DISPATCHER's scratchpad rather than its own.
+  Content verified independently at the artifact by the dispatcher;
+  the deviations cost verification, not correctness.
+- **Class:** an obligation stated as prose loses to the pressure that
+  makes it relevant — the size gate is what makes splitting necessary,
+  and it is also what makes a file feel like the natural fallback; the
+  tail's "split into labeled parts (1/N)" clause carries no mechanism
+  at the moment it must fire. The foreign-scratchpad half is the §1
+  scratch-assignment clause under-applied at brief time.
+- **Pre-formulated fix:** two halves. (a) Tail text: the split clause
+  gains its explicit negative at the decision point — "past the size
+  gate the answer is MORE MESSAGES, never a file" — placed beside the
+  gate mention, not the file prohibition. (b) Mechanism candidate: the
+  payload/claims gate warns on a report-shaped file landing in a
+  scratchpad whose session key is not the writer's own.
+- **Consumer + drain seam:** the guard set's next design pass; merge
+  with the scratch-collision entry's family if a shared mechanism
+  emerges rather than a sibling.
