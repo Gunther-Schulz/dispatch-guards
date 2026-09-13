@@ -4833,3 +4833,67 @@ so the lane-report path (this entry) is its only reliable counter.
 - **Consumer + drain seam:** the guard set's next design pass; merge
   with the scratch-collision entry's family if a shared mechanism
   emerges rather than a sibling.
+
+## 2026-09-13 — CLASS: the reservation protocol's claim, warn, and release all key on tool-surface events, and the writers most likely to collide sit outside all three
+
+**Incident + basis.** Reported by the lifecycle drain desk
+(dotfiles-b8) after a peer asked whether its holding of the
+lifecycle copy is machine-readable anywhere; verified at this desk
+against `hooks/writer-reservation-gate.py` (0.11.14 installed
+cache) and the live state file before booking. Three findings, one
+mechanism. F1: the WARN is PreToolUse(Bash) keyed on a literal
+`git commit` in command position (verdict(): "no `git commit`
+invocation in command position" → silent) — every lifecycle
+carrier verb commits INSIDE Python (`lifecycle item add` runs
+`git commit -q` as a subprocess), so the commits most likely to
+collide on a shared carrier are invisible to the gate,
+symmetrically for both parties. F2: the CLAIM is
+PostToolUse(Write|Edit) only — `write_reservation` has exactly one
+caller, `on_write`, gated on `_WRITE_TOOLS` — so a desk doing its
+work through Bash verbs claims nothing and its held copy reads as
+free to every other writer; the docstring's argument against an
+explicit claim step (prose instructions get skipped) is sound and
+still leaves this hole, because the automatic design assumes the
+holder edits with Write/Edit. F3, observed live: b8's copy's
+`.git/writer-reservation.json` names
+`aopus-lc90-closemoot-6559040df1c9af56`, claimed 12:57:33Z, TTL
+5400 s — a lane killed mid-report by the account limit; release
+runs on Stop/SubagentStop, which a killed lane never reaches, so
+a dead agent held the copy for its full TTL and the one commit
+shape the gate CAN see warned the copy's real holder about a
+corpse. A check firing on a non-defect — the override-training
+shape. CORRECTION folded in, same day, this desk: an earlier
+belief that a monitor's `git fetch` had renewed a reservation is
+refuted by the same source read — no Bash-side claim or renew
+path exists; the observed persistence was a stale file outliving
+its writer, i.e. F3's class, not a fetch-claims mechanism.
+
+**Class.** A protocol whose claim/warn/release are all derived
+from HARNESS TOOL EVENTS covers exactly the writers who use those
+tools, and the population that motivated it (shared-carrier
+writers) works through subprocesses. Same family as the corpus
+"applying one behaviour to every member of a category": the sweep
+is keyed to the members' shared idiom (Write/Edit, literal `git
+commit`), not to the invariant every member carries (the
+repository's own state changing).
+
+**Pre-formulated fix direction** (design, not text — the realizing
+surface is this repo's hook and its judgment):
+the invariant every writer moves is the REPO, not the tool call —
+candidates: claim on any Bash whose cwd/`-C` resolves into a
+reserved copy (coarse, over-claims readers), or a HEAD/index
+mtime watch at warn time (reads the repo's own record, catches
+subprocess commits), plus an expiry-aware release: an expired
+reservation whose holder is dead (session/agent id no longer
+listed) is CLEARED at the next gate evaluation, not merely
+treated as silent — a dead holder's file should not need a human
+delete. F3's live instance is the red-first case; F1's carrier
+verb is the must-catch; a read-only `git status` in a foreign
+copy is the must-not-claim control.
+
+**Consumer + drain seam.** This repo's maintainer at the next
+guard iteration (writer-reservation-gate redesign), normal quota
+drain. Grading carried from the reporter, verified here: F1/F2
+structural (read off the wiring), F3 observed live; frequency
+unestablished — one collision today, costing a wrong author in a
+lane's state model and a push-gate surprise.
