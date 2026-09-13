@@ -49,6 +49,21 @@ amended-blocked-by: 2026-09-13 NONE
 closed-reason: 2026-09-13 three builds landed: in-plugin --doctor (per-surface status, default/overridden marked), UNSET overlay template as sibling reference, README Optional-site-surfaces section; mechanism was already sane-defaulted, gap was surfacing
 closed-ref: fd4cc33
 
+## dg-41
+grade: DONE
+requirement: ship codex ROUTING DEFAULTS in the dispatch skill: fold the statiker codex certification's per-(role,model) results into references/codex-routing.md as shipped defaults: read-side mechanical PASS at sonnet parity; verify role SAFE-UNCOMPETITIVE (astra 3/9, terra 6/9 vs sonnet/haiku 8/9, zero fabrication all arms); reviewer role EXCLUDED by measurement (stage-2d plus R7 replication); sandbox bindings loud (danger-full-access required for commit-bearing work, workspace-write depresses suite counts, read-only cannot execute checks)
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/codex-routing.md,plugin/.claude-plugin/plugin.json
+done-criterion: codex-routing.md carries the certified role table with per-role yield figures and the sandbox bindings, each entry citing the statiker certification record as provenance; ships in a version bump
+evidence: operator ask 2026-09-13 (statiker session 1b204567): once the numbers are in, codex defaults get shipped; numbers now in: statiker dev-notes/codex-only-certification-2026-09-13.md at e4b33fa (results) and 833215c (transcript audit CLEAN, scores final)
+blocked-by: NONE
+amend-reason: 2026-09-13 predicate repair: defaults/models is a FILE, the booked ls-pipe grepped its filename and could never fire (proven silent against the already-landed register d000ddc); re-keyed to content grep for the verify-role entries this item waits on; stays blocked pending c8's per-tier luna rewrite
+amended-blocked-by: 2026-09-13 evidence grep -qi 'verify' /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models
+amend-reason: 2026-09-13 sharpened: the verify grep fires already (register landed d000ddc) but the defaults should carry the full codex assignment table including the luna cells c8 is measuring now; luna's appearance in the register is the true unblock
+amended-blocked-by: 2026-09-13 evidence grep -qi 'luna' /home/g/dev/Gunther-Schulz/statiker/plugin/skills/statiker/defaults/models
+closed-reason: 2026-09-13 codex certification folded into codex-routing.md as shipped defaults: verify role two-figure SAFETY/YIELD with terra assignment and inversion recorded, reviewer exclusion second provenance, UNMEASURED cells explicit, sandbox bindings loud; bumped 0.11.18
+closed-ref: e63ab6f
+
 ## Archive (pre-migration)
 
 
