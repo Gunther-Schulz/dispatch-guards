@@ -4537,3 +4537,63 @@ commits in repos the session touched.
 
 **Consumer + drain seam.** push-claim-reminder's next build in
 this repo; normal quota drain.
+
+## 2026-09-13 — a horizon watch keyed to an artifact the WATCHER also moves fires on the watcher's own writes
+
+**Incident + basis.** The drain desk's lane horizon was keyed to
+"has HEAD moved" on the shared checkout; the desk's own carrier
+booking moved HEAD, and the horizon fired on its owner's write —
+a false wake read by the one party who trusts the instrument
+(drain-desk digest, lc-86 close, 2026-09-13; re-anchored at that
+desk to the lane's write set the same day). Same family, other
+polarity, judgment desk, same day: a remote-delivery watch whose
+change-branch emitted NO stdout line, so the artifact-moved case
+arrived only as a bare task-completion notice — the interesting
+outcome was the silent one.
+
+**Class.** The watch's trigger set is not partitioned by AUTHOR or
+by CHANNEL: a delta-keyed anchor (correct per the corpus anchor
+rule) still over-fires when the watcher's own writes land in the
+watched set, and under-informs when an outcome branch emits
+nothing. The corpus rule covers WHERE the anchor points; this is
+WHO moves it and WHAT each branch says.
+
+**Pre-formulated rule text** (dispatch skill §4, the poll/horizon
+rule, sharpen): "The watch condition excludes the watcher's own
+writes — key it to the LANE's write set or the peer's commit
+identity, never to bare movement of a shared artifact — and every
+outcome branch of the poll, the expected completion included,
+emits its own named line: an exit whose interesting case is
+silent reports as a bare completion notice and reads as nothing."
+
+**Consumer + drain seam.** Dispatch skill §4 amendment (this
+repo), normal quota drain.
+
+## 2026-09-13 — a process-wait pattern that matches the waiter's own command line never terminates and reports the target as eternally running
+
+**Incident + basis.** A lane's wait loop was `until ! pgrep -f
+'tools/prove-rows.py'`; the pattern string sits in the waiter's
+own command line, so pgrep matched the waiter itself — the loop
+could not terminate by construction and reported the peer's
+prover as running three times after it had exited. Nineteen
+minutes lost. Found by the lane itself; fixed with a pattern that
+cannot match the waiter plus a positive control (drain-desk
+digest, lc-86, 2026-09-13).
+
+**Class.** The instrument is a member of its own match set — the
+self-matching probe, kin of the zero-hit-search family but
+inverted: an eternal HIT that reads as "still running" instead of
+a false zero. Waiting looks identical to working, so nothing
+prompts the second look (the corpus wait rule's silence hazard,
+here with the anchor matching the anchor-holder).
+
+**Pre-formulated rule text** (dispatch skill §4, beside the poll
+rule): "A process-wait's match pattern is proven to EXCLUDE the
+waiter (the classic form: bracket one character, `[t]ools/...`,
+or match on pid provenance) and shown live on a positive control
+before the wait is trusted; a wait that cannot distinguish the
+target from itself reports the target running forever."
+
+**Consumer + drain seam.** Dispatch skill §4 amendment (this
+repo), normal quota drain; merge candidate with the existing
+wait/anchor entries at the pass rather than a third sibling.
