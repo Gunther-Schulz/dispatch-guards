@@ -4426,6 +4426,87 @@ route is asking, not inferring."
 normal quota drain; fire-rate provenance n=2 same-day for the
 existing trailer rule's inertness.
 
+## 2026-09-13 — CLASS: the live-on-write clause enumerates FIRST-ORDER execution paths, so a file that is live only TRANSITIVELY reads as safe
+
+**Incident + basis.** A brief for a doctor/register build asserted as
+an established Background line: "bootstrap/doctor.py is NOT
+live-on-write (invoked, not hook-wired), so an intermediate state is
+safe." The executing lane opened it and returned it as wrong in its
+critique pass, before building: `tools/readiness-fingerprint-check.py:61`
+exec_module()s bootstrap/doctor.py, and `git/hooks/pre-commit:1262-1295`
+loads that tool in EVERY repo on this machine through the global
+`core.hooksPath`. A syntactically broken doctor.py therefore breaks
+co-writers' commits machine-wide for the duration of an edit window.
+Dispatcher (dotfiles-c6) conceded at the artifact; lane kept the file
+parseable at every intermediate state as its own mitigation.
+
+**Class.** NOT a gap — §1 already carries "Deployment-coupled is a
+different question from LIVE ON WRITE" (adopted from this carrier's
+own earlier entry, "### 2. The brief boxed DEPLOYMENT and missed
+LIVE-ON-WRITE"). This is loaded-but-inert, and the mechanism of the
+non-firing is the clause's ENUMERATION: it lists first-order
+execution paths — a git hook under core.hooksPath, a registered
+harness hook, a file a running daemon re-reads, anything under a
+watched directory. A CLI imported BY one of those matches no item on
+the list, so a reader checking the list correctly concludes "not
+live-on-write" and is wrong. The dispatcher reasoned from the file's
+CATEGORY (it is a CLI, invoked not wired) instead of from its
+callers, which is exactly what an enumeration invites. The corpus's
+own rule predicted it: enumerated triggers always have gaps, and the
+fix is to abstract upward rather than append the next variant.
+
+**Pre-formulated rule text** (dispatch skill §1, replacing the
+enumeration's closing clause in the deployment-coupled bullet): "The
+question is not whether the file SITS on an execution path but
+whether anything on one REACHES it — a CLI a git hook imports, a
+module a registered hook exec_module()s, a library a watched process
+loads are each live on write at one remove, and the reach is
+established by reading the file's CALLERS, never by classifying the
+file. Where the write set touches such a path, the brief answers
+both, and the executor keeps the file loadable at every intermediate
+state."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment (this repo),
+normal quota drain; rides the same window as any other §1 edit.
+
+## 2026-09-13 — CLASS: a one-item lane's base-check HALT collides with the tail's "never halt the LANE"
+
+**Incident + basis.** Same dispatch. The pasted EXECUTION tail opens
+"on a gap HALT THE ITEM, FINISH THE REMAINDER, REPORT — never halt
+the LANE, since 'halt and wait' is not a survivable state for a
+subagent", while the brief's own base check says "Base contained WITH
+commits on top = foreign work present: report the commits as a gap
+and HALT." The lane hit exactly that state (three peer commits on
+top, all disjoint from its write set, tree clean) and named the
+contradiction in its critique pass: a ONE-ITEM lane has an empty
+remainder, so halting the item IS halting the lane — the thing the
+tail forbids. It resolved by proceeding with a stated deviation,
+reasoning that the three reads exist for collision detection and the
+evidence dissolved the collision, and that uncommitted edits in a
+shared copy are the more dangerous terminal state. Dispatcher
+ratified.
+
+**Class.** A brief-level stop instruction and the invariant tail
+disagree about what a stop MEANS, and the disagreement is invisible
+whenever a lane carries more than one item — the remainder absorbs
+it. The base check's HALT was written for the multi-item case
+without noticing that the single-item case is the common one for
+guard/checker builds.
+
+**Pre-formulated rule text** (dispatch skill §1, base-commit clause,
+replacing the bare "and HALT"): "…report the commits as a gap and
+STOP BEFORE WRITING — a base-check stop is a report-and-hold at the
+lane's head, never a lane termination: nothing has been built yet, so
+the lane reports what it found and waits for one message. Where the
+foreign commits are disjoint from the write set and the tree is
+clean, the lane may proceed on a STATED deviation rather than spend a
+round trip, because leaving edits uncommitted in a shared copy is the
+more dangerous terminal state."
+
+**Consumer + drain seam.** Dispatch skill §1 base-commit clause (this
+repo), normal quota drain; bundles with the entry above — both are
+single-paragraph §1 edits.
+
 ## 2026-09-13 — a denied fused command leaves a half-completed intent with no carrier
 
 **Incident + basis.** Session dotfiles-c6 (df24cc0c, self-reported
