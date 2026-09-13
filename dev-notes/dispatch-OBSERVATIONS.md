@@ -5210,38 +5210,68 @@ omission, not by its work."
 normal quota drain (measured: lc-112, one lane, correct code with
 two arms red at close).
 
-## 2026-09-13 — the mailbox's loss is asymmetric by message kind: a lost directive self-announces, a lost state update reports confidently wrong
+## 2026-09-13 — the mailbox's loss is asymmetric by BLOCKING, not by message kind: only a directive the lane would block on announces its loss
 
-**Incident + basis.** Lifecycle lc-112: the dispatching desk sent
-the lane 3+ messages; at least one was lost in transit. The lane's
-closing report then named two gaps the desk's own record showed
-ALREADY CLOSED — the lane was not wrong about its snapshot, its
-snapshot was missing the update that closed them. Measured: 3
-delivered, ≥1 lost, two already-closed gaps reported as open.
+(Amended same day: the first version keyed the asymmetry to
+message KIND — directive vs state update — and the drain desk
+measured a counter-case within hours. The split that holds is
+whether the lane would BLOCK without the message.)
+
+**Incident + basis.** Two measurements, one day, both lifecycle.
+(1) lc-112: the dispatching desk sent the lane 3+ messages; at
+least one was lost. The lane's closing report named two gaps the
+desk's own record showed ALREADY CLOSED — its snapshot was missing
+the update that closed them. (2) lc-81, the counter-case: the desk
+sent the lane a RULING (the unresolved branch must write `true`);
+send returned success; the lane's closing report says "no
+dispatcher message received after the brief", and it shipped
+`false` — deciding the question ALONE, declaring the choice as a
+deviation with grounds. From the desk's side that is
+indistinguishable from a lane that received the ruling and argued
+against it; the only tell was one slot-(d) sentence true of the
+brief and false of the lost message.
 
 **Class.** Message loss is symmetric at the channel and asymmetric
-at the failure: a lost DIRECTIVE self-announces as inaction — the
-work does not appear, the horizon fires, somebody looks. A lost
-STATE UPDATE announces nothing: the receiver keeps operating on
-the stale state and reports its conclusions CONFIDENTLY, and the
-report reads as a finding rather than as staleness. The channel's
-existing safeguards (armed horizons, delivery acks) all key on the
-directive shape; nothing detects the state-update shape, because
-its failure is a plausible report, not a silence.
+at the failure — but the axis is BLOCKING, not kind. A lost
+message the lane would BLOCK on self-announces: the work does not
+appear, the horizon fires. A lost state update announces nothing
+(the lane reports confidently off the stale snapshot), and a lost
+directive that settles a question the lane can decide alone is
+exactly as silent: the lane decides, ships, and reports the
+decision as its own, and the dispatcher reads a DEVIATION where
+there was a COUNTERMAND. The lc-81 case carries a second finding
+that cuts against the obvious fix: the lane was RIGHT and the
+lost ruling was WRONG — the lane held two artifact facts the desk
+did not (no live scan existed for the `false` to relax; the false
+branch was loud by design, dissolving the asymmetry the ruling
+rested on). "Deliver directives more reliably" is therefore not
+straightforwardly an improvement when the directive is a desk
+overruling a lane that has read the code the desk has not — the
+desk verified both facts at the artifact, accepted the lane's
+version, and recorded the self-overrule in the closure reason
+rather than taking it quietly.
 
 **Pre-formulated rule text** (dispatch skill §4, beside the
-silence-handling duties): "State updates whose staleness would
-change what a lane REPORTS travel by ARTIFACT, never only by
-message — the lane re-reads the artifact at report time, so a lost
-message costs nothing. And a dispatcher grading a report checks
-each reported GAP against its OWN record before acting on it: a
-gap the record shows closed is a staleness finding about the
-channel, not a work item — measured as two already-closed gaps
-confidently reported open after a lost update."
+silence-handling duties; the blocking half is the drain desk's
+text verbatim): "State updates whose staleness would change what
+a lane REPORTS travel by ARTIFACT, never only by message — the
+lane re-reads the artifact at report time, so a lost message
+costs nothing. A dispatcher grading a report checks each reported
+GAP against its OWN record before acting on it: a gap the record
+shows closed is a staleness finding about the channel, not a work
+item. And a lost directive announces itself ONLY where the lane
+would otherwise BLOCK on it: where the directive settles a
+question the lane can decide alone, its loss is as silent as a
+lost state update — the lane decides, ships, and reports the
+decision as its own, and the dispatcher reads a deviation where
+there was a countermand. The detector is the same one either way:
+a directive whose content is not ALSO in the brief file was never
+reliably sent."
 
 **Consumer + drain seam.** Dispatch skill §4 amendment on the
-normal quota drain (measured: lc-112, ≥1 of 3+ messages lost, two
-stale gaps in the closing report).
+normal quota drain (measured: lc-112, ≥1 of 3+ lost, two stale
+gaps reported; lc-81, a lost countermand shipped as the lane's
+own deviation — and the countermand was wrong at the artifact).
 
 ## 2026-09-13 — the write-boundary join is only as trustworthy as the slot it joins over: prose hides a cycle, short-but-pure paths read complete
 
