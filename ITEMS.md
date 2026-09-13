@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 5
+added: 6
 compacted: 0
 
 ## dg-1
@@ -317,3 +317,12 @@ write-set: plugin/skills/dispatch/references/forms.md,plugin/.claude-plugin/plug
 done-criterion: forms.md §3b carries the bare-token sentence; ships in a version bump per the release flow; the JOURNAL line rides the same session in dotfiles per the dispatch-guards convention
 evidence: 2026-09-12, df-151 discovery wave: lane B wrote its reasoning INTO the enum field under a brief that declared the vocabulary but not exclusivity; the carrier doctrine's open-vocabulary decay reproduced in a data file. Matrices and reading caveat preserved at dotfiles claude/records/. Booked by the judgment desk after the drainage desk's cost-test veto correctly refused a dotfiles-side booking (wrong reader path) and correctly refused --source operator on a desk's ask (testimony, not the decision). Write-set collides with dg-35/dg-36 — the three bundle into one forms.md release
 blocked-by: NONE
+
+## dg-38
+grade: NEW
+requirement: sane defaults for everything the plugin currently expects a new user to hand-create: ~/.claude/dispatch-guards.json site policy, ~/.claude/readiness.json register, the routing.md site overlay's lineup table. A fresh install today runs with those absent and the degradation is not designed: defaults should apply LOUDLY (doctor prints what is defaulted, gates state 'site policy absent, default X applied'), so deploying the stack or only parts of it is easy — absence loud or merely slower, never silently lossy (statiker's self-containment criterion, borrowed as the standard)
+goal: tend
+write-set: UNKNOWN
+done-criterion: UNKNOWN — set at design: likely in-plugin default policy + doctor lines + a site-overlay template with UNSET markers
+evidence: operator ask 2026-09-13 (statiker session 1b204567): 'dispatch guards should have sane defaults for the things it expects new users to set up manually so it is easy to deploy the stack or only parts of it'; the expected-manual set enumerated from SKILL.md §5 (site policy path) and §6 (readiness register) and references/routing.md (site overlay slots), reads of this date at the statiker desk
+blocked-by: decision which surfaces get in-plugin defaults and what each default is, after a design pass reading the hooks' current absent-file behavior at the source
