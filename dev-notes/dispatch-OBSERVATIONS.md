@@ -5138,3 +5138,40 @@ because the reasoning stays plausible while the tree has moved."
 normal quota drain; both dispatching desks apply it from this
 entry forward (the drain desk is the worked example, at its own
 insistence).
+
+## 2026-09-13 — slot-(e) lessons with out-of-boundary homes default to dying in chat; the enumeration slips, never the individual lesson
+
+**Incident + basis.** The drain desk caught itself twice in one
+session leaving a lane's slot-(e) candidate lessons unrouted —
+lc-38's pair surfaced hours late with "sitting in chat with no
+carrier, the two-exits failure with my name on it", then lc-115's
+second candidate was "about to" repeat it identically. The desk's
+own framing, adopted as the datum: routing slot (e) is evidently
+not done reliably from memory, and what slips is the ENUMERATION
+(walking every lesson to a carrier or a decline), never the
+judgment on any individual lesson once looked at.
+
+**Class.** The closing-report form makes the LANE enumerate its
+lessons (slot (e) demands them), but no form makes the RECEIVING
+desk enumerate their dispositions — the obligation has output on
+one side of the channel only, so its absence on the grading side
+is invisible (the obligation-with-no-output shape). Lessons whose
+home is the grader's own boundary get booked in stride; the ones
+needing ROUTING to another desk are exactly the ones with no
+carrier at hand, so they cost a decision plus a message and lose
+to momentum.
+
+**Pre-formulated rule text** (dispatch skill §4, the
+report-grading duty): "Grading a closing report includes
+dispositioning slot (e) BY COUNT: each candidate lesson is
+booked, routed to the desk whose boundary holds its home, or
+declined with a line — and the digest that grades the report
+states the count (e.g. 'slot (e): 3 — one booked, one routed, one
+declined'). A graded report whose digest is silent on slot (e)
+has not been graded; the count is the visible output the
+obligation otherwise lacks."
+
+**Consumer + drain seam.** Dispatch skill §4 amendment on the
+normal quota drain; both desks apply the count-in-digest form
+from this entry forward (fire-rate datum: n=2, one desk, one
+session, self-caught both times).
