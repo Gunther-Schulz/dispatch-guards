@@ -4230,3 +4230,47 @@ could-not-verify, never a result."
 normal quota drain; the devbook's step-4 bite clause gains a
 cross-reference in the same pass, priced with the fingerprint reset
 above so both CLAUDE.md edits ride one window.
+
+## 2026-09-13 — a discovery lane wrote a REPORT FILE despite the read-only tail's explicit ban, and into the DISPATCHER's scratchpad
+
+**Incident + basis.** Three parallel discovery lanes, identical
+read-only tails pasted verbatim from forms.md, each carrying "NO
+REPORT FILE. Your findings go in your SendMessage reply — a file you
+write is not a report, is not read as one, and reaches no one" plus
+"Transient probe scratch goes in YOUR OWN scratchpad, never the
+dispatcher's". Lane `sonnet-pstack-conduct` returned a SendMessage
+carrying six headline bullets and a POINTER to
+`<dispatcher-session-scratchpad>/pstack-conduct-knowledge-findings.md`,
+778 lines — the substance in a file, the message a summary of it.
+The other two lanes on the same tail complied, one splitting into 14
+labelled parts. So the tail's text is not the defect; a lane can read
+that exact prohibition and still take the file exit under output
+volume. Measured this session; the file was read and its content was
+good, which is what makes the deviation cheap to miss.
+
+**Class.** The ban is stated as a PROHIBITION with its reason
+("reaches no one"), and the reason is false for a lane whose
+dispatcher shares a filesystem — the file DID reach the dispatcher,
+so the stated rationale argues against the rule at exactly the moment
+the lane weighs it. Second half: the volume pressure that produces
+the file exit is real (778 lines against a message-size gate), and
+the tail names the split-into-parts remedy in the same breath, so the
+lane chose between two sanctioned-looking exits. Sibling of §2's
+payload-vs-pointer rule, which governs a SENDER's long content; this
+is the read-only lane's version, where no pointer is admissible
+because the dispatcher must book from the message.
+
+**Pre-formulated rule text** (forms.md, READ-ONLY tail, replacing
+the "NO REPORT FILE" sentence): "NO REPORT FILE, and no pointer to
+one. Findings travel IN your SendMessage replies — split into
+labelled parts (1/N) as many times as fidelity needs; there is no
+volume at which a file becomes the right answer. A message naming a
+path instead of carrying the finding is an unbooked report: the
+dispatcher grades what arrives in the channel, and a lane that
+cannot fit its findings in parts has a slice too large, which is the
+dispatcher's defect to report, not the lane's to route around."
+
+**Consumer + drain seam.** forms.md §2's read-only tail (this repo),
+normal quota drain. Rides the same window as the one-writer widening
+above if that opens first — both are single-paragraph edits in the
+dispatch skill's own text.
