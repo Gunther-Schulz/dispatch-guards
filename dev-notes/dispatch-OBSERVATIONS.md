@@ -4461,6 +4461,70 @@ route is asking, not inferring."
 normal quota drain; fire-rate provenance n=2 same-day for the
 existing trailer rule's inertness.
 
+## 2026-09-13 — CLASS: "open the claim before repeating it" is read as IS IT TRUE, and a true fact carries a wider verdict out unchecked (n=3, one desk, one session)
+
+**Incident + basis.** One desk (dotfiles-c6) relayed three findings to
+peers in one session. Each rested on a fact that was true, measured,
+and in two cases cross-checked on a second instrument. Each carried a
+verdict WIDER than its fact, and each was refuted by the receiving
+peer within one round:
+(i) to statiker-fd — "a 7th ethos module is silently never loaded and
+nothing goes red", from two hardcoded MODULE_ORDER lists and a
+word-boundary grep showing zero directory enumeration under plugin/
+(all true). Refuted: dotfiles doctor's `corpus_import_targets_verdict`
+already guards membership in BOTH directions, and the desk had been
+reading the fresh-install path while calling it this machine's loading
+path. Missing probe: `ls -la ~/.claude/CLAUDE.md`, one command.
+(ii) to dotfiles-b8 — "36 tests never execute, their subjects
+uncovered", from the repo's OWN declared verify command erroring on
+two bare sibling imports (true, reproduced, and confirmed on a second
+runner). Refuted: the same discovery WITHOUT `-t .` runs 368, OK; the
+arithmetic closes exactly (334 − 2 placeholders + 36). Missing probe:
+run the other invocation, one command. It is a documentation defect,
+which routes to a twenty-line pass, not the lane the desk's severity
+implied.
+(iii) its own booked observation — a stale-timer separator
+(lane-report vs peer-message), refuted within the hour by the next
+instance, which ended on a lane report and fired stale anyway.
+
+**Class.** NOT a gap. The rule exists in TWO homes and both name this
+case: dispatch skill §4 ("A claim is opened before it is REPEATED, not
+only before it is merged… repeating a claim to the operator, to
+another agent, or into a booking puts it where someone acts on it"),
+and the corpus's refutation-probe rule, whose scope line says
+"Load-bearing includes DELIVERED". Loaded-but-inert, three times, in
+one session, by a desk that quotes both rules in its own messages.
+
+The mechanism of the non-firing is the word OPEN. Opening a claim is
+performed as a truth check — read the file, run the command, confirm
+the fact — and all three facts PASSED that check. What went unexamined
+was the claim's SCOPE: what else could produce this observation, and
+which paths the finding does not reach. A true fact silences the probe
+by satisfying it, and the wider verdict rides out attached to the fact
+rather than as a claim of its own — the attachment costume, one level
+up from the sentence. The costume is reinforced by the channel: a
+finding being SENT reads as delivering information, not as resting
+work on a premise, while the receiver builds on it immediately.
+
+**Pre-formulated rule text** (dispatch skill §4, appended to the
+existing "opened before it is REPEATED" clause): "Opening establishes
+the fact, never the verdict's REACH — and a true fact is the shape
+that silences this rule, because the check it invites passes. Before a
+finding travels, the second question is asked in its own words: what
+would make this NOT a defect, and which command answers that? In the
+measured cases the answer was one command every time — the OTHER
+invocation, the OTHER load path, the OTHER instance of the class — and
+none of them was about whether the fact was true. A finding relayed
+with its fact opened and its reach unopened is sent with the reach
+named as unverified, or it is not sent yet."
+
+**Consumer + drain seam.** Dispatch skill §4 (this repo), normal quota
+drain; bundles with the other §4/§1 entries of this date — all are
+single-paragraph edits to the same two sections. Note for whoever
+drains it: the corpus's Grounding module carries the reach test
+already, in general form; what is missing is its rendering at the
+RELAY moment, which is where §4 speaks.
+
 ## 2026-09-13 — CLASS: a red/green probe keyed on SEVERITY is satisfied by the fixture's own unrelated failure, and scores the old binary green
 
 **Incident + basis.** A guard/checker lane building a doctor verdict
