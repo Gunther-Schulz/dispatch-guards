@@ -5210,6 +5210,18 @@ omission, not by its work."
 normal quota drain (measured: lc-112, one lane, correct code with
 two arms red at close).
 
+*Amended same day, three more fires plus the discriminator (drain
+desk dotfiles-93, wave 1):* lc-33 and lc-68 amended at brief time,
+lc-34 checked and CLEARED — and the clearing is what sharpened the
+rule into a one-command check for this repo family: a FINDING emit
+site mechanically requires a registered roster row (roster.py
+enforces it), a COULD NOT VERIFY emission requires none, and a
+whole-package grep for the bracketed idiom vs the plain phrase
+separates the two ('COULD NOT VERIFY [' zero hits package-wide,
+plain form eight in one file). The pre-formulated text gains its
+cheap discriminator: ask the emit-KIND, not just whether output is
+new.
+
 ## 2026-09-13 — the mailbox's loss is asymmetric by BLOCKING, not by message kind: only a directive the lane would block on announces its loss
 
 (Amended same day: the first version keyed the asymmetry to
@@ -5303,6 +5315,18 @@ seam checking completeness. The cycle case adds the blocker
 slot: an evidence predicate produced by the very change it gates
 is a coupling wearing a blocker's syntax, and both renders stay
 individually correct while jointly dead.
+
+*Amended same day (drain desk dotfiles-93, wave 1): even a
+CORRECT join's collision output answers only WHO collides, never
+whether the colliding items are the SAME WORK.* lc-80 and lc-95
+shared CLAUDE.md in the join's own evidence lines, and the
+collision was read as a serialization fact while lc-80 duplicated
+part (i) of lc-95 — found at booking time, one lane spent on work
+another entry covered. A collision on the same file is also a
+duplicate-content PROBE: the two bodies get compared before both
+are dispatched, and the intake join's carrier search covers items
+naming the same file AND section, not only the realizing file
+read alone.
 
 **Pre-formulated rule text** (routing reference, the
 mapping-source line; drain-desk text for the blocker half
@@ -5403,6 +5427,19 @@ mechanizable slice — an in-file MUTATES_TRACKED_FILES marker a
 brief-composition check can refuse to pair with a baseline list —
 is a lifecycle item, booked at the drain desk by the two-exits
 rule.
+
+*Amended same day, sixth instance (drain desk dotfiles-93, wave 1,
+booked into lifecycle lc-100):* the same structural cause — the
+tool listed among ordinary baselines — reproduced under a THIRD
+desk and a different executor VENDOR (codex terra), which is what
+promotes the diagnosis from a desk habit to a rule about the
+template. Two facts the first five instances could not supply:
+the lane ran in a PRIVATE CLONE, so the stray edit the walk left
+never reached the shared copy — clone-by-default observed working
+as isolation before the tool defends itself — and concurrency
+corrupts the prover's OWN verdict, not only its neighbours (exit
+3 "unreliable" in the shared tree, exit 0 for the same tree in
+isolation, every arrangement holding).
 
 ## 2026-09-13 — a brief's Fix-prose contradicted the item text it summarized, and following it literally would have re-shipped a reverted over-fire
 
