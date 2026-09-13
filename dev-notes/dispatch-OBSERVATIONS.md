@@ -4957,3 +4957,49 @@ set overlaps yours or cannot be established."
 **Consumer + drain seam.** This desk's future guard-checker
 briefs immediately (applied from this entry forward); dispatch
 skill §1 amendment on the normal quota drain.
+
+## 2026-09-13 — CLASS: the announcement-stall detector rests on a WAITING side, and a symmetric close removes the waiter
+
+**Incident + basis.** The lifecycle drain desk went idle after its
+lc-103 closing digest while the READY set it owns was nonempty and
+schedulable; the stall was detected by the OPERATOR watching an
+idle terminal (their words: "i dont see any activity there") — the
+party the kind split says should never be the detector. Neither
+desk was waiting BY CONSTRUCTION: the drain desk's digest ended
+"nothing blocking", the judgment desk's reply handed the queue
+back ("the remaining READY is yours to drain") and declared its
+own desk drained — a handoff in a status-close costume, sent by a
+desk that had cited the membership-by-function rule the same
+afternoon. The corpus rule this instantiates already records that
+end-of-turn discipline fails while loaded (closure momentum at
+the firing moment); its prescribed fix — the waiting side's armed
+horizon — assumes a waiting side exists, and a SYMMETRIC close
+(both parties report settled, neither owes the other a return)
+removes it.
+
+**Class.** Stall detection keyed to a WAITER fails exactly at role
+boundaries: the moment a queue is handed over is the moment the
+sender stops waiting, so the handoff most likely to stall is the
+one least likely to be watched. The fix must ride with the party
+that CANNOT rely on itself — a timer armed before the stall can
+exist.
+
+**Pre-formulated rule text** (two halves; dispatch skill §4 for
+the second, the wave-directive template for the first):
+(a) "A desk that OWNS a nonempty ready queue arms a SELF-HEARTBEAT
+at role start — a session-local recurring timer (cron), predicate-
+guarded: ready head schedulable AND no hold declared in the arc
+directive -> resume the drain; else no-op. Disarmed at role end,
+in the same act that closes the role. The timer pre-exists any
+stall by construction, which is what end-of-turn discipline
+cannot do." (b) "A message that hands a queue and ends the
+sender's waiting IS a handoff whatever it reads like; the sender
+arms the recurring horizon plus a one-shot idle subscription
+BEFORE the turn that sends it ends — the anchor is the handing
+sentence, not the message's register."
+
+**Consumer + drain seam.** Wave-directive template (lifecycle
+docs/directives) at the next wave start; dispatch skill §4
+amendment on the normal quota drain; applied by this desk's own
+sends from this entry forward.
+
