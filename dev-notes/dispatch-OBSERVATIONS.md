@@ -5052,3 +5052,45 @@ your seat, since amend is denied."
 **Consumer + drain seam.** The EXECUTION tail in
 references/forms.md at the next forms release batch (dg-35/36/37
 seam); this desk's briefs paste the amended tail from then on.
+
+## 2026-09-13 — CLASS: a fingerprint-fence check built from the checking desk's own view misses the lanes another desk pins — n=2 in one day, both directions
+
+**Incident + basis.** Edit direction, this desk: a registered
+devbook section was edited while a peer desk's live lane pinned
+its fingerprint. The editor's fence check was an INFERENCE from
+the item's subject matter ("lc-38 is a pointer-migration item,
+not a guard build") — and the item was a migration item by
+subject while being a guard build BY ITS BRIEF, dispatched
+explicitly as the class re-probe. The dispatching desk's words:
+"a fact only this desk has"; the subject matter is exactly the
+wrong instrument. No harm resulted for two reasons that are net,
+not luck: the brief's read-from-FILE-never-trust-the-pin
+instruction (exercised live earlier the same day), and the
+dispatcher steering by artifact plus a state-token ping on
+noticing. Hold direction, same day, roles reversed: a fence's
+lift condition named one dependent lane when a peer desk's lane
+pinned the same fingerprint (the df-192 second-dependent
+correction). Two firings, one class, opposite verbs.
+
+**Class.** A registered section's pin set is DISTRIBUTED STATE:
+each dispatching desk holds its own lanes' pins in its dispatch
+record, and no desk can enumerate another's. Any fence act —
+holding an edit, or deciding an edit is safe — that derives the
+pin set from the actor's own view plus inference is reading a
+label where only the record answers. Same family as
+warm-from-the-listing (routing module, 2026-09-13): a property
+only the holder's record carries, inferred from an outside
+surface.
+
+**Pre-formulated rule text** (dispatch skill §6, beside the
+fingerprint-invalidation clause): "Before editing a registered
+section, one line to each desk that dispatches its class: 'does
+a live lane pin this section?' — the dispatch record is the only
+instrument for the pin set, and an item's subject matter answers
+a different question. The reply is cheap, the fork it prevents
+is not; the read-from-file binding in briefs is the NET for the
+miss, never the licence for skipping the ask."
+
+**Consumer + drain seam.** This desk's registered-section edits
+immediately (applied from this entry forward); dispatch skill §6
+amendment on the normal quota drain.
