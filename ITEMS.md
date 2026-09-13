@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 6
+added: 7
 compacted: 0
 
 ## dg-1
@@ -330,3 +330,12 @@ amend-reason: 2026-09-13 the design pass ran (sonnet probe, 2026-09-13): the plu
 amended-write-set: 2026-09-13 plugin/hooks (doctor/defaulted-surfaces line),plugin/skills/dispatch/references/routing.md (site-overlay UNSET template),README or install docs (the three-surfaces section)
 amended-done-criterion: 2026-09-13 the probe's facts (this date, lanes 8f5b4774/429039df) turned into three small builds: (1) the doctor prints a defaulted-surfaces summary — dispatch-guards.json absent means shipped defaults active, named per guard-mode; (2) the routing site overlay ships an UNSET-marker template beside the portable defaults, so a fresh install reads as unconfigured rather than configured-empty; (3) install docs name the three surfaces and each one's absence behavior. NOT needed, per the probe: new defaults machinery — dispatch-guards.json already fail-opens to shipped defaults (_dispatch_common.py:293-326) and readiness.json absence is already loud per-dispatch (brief-reminder.py:492-495); the gap was surfacing and template, never mechanism
 amended-blocked-by: 2026-09-13 NONE
+
+## dg-39
+grade: NEW
+requirement: the unbumped-plugins pre-commit guard is machine-local (dotfiles git/hooks pre-commit, unbumped_plugins() at :233) while the discipline it enforces — no plugin-payload commit without a version bump, because claude plugin update compares versions only and a stale install fails silently — is plugin-release discipline that every stack repo needs. A stack user who installs the plugins and authors their own gets no such guard. Candidate home: this plugin's guard set (it already owns release-adjacent guards), shipped as an adoptable git-hook the way lifecycle ships its git-hooks; fired twice for real on 2026-09-13 (the sc-8 lane's bounce and its documented multi-commit exemption)
+goal: tend
+write-set: UNKNOWN
+done-criterion: UNKNOWN — set at design: whether the guard ships here or beside skill-craft's release machinery is the placement question, decided against both repos' guard rosters
+evidence: operator second-look ask 2026-09-13 (statiker session 1b204567); the guard's two real fires same date (sc-8 lane bounce, exemption sequence per dispatch skill commit-plan bullet); dotfiles git/hooks/pre-commit read by the sc-8 lane at :233, :2013-2030
+blocked-by: decision which repo homes the shipped guard, this plugin or skill-craft's release tooling, decided against both guard rosters
