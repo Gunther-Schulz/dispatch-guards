@@ -4012,15 +4012,32 @@ answer named. Same displacement, and one detail sharpens the class:
 this desk had disarmed a DIFFERENT timer correctly minutes earlier
 (the discovery-lane horizon, stopped in the turn its last lane
 reported), so the rule was not merely loaded but actively obeyed on
-one instrument while the other went unstopped. What separated them
-is that the discovery timer's wait ended on a LANE REPORT — an
-artifact the desk was already grading, with the disarm in the same
-motion — while this one ended on an inbound PEER MESSAGE, which
-arrives mid-turn and gets answered rather than processed as an
-arrival. The trigger shape therefore has a second, quieter face: not
-only "a rich artifact displaces the disarm", but "an arrival that
-does not look like a deliverable is not read as the wait's END at
-all".
+one instrument while the other went unstopped.
+
+The separator first written here — that a LANE REPORT carries its own
+disarm while an inbound PEER MESSAGE does not — was REFUTED within
+the hour by n=5 at the same desk: the build lane's horizon fired
+stale too, and THAT wait ended on a lane report, the case the
+proposed rule called safe. Corrected in place rather than appended,
+and recorded because the collapse is itself the evidence: the
+explanation was a rationalization that survived exactly one case.
+
+What separates the ONE disarm that worked from the four that did not
+is ARRIVAL GRAIN. The discovery horizon was stopped correctly because
+its three lanes' reports converged on a single turn in which "the
+wait has ended" could be a thought of its own. Every stale fire
+followed a DIFFUSE arrival: a 7-part report split across many turns
+by the payload gate, where no part announces itself as the last; a
+peer answer arriving mid-turn and answered rather than processed; a
+digest that must be graded before it can be recognised as complete. A
+wait whose end has no single observable moment offers no moment at
+which the disarm can be the first act — which is what every version
+of this fix has assumed it has. Consequence for the fix text: keying
+the disarm to the arrival TURN is unreliable by construction wherever
+arrivals are multi-part. The robust form keys it to the LANE-CLOSE
+act (sent exactly once per lane, a single observable moment), or
+takes the timer out of the desk's hands entirely by having the wait's
+instrument stop itself on the artifact it watches.
 
 **Class.** The disarm rule exists (Insurance: "a wait that ENDS
 disarms its timer in the same turn") and was LOADED — the failure
