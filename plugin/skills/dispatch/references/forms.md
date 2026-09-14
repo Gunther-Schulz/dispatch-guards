@@ -70,6 +70,15 @@ is not; (h) rides the EXECUTION tail only:
   (h) sources actually read, of those the brief named (execution
       tail only)
 
+A slot asserting a LANE-WIDE absence ("no message arrived", "no
+co-writer touched X") is written at one instant and read at
+another, and the lane can be re-invoked between them — so such a
+slot carries the instant it describes ("as of composing this
+report"), or it silently becomes a claim about a lane-lifetime it
+cannot see (measured: an inbox-empty slot true at composition,
+falsified by a queued delivery on the lane's next invocation; the
+lane's own correction supplied this rule's wording).
+
 An idle agent without a report gets the report demanded (SendMessage),
 never booked as success — the missing report is an observed failure
 mode of delegated work, and silence is never success (source:
