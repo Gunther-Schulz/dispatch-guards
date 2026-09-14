@@ -518,7 +518,14 @@ Mandatory parts (execution briefs):
     neither a docker daemon nor usable sudo, which leaves "run this
     against a postgres container" unexecutable at that tier — so a
     step needing a container runtime, a service, or privilege
-    states that as a tier/environment precondition.
+    states that as a tier/environment precondition. The
+    environment includes what is MOUNTED into every test — an
+    autouse fixture, a globally wired check step. The brief
+    states what such a step will SEE in the executor's runs, read
+    from the fixtures and wiring, never assumed — and carries the
+    decided grade of the absent case: the commissioned-instrument
+    SEMANTICS clause's absence rule, applied to machinery the
+    brief relies on rather than commissions.
 - **Commit convention verbatim.** Title pattern + the exact
   `Co-Authored-By: Claude <executor model name> <noreply@anthropic.com>`
   trailer — spelled out, not referenced.
