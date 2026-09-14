@@ -2549,6 +2549,9 @@ header does not enumerate them, so it cannot go stale against the
 actual count (an earlier version said 'the three below' while five
 stood here — a label outliving its own body).
 
+## 2026-08-17 — residue: the devbook texts, home outside this copy
+(drained 2026-09-14, SPLIT disposition below)
+
 **RESIDUE (maintenance pass 2026-08-17) — home outside this working
 copy:** the pre-formulated text amends the guard-checker-build
 devbook in the dotfiles repo (that repo's CLAUDE.md, §Registered
@@ -2564,6 +2567,21 @@ line, checked at the source); they are not APPLIED there. An entry
 booked elsewhere is not an applied one — the distinction stands here
 because a booking reads, on first glance, like being done. Stays
 open, consumer unchanged.
+**Drained 2026-09-14 → dotfiles `4b7b032` + this repo `21e9038`,
+SPLIT — not a flat "applied," which would be false in two
+directions:** texts (1) and (3), plus the 2026-08-19 fourth, are
+APPLIED in the dotfiles devbook (4b7b032; new section fingerprint
+df2fa416…); text (1)'s mutation-proves-applied fragment landed
+NOWHERE — already covered by the devbook's ONE-STEP-EARLIER
+paragraph (dotfiles CLAUDE.md:862-877), amendment over addition;
+text (2) is NOT in the devbook — dispatcher-side by subject, it
+RE-HOMED into this repo's own dispatch §1 (21e9038, the
+knob-AND-environment clause's mounted-machinery member), grading
+and ruling recorded on dotfiles df-210 and df-25. A reader
+hunting the devbook for text (2) is the drift this split mark
+exists to prevent. Driven per the entry's own close-check: the
+seam (the devbook's next amendment there) arrived 2026-09-14 and
+the judgment desk holding this copy drained it.
 
 ## 2026-08-12 — the battery invocation is part of the instrument: `-k` hides fixtures, `-x` hides arms (3 incidents, 3 lanes)
 
