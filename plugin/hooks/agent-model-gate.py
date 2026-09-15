@@ -104,8 +104,15 @@ the shape `docs/audits/wave0-probe-record-2026-09-15.md` found
 correct (arms b2/b3: applies with no forced allow, permission flow
 still runs unforced on a rewritten call). That record measured
 `updatedInput` on the `prompt` and `command` fields, never on `name`
-itself — the `name` rewrite generalizes from those two fields rather
-than resting on a direct probe of this one. Any state where the
+itself. The nearest direct evidence for THIS field is one field
+over: the directive's Origin section records a live test in which
+an added `model: haiku` on an Agent call took effect and showed in
+the recorded call — same tool, sibling top-level field — so the
+name rewrite generalizes from a sibling, not across tool kinds.
+The residual stands rather than being argued away: `name` itself
+is unprobed until this lane's first live fire, and the staging
+noted below is the instrument that covers exactly that gap. Any
+state where the
 rewrite cannot be computed still denies (never a silent pass), though
 `_slugify`'s `task` fallback means this should not occur in practice.
 This is a verb CONVERSION under the three-verbs rule (CLAUDE.md):
