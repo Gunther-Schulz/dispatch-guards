@@ -241,6 +241,23 @@ def _slugify(text: str) -> str:
     return s or "task"
 
 
+_LEGACY_MODEL_PREFIX_RE = re.compile(r"^([A-Za-z]+)\s*[:\-]\s*")
+
+
+def _strip_model_prefix(text: str, model: str) -> str:
+    """Strip a leading '<model>: ' or '<model>-' (case-insensitive,
+    optional whitespace around the separator) from `text`, ONLY when
+    the leading word EQUALS the call's own validated `model` — a
+    leading DIFFERENT model word is information and stays untouched
+    (dg-49, judgment-desk design 2026-09-15, kept narrow for a
+    zero-false-fire profile). `text` unchanged on no match or a
+    non-matching leading word."""
+    m = _LEGACY_MODEL_PREFIX_RE.match(text)
+    if m and m.group(1).lower() == model.lower():
+        return text[m.end():]
+    return text
+
+
 def compute_name_rewrite(tool_input: dict, model: str) -> str | None:
     """The corrected `name` for a generic dispatch with a valid,
     non-denied `model`, or None when the existing name already
@@ -248,12 +265,22 @@ def compute_name_rewrite(tool_input: dict, model: str) -> str | None:
     needed. Slug source: the existing name when one is present
     (prefixed as-is, per the settled design — a name already
     carrying a DIFFERENT model's prefix is not stripped, only
-    re-prefixed), else `description`. Never raises: _slugify always
-    returns a non-empty [a-z0-9_-]+ string."""
+    re-prefixed — the sibling case, which stands), else
+    `description` with a leading legacy '<model>: '/'<model>-'
+    prefix EQUAL to this call's own model stripped first (dg-49: the
+    model was otherwise carried twice, e.g. description "opus: Fix
+    tests" + model opus slugified whole to "opus-opus-fix-tests").
+    The strip applies to the description-fallback branch only — a
+    `name` source is never stripped, matching the sibling case
+    above. Never raises: _slugify always returns a non-empty
+    [a-z0-9_-]+ string."""
     name = (tool_input.get("name") or "").strip()
     if name and name.lower().startswith(model.lower() + "-"):
         return None
-    source = name or (tool_input.get("description") or "")
+    if name:
+        source = name
+    else:
+        source = _strip_model_prefix(tool_input.get("description") or "", model)
     return f"{model}-{_slugify(source)}"
 
 
@@ -490,12 +517,35 @@ if __name__ == "__main__":
         # below whose ONLY old defect was the name is check()-None now; the
         # rewrite itself is asserted via compute_name_rewrite().
         assert check({"model": "opus", "description": "opus: Fix tests"}) is None
+        # dg-49 (2026-09-15): the enshrining expectation FLIPS here — the
+        # old value "opus-opus-fix-tests" (the model carried twice) was the
+        # defect, not the contract. RED-FIRST baseline recorded against the
+        # pre-fix implementation before this edit landed: compute_name_rewrite
+        # returned "opus-opus-fix-tests" for this exact input (confirmed by
+        # direct invocation), so this flipped assertion failed against the
+        # old code and passes only against the fix below.
         assert compute_name_rewrite(
             {"model": "opus", "description": "opus: Fix tests"},
-            "opus") == "opus-opus-fix-tests"   # slug built from the whole
-            # description, including its own legacy "opus: " prefix — the
-            # design derives the slug from description verbatim, it does not
-            # strip a leading model token first.
+            "opus") == "opus-fix-tests"   # leading "opus: " equals the
+            # call's own validated model, so it strips before slugifying —
+            # the model is no longer carried twice.
+        # A leading prefix from a DIFFERENT model is information and stays
+        # (mirrors the sibling `name` case below): only the call's own
+        # model word is ever stripped.
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "sonnet: Fix tests"},
+            "opus") == "opus-sonnet-fix-tests"
+        # Hyphen separator, case-insensitive, no space after — all three
+        # knobs the requirement names.
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "OPUS-Fix tests"},
+            "opus") == "opus-fix-tests"
+        # A `name` source is never stripped, even when it carries the same
+        # model word with a colon (only the hyphen prefix short-circuits to
+        # None above) — the strip is description-fallback only.
+        assert compute_name_rewrite(
+            {"model": "opus", "name": "opus: legacy title", "description": "x"},
+            "opus") == "opus-opus-legacy-title"
         assert check({"model": "opus", "description": "Fix tests"}) is None
         assert compute_name_rewrite(
             {"model": "opus", "description": "Fix tests"},
