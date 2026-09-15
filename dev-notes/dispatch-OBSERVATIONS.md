@@ -1478,6 +1478,37 @@ distinguish "this writer left work" from "a sibling is mid-flight",
 and only the first justifies holding. A finer-grain release is a
 predicate change for this entry's existing consumer seam.
 
+**Firing record, 2026-09-15 (b) — third firing, and the class's
+inferred anchor is half-refuted at the source.** Drain desk
+dotfiles-f1, same day, the CLAIMS face this time: writer-claims
+WARN on test/test_items.py (lifecycle repo) naming a claim by
+sonnet-lc126 ~1h after that lane's work was committed (67c461a),
+pushed (contained in origin/main), its item closed (8e0f621) and
+the lane idle — measured four ways by the reporting desk at the
+artifact; the firing lane proceeded via the gate's own stated
+condition (correct conduct, but the override-training cost this
+entry names). The reporter's inference ("anchor is elapsed time,
+not uncommitted state" — offered explicitly as derived, source
+unread) is REFUTED at the source: check() relieves via
+no_uncommitted_work() before consulting any claim
+(writer-claims-gate.py:199, the 2026-08-10 relief). A firing
+against a committed-clean history therefore implies the relief
+was DEFEATED at fire time. Two candidate mechanisms, both
+derived, undetermined: (i) own-dirt defeat — the relief keys on
+the FILE being clean, not on whose dirt it carries, so the
+successor's own first landed edit re-arms every stale foreign
+claim on that file for its later edits (whether the successor's
+own write records a superseding claim, which would silence this
+path, is unread here); (ii) the relief's git call timing out
+(_GIT_TIMEOUT, conservative False → relief skipped) — this
+machine was measurably killing processes for memory the same
+hour. Discriminator between them: whether the file carried the
+successor's OWN uncommitted work at fire time (reporter offers
+exact timings and the lane's note). Either mechanism strengthens
+slot 3's release-on-close fix; (i) adds a refinement candidate —
+relief also holds when the path's latest claim is the current
+agent's own.
+
 2. **Class:** lane lifecycle vs. claim lifecycle divergence: the
    claim register knows only the TTL, not a lane's booking-close — a
    dead writer reads to the successor exactly like a live one (a
