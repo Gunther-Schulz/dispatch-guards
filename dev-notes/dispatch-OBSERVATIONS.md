@@ -5620,3 +5620,47 @@ live tree or nearly did."
 **Consumer + drain seam.** Dispatch skill §1 amendment on the
 normal quota drain; the crash-shape half drains through lifecycle
 lc-133 (that repo's tool).
+
+## 2026-09-15 — a brief's red-first step aims at the symbol the finding names, not where the defect lives (n=2, one desk, one sitting)
+
+**Incident + basis.** Two dispatch briefs written by one desk
+(statiker-d4, the run-3 contract-repair arc) in one sitting each
+specified their red-first step at the wrong object, and each lane's
+commissioned critique pass caught it before the first build call.
+Lane 1 (sonnet-launch-probe): the brief said reproduce S2 by
+driving `verdict()` with hand-built leg dicts — but the defect
+lives in `leg_background_resume()`'s marker-to-dict CONSTRUCTION,
+which hand-built dicts bypass by construction; the reproduction
+could never go red. Lane 2 (sonnet-driver-probe): the brief said
+"run the NEW battery against the OLD implementation" — while item 1
+of the same brief IS the extraction of the function the battery
+targets, so the old file has no such function and the step names
+something that does not exist. Desk verified both at the code
+before confirming; reported by the desk itself as a shared blind
+spot rather than fixed twice quietly (statiker LEDGER, 2026-09-15
+arc; relayed and booked by the driving desk statiker-9c).
+
+**Class.** Red-first altitude keyed to the finding's NAMED SYMBOL
+rather than to the defect's location or the old code's actual
+state. The finding names a symbol; the brief author reaches for
+that symbol; the symbol is the wrong object — once a reader
+function when the bug was in its input constructor, once a function
+the "old" side cannot contain because the brief's own first item
+creates it. The corpus's instruments-sharing-an-author rule with
+the brief's author as the shared author: invisible from inside any
+single brief, visible only across the set. The commissioned
+critique pass is the measured catch mechanism (2 for 2 here,
+both pre-build).
+
+**Pre-formulated rule text** (dispatch skill, the brief's
+red-first/verification bullet): "The red-first step is specified at
+the altitude where the DEFECT lives, not at the symbol the finding
+names. Compose-time check, per red-first step: name the function
+AND state what it is being fed, then ask whether the defect can
+reach that input — and where the brief itself creates or extracts
+the target, say explicitly which side of that change the 'old'
+arrangement is."
+
+**Consumer + drain seam.** Dispatch skill amendment on the normal
+quota drain; until then the compose-time check is brief-author
+prose.
