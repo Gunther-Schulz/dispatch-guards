@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 16
+added: 17
 compacted: 0
 
 ## dg-1
@@ -368,18 +368,6 @@ blocked-by: NONE
 amend-reason: 2026-09-15 premise line added: the bench this entry cites moves in wave 1 of the guard-rewrite arc
 amended-evidence: 2026-09-15 G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date. PREMISE MOVED 2026-09-15 (guard-rewrite arc wave 1): tools/replay-bench.py gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it, ordered after the decision checks. This entry was written against the PRE-rewrite-KIND bench, so its dispatcher re-reads classify() and KINDS before building — the warn-vs-context question stands, but the vocabulary it extends has moved.
 
-## dg-45
-grade: READY
-requirement: agent-model-gate DENIES a generic dispatch whose `name` is missing or lacks the `<model>-` prefix even when the model itself is valid — a mechanically repairable call bounced back for full recomposition, 140 blocks all-time. Replace that deny with a REWRITE via PreToolUse updatedInput. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 1
-goal: general-maintenance
-write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,README.md
-done-criterion: new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; guards.jsonl extended and replay-bench green; docstring (canonical) + README guard-roster row amended; check-doc-drift green; the CLAUDE.md verify block green in full
-evidence: Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md — arm b2: updatedInput applies with no permissionDecision; arm b3: the permission flow still runs on a rewritten call. Fire-log 140 agent-model-gate blocks all-time as of 2026-09-15
-blocked-by: NONE
-amend-reason: 2026-09-15 2026-09-15 judgment-desk ruling on the lane's critique pass: the write-set narrowing that dropped replay-bench.py read narrower than its parent directive, whose item-1 Tests section already demanded bench expectations; value-discrimination added
-amended-write-set: 2026-09-15 plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,tools/replay-bench.py,README.md
-amended-done-criterion: 2026-09-15 new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; replay-bench gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it AFTER the decision checks; guards.jsonl extended with at least one case asserting the rewritten VALUE (not merely that a rewrite occurred) plus a wrong-value red-first arm; docstring (canonical) + README guard-roster row amended, describing the lane as DELIVERING the rewrite and never as a compliance guarantee; check-doc-drift green; the CLAUDE.md verify block green in full
-
 ## dg-46
 grade: READY
 requirement: brief-reminder's missing_tail lane DENIES a brief lacking the §2 tail block, forcing recomposition of a multi-kilotoken call — 171 denies all-time. Append the correct tail via updatedInput for the mechanically decidable class; the AMBIGUOUS class keeps the existing refusal. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 2 + judgment-desk ruling 1, 2026-09-15
@@ -408,3 +396,12 @@ write-set: plugin/hooks/_dispatch_common.py,plugin/hooks/brief-reminder.py
 done-criterion: each of the three lanes either gains a mode-aware exit or carries a stated reason in its docstring for staying hard
 evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes are unaffected since deny() does not consult the modes at all; Wave 0 probe record finding 2 (live confirmation)
 blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
+
+## dg-49
+grade: READY
+requirement: agent-model-gate's description-derived slug does not strip a legacy '<model>: ' title prefix before slugifying, so a dispatch with description 'opus: Fix tests' and model opus is rewritten to name 'opus-opus-fix-tests'. The model is carried twice and the panel shows the doubling. The lane's own bite currently ENSHRINES this as the expected value, so fixing it means changing that expectation. Surfaced as a named deviation by lane sonnet-dg45-model-gate-rewrite, 2026-09-15, and confirmed by me in its test text. Record: dg-45 closing report slot (d), commit df4a850
+goal: general-maintenance
+write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
+done-criterion: a description-derived slug strips a leading '<model>: ' (and '<model>-') before slugifying; the existing bite expectation is updated with the change and a red-first arm shows the old expectation failing against the new implementation; agent-model-gate --test and replay-bench green; the SIBLING case stays untouched by decision (a name already carrying a different model's prefix is re-prefixed, not stripped)
+evidence: lane report slot (d); the expectation is visible in agent-model-gate.py's own --test text, which I read while mutation-testing it: check(...'opus: Fix tests') expects 'opus-opus-fix-tests'
+blocked-by: decision should the description-derived slug strip a legacy model title prefix, against the directive's literal spec

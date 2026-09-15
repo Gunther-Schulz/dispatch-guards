@@ -64,6 +64,20 @@ amended-blocked-by: 2026-09-13 evidence grep -qi 'luna' /home/g/dev/Gunther-Schu
 closed-reason: 2026-09-13 codex certification folded into codex-routing.md as shipped defaults: verify role two-figure SAFETY/YIELD with terra assignment and inversion recorded, reviewer exclusion second provenance, UNMEASURED cells explicit, sandbox bindings loud; bumped 0.11.18
 closed-ref: e63ab6f
 
+## dg-45
+grade: DONE
+requirement: agent-model-gate DENIES a generic dispatch whose `name` is missing or lacks the `<model>-` prefix even when the model itself is valid — a mechanically repairable call bounced back for full recomposition, 140 blocks all-time. Replace that deny with a REWRITE via PreToolUse updatedInput. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 1
+goal: general-maintenance
+write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,README.md
+done-criterion: new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; guards.jsonl extended and replay-bench green; docstring (canonical) + README guard-roster row amended; check-doc-drift green; the CLAUDE.md verify block green in full
+evidence: Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md — arm b2: updatedInput applies with no permissionDecision; arm b3: the permission flow still runs on a rewritten call. Fire-log 140 agent-model-gate blocks all-time as of 2026-09-15
+blocked-by: NONE
+amend-reason: 2026-09-15 2026-09-15 judgment-desk ruling on the lane's critique pass: the write-set narrowing that dropped replay-bench.py read narrower than its parent directive, whose item-1 Tests section already demanded bench expectations; value-discrimination added
+amended-write-set: 2026-09-15 plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,tools/replay-bench.py,README.md
+amended-done-criterion: 2026-09-15 new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; replay-bench gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it AFTER the decision checks; guards.jsonl extended with at least one case asserting the rewritten VALUE (not merely that a rewrite occurred) plus a wrong-value red-first arm; docstring (canonical) + README guard-roster row amended, describing the lane as DELIVERING the rewrite and never as a compliance guarantee; check-doc-drift green; the CLAUDE.md verify block green in full
+closed-reason: 2026-09-15 wave 1 of the guard-rewrite arc. agent-model-gate's missing-name and wrong-prefix denies are now a rewrite via updatedInput with no permissionDecision. Verified at the artifact by the dispatcher, not booked from the lane's claims: replay-bench 63/63 with catch 34/34 and zero false fires, all hook bites under a fresh XDG_DATA_HOME, check_devbook_form, worktree_doctor, check-doc-drift, manifests and wrap, zero skips. Discrimination independently re-proven by mutation against a green control copy: a wrong computed value and a short-circuited rewrite lane each go red. Docstring evidence framing corrected at integration (9b16c77). Two deviations surfaced by the lane and NOT fixed unilaterally: the description-derived slug does not strip a legacy model title prefix (booked dg-49, recommended for fixing), and a name carrying a different model's prefix is re-prefixed rather than stripped (recommended to stand)
+closed-ref: df4a850
+
 ## Archive (pre-migration)
 
 
