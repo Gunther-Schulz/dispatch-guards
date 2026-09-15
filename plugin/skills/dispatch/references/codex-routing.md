@@ -13,8 +13,20 @@ Measured 2026-09-12 (mechanical read, attack, implementation,
 reviewer) and 2026-09-13 (verify) in pre-registered, desk-graded
 evals (evidence home: statiker `dev-notes/codex-pilot-2026-09-12.md`
 and `dev-notes/codex-only-certification-2026-09-13.md`);
-statiker-measured, so outside that repo the entries are
-candidate-in-operation, graded by the fire-rate review.
+statiker-measured; adopted globally as standing routing (operator
+decision), the entries graded in operation by the
+fire-rate review on their non-statiker fires. Adoption scope, per
+role: mechanical-read/discovery lanes default to luna wherever the
+CLI is present and unthrottled; attack rounds ADD an astra arm
+beside the site review tier — additive, never a substitution;
+terra may take SINGLE-ARTIFACT implementation from a
+decision-complete brief, while multi-commit builds stay Claude —
+codex lanes cannot commit and sandbox suites grade wrong (bindings
+below), so the integration toll eats the saving; verify legs and
+reviews stay Claude (operator-excluded: cheapest Claude beat
+strongest codex on verify yield at equal honesty, and both review
+tiers failed the replay outright). Limit behavior and the Claude
+fallback: the Limits section below.
 Certification is per (role, model): a pass never infers down the
 ladder, and a fail one tier down certifies nothing about the tier
 above. UNMEASURED cells read as unmeasured, never as fine — luna
@@ -96,6 +108,36 @@ at attack/implementation, every codex tier at the desk role below.
   stderr before believing an empty output.
 - Codex runs can exceed the Bash tool's default timeout: pass an
   explicit timeout or run in background.
+
+## Subscription limits and the Claude fallback
+
+The codex subscription throttles on TWO windows — a short rolling
+window (hour-scale) and a weekly cap — and the two take different
+responses, so a limit refusal is never handled generically: read
+WHICH window fired before routing (operator decision).
+
+- A limit refusal is BACKPRESSURE: it prices retry and says
+  nothing about the work — never booked as a lane failure, and a
+  quota kill mid-run is a LOST lane, never a zero-findings result
+  (the exit-0 binding above; the refusal-vs-failure split is the
+  site corpus's, Fixing).
+- SHORT window hit: codex lanes whose consumer can wait hold for
+  the window's reset; work a consumer is waiting on falls back NOW
+  to the role's Claude default (mechanical read → the discovery
+  default tier; implementation → the same; the astra attack arm is
+  additive and simply does not run this round).
+- WEEKLY cap hit: codex leaves the lineup until reset — every
+  certified role routes to its Claude default, and later
+  dispatches in the session go straight to Claude without
+  re-probing; cross-session, the first probe's refusal is the
+  discovery, which is cheap because a refused `codex exec` fails
+  fast.
+- DETECTION (unverified — no limit refusal has been observed under
+  this discipline yet): the CLI reports refusals on stderr, and
+  which window fired is read from the refusal text and its stated
+  reset time. The first session to observe one records the
+  verbatim stderr here as the stamp, amending this clause rather
+  than adding a sibling.
 
 ## Conduct
 
