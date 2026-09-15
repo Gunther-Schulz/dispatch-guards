@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 9
+added: 10
 compacted: 0
 
 ## dg-1
@@ -338,3 +338,12 @@ blocked-by: evidence the next guard-set design pass opens (maintenance batches t
 amend-reason: 2026-09-13 operator sharpened the question mid-review: the noodle shape (isolation always, typed escape) is the heavy pole; our stack wants a per-lane discriminator between heavy and light, and the item now asks for that design rather than a binary flip
 amended-requirement: 2026-09-13 design the lane-isolation DISCRIMINATOR, not a default flip (operator steer 2026-09-13: heavy machinery vs light needs a discriminator, never always-type-X): name the computable per-lane properties that route a lane to worktree isolation (heavy) vs shared copy under the warn-gradient (light). Candidate inputs the design weighs: write-set overlap with a live writer (the existing ladder trigger), shared-FILE overlap (already worktree-mandatory, no safe form exists), co-writer class on the copy (peer session, operator, scheduled job), lane duration. Record: statiker dev-notes/grokbot-space-comparison-2026-09-13.md steal item 3
 amended-done-criterion: 2026-09-13 discriminator recorded with the reservation-gate fire tally since 2026-08-06 as evidence (absorption-class incidents caught vs missed vs silent); the ladder text re-keyed to the discriminator; each routing outcome carries a named basis, no unconditional default in either direction
+
+## dg-42
+grade: READY
+requirement: dispatch-time scratch-disjointness gate: refuse two live lanes of one session whose assigned scratch paths are not distinct — the lane-grain hole in the session-grain Scratch wording, measured 2026-09-15 when lane A's rm -rf + clone at a generic scratchpad path destroyed lane B's private clone (reflog empty) and lane B's probe residue crossed back. Entry with pre-formulated skeleton text: dev-notes/dispatch-OBSERVATIONS.md 2026-09-15 scratch entry
+goal: general-maintenance
+write-set: hooks/,plugin/skills/dispatch/SKILL.md
+done-criterion: red-first: a replayed two-lane dispatch with identical assigned scratch paths is refused naming both lanes; distinct-slug pair passes; predicate needs the Scratch assignment machine-readable, so the skeleton line change lands in the same item; bite registered per this repo's guard conventions
+evidence: wave-A measurement relayed by dotfiles-a8 2026-09-15, mechanism verified at dotfiles-89 (mtime attribution, reflog empty); dispatch skill section 1 slug rule exists but skeleton does not force it
+blocked-by: NONE
