@@ -390,15 +390,6 @@ done-criterion: each of the three lanes either gains a mode-aware exit or carrie
 evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes are unaffected since deny() does not consult the modes at all; Wave 0 probe record finding 2 (live confirmation)
 blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
 
-## dg-50
-grade: PARKED
-requirement: the model-doubling dg-49 fixed on the description path survives on the NAME path: a dispatch with name 'opus: legacy title' under model opus still rewrites to 'opus-opus-legacy-title', because compute_name_rewrite only tests whether the name already starts with '<model>-' and a colon form does not match. The wave-2 lane read dg-49's criterion literally (description only), which was correct, and PINNED this case with a bite so the behaviour is visible and reversible rather than latent. Record: dg-46/dg-49 closing report gap 1, commit f37862b, bite at plugin/hooks/agent-model-gate.py
-goal: general-maintenance
-write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
-done-criterion: either the strip extends to the name source under the same equals-the-validated-model test with the pinning bite flipped and red-first stated, or the docstring records why the name path deliberately keeps the doubling; no third state where the bite pins behaviour nobody decided
-evidence: the lane's own bite asserting 'opus-opus-legacy-title' (read by me at agent-model-gate.py:548); dg-49's amended done-criterion says 'description-derived', which is what scoped the fix
-blocked-by: decision should the legacy-model-prefix strip extend to the name source as well as the description
-
 ## dg-51
 grade: READY
 requirement: the lifecycle CLI auto-commits without an AI attribution trailer, so every "lifecycle: ledger decision" commit lands unattributed and the machine pre-push guard flags it as unbooked-without-a-mark. Observed 2026-09-15 on 494028d in this repo: author is the operator, trailer block EMPTY, guard could not determine who made it. The operator corpus requires explicit AI attribution on commits published under the operator accounts, so the tool produces the violation by construction rather than its caller slipping. Worse for the caller: the decision verb offers no --no-commit, unlike item add / item amend / item close, so a caller cannot take the commit over and attribute it. Record: push of 95cd0fb, guard-rewrite arc wave 2

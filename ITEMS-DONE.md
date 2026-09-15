@@ -109,6 +109,20 @@ amended-done-criterion: 2026-09-15 the missing_tail lane is MODE-AWARE (decidabl
 closed-reason: 2026-09-15 wave 2, the arc's headline mechanism. missing_tail is now mode-aware: a brief whose BODY declares writes gets the shipped forms.md EXECUTION tail appended via updatedInput under both deny and warn; the ambiguous class keeps a refusal, mode-aware for the first time via fire(); off silences both. Tail read from forms.md at fire time, never a pasted copy, with a never-silent fallback when it is unreadable. Verified at the artifact by the dispatcher: bench 64/64 catch 35/35 zero false fires, both hooks' bites, full verify block, zero skips. Discrimination mutation-tested against a green control: forcing the decidable predicate True goes RED, truncating the tail body goes RED. Accepted as built with the docstring naming the substring residue, the asymmetry basis, missing_sections as precedent, and the shared guard_modes key's three-lane entanglement
 closed-ref: a0533fc
 
+## dg-50
+grade: DONE
+requirement: the model-doubling dg-49 fixed on the description path survives on the NAME path: a dispatch with name 'opus: legacy title' under model opus still rewrites to 'opus-opus-legacy-title', because compute_name_rewrite only tests whether the name already starts with '<model>-' and a colon form does not match. The wave-2 lane read dg-49's criterion literally (description only), which was correct, and PINNED this case with a bite so the behaviour is visible and reversible rather than latent. Record: dg-46/dg-49 closing report gap 1, commit f37862b, bite at plugin/hooks/agent-model-gate.py
+goal: general-maintenance
+write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
+done-criterion: either the strip extends to the name source under the same equals-the-validated-model test with the pinning bite flipped and red-first stated, or the docstring records why the name path deliberately keeps the doubling; no third state where the bite pins behaviour nobody decided
+evidence: the lane's own bite asserting 'opus-opus-legacy-title' (read by me at agent-model-gate.py:548); dg-49's amended done-criterion says 'description-derived', which is what scoped the fix
+blocked-by: NONE
+promote-reason: 2026-09-15 decision answered in LEDGER.md this date; design, write-set and verifier already stated
+promoted-by: 2026-09-15 dispatch-guards-bc (judgment desk, guard-rewrite arc)
+blocker-moot: should the legacy-model-prefix strip extend to the name source as well as the description (answered in the ledger before this item closed)
+closed-reason: 2026-09-15 wave 2b. The strip now applies to either slug source when the leading word equals the call's validated model; the canonical '<model>-' name short-circuits before the strip and a different model's word stays, asserted as a PAIR beside it so widening into the sibling case goes red. Red-first: green baseline, flipped expectation failed against the old implementation, green after. Both docstrings corrected in the same change — each had become false about its own behaviour. Verify block green in full, verified at the artifact by this desk
+closed-ref: 186edbb
+
 ## Archive (pre-migration)
 
 
