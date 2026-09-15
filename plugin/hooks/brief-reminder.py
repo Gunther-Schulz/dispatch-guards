@@ -21,6 +21,38 @@ CONFIRMED live, reminder line visible before each spawn (unverified
 only at mint time 2026-07-19). Fail-open and
 inert if the harness ignores it; --test covers the logic only
 (bootstrap doctor tripwire).
+
+Verb conversion, missing_tail lane (2026-09-15, guard-rewrite arc
+item 2, `docs/directives/2026-09-15-guard-rewrite-arc.md`): a
+tail-less brief that DECLARES it writes (a write-boundary or
+commit-plan body marker — the one condition `_tail_rewrite_decidable`
+decides, since `_tail_kind()` cannot: it reads anchors that live
+INSIDE the tail, absent by construction at this lane's firing
+moment) is now REPAIRED — the shipped EXECUTION tail from
+forms.md, channel line filled from `name` presence — via
+`hookSpecificOutput.updatedInput`, never denied, under BOTH "deny"
+and "warn" `guard_modes`. The AMBIGUOUS class (no such marker) keeps
+the deny, now MODE-AWARE for the first time: `deny()` does not
+consult `guard_modes` at all (this file's own main() comment
+elsewhere says so, and wave 0's probe confirmed it live), so before
+this the lane could not be demoted by any site; it now routes
+through `fire()` on the shared "brief-reminder" key, `off` silencing
+the whole lane for both classes. Never a silent pass: a decidable
+brief whose repair cannot be computed (forms.md unreadable or its
+heading moved) falls back to the same mode-aware exit rather than
+passing. DELIVERY, not compliance — wave 0's probe record proved an
+injected prompt block reaches the subagent's effective prompt, and
+separately that the agent quoted rather than obeyed an injected
+line in that same run; this lane's docstrings and its fire-log
+reason describe it as delivering the tail, never as a guarantee the
+agent then follows it. Read-only is never positively decided or
+auto-appended (asymmetry: an execution tail on a read-only brief
+over-specifies harmlessly; a read-only tail on a writing brief
+strips its commit discipline and would be actively wrong — see
+`_tail_rewrite_decidable`'s own docstring). Unaffected this arc: the
+other three deny lanes (`deny_text`, `tail_mode_mismatch`,
+`missing_sections`) and both existing fire()-routed lanes stay as
+they are.
 """
 from __future__ import annotations
 
@@ -30,7 +62,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny, fire, fire_log, policy  # noqa: E402
+from _dispatch_common import deny, fire, fire_log, guard_mode, policy  # noqa: E402
 
 _SOURCE = "dispatch-guards/brief-reminder"
 
@@ -233,9 +265,13 @@ def missing_tail(payload: dict) -> bool:
 
 def missing_tail_deny_text() -> str:
     return (
-        "Blocked: dispatch brief without the §2 tail block. Paste the "
-        f"EXECUTION or READ-ONLY tail verbatim from {_forms_path()} "
-        "into the prompt — "
+        "Blocked: dispatch brief without the §2 tail block, and its "
+        "body names no write-boundary or commit-plan marker — the one "
+        "condition under which this lane auto-repairs by appending the "
+        "EXECUTION tail (dg-46). If this brief DOES write, add a "
+        "'Write boundaries' or 'Commit plan' section and retry, or "
+        "paste the tail yourself: EXECUTION or READ-ONLY tail verbatim "
+        f"from {_forms_path()} — "
         "pick the channel line matching the dispatch LANE, which "
         "`name` alone decides (named = mailbox, unnamed = background "
         "task) — or point the prompt at a brief FILE that "
@@ -480,6 +516,122 @@ def missing_commit_plan_deny_text() -> str:
         "bumps the manifest. 'none' (no such guard) is a valid "
         "filling; silence is not. Add the section and retry."
     )
+
+
+# ── Tail auto-repair (missing_tail REWRITE; dg-46, guard-rewrite arc
+# item 2, 2026-09-15) ─────────────────────────────────────────────
+#
+# ASYMMETRY (the stated basis for the one-directional rule below): an
+# execution tail appended to a genuinely read-only brief
+# over-specifies harmlessly — the agent reads a closing-report
+# skeleton it does not need. A read-only tail appended to a brief
+# that actually writes is actively wrong — it tells the agent "no
+# repo writes, no report files" and strips the commit/pathspec
+# discipline the work needs. So this lane only ever appends the
+# EXECUTION tail, never the read-only one: read-only is NEVER
+# positively decided from body markers, only ever falling through to
+# the unchanged ambiguous-class exit below.
+_EXECUTION_TAIL_HEADING = "EXECUTION tail (any dispatch that writes):"
+_MAILBOX_CHANNEL_LINE = (
+    "Report channel: SendMessage to the dispatcher — your final text "
+    "reaches no one.")
+_BACKGROUND_CHANNEL_LINE = "Report channel: your final text IS the report."
+_CHANNEL_LINE_PLACEHOLDER = "<channel line>"
+
+
+def _tail_rewrite_decidable(payload: dict) -> bool:
+    """True iff a tail-less brief's BODY declares that it writes —
+    the one condition under which missing_tail's deny becomes a
+    rewrite instead.
+
+    _tail_kind() (above) decides EXECUTION vs READONLY from anchors
+    that live INSIDE the tail itself — at missing_tail's firing
+    moment the tail is absent by definition, so _tail_kind() returns
+    "none" by construction and cannot serve this decision; that
+    circularity is why this reads the body instead. It reuses the
+    two marker families missing_sections and missing_commit_plan
+    already key on (_WRITE_BOUNDARY_MARKERS, _COMMIT_PLAN_MARKERS) —
+    those two lanes are the precedent for deciding from these same
+    substrings, so this is the hook's existing idiom extended, not a
+    new concept.
+
+    Accepted residue, named rather than left to be discovered later:
+    both marker families are SUBSTRING matches, so a genuinely
+    read-only brief that merely DISCUSSES write boundaries ("no
+    write boundaries apply") false-fires into the execution-append.
+    That lands in the harmless direction the ASYMMETRY note above
+    describes, which is precisely why the one-direction rule
+    survives it rather than needing a stricter (and more fragile)
+    predicate."""
+    brief = _brief_text(payload)
+    return (any(m in brief for m in _WRITE_BOUNDARY_MARKERS)
+            or any(m in brief for m in _COMMIT_PLAN_MARKERS))
+
+
+def _execution_tail_body() -> str | None:
+    """The shipped EXECUTION tail's raw text (channel-line
+    placeholder still in it), read from forms.md AT FIRE TIME —
+    never a second copy pasted into this hook, which would drift
+    from the source it is meant to mirror (paraphrase-drift).
+    Extracts the markdown indented-code block that follows the
+    "EXECUTION tail (any dispatch that writes):" heading: every
+    line indented 4 spaces, de-indented, until the first
+    non-indented line. None on any read/parse failure — an
+    unreadable forms.md or a moved heading must not manufacture a
+    tail from nothing; the caller falls back to the unchanged
+    deny/warn exit rather than a silent pass."""
+    try:
+        with open(_forms_path(), encoding="utf-8") as f:
+            text = f.read()
+    except OSError:
+        return None
+    lines = text.splitlines()
+    try:
+        start = next(i for i, ln in enumerate(lines)
+                     if ln.strip() == _EXECUTION_TAIL_HEADING)
+    except StopIteration:
+        return None
+    body: list[str] = []
+    for ln in lines[start + 1:]:
+        if ln.startswith("    "):
+            body.append(ln[4:])
+        elif not ln.strip() and not body:
+            continue  # the blank line between heading and block
+        else:
+            break
+    return "\n".join(body) if body else None
+
+
+def rewrite_tail_input(payload: dict) -> dict | None:
+    """The repaired `tool_input` for a DECIDABLE tail-less brief: the
+    shipped EXECUTION tail appended to the prompt, its channel-line
+    placeholder filled from `name` presence exactly as the existing
+    channel lanes decide it (mailbox_lane()) — named → the mailbox
+    line, unnamed → the background line. None when
+    _execution_tail_body() cannot produce a tail (forms.md
+    unreadable or moved); the caller then falls back to the
+    unchanged deny/warn exit rather than passing silently, mirroring
+    agent-model-gate's never-silent-fallback convention for its own
+    rewrite lane.
+
+    DELIVERY, not compliance: this appends the tail into the
+    effective prompt the agent reads — wave 0's probe record proved
+    an injected block reaches the subagent, and separately that the
+    agent QUOTED rather than obeyed an injected instruction in that
+    same probe. Appending is not a guarantee the agent then follows
+    the tail's rules, only that it is no longer absent from what the
+    agent reads."""
+    body = _execution_tail_body()
+    if not body:
+        return None
+    tool_input = payload.get("tool_input") or {}
+    line = (_MAILBOX_CHANNEL_LINE if mailbox_lane(tool_input)
+           else _BACKGROUND_CHANNEL_LINE)
+    tail = body.replace(_CHANNEL_LINE_PLACEHOLDER, line)
+    prompt = tool_input.get("prompt") or ""
+    new_input = dict(tool_input)
+    new_input["prompt"] = prompt.rstrip("\n") + "\n" + tail
+    return new_input
 
 
 # A devbook/section fingerprint as the §6 register and the class
@@ -774,8 +926,50 @@ def main() -> int:
     # which two sessions misattributed to a Claude Code permission bug.
     if missing_channel(payload):
         deny(deny_text(payload), source=_SOURCE, payload=payload)
+    # MODE-AWARE since 2026-09-15 (dg-46, guard-rewrite arc item 2) —
+    # a verb conversion carrying this lane's existing record forward:
+    # it was never staged (hard deny from the day it shipped, like
+    # the mandatory-name lane's declared exception), so the default
+    # here stays "deny" and a fresh/unconfigured site sees exactly
+    # the old behavior. What is NEW is the DECIDABLE class, which
+    # repairs unconditionally in "deny" and "warn" alike (the repair
+    # is the action, not a punishment grade — CLAUDE.md three-verbs
+    # bullet) and only "off" turns the whole lane silent for both
+    # classes. `guard_modes["brief-reminder"]` is SHARED with
+    # missing_commit_plan and missing_devbook_pin below (one key,
+    # one file, per the existing convention) — a site demoting the
+    # commit-plan lane to "warn" also softens this lane's AMBIGUOUS
+    # exit from deny to warn-and-pass; the decidable class is
+    # unaffected by that (it never denies in "deny" or "warn"),
+    # named here because nothing else in this file's history says so.
     if missing_tail(payload):
-        deny(missing_tail_deny_text(), source=_SOURCE, payload=payload)
+        if guard_mode(_SOURCE) != "off":
+            if _tail_rewrite_decidable(payload):
+                new_input = rewrite_tail_input(payload)
+            else:
+                new_input = None
+            if new_input is not None:
+                reason = (
+                    "brief-reminder: appended the EXECUTION tail "
+                    f"({_forms_path()} §2) — the brief's body names a "
+                    "write-boundary or commit-plan marker (declares it "
+                    "writes) and carried no §2 tail. Delivered into "
+                    "the effective prompt; the agent may quote it, "
+                    "this does not guarantee it then complies."
+                )
+                fire_log(_SOURCE, "rewrite", reason, payload)
+                print(json.dumps({
+                    "hookSpecificOutput": {
+                        "hookEventName": "PreToolUse",
+                        "updatedInput": new_input,
+                    }
+                }))
+                return 0
+            # AMBIGUOUS class, or the decidable rewrite could not be
+            # computed (forms.md unreadable/moved) — never a silent
+            # pass: fall back to the mode-aware deny/warn exit.
+            fire(missing_tail_deny_text(), source=_SOURCE, payload=payload,
+                 default_mode="deny")
     if tail_mode_mismatch(payload):
         deny(tail_mode_mismatch_deny_text(payload), source=_SOURCE,
              payload=payload)
@@ -1066,6 +1260,177 @@ if __name__ == "__main__":
         assert "Blocked" in missing_tail_deny_text()
         assert "Blocked" in tail_mode_mismatch_deny_text(bg_with_sync_line)
 
+        # ── Tail auto-repair (dg-46, guard-rewrite arc item 2) ──────
+        # Marker text literal here, never the detection constants
+        # (_WRITE_BOUNDARY_MARKERS / _COMMIT_PLAN_MARKERS), same
+        # no-shared-parentage convention as every other lane in this
+        # suite.
+        _WB_MARKER_TEXT = ("Write boundaries: you own src/foo.py only; "
+                           "targeted git add, never -A.")
+        _CP_MARKER_TEXT = "Commit plan: one commit by pathspec, no bump."
+
+        # (i) _tail_rewrite_decidable: the two marker families, both
+        # directions, plus the exemptions its siblings share.
+        assert _tail_rewrite_decidable({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + _WB_MARKER_TEXT}})
+        assert _tail_rewrite_decidable({"tool_name": "Agent", "tool_input": {
+            "prompt": "Do X.\n" + _CP_MARKER_TEXT}})
+        assert not _tail_rewrite_decidable({"tool_name": "Agent",
+                                            "tool_input": {"prompt": "Do X."}})
+        # Accepted residue, pinned rather than left to surprise later:
+        # a read-only brief that merely DISCUSSES write boundaries
+        # false-fires True here — the harmless direction the
+        # docstring names.
+        assert _tail_rewrite_decidable({"tool_name": "Agent", "tool_input": {
+            "prompt": "Verifier. No write boundaries apply to this "
+                      "read-only brief."}})
+
+        # (ii) _execution_tail_body / rewrite_tail_input: read the REAL
+        # forms.md, channel line filled from `name` presence, and the
+        # result is normalized-equal to the shipped tail — proving
+        # this reads forms.md rather than carrying a second copy.
+        _body = _execution_tail_body()
+        assert _body and _TAIL_ANCHOR in _norm(_body), _body
+        assert _CHANNEL_LINE_PLACEHOLDER in _body, _body
+        _named_decidable = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x", "prompt": "Do X.\n" + _WB_MARKER_TEXT}}
+        _rewritten = rewrite_tail_input(_named_decidable)
+        assert _rewritten is not None
+        assert _MAILBOX_CHANNEL_LINE in _rewritten["prompt"]
+        assert _BACKGROUND_CHANNEL_LINE not in _rewritten["prompt"]
+        assert _norm(_rewritten["prompt"]).endswith(
+            _norm(_body.replace(_CHANNEL_LINE_PLACEHOLDER,
+                                _MAILBOX_CHANNEL_LINE)))
+        assert _rewritten["prompt"].startswith("Do X.\n" + _WB_MARKER_TEXT)
+        assert not missing_tail({"tool_name": "Agent",
+                                 "tool_input": _rewritten})  # tail now present
+        _unnamed_decidable = {"tool_name": "Agent", "tool_input": {
+            "subagent_type": "claude-code-guide",
+            "prompt": "Do X.\n" + _CP_MARKER_TEXT}}
+        _rewritten_bg = rewrite_tail_input(_unnamed_decidable)
+        assert _BACKGROUND_CHANNEL_LINE in _rewritten_bg["prompt"]
+        assert _MAILBOX_CHANNEL_LINE not in _rewritten_bg["prompt"]
+        # other tool_input keys ride along unchanged
+        assert _rewritten_bg["subagent_type"] == "claude-code-guide"
+
+        # (iii) never-silent fallback: an unresolvable forms.md path
+        # must not manufacture a tail, mirroring agent-model-gate's
+        # own never-silent convention for its rewrite lane.
+        _real_forms_path = _forms_path
+        globals()["_forms_path"] = lambda: "/nonexistent/forms.md"
+        assert _execution_tail_body() is None
+        assert rewrite_tail_input(_named_decidable) is None
+        globals()["_forms_path"] = _real_forms_path
+        assert _execution_tail_body() is not None  # restored
+
+        # (iv) END TO END, real subprocess, stdin JSON -> stdout JSON —
+        # the same boundary agent-model-gate.py --test exercises for
+        # its own rewrite lane, and the only way to prove main()'s
+        # actual WIRING (mode consult, fire_log, updatedInput shape)
+        # rather than its pieces in isolation.
+        #
+        # RED-FIRST baseline (recorded this session, not re-run here
+        # since the pre-dg-46 source no longer exists in the working
+        # tree): the identical payload below, run against the parent
+        # commit's brief-reminder.py as a subprocess, exited 2 with a
+        # "Blocked: dispatch brief without the §2 tail block" deny —
+        # no updatedInput, no rewrite. This assertion block is the
+        # green side of that pair.
+        import subprocess as _sp2
+
+        def _run_brief_hook(payload, env_extra=None):
+            env = dict(os.environ)
+            env["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+            env["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = os.path.join(
+                tempfile.mkdtemp(), "fires.jsonl")
+            if env_extra:
+                env.update(env_extra)
+            proc = _sp2.run(
+                [sys.executable, os.path.realpath(__file__)],
+                input=json.dumps(payload), capture_output=True, text=True,
+                env=env)
+            fires = []
+            if os.path.isfile(env["CLAUDE_DISPATCH_GUARDS_FIRELOG"]):
+                fires = [json.loads(_l) for _l in
+                        open(env["CLAUDE_DISPATCH_GUARDS_FIRELOG"],
+                             encoding="utf-8")]
+            return proc, fires
+
+        _e2e_decidable = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
+            "prompt": ("Do X.\n" + _WB_MARKER_TEXT + "\n"
+                      "Report channel: SendMessage to the dispatcher "
+                      "— your final text reaches no one.")}}
+        _proc_a, _fires_a = _run_brief_hook(_e2e_decidable)
+        assert _proc_a.returncode == 0, (_proc_a.returncode, _proc_a.stderr)
+        _out_a = json.loads(_proc_a.stdout)
+        _hso_a = _out_a["hookSpecificOutput"]
+        assert "updatedInput" in _hso_a, _hso_a
+        assert "permissionDecision" not in _hso_a, _hso_a  # wave0 b2/b3 shape
+        assert _MAILBOX_CHANNEL_LINE in _hso_a["updatedInput"]["prompt"]
+        assert any(f["mode"] == "rewrite" and f["guard"] == "brief-reminder"
+                  for f in _fires_a), _fires_a
+
+        # (iv-b) AMBIGUOUS class, default config -> still a hard DENY,
+        # unchanged from pre-dg-46 behavior (never-staged record
+        # carried forward).
+        _e2e_ambiguous = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
+            "prompt": ("Do X and report back.\nReport channel: "
+                      "SendMessage to the dispatcher — your final "
+                      "text reaches no one.")}}
+        _proc_b, _fires_b = _run_brief_hook(_e2e_ambiguous)
+        assert _proc_b.returncode == 0
+        _hso_b = json.loads(_proc_b.stdout)["hookSpecificOutput"]
+        assert _hso_b.get("permissionDecision") == "deny", _hso_b
+        assert any(f["mode"] == "deny" and f["guard"] == "brief-reminder"
+                  for f in _fires_b), _fires_b
+
+        # (iv-c) guard_modes["brief-reminder"] = "warn": the AMBIGUOUS
+        # class softens to a warning-and-pass; the DECIDABLE class is
+        # UNAFFECTED — it still rewrites, proving "repair is the
+        # action, not a punishment grade".
+        with tempfile.NamedTemporaryFile("w", suffix=".json",
+                                         delete=False) as _wf:
+            _wf.write(json.dumps({"guard_modes": {"brief-reminder": "warn"}}))
+            _warn_cfg = _wf.name
+        _proc_c, _fires_c = _run_brief_hook(
+            _e2e_ambiguous, {"CLAUDE_DISPATCH_GUARDS_CONFIG": _warn_cfg})
+        assert _proc_c.returncode == 0
+        _hso_c = json.loads(_proc_c.stdout)["hookSpecificOutput"]
+        assert "permissionDecision" not in _hso_c, _hso_c
+        assert "additionalContext" in _hso_c, _hso_c
+        assert any(f["mode"] == "warn" and f["guard"] == "brief-reminder"
+                  for f in _fires_c), _fires_c
+        _proc_d, _fires_d = _run_brief_hook(
+            _e2e_decidable, {"CLAUDE_DISPATCH_GUARDS_CONFIG": _warn_cfg})
+        assert _proc_d.returncode == 0
+        _hso_d = json.loads(_proc_d.stdout)["hookSpecificOutput"]
+        assert "updatedInput" in _hso_d, _hso_d   # still rewrites under warn
+        assert any(f["mode"] == "rewrite" for f in _fires_d), _fires_d
+
+        # (iv-d) guard_modes["brief-reminder"] = "off": the WHOLE lane
+        # goes silent for BOTH classes — no rewrite, no deny, no warn.
+        with tempfile.NamedTemporaryFile("w", suffix=".json",
+                                         delete=False) as _of:
+            _of.write(json.dumps({"guard_modes": {"brief-reminder": "off"}}))
+            _off_cfg = _of.name
+        _proc_e, _fires_e = _run_brief_hook(
+            _e2e_decidable, {"CLAUDE_DISPATCH_GUARDS_CONFIG": _off_cfg})
+        assert _proc_e.returncode == 0
+        _hso_e = json.loads(_proc_e.stdout)["hookSpecificOutput"]
+        assert "updatedInput" not in _hso_e, _hso_e
+        assert "permissionDecision" not in _hso_e, _hso_e
+        assert not any(f["mode"] in ("rewrite", "deny", "warn")
+                      and f["guard"] == "brief-reminder" for f in _fires_e), \
+            _fires_e
+        _proc_f, _fires_f = _run_brief_hook(
+            _e2e_ambiguous, {"CLAUDE_DISPATCH_GUARDS_CONFIG": _off_cfg})
+        assert _proc_f.returncode == 0
+        _hso_f = json.loads(_proc_f.stdout)["hookSpecificOutput"]
+        assert "updatedInput" not in _hso_f, _hso_f
+        assert "permissionDecision" not in _hso_f, _hso_f
+
         # ── Section lane (missing_sections) ────────────────────────
         # Section markers named in the dispatch skill §1 ("Grounding
         # basis as a mandatory section." / "Write boundaries.") —
@@ -1215,10 +1580,11 @@ if __name__ == "__main__":
                 if _kw.arg == "default_mode":
                     _mode = getattr(_kw.value, "value", None)
             _fire_modes[_text_fn] = _mode
-        # Both lanes present, so a DELETED call site fails here too —
+        # All THREE fire()-routed lanes present (missing_tail joined
+        # 2026-09-15, dg-46), so a DELETED call site fails here too —
         # a mode map missing a key reads exactly like a lane set to
         # None otherwise.
-        assert len(_fire_modes) == 2, _fire_modes
+        assert len(_fire_modes) == 3, _fire_modes
         assert _fire_modes.get("missing_commit_plan_deny_text") == "deny", (
             "the commit-plan lane ships DENY since 2026-09-15 "
             "(df-238 promotion; the evidence is in its docstring)",
@@ -1227,6 +1593,11 @@ if __name__ == "__main__":
             "the devbook-pin lane must ship WARN (repo CLAUDE.md: a "
             "new lane earns deny through the fire-rate review, never "
             "by assertion)", _fire_modes)
+        assert _fire_modes.get("missing_tail_deny_text") == "deny", (
+            "the missing_tail AMBIGUOUS-class exit ships DENY (dg-46: "
+            "a verb conversion carries the lane's existing never-"
+            "staged record forward, so a fresh/unconfigured site sees "
+            "exactly the pre-conversion behavior)", _fire_modes)
 
         # ── Commit-plan lane (missing_commit_plan), STAGED WARN ────
         # Slot named in the dispatch skill §1 skeleton ("## Commit
