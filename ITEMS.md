@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 11
+added: 12
 compacted: 0
 
 ## dg-1
@@ -355,4 +355,13 @@ goal: general-maintenance
 write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
 done-criterion: a corpus case carrying a register fixture drives the pin lane to its WARN and the bench asserts it as a fire; the absent-register cases keep their could-not-verify silence; bench selftest green
 evidence: G1 report slot (c)2 + the lane's read of the bench env pinning; the second corpus case (019e856) documents itself as false-fire-only
+blocked-by: NONE
+
+## dg-44
+grade: READY
+requirement: replay-bench classify() folds a WARN into the 'context' bucket, the same as the ordinary reminder line, so no corpus case can assert a warn AS a warn — a staged lane's fire and its silence read identically to the bench. Distinct from the register-fixture gap and survives it. Add a warn kind to the bench vocabulary. Found by the G1 lane 2026-09-15, report slot (c)3
+goal: general-maintenance
+write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
+done-criterion: classify() distinguishes warn from context; at least one corpus case asserts kind=warn and goes red when the lane is silenced (red-first); existing 59 cases unchanged in verdict; bench selftest green
+evidence: G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date
 blocked-by: NONE
