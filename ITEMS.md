@@ -365,6 +365,8 @@ write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
 done-criterion: classify() distinguishes warn from context; at least one corpus case asserts kind=warn and goes red when the lane is silenced (red-first); existing 59 cases unchanged in verdict; bench selftest green
 evidence: G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date
 blocked-by: NONE
+amend-reason: 2026-09-15 premise line added: the bench this entry cites moves in wave 1 of the guard-rewrite arc
+amended-evidence: 2026-09-15 G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date. PREMISE MOVED 2026-09-15 (guard-rewrite arc wave 1): tools/replay-bench.py gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it, ordered after the decision checks. This entry was written against the PRE-rewrite-KIND bench, so its dispatcher re-reads classify() and KINDS before building — the warn-vs-context question stands, but the vocabulary it extends has moved.
 
 ## dg-45
 grade: READY
@@ -374,6 +376,9 @@ write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,README.md
 done-criterion: new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; guards.jsonl extended and replay-bench green; docstring (canonical) + README guard-roster row amended; check-doc-drift green; the CLAUDE.md verify block green in full
 evidence: Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md — arm b2: updatedInput applies with no permissionDecision; arm b3: the permission flow still runs on a rewritten call. Fire-log 140 agent-model-gate blocks all-time as of 2026-09-15
 blocked-by: NONE
+amend-reason: 2026-09-15 2026-09-15 judgment-desk ruling on the lane's critique pass: the write-set narrowing that dropped replay-bench.py read narrower than its parent directive, whose item-1 Tests section already demanded bench expectations; value-discrimination added
+amended-write-set: 2026-09-15 plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,tools/replay-bench.py,README.md
+amended-done-criterion: 2026-09-15 new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; replay-bench gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it AFTER the decision checks; guards.jsonl extended with at least one case asserting the rewritten VALUE (not merely that a rewrite occurred) plus a wrong-value red-first arm; docstring (canonical) + README guard-roster row amended, describing the lane as DELIVERING the rewrite and never as a compliance guarantee; check-doc-drift green; the CLAUDE.md verify block green in full
 
 ## dg-46
 grade: READY
