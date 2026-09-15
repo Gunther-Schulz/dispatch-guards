@@ -39,6 +39,33 @@ are not — this repo carries both sides, and the split is the design.
   protect against. A future lane wanting the same exemption earns
   it by its own operator decision, never by inheriting the
   structure.
+- **Guard lanes have three verbs, not two.** Deny, warn, and
+  REWRITE: a PreToolUse hook repairs the call in place via
+  `hookSpecificOutput.updatedInput` instead of bouncing it back for
+  recomposition. Every new lane and every lane amendment NAMES its
+  verb and why, because a deny where a mechanical repair exists is
+  priced in re-sent calls (fire log all-time, as of 2026-09-15: 140
+  agent-model-gate blocks, 171 brief-reminder denies, each forcing
+  an often multi-kilotoken call to be composed again). The rewrite
+  lives INSIDE the gate it satisfies: matching hooks run in
+  parallel and each sees the ORIGINAL call, never another's
+  rewrite, so a separate rewriting hook satisfies nothing. A verb
+  CONVERSION in any direction (deny→rewrite, warn→deny) carries the
+  lane's existing staging and promotion record forward in its
+  docstring and never re-stages the lane — that record is what the
+  fire-rate review reads. Deny stays the right verb where the deny
+  IS the point: a judgment forcing-function such as the
+  missing-model lane exists to make someone choose, and repairing
+  it would delete the choice. Basis: the hooks doc (fetched
+  2026-09-15) and `docs/audits/wave0-probe-record-2026-09-15.md` —
+  a hook's prompt edit reaches the subagent's effective prompt
+  (delivery; obedience to it is a separate question and was not
+  shown), a rewrite applies with no `permissionDecision` field, and
+  the permission flow still runs on a rewritten call. That record's
+  arm b4 also found a hook-forced `allow` did NOT override a
+  settings `ask` rule — tested against a permission RULE only, so
+  it grounds no general claim that a forced allow cannot suppress a
+  dialog.
 - **Releases go through `skill-craft:release-plugin`** — version
   bump in `plugin/.claude-plugin/plugin.json`, marketplace pin,
   operator `/reload-plugins` handoff. Editing a skill and leaving it

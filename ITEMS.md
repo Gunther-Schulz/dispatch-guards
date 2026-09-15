@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 12
+added: 16
 compacted: 0
 
 ## dg-1
@@ -365,3 +365,39 @@ write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
 done-criterion: classify() distinguishes warn from context; at least one corpus case asserts kind=warn and goes red when the lane is silenced (red-first); existing 59 cases unchanged in verdict; bench selftest green
 evidence: G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date
 blocked-by: NONE
+
+## dg-45
+grade: READY
+requirement: agent-model-gate DENIES a generic dispatch whose `name` is missing or lacks the `<model>-` prefix even when the model itself is valid — a mechanically repairable call bounced back for full recomposition, 140 blocks all-time. Replace that deny with a REWRITE via PreToolUse updatedInput. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 1
+goal: general-maintenance
+write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl,README.md
+done-criterion: new --test bites (name missing → rewrite JSON carrying the computed name; wrong prefix → prefixed; missing or invalid model → still denies; slug stays within [A-Za-z0-9_-]) run RED against the OLD implementation and green against the new, with the baseline result stated; guards.jsonl extended and replay-bench green; docstring (canonical) + README guard-roster row amended; check-doc-drift green; the CLAUDE.md verify block green in full
+evidence: Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md — arm b2: updatedInput applies with no permissionDecision; arm b3: the permission flow still runs on a rewritten call. Fire-log 140 agent-model-gate blocks all-time as of 2026-09-15
+blocked-by: NONE
+
+## dg-46
+grade: READY
+requirement: brief-reminder's missing_tail lane DENIES a brief lacking the §2 tail block, forcing recomposition of a multi-kilotoken call — 171 denies all-time. Append the correct tail via updatedInput for the mechanically decidable class; the AMBIGUOUS class keeps the existing refusal. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 2 + judgment-desk ruling 1, 2026-09-15
+goal: general-maintenance
+write-set: plugin/hooks/brief-reminder.py,tools/corpus/guards.jsonl,README.md
+done-criterion: the missing_tail lane is MODE-AWARE (decidable class rewrites under both deny and warn; ambiguous class takes the mode-aware exit; off = no rewrite and no deny); tail text read from the shipped forms.md at fire time — never a second copy in the hook — and a bite asserts the appended tail equals the forms.md tail under the same normalization the detector uses; channel line computed from name presence; docstring and README describe the lane as DELIVERING the tail into the effective prompt, never as a compliance guarantee; bites + guards.jsonl extended with the red-first arrangement and baseline stated; verify block green in full
+evidence: Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md — arms a7/a8: hook-injected prompt text reaches the subagent's effective prompt, control clean, and the agent QUOTED rather than obeyed it (delivery proven, obedience not). The lane's own deny text already computes the tail block, its source file and the name-decides-channel-line rule
+blocked-by: NONE
+
+## dg-47
+grade: PARKED
+requirement: the dispatch SKILL.md is ~17k tokens (68500 bytes measured 2026-09-15) and is re-billed into the prefix of every session that loads it; a skill-craft Pareto pass to cut it. Operational corpus, so governed by CLAUDE-maintenance: a structural restructure lands first, then takes a fresh-context vet before push. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 3
+goal: general-maintenance
+write-set: plugin/skills/dispatch/SKILL.md
+done-criterion: SKILL.md materially smaller with no rule lost — established by a section-level audit of what left, not by byte count alone; fresh-context vet passed before push
+evidence: 68500 bytes measured 2026-09-15 (directive item 3); the re-billed-prefix cost is the operator corpus's session-depth rule
+blocked-by: decision a corpus-maintenance session with its own operator GO
+
+## dg-48
+grade: PARKED
+requirement: deny() does not consult guard_modes, so brief-reminder's other three deny lanes (deny_text, tail_mode_mismatch, missing_sections) and push-claim-reminder's cannot be demoted by a site AT ALL. The hook's own main() comment states this and the Wave 0 probe confirmed it live (modes set to off did not stop the lane). This arc makes only missing_tail mode-aware, by ruling; whether deny() should consult the modes globally is open. Record: Wave 0 probe record finding 2 plus judgment-desk ruling 1 scope line, 2026-09-15
+goal: general-maintenance
+write-set: plugin/hooks/_dispatch_common.py,plugin/hooks/brief-reminder.py
+done-criterion: each of the three lanes either gains a mode-aware exit or carries a stated reason in its docstring for staying hard
+evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes are unaffected since deny() does not consult the modes at all; Wave 0 probe record finding 2 (live confirmation)
+blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
