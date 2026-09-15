@@ -5581,3 +5581,42 @@ session whose assigned scratch paths are not distinct.
 **Consumer + drain seam.** Dispatch skill §1 amendment on the
 normal quota drain; the hook half drains through this repo's item
 carrier (see the dg booking of the same date).
+
+## 2026-09-15 — a mutate-and-restore tool's venue constraint travels IN the instruction that names it (n=3)
+
+**Incident + basis.** Three instances in one day, one wave
+(lifecycle drain, wave A): two round-1 briefs listed
+`tools/prove-rows.py` among ordinary verification commands — both
+lanes independently routed it to a private clone — then the DESK
+that had just read both reports ran it on the live shared checkout,
+killed it mid-arm, and left an injected mutation in `migrate.py`
+(found by sha256 of all 64 tracked files against HEAD blobs,
+restored from the committed blob). The desk's own diagnosis: not a
+missing fact — its brief stated the hazard in one item and the
+co-writer in the next, then said "run it as a verifier"; all
+premises present, the JOIN missing, with the venue instruction
+pointing the wrong way. A follow-up booking (lifecycle lc-133)
+sharpened the class: the tool's restore runs at the END of each
+arm, so an interrupted run leaves the mutation live — the hazard is
+not misuse alone, it is the tool's crash shape.
+
+**Class.** Venue constraint separated from the instruction that
+triggers the act. Two lanes making the join correctly is not
+evidence the brief was sound — the reader who fails is the one
+holding the most context, because the join feels already made. The
+dotfiles guard/checker devbook carries the executing-side rule
+(mutate-and-restore runs in a private snapshot); this entry is the
+BRIEF side: nothing in §1 makes the venue ride the command list.
+
+**Pre-formulated rule text** (dispatch skill §1, the verifier
+bullet or its own line): "A verification command that MUTATES and
+restores a tracked file (a prove-rows, a mutation walk) carries its
+venue constraint IN the same line that names it — 'run in a private
+clone/snapshot, never the shared checkout' — never in a separate
+hazard note: the instruction and its constraint separated is how
+three parties in one wave, two of them warned, put the tool on the
+live tree or nearly did."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment on the
+normal quota drain; the crash-shape half drains through lifecycle
+lc-133 (that repo's tool).
