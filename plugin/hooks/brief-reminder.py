@@ -30,7 +30,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-from _dispatch_common import deny, fire, policy  # noqa: E402
+from _dispatch_common import deny, fire, fire_log, policy  # noqa: E402
 
 _SOURCE = "dispatch-guards/brief-reminder"
 
@@ -436,9 +436,23 @@ def missing_commit_plan(payload: dict) -> bool:
     repair. What this establishes is PRESENCE OF THE LABEL and
     nothing more — a plan naming the wrong guard reads identical to a
     correct one here, so this lane grades composition, never the
-    plan. Staged: it ships WARN and earns deny only through the
-    fire-rate review (repo CLAUDE.md), never by assertion. Fail-open
-    on parse doubt."""
+    plan.
+
+    PROMOTED TO DENY 2026-09-15 (dotfiles df-238), through the
+    fire-rate review the repo's staging rule demands. The record, in
+    the form the evidence actually supports: 47 fires in the machine
+    fire log, all mode=warn, of which 39 post-date the one known
+    false-fire class (a verifier brief merely CITING forms.md,
+    repaired 2026-08-15 in 372dcc7 and pinned by the regression case
+    below); at least six of those are desk-confirmed true positives
+    (wave-5 brief set, lane E, df-3 build brief 2026-09-14), each
+    repaired per instance. NOT a measured zero of false fires: the
+    fire-log record carries no truth-value field (_dispatch_common
+    fire_log), so "no false fire since" is an absence of record in
+    any carrier, never a measurement — stated here in that honest
+    form because a promotion record wider than its evidence is the
+    assurance-wider-than-its-predicate class. Fail-open on parse
+    doubt."""
     if payload.get("tool_name") != "Agent":
         return False
     tool_input = payload.get("tool_input") or {}
@@ -450,11 +464,12 @@ def missing_commit_plan(payload: dict) -> bool:
                    for m in _COMMIT_PLAN_MARKERS)
 
 
-def missing_commit_plan_warn_text() -> str:
+def missing_commit_plan_deny_text() -> str:
     doc = policy().get("discipline_doc") or "the dispatch skill"
     return (
-        f"Execution brief without a commit-plan section ({doc} §1 "
-        "skeleton, '## Commit plan'). State the target repo's "
+        f"Blocked: execution brief without a commit-plan section "
+        f"({doc} §1 skeleton, '## Commit plan'). State the target "
+        "repo's "
         "commit-blocking guards READ at compose time and where the "
         "bump or ordering commit sits: a payload-version guard "
         "comparing against the RELEASE state clears every later "
@@ -463,7 +478,134 @@ def missing_commit_plan_warn_text() -> str:
         "it — where its basis is the origin manifest, push at "
         "integration only, and a plugin-payload brief names who "
         "bumps the manifest. 'none' (no such guard) is a valid "
-        "filling; silence is not."
+        "filling; silence is not. Add the section and retry."
+    )
+
+
+# A devbook/section fingerprint as the §6 register and the class
+# devbooks spell one: a 64-character sha256 in hex. Matched over the
+# NORMALIZED brief (lower-cased), and both ends anchored — an
+# unanchored 64-run would also match inside a longer hex blob, which
+# is the prefix-match-in-an-equality's-costume shape.
+_HEX64_RE = re.compile(r"(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])")
+_PIN_UNREADABLE_REASON = (
+    "devbook-pin lane: could not verify — no readiness register was "
+    "readable at {path}, so whether this brief names a registered "
+    "class is UNKNOWN. Lane silent by design (a guess here would fire "
+    "on legitimate work); logged so the absence is countable rather "
+    "than invisible.")
+
+
+def _registered_class_names() -> list | None:
+    """Every name a brief can legitimately cite a registered class BY,
+    read from the §6 register: each `prozesse[].id`, plus the
+    SECTION-NAME TAIL of each `heimat` (`<file>#<section>` →
+    `<section>`), because a brief names the devbook section at least
+    as often as the class id.
+
+    Three answers, not two (repo CLAUDE.md, the checker's third
+    answer). `None` is COULD NOT VERIFY — register absent,
+    unreadable, malformed, or not the register's own
+    `{"prozesse": [...]}` shape (_register_entries) — and the caller
+    maps it to silence-plus-a-log, never to "clean". An empty list is
+    a real answer: the register was read and certifies zero classes,
+    so no brief can be naming one. A malformed ENTRY inside a good
+    file degrades to skipping that entry, mirroring _register_row:
+    one bad row must not blank the whole consult."""
+    path = _register_path()
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError, ValueError):
+        return None
+    entries = _register_entries(data)
+    if entries is None:
+        return None
+    names = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        class_id = entry.get("id")
+        if isinstance(class_id, str) and class_id.strip():
+            names.append(class_id.strip())
+        heimat = entry.get("heimat")
+        if isinstance(heimat, str) and "#" in heimat:
+            tail = heimat.split("#", 1)[1].strip()
+            if tail:
+                names.append(tail)
+    return names
+
+
+def missing_devbook_pin(payload: dict) -> str | None:
+    """The matched class/section name iff an execution-tail Agent
+    brief cites a REGISTERED class and pins no fingerprint — else
+    None.
+
+    The class this closes (dotfiles df-238): a build brief named a
+    registered devbook section that had been amended the same day and
+    pinned nothing, so the executing lane worked from whatever the
+    file happened to say at read time. §6 makes the fingerprint the
+    instrument for exactly that drift, and until now nothing asked for
+    it at the one moment it is cheap — compose time. Caught by hand
+    that day; a mechanism is what survives into the next session.
+
+    Scope is its two siblings' — `_tail_kind(payload) == "execution"`,
+    so verifier/discovery briefs are exempt, including one that merely
+    CITES forms.md (the false-fire class repaired 2026-08-15).
+
+    Accepted residue, named rather than discovered later: the class
+    match is a SUBSTRING test over the normalized brief, so a heimat
+    tail that is ordinary English ("Registered procedure") matches a
+    brief that discusses it without dispatching against it. The
+    direction is deliberate — this lane ships WARN, and an over-fire
+    here costs a line the dispatcher reads, while an under-fire costs
+    the drift the lane exists to catch. A `guard_modes` promotion to
+    deny is what would make that residue expensive, which is the
+    fire-rate review's question, not this docstring's.
+
+    Fail-open on parse doubt, like every lane in this file."""
+    if payload.get("tool_name") != "Agent":
+        return None
+    tool_input = payload.get("tool_input") or {}
+    if not (tool_input.get("prompt") or ""):
+        return None
+    if _tail_kind(payload) != "execution":
+        return None  # verifier/discovery or no tail; exempt
+    brief = _brief_text(payload)
+    if _HEX64_RE.search(brief):
+        return None  # a pin is present; this lane asks nothing more
+    names = _registered_class_names()
+    if names is None:
+        # COULD NOT VERIFY: with no register the lane cannot know
+        # whether a class was named. Silent — but logged, so the
+        # blind stretch is countable instead of reading as clean.
+        fire_log(_SOURCE, "could-not-verify",
+                 _PIN_UNREADABLE_REASON.format(path=_register_path()),
+                 payload)
+        return None
+    for name in names:
+        if _norm(name) in brief:
+            return name
+    return None
+
+
+def missing_devbook_pin_warn_text(class_name: str) -> str:
+    doc = policy().get("discipline_doc") or "the dispatch skill"
+    return (
+        f"Execution brief cites the registered class/section "
+        f"\"{class_name}\" ({doc} §6 register) and pins NO 64-hex "
+        "fingerprint. A registered devbook section can be amended "
+        "between compose time and the lane's read — the §6 "
+        "invalidation exists for exactly that — and an unpinned lane "
+        "cannot tell which text it holds, so it reports \"the devbook "
+        "says\" about a snapshot nobody graded. Repair: paste the "
+        "section's sha256 into the brief. The recipe is the devbook "
+        "section's OWN fingerprint paragraph (sha256 from its `## ` "
+        "heading line up to, exclusive, the next `## `-prefixed line "
+        "or EOF). RECOMPUTE IT FROM THE FILE, never copy it from the "
+        "register: a register entry standing stale against the file "
+        "is the drift the pin exists to catch, so a pin derived from "
+        "the register agrees with itself and grades nothing."
     )
 
 
@@ -640,15 +782,38 @@ def main() -> int:
     if missing_sections(payload):
         deny(missing_sections_deny_text(payload), source=_SOURCE,
              payload=payload)
-    # Staged lane: ships warn, promotable to deny via guard_modes
-    # (key "brief-reminder" — the four deny lanes above call deny()
-    # directly, so that key reaches this lane alone). fire() exits in
-    # EVERY mode, so a warn here replaces the reminder line below for
-    # this one brief: the warn names the same §1 check more
-    # specifically, and every deny lane above already exits the same
-    # way.
+    # PROMOTED to deny 2026-09-15 (df-238) — the evidence and its
+    # honest limits live in missing_commit_plan's docstring. It stays
+    # on fire() rather than deny() so a site can demote it through
+    # `guard_modes` without a code change.
+    #
+    # The `guard_modes` key is "brief-reminder" (the source tag's last
+    # segment), and it now reaches BOTH fire()-routed lanes in this
+    # file, no longer one: a site setting it to "warn" demotes this
+    # deny, and setting it to "deny" promotes the staged pin lane
+    # below. The four deny() lanes above are unaffected either way,
+    # since deny() does not consult the modes at all. Stated because
+    # the superseded comment here claimed the key "reaches this lane
+    # alone", which stopped being true the moment a second fire()
+    # lane landed — a mechanism's own words outliving their predicate.
     if missing_commit_plan(payload):
-        fire(missing_commit_plan_warn_text(), source=_SOURCE,
+        fire(missing_commit_plan_deny_text(), source=_SOURCE,
+             payload=payload, default_mode="deny")
+    # Staged lane (WARN by shipped default, repo CLAUDE.md: a new lane
+    # earns deny through the fire-rate review), ordered LAST ON
+    # PURPOSE — after every deny lane above. fire() exits in EVERY
+    # mode, warn included, so a warn lane placed EARLIER would exit
+    # before the denies behind it ever ran: a staged lane silently
+    # disabling four shipped ones. The named-diagnostic ordering rule
+    # (put the specific message ahead of the broad one) is a
+    # Report-pattern rule, where every check appends and none exits;
+    # transferred to an exit-per-lane hook its mechanism does not
+    # hold. What the ordering costs is bounded: a pin-less brief that
+    # is ALSO denied gets the deny, is repaired, and the pin warn
+    # fires on the retry.
+    pin_class = missing_devbook_pin(payload)
+    if pin_class:
+        fire(missing_devbook_pin_warn_text(pin_class), source=_SOURCE,
              payload=payload, default_mode="warn")
     # One additionalContext field per hook call: the advisory and the
     # register rows ride the reminder line rather than replacing it.
@@ -1016,19 +1181,52 @@ if __name__ == "__main__":
         # exempted — a staged warn lane firing on legitimate work.
         assert not missing_commit_plan(_vet)
         assert missing_commit_plan(_exec_bad)
-        # The lane's STAGING is a claim its docstring makes about
-        # itself ("ships WARN, earns deny through the fire-rate
-        # review") and repo CLAUDE.md makes a rule. Nothing asserted
-        # it: flipping the default to "deny" left every net green — a
-        # mechanism's own words with no predicate behind them. The
-        # call site's default_mode is read from the source, so the
-        # claim now ages loudly.
+        # Each fire()-routed lane's SHIPPED MODE is a claim its
+        # docstring makes about itself, and repo CLAUDE.md makes a
+        # rule of it. Nothing asserted it once: flipping a default
+        # left every net green — a mechanism's own words with no
+        # predicate behind them.
+        #
+        # The former spelling was a bare `'default_mode="warn"' in
+        # _main_src`, which stopped discriminating the day a SECOND
+        # fire() lane landed: with one lane on "deny" and one on
+        # "warn", a substring test over the whole function is
+        # satisfied by either lane carrying either value — the
+        # match-over-rendered-text shape. So the modes are read per
+        # CALL SITE out of the parsed function, keyed by the text
+        # helper each call passes, and the map is derived from the
+        # running parser rather than restated here.
+        import ast as _ast
         import inspect as _inspect
+        import textwrap as _textwrap
         _main_src = _inspect.getsource(main)
-        assert 'default_mode="warn"' in _main_src, (
-            "the commit-plan lane must ship WARN (repo CLAUDE.md: a "
+        _fire_modes = {}
+        for _node in _ast.walk(_ast.parse(_textwrap.dedent(_main_src))):
+            if not (isinstance(_node, _ast.Call)
+                    and isinstance(_node.func, _ast.Name)
+                    and _node.func.id == "fire"):
+                continue
+            _text_fn = None
+            if (_node.args and isinstance(_node.args[0], _ast.Call)
+                    and isinstance(_node.args[0].func, _ast.Name)):
+                _text_fn = _node.args[0].func.id
+            _mode = None
+            for _kw in _node.keywords:
+                if _kw.arg == "default_mode":
+                    _mode = getattr(_kw.value, "value", None)
+            _fire_modes[_text_fn] = _mode
+        # Both lanes present, so a DELETED call site fails here too —
+        # a mode map missing a key reads exactly like a lane set to
+        # None otherwise.
+        assert len(_fire_modes) == 2, _fire_modes
+        assert _fire_modes.get("missing_commit_plan_deny_text") == "deny", (
+            "the commit-plan lane ships DENY since 2026-09-15 "
+            "(df-238 promotion; the evidence is in its docstring)",
+            _fire_modes)
+        assert _fire_modes.get("missing_devbook_pin_warn_text") == "warn", (
+            "the devbook-pin lane must ship WARN (repo CLAUDE.md: a "
             "new lane earns deny through the fire-rate review, never "
-            "by assertion)")
+            "by assertion)", _fire_modes)
 
         # ── Commit-plan lane (missing_commit_plan), STAGED WARN ────
         # Slot named in the dispatch skill §1 skeleton ("## Commit
@@ -1096,7 +1294,12 @@ if __name__ == "__main__":
             "prompt": "Do X.\n" + (missing_commit_plan.__doc__ or "")
                       + "\n" + EXECUTION_TAIL_BG}})
 
-        assert "commit-plan section" in missing_commit_plan_warn_text()
+        # A promoted lane's text is a DENY text, and this file's deny
+        # texts all announce the block and name a repair that clears
+        # on retry — the convention deny_text()'s own docstring states.
+        assert "commit-plan section" in missing_commit_plan_deny_text()
+        assert "Blocked" in missing_commit_plan_deny_text()
+        assert "retry" in missing_commit_plan_deny_text()
 
         # ── Whitespace-normalization lane (false-fire 2026-07-30) ──
         # The §2 tails carry hard line wraps in references/forms.md
@@ -1558,6 +1761,240 @@ if __name__ == "__main__":
         assert "brief check" in _e2e_ctx, _e2e_ctx
         assert _REGISTER_HEADER_LINE in _e2e_ctx, _e2e_ctx
         assert "LIVENESS-NET-SENTINEL" in _e2e_ctx, _e2e_ctx
+
+        # ── Devbook-pin lane (missing_devbook_pin), STAGED WARN ────
+        # Motivating incident (dotfiles df-238): a build brief named a
+        # registered devbook section amended the SAME DAY and pinned
+        # nothing, so the lane worked from an ungraded snapshot.
+        # Expectations derive from §6's fingerprint contract (a pin is
+        # a 64-hex sha256 over the section) and from the register's
+        # own shape — never from this lane's behavior.
+
+        # (i) the pin token: both ends anchored. An unanchored 64-run
+        # also matches INSIDE a longer hex blob, which would let a
+        # 128-char digest of something else pass as a section pin.
+        assert _HEX64_RE.search("a" * 64)
+        assert not _HEX64_RE.search("a" * 63)
+        assert not _HEX64_RE.search("a" * 65)
+        assert not _HEX64_RE.search("z" * 64)          # not hex
+        assert _HEX64_RE.search("sha256 " + "0f" * 32 + ".")
+
+        # (ii) _registered_class_names: THREE answers. None is
+        # could-not-verify; [] is a read register certifying zero
+        # classes; a populated register yields ids AND heimat tails.
+        _pin_tmpdir = _tf.mkdtemp()
+
+        def _with_pin_register(path, fn):
+            os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"] = path
+            try:
+                return fn()
+            finally:
+                del os.environ["CLAUDE_DISPATCH_GUARDS_REGISTER"]
+
+        _pin_reg = os.path.join(_pin_tmpdir, "readiness.json")
+        with open(_pin_reg, "w") as f:
+            json.dump(_prozesse(
+                {"id": "guard-checker-bau", "tier": "opus",
+                 "status": "eval-open",
+                 "heimat": "CLAUDE.md#Registered procedure",
+                 "fingerprint": "b" * 64},
+                {"id": "enumeration-fixed-schema", "tier": "haiku",
+                 "status": "ready",
+                 "heimat": "CLAUDE.md#Registered class: fixed-schema "
+                           "enumeration"},
+                "not-a-dict",
+                {"tier": "opus"},           # no id, no heimat
+            ), f)
+        _names = _with_pin_register(_pin_reg, _registered_class_names)
+        assert "guard-checker-bau" in _names, _names
+        assert "Registered procedure" in _names, _names
+        assert "Registered class: fixed-schema enumeration" in _names, \
+            _names
+        # the malformed entry is SKIPPED, never a crash and never a
+        # row: four entries in, four names out (2 ids + 2 tails).
+        assert len(_names) == 4, _names
+        # could-not-verify, all three ways in
+        assert _with_pin_register(os.path.join(_pin_tmpdir, "gone.json"),
+                                  _registered_class_names) is None
+        _pin_bad = os.path.join(_pin_tmpdir, "bad.json")
+        with open(_pin_bad, "w") as f:
+            f.write("{not json")
+        assert _with_pin_register(_pin_bad,
+                                  _registered_class_names) is None
+        _pin_shape = os.path.join(_pin_tmpdir, "shape.json")
+        with open(_pin_shape, "w") as f:
+            json.dump({"schema_version": 2}, f)
+        assert _with_pin_register(_pin_shape,
+                                  _registered_class_names) is None
+        # …and the READ-BUT-EMPTY answer is [], never None: a register
+        # certifying zero classes is a measurement, not a blind spot.
+        _pin_empty = os.path.join(_pin_tmpdir, "empty.json")
+        with open(_pin_empty, "w") as f:
+            json.dump(_prozesse(), f)
+        assert _with_pin_register(_pin_empty,
+                                  _registered_class_names) == []
+
+        # (iii) THE PAIR that grades the lane — the same brief with and
+        # without a pin. They must DIFFER; a pair both readings satisfy
+        # grades nothing. Red-proven against the whole-repo snapshot at
+        # the parent commit, where the predicate did not exist at all.
+        _PIN_LINE = ("Devbook section sha256 "
+                     "77c9bf3fd7dead9ae5256a7ad4df61d8e8299d4a1"
+                     "7e9801422c2dab3d5d222b4 — recomputed from the "
+                     "file.")
+
+        def _pin_brief(*extra):
+            return {"tool_name": "Agent", "tool_input": {
+                "name": "sonnet-x",
+                "prompt": "\n".join(("Do X.",) + extra
+                                    + (GROUNDING_SECTION,
+                                       WRITE_BOUNDARIES_SECTION,
+                                       COMMIT_PLAN_SECTION,
+                                       EXECUTION_TAIL_BG))}}
+
+        _class_no_pin = _pin_brief(
+            "REGISTERED-CLASS dispatch: guard-checker-bau, tier opus.")
+        _class_with_pin = _pin_brief(
+            "REGISTERED-CLASS dispatch: guard-checker-bau, tier opus.",
+            _PIN_LINE)
+        assert _with_pin_register(
+            _pin_reg, lambda: missing_devbook_pin(_class_no_pin)) == \
+            "guard-checker-bau"
+        assert _with_pin_register(
+            _pin_reg, lambda: missing_devbook_pin(_class_with_pin)) is None
+        # (iv) the heimat SECTION-NAME tail is a second way in — a
+        # brief names the devbook section at least as often as the id.
+        _heimat_no_pin = _pin_brief(
+            "Follow the Registered procedure devbook, steps 1-5.")
+        assert _with_pin_register(
+            _pin_reg, lambda: missing_devbook_pin(_heimat_no_pin)) == \
+            "Registered procedure"
+        # (v) scope negatives: no class named; Task tool; garbage
+        assert _with_pin_register(
+            _pin_reg, lambda: missing_devbook_pin(
+                _pin_brief("Ordinary build, no registered class."))) is None
+        assert _with_pin_register(_pin_reg, lambda: missing_devbook_pin(
+            {"tool_name": "Task", "tool_input": dict(
+                _class_no_pin["tool_input"])})) is None
+        assert _with_pin_register(_pin_reg, lambda: missing_devbook_pin(
+            {"tool_name": "Agent", "tool_input": {}})) is None
+        assert _with_pin_register(
+            _pin_reg, lambda: missing_devbook_pin({})) is None
+        # (vi) the READ-ONLY tail exempts, exactly as for the two
+        # sibling lanes — and the MUST-NOT-MOVE arm is asked of an
+        # INDEPENDENT instrument (_tail_kind), never of the lane on
+        # trial: a lane that returned None for the wrong reason would
+        # satisfy an assertion phrased against itself.
+        _vet_cites_class = {"tool_name": "Agent", "tool_input": {
+            "name": "opus-vet",
+            "prompt": ("Verifier dispatch. ARTIFACT: the diff. "
+                       "QUESTION: does the guard-checker-bau devbook "
+                       "still match the hook?\n"
+                       + _READONLY_TAIL_REAL)}}
+        assert _tail_kind(_vet_cites_class) == "readonly", \
+            _tail_kind(_vet_cites_class)
+        assert "guard-checker-bau" in _brief_text(_vet_cites_class), (
+            "fixture names no registered class — it would pass "
+            "regardless of the exemption")
+        assert _with_pin_register(
+            _pin_reg,
+            lambda: missing_devbook_pin(_vet_cites_class)) is None
+        # (vii) COULD NOT VERIFY is silent AND logged: an unreadable
+        # register must not read as a clean brief. The log line is the
+        # positive control — without it the silent branch is
+        # indistinguishable from "checked, nothing found".
+        _pin_firelog = os.path.join(_pin_tmpdir, "fires.jsonl")
+        _prev_firelog = os.environ.get("CLAUDE_DISPATCH_GUARDS_FIRELOG")
+        os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = _pin_firelog
+        try:
+            assert _with_pin_register(
+                os.path.join(_pin_tmpdir, "gone.json"),
+                lambda: missing_devbook_pin(_class_no_pin)) is None
+            _pin_fires = [json.loads(ln) for ln in
+                          open(_pin_firelog, encoding="utf-8")
+                          if ln.strip()]
+            assert len(_pin_fires) == 1, _pin_fires
+            assert _pin_fires[0]["mode"] == "could-not-verify", _pin_fires
+            assert "could not verify" in _pin_fires[0]["reason"], _pin_fires
+            # …and a brief that PINS never reaches the register at all,
+            # so it logs nothing: the lane asks nothing more of it.
+            assert _with_pin_register(
+                os.path.join(_pin_tmpdir, "gone.json"),
+                lambda: missing_devbook_pin(_class_with_pin)) is None
+            _pin_fires2 = [ln for ln in open(_pin_firelog, encoding="utf-8")
+                           if ln.strip()]
+            assert len(_pin_fires2) == 1, _pin_fires2
+        finally:
+            if _prev_firelog is None:
+                del os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"]
+            else:
+                os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = _prev_firelog
+
+        # (viii) the warn text names all three things the brief
+        # demands of it: the matched class, the recipe pointer, and
+        # that the pin is recomputed from the FILE.
+        _wt = missing_devbook_pin_warn_text("guard-checker-bau")
+        assert "guard-checker-bau" in _wt
+        assert "sha256" in _wt and "heading line" in _wt
+        assert "FROM THE FILE" in _wt
+
+        # ── END-TO-END exit decisions, both halves ─────────────────
+        # The done-criterion is pinned on the EXIT DECISION, never the
+        # message text, so these run the real script as a subprocess
+        # (stdin payload -> stdout JSON) the way replay-bench does.
+        def _e2e(payload, register):
+            env = dict(os.environ)
+            env["CLAUDE_DISPATCH_GUARDS_REGISTER"] = register
+            env["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+            env["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = os.path.join(
+                _tf.mkdtemp(), "fires.jsonl")
+            proc = _sp.run([sys.executable, os.path.realpath(__file__)],
+                           input=json.dumps(payload), env=env,
+                           capture_output=True, text=True)
+            assert proc.returncode == 0, proc
+            out = json.loads(proc.stdout) if proc.stdout.strip() else {}
+            hso = out.get("hookSpecificOutput") or {}
+            return (hso.get("permissionDecision"),
+                    hso.get("additionalContext") or "",
+                    hso.get("permissionDecisionReason") or "")
+
+        # half 1: the commit-plan-less execution brief now DENIES.
+        # Against the snapshot at the parent commit the same payload
+        # exited warn-shaped (additionalContext "WARN — staging mode",
+        # no permissionDecision) — that is this arm's red.
+        _no_plan = {"tool_name": "Agent", "tool_input": {
+            "name": "sonnet-x",
+            "prompt": "\n".join(("Do X.", GROUNDING_SECTION,
+                                 WRITE_BOUNDARIES_SECTION,
+                                 EXECUTION_TAIL_BG))}}
+        _d, _ctx, _reason = _e2e(_no_plan, _pin_reg)
+        assert _d == "deny", (_d, _ctx)
+        assert "commit-plan section" in _reason, _reason
+        # …and the compliant twin still passes: the pair must differ.
+        _d2, _ctx2, _ = _e2e(_pin_brief("Ordinary build."), _pin_reg)
+        assert _d2 is None, (_d2, _ctx2)
+        assert "brief check" in _ctx2, _ctx2
+
+        # half 2: class named, no pin -> WARN naming the class; the
+        # same brief with a pin -> no warn; the verifier brief -> no
+        # warn (exempt). Read off the exit decision + the staging
+        # marker fire() emits, never off prose.
+        _d3, _ctx3, _ = _e2e(_class_no_pin, _pin_reg)
+        assert _d3 is None, (_d3, _ctx3)
+        assert "WARN — staging mode" in _ctx3, _ctx3
+        assert "guard-checker-bau" in _ctx3, _ctx3
+        _d4, _ctx4, _ = _e2e(_class_with_pin, _pin_reg)
+        assert _d4 is None, (_d4, _ctx4)
+        assert "WARN — staging mode" not in _ctx4, _ctx4
+        _d5, _ctx5, _ = _e2e(_vet_cites_class, _pin_reg)
+        assert _d5 is None, (_d5, _ctx5)
+        assert "WARN — staging mode" not in _ctx5, _ctx5
+        # …and with NO register readable the lane is silent end to end
+        # (could-not-verify), rather than warning on a guess.
+        _d6, _ctx6, _ = _e2e(_class_no_pin,
+                             os.path.join(_pin_tmpdir, "gone.json"))
+        assert _d6 is None, (_d6, _ctx6)
+        assert "WARN — staging mode" not in _ctx6, _ctx6
 
         print("brief-reminder: all tests passed")
         sys.exit(0)
