@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 10
+added: 11
 compacted: 0
 
 ## dg-1
@@ -346,4 +346,13 @@ goal: general-maintenance
 write-set: hooks/,plugin/skills/dispatch/SKILL.md
 done-criterion: red-first: a replayed two-lane dispatch with identical assigned scratch paths is refused naming both lanes; distinct-slug pair passes; predicate needs the Scratch assignment machine-readable, so the skeleton line change lands in the same item; bite registered per this repo's guard conventions
 evidence: wave-A measurement relayed by dotfiles-a8 2026-09-15, mechanism verified at dotfiles-89 (mtime attribution, reflog empty); dispatch skill section 1 slug rule exists but skeleton does not force it
+blocked-by: NONE
+
+## dg-43
+grade: READY
+requirement: replay-bench cannot exercise the devbook-pin lane's FIRING direction: CLAUDE_DISPATCH_GUARDS_REGISTER is pinned to a per-index ABSENT path and the case schema has no register-fixture key, so under the bench that lane sits permanently in its could-not-verify branch and its corpus case can only guard false fires. Add a register key to the case schema (a fixture the bench materialises per case) so the lane's positive direction is bench-coverable. Found by the G1 lane 2026-09-15, report slot (c)2
+goal: general-maintenance
+write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
+done-criterion: a corpus case carrying a register fixture drives the pin lane to its WARN and the bench asserts it as a fire; the absent-register cases keep their could-not-verify silence; bench selftest green
+evidence: G1 report slot (c)2 + the lane's read of the bench env pinning; the second corpus case (019e856) documents itself as false-fire-only
 blocked-by: NONE
