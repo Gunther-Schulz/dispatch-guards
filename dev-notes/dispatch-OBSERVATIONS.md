@@ -1502,12 +1502,39 @@ own write records a superseding claim, which would silence this
 path, is unread here); (ii) the relief's git call timing out
 (_GIT_TIMEOUT, conservative False → relief skipped) — this
 machine was measurably killing processes for memory the same
-hour. Discriminator between them: whether the file carried the
-successor's OWN uncommitted work at fire time (reporter offers
-exact timings and the lane's note). Either mechanism strengthens
-slot 3's release-on-close fix; (i) adds a refinement candidate —
-relief also holds when the path's latest claim is the current
-agent's own.
+hour. RESOLVED same day, one message round plus the fire log. (i) is
+REFUTED by the reporter's machine-read timeline (claims store +
+git): tree-wide `status --porcelain` EMPTY at 19:33:30 local,
+zero claims on the path 19:10→19:39, and the firing edit was the
+successor's FIRST touch of the file — the file was clean at fire
+time, so the relief's input was a clean tree and it still did
+not relieve. The fire log (ts is ISO-8601 UTC — epoch parsing
+returns silent false zeros, one such false zero produced and
+caught by positive control during this very diagnosis) shows
+EXACTLY ONE warn: 17:39:00Z, agent opus-lc120, against
+asonnet-lc126's claim; the successor's 19:40:18 and 19:42:55
+edits fired NOTHING — explained at the source: record_claim runs
+on the victim's own first write, making the victim the path's
+latest claimant, so the gate self-heals per successor. Real cost
+of the class: one spurious warn per successor lane per file per
+TTL window. Remaining mechanism, now the only one standing: the
+relief's documented could-not-verify branch — "git unrunnable,
+slow, or exiting non-zero → False, and the gate keeps firing"
+(no_uncommitted_work docstring) — under measured machine load
+(reporting desk running a full clone + 635-test battery + node
+suites that hour; the same hour this machine killed two of the
+judgment desk's timers for memory). The timeout/exit itself is
+uninstrumented, WHICH IS THE DEFECT: the warn text and fire-log
+record are byte-identical whether the file was dirty or the
+check could not run. Slot 3 gains its sharpest fix: the warn and
+its fire-log record NAME the producing branch — "live
+uncommitted work at <path>" vs "could-not-verify (git timeout /
+exit N)" — the third-answer rule applied to this gate's own
+output; with the branch named, today's two-desk multi-round
+diagnosis becomes one grep, and the fire-rate review can count
+could-not-verify fires as their own line. (Correction folded in:
+the stale claim's work was committed AND pushed 70 minutes
+before the firing; firing lane opus-lc120.)
 
 2. **Class:** lane lifecycle vs. claim lifecycle divergence: the
    claim register knows only the TTL, not a lane's booking-close — a
