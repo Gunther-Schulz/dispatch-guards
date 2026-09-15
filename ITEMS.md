@@ -398,7 +398,7 @@ evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes a
 blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
 
 ## dg-49
-grade: READY
+grade: PARKED
 requirement: agent-model-gate's description-derived slug does not strip a legacy '<model>: ' title prefix before slugifying, so a dispatch with description 'opus: Fix tests' and model opus is rewritten to name 'opus-opus-fix-tests'. The model is carried twice and the panel shows the doubling. The lane's own bite currently ENSHRINES this as the expected value, so fixing it means changing that expectation. Surfaced as a named deviation by lane sonnet-dg45-model-gate-rewrite, 2026-09-15, and confirmed by me in its test text. Record: dg-45 closing report slot (d), commit df4a850
 goal: general-maintenance
 write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
