@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 18
+added: 19
 compacted: 0
 
 ## dg-1
@@ -398,3 +398,12 @@ write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
 done-criterion: either the strip extends to the name source under the same equals-the-validated-model test with the pinning bite flipped and red-first stated, or the docstring records why the name path deliberately keeps the doubling; no third state where the bite pins behaviour nobody decided
 evidence: the lane's own bite asserting 'opus-opus-legacy-title' (read by me at agent-model-gate.py:548); dg-49's amended done-criterion says 'description-derived', which is what scoped the fix
 blocked-by: decision should the legacy-model-prefix strip extend to the name source as well as the description
+
+## dg-51
+grade: READY
+requirement: the lifecycle CLI auto-commits without an AI attribution trailer, so every "lifecycle: ledger decision" commit lands unattributed and the machine pre-push guard flags it as unbooked-without-a-mark. Observed 2026-09-15 on 494028d in this repo: author is the operator, trailer block EMPTY, guard could not determine who made it. The operator corpus requires explicit AI attribution on commits published under the operator accounts, so the tool produces the violation by construction rather than its caller slipping. Worse for the caller: the decision verb offers no --no-commit, unlike item add / item amend / item close, so a caller cannot take the commit over and attribute it. Record: push of 95cd0fb, guard-rewrite arc wave 2
+goal: general-maintenance
+write-set: /home/g/dev/Gunther-Schulz/lifecycle/plugin/cli/lifecycle
+done-criterion: either the CLI writes the attribution trailer on its own commits, or every committing verb offers --no-commit so the caller owns the commit and its trailer; the pre-push attribution guard stops flagging lifecycle auto-commits
+evidence: 494028d in this repo shows an empty trailer block and was flagged by the pre-push guard this date; the decision verb help lists no --no-commit flag while item add does
+blocked-by: NONE
