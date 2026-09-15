@@ -5548,7 +5548,24 @@ lane's own claim, never on any trailer."
 normal quota drain; dotfiles df-217 carries the tail's claim-rule
 half and cites this entry.
 
-## 2026-09-15 — "your OWN scratchpad" reads green while two lanes of one session collide
+**Firing record, 2026-09-15 (second independent measurement, new
+direction).** Drain desk dotfiles-f1, lifecycle wave 1: three lane
+commits (bc35cea, 72598bf, 73f59a9) byte-identical on BOTH
+trailers, re-verified at the judgment desk. Two sharpenings the
+first measurement did not carry. POPULATION: for a within-session
+fan-out the §4 fallback clause ("candidates still
+indistinguishable") is not an edge case but the WHOLE population —
+a reader meeting "the session trailer is the discriminator" takes
+it as generally available, and for sibling lanes it never is.
+DIRECTION: found by a LANE from the claiming side — bc35cea
+carries lane B's exact trailer block and is another lane's work,
+so the trailer FALSELY CLAIMS where the rule's text anticipates
+only failing to claim; the lane identified its commits by content
+and write-set disjointness, which held only because the wave's
+boundaries were disjoint by construction. Same cause set touches
+dotfiles' pre-push guard comment, which recorded the trailer as
+unreliable via non-determinism only; inheritance is the second,
+systematic cause (comment amended same day).
 
 **Incident + basis.** Same wave, measured in both directions with
 neither lane disobeying its brief: lane A's `rm -rf` + `git clone`
