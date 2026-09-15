@@ -5514,3 +5514,70 @@ reason."
 normal quota drain (measured: wave 1, one desk, self-caught at its
 own close review — the close-time spend question's first live
 catch).
+
+## 2026-09-15 — the session trailer discriminates SESSIONS, not lanes
+
+**Incident + basis.** Lifecycle drain wave A (drain desk
+dotfiles-a8, judgment desk dotfiles-89): two parallel opus lanes of
+ONE session produced commits with byte-identical trailer blocks —
+Co-Authored-By AND Claude-Session — verified by the drain desk via
+`git interpret-trailers --parse` + diff (zero lines differing);
+mechanism confirmed independently at dotfiles-89 on lifecycle
+1caa4dc, whose Claude-Session names the PARENT session's URL. A
+lane's own report also misstated the sibling as carrying NO session
+trailer — right conclusion, wrong stated reason, caught by the
+desk checking its instrument before the claim.
+
+**Class.** Attribution-label reach: §4's "the session trailer,
+where the harness wrote one, is the discriminator" holds between
+SESSIONS only — every lane of one session inherits that session's
+URL, so the discriminator is the same value by construction exactly
+where a wave's sibling commits need telling apart. Sibling of
+dotfiles df-217 (briefed-identical Co-Authored-By) and of the
+label-the-checked-party class (dotfiles pre-push, 2026-08-10).
+
+**Pre-formulated rule text** (dispatch skill §4, the trailer
+clause): after "The session trailer, where the harness wrote one,
+is the discriminator" append: "— between SESSIONS only: every lane
+of one session inherits that session's URL, so sibling lanes of one
+desk carry byte-identical session trailers by construction, and
+within-session attribution rests on disjoint write sets and each
+lane's own claim, never on any trailer."
+
+**Consumer + drain seam.** Dispatch skill §4 amendment on the
+normal quota drain; dotfiles df-217 carries the tail's claim-rule
+half and cites this entry.
+
+## 2026-09-15 — "your OWN scratchpad" reads green while two lanes of one session collide
+
+**Incident + basis.** Same wave, measured in both directions with
+neither lane disobeying its brief: lane A's `rm -rf` + `git clone`
+at a generic scratchpad path destroyed lane B's private clone
+(reflog empty — repository object destroyed, not rewound;
+attributed by mtime pair `.git/config`/`.git/HEAD`); lane B's
+probe residue later crossed into the tree lane A was measuring.
+The brief said "your OWN scratchpad, never another session's" and
+assigned no slugs — both lanes SATISFIED the clause, because both
+words key to the SESSION grain while the collision is lane against
+lane. The skill's slug rule (§1, untracked outputs) already exists;
+the skeleton's Scratch line does not force it, so a compliant-
+reading brief ships the collision.
+
+**Class.** Boundary clause keyed one grain too coarse: a scope word
+("own", "another session's") at the session grain over a hazard at
+the lane grain reads green at exactly the moment it does not hold.
+Same family as the directory-grain allowance concealing undeclared
+artifacts (dotfiles CLAUDE.md).
+
+**Pre-formulated rule text.** (a) Brief skeleton, Scratch line:
+"Scratch: <own scratchpad>/<lane-slug>/ — per-lane subdirectory
+assigned HERE; parallel lanes of one session share one session-
+keyed scratchpad, so an unslugged path collides lane-against-lane
+while reading compliant." (b) Mechanical half, hook candidate
+(computable predicate, near-zero false fires — booked as dg item
+in this repo's carrier): at dispatch, refuse two live lanes of one
+session whose assigned scratch paths are not distinct.
+
+**Consumer + drain seam.** Dispatch skill §1 amendment on the
+normal quota drain; the hook half drains through this repo's item
+carrier (see the dg booking of the same date).
