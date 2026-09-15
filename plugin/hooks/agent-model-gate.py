@@ -95,10 +95,14 @@ Verb conversion, name lane (2026-09-15, guard-rewrite arc item 1,
 `docs/directives/2026-09-15-guard-rewrite-arc.md`): the missing-name
 and wrong-prefix denies above are now a REWRITE, not a bounce. The
 gate computes `<model>-<slug>` — slug from the existing `name` when
-one is present (prefixed as-is, even if it carries a stale model
-token) or from `description` otherwise (lowercased, anything outside
-`[a-z0-9_-]` collapsed to one `-`, trimmed, capped ~24 chars,
-fallback `task` on an empty result) — and emits it via
+one is present, else from `description`, with a leading legacy
+`<model>:`/`<model>-` prefix stripped from EITHER source when that
+leading word equals this call's own validated model (dg-49 for the
+description path, dg-50 transposing it to the name path); a
+DIFFERENT model's leading word is information and stays. Then
+lowercased, anything outside `[a-z0-9_-]` collapsed to one `-`,
+trimmed, capped ~24 chars, fallback `task` on an empty result — and
+emits it via
 `hookSpecificOutput.updatedInput` with NO `permissionDecision` field,
 the shape `docs/audits/wave0-probe-record-2026-09-15.md` found
 correct (arms b2/b3: applies with no forced allow, permission flow
@@ -262,25 +266,28 @@ def compute_name_rewrite(tool_input: dict, model: str) -> str | None:
     """The corrected `name` for a generic dispatch with a valid,
     non-denied `model`, or None when the existing name already
     carries the right prefix (case-insensitively) — no rewrite
-    needed. Slug source: the existing name when one is present
-    (prefixed as-is, per the settled design — a name already
-    carrying a DIFFERENT model's prefix is not stripped, only
-    re-prefixed — the sibling case, which stands), else
-    `description` with a leading legacy '<model>: '/'<model>-'
-    prefix EQUAL to this call's own model stripped first (dg-49: the
-    model was otherwise carried twice, e.g. description "opus: Fix
-    tests" + model opus slugified whole to "opus-opus-fix-tests").
-    The strip applies to the description-fallback branch only — a
-    `name` source is never stripped, matching the sibling case
-    above. Never raises: _slugify always returns a non-empty
-    [a-z0-9_-]+ string."""
+    needed. Slug source: the existing `name` when one is present,
+    else `description`. EITHER source has a leading legacy
+    '<model>: '/'<model>-' prefix stripped first, and only when that
+    leading word EQUALS this call's own validated model (dg-49 for
+    the description path: "opus: Fix tests" + model opus otherwise
+    slugified whole to "opus-opus-fix-tests"; dg-50 transposed it to
+    the name path, where the same doubling survived — name
+    "opus: legacy title" + model opus gave "opus-opus-legacy-title").
+    A name in the CANONICAL '<model>-' form short-circuits to None
+    above and never reaches the strip, so only doubling cases arrive
+    here. A leading DIFFERENT model's word is information and is
+    never stripped from either source — the sibling case, which
+    stands (judgment desk 2026-09-15, 2(b)): "sonnet-foo" under
+    model opus stays "opus-sonnet-foo", because a slug that merely
+    begins with a model word is not thereby mislabelled. Never
+    raises: _slugify always returns a non-empty [a-z0-9_-]+
+    string."""
     name = (tool_input.get("name") or "").strip()
     if name and name.lower().startswith(model.lower() + "-"):
         return None
-    if name:
-        source = name
-    else:
-        source = _strip_model_prefix(tool_input.get("description") or "", model)
+    source = _strip_model_prefix(
+        name or (tool_input.get("description") or ""), model)
     return f"{model}-{_slugify(source)}"
 
 
@@ -540,12 +547,19 @@ if __name__ == "__main__":
         assert compute_name_rewrite(
             {"model": "opus", "description": "OPUS-Fix tests"},
             "opus") == "opus-fix-tests"
-        # A `name` source is never stripped, even when it carries the same
-        # model word with a colon (only the hyphen prefix short-circuits to
-        # None above) — the strip is description-fallback only.
+        # A NAME carrying this call's own model under a NON-canonical
+        # separator is stripped too (dg-50): the canonical "<model>-" form
+        # short-circuits to None above and never reaches the strip, so only
+        # the doubling cases arrive here.
         assert compute_name_rewrite(
             {"model": "opus", "name": "opus: legacy title", "description": "x"},
-            "opus") == "opus-opus-legacy-title"
+            "opus") == "opus-legacy-title"
+        # ...while a DIFFERENT model's leading word still stays, which is the
+        # sibling case ruled to stand — this pair is what keeps dg-50 from
+        # widening into it.
+        assert compute_name_rewrite(
+            {"model": "opus", "name": "sonnet-foo", "description": "x"},
+            "opus") == "opus-sonnet-foo"
         assert check({"model": "opus", "description": "Fix tests"}) is None
         assert compute_name_rewrite(
             {"model": "opus", "description": "Fix tests"},
