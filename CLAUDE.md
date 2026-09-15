@@ -44,9 +44,16 @@ are not — this repo carries both sides, and the split is the design.
   `hookSpecificOutput.updatedInput` instead of bouncing it back for
   recomposition. Every new lane and every lane amendment NAMES its
   verb and why, because a deny where a mechanical repair exists is
-  priced in re-sent calls (fire log all-time, as of 2026-09-15: 140
-  agent-model-gate blocks, 171 brief-reminder denies, each forcing
-  an often multi-kilotoken call to be composed again). The rewrite
+  priced in re-sent calls, each forcing an often multi-kilotoken
+  call to be composed again. The tally is READ, never carried — it
+  moves every day the guards fire, so a number quoted here is stale
+  by construction (this bullet shipped with 171 brief denies and was
+  179 the same evening, partly from the arc's own probe runs):
+  `python3 -c "import json,collections,os;rows=[json.loads(l) for l
+  in open(os.path.expanduser('~/.local/share/claude/dispatch-guards-fires.jsonl'))
+  if l.strip()];print(collections.Counter((r['guard'],r['mode']) for
+  r in rows))"` — 2026-09-15: 140 agent-model-gate blocks, 179
+  brief-reminder denies. The rewrite
   lives INSIDE the gate it satisfies: matching hooks run in
   parallel and each sees the ORIGINAL call, never another's
   rewrite, so a separate rewriting hook satisfies nothing. A verb
