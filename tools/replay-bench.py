@@ -26,7 +26,7 @@ claims store.
 Corpus format (JSONL, one case per line):
 
     {"hook": "<basename>.py",
-     "expect": "deny"|"ask"|"context"|"block"|"silent",
+     "expect": "deny"|"ask"|"context"|"block"|"silent"|"rewrite",
      "payload": {...}}                # the hook-input JSON
 
   optional keys:
@@ -36,12 +36,26 @@ Corpus format (JSONL, one case per line):
     "transcript_events": [...]        # written to a temp .jsonl whose path
                                       # is injected as payload.transcript_path
     "note": "<why this case exists>"  # carried by every regression case
+    "expect_updated_input": {...}     # "rewrite" cases only (2026-09-15):
+                                      # key/value pairs the observed
+                                      # hookSpecificOutput.updatedInput must
+                                      # carry — a kind-only "rewrite" match
+                                      # proves a repair happened, never that
+                                      # it repaired to the RIGHT value; this
+                                      # is the value-discriminating half
+                                      # (dg-45 judgment-desk ruling). Its
+                                      # own discrimination is proven by
+                                      # replay-bench.py --test, never by a
+                                      # corpus case, since a case cannot
+                                      # assert against a deliberately wrong
+                                      # expectation of itself.
 
 Outcome classification of one run:
     exit 2                                          -> block
     exit 0, empty stdout                            -> silent
     exit 0, JSON stdout, permissionDecision deny    -> deny
     exit 0, JSON stdout, permissionDecision ask     -> ask
+    exit 0, JSON stdout, updatedInput, no decision  -> rewrite
     exit 0, JSON stdout, additionalContext only     -> context
     anything else (unparseable stdout, other exit)  -> error (always a miss)
 
@@ -63,8 +77,8 @@ REPO = Path(__file__).resolve().parent.parent
 HOOKS = REPO / "plugin" / "hooks"
 DEFAULT_CORPUS = Path(__file__).resolve().parent / "corpus" / "guards.jsonl"
 
-KINDS = ("deny", "ask", "context", "block", "silent")
-FIRE_KINDS = ("deny", "ask", "context", "block")
+KINDS = ("deny", "ask", "context", "block", "silent", "rewrite")
+FIRE_KINDS = ("deny", "ask", "context", "block", "rewrite")
 
 
 def classify(returncode: int, stdout: str) -> str:
@@ -88,6 +102,15 @@ def classify(returncode: int, stdout: str) -> str:
     decision = hso.get("permissionDecision")
     if decision in ("deny", "ask"):
         return decision
+    # REWRITE (2026-09-15, guard-rewrite arc, dg-45 judgment-desk ruling):
+    # a repair via updatedInput with NO permissionDecision — the shape
+    # docs/audits/wave0-probe-record-2026-09-15.md found correct (arms
+    # b2/b3: applies with no forced allow, permission flow still runs
+    # unforced on a rewritten call). Checked AFTER the decision branch so
+    # a hypothetical lane pairing updatedInput with an explicit deny/ask
+    # still classifies by its decision, never silently as a rewrite.
+    if "updatedInput" in hso:
+        return "rewrite"
     if "additionalContext" in hso:
         return "context"
     return "error"
@@ -175,6 +198,10 @@ def load_corpus(path: Path, hook_filter: str | None) -> list[dict]:
             if ("payload" in case) == ("raw" in case):
                 raise SystemExit(
                     f"{path}:{lineno}: exactly one of payload/raw required")
+            if "expect_updated_input" in case and case["expect"] != "rewrite":
+                raise SystemExit(
+                    f"{path}:{lineno}: expect_updated_input only makes "
+                    "sense with expect=\"rewrite\"")
             if hook_filter and case["hook"] not in (
                     hook_filter, hook_filter + ".py"):
                 continue
@@ -182,8 +209,31 @@ def load_corpus(path: Path, hook_filter: str | None) -> list[dict]:
     return cases
 
 
+def _rewrite_value_mismatch(case: dict, raw_stdout: str) -> str | None:
+    """None if `case`'s `expect_updated_input` (if any) matches the
+    observed rewrite's actual `updatedInput`, else a description of the
+    first mismatching key. A case with no `expect_updated_input` makes no
+    value claim and always returns None — kind-matching alone ("rewrite"
+    observed) still requires this to return None before a case counts as
+    caught; see main()'s `caught` computation."""
+    expected = case.get("expect_updated_input")
+    if not expected:
+        return None
+    try:
+        updated = json.loads(raw_stdout)["hookSpecificOutput"]["updatedInput"]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return "no updatedInput to compare expect_updated_input against"
+    for k, v in expected.items():
+        got = updated.get(k)
+        if got != v:
+            return f"{k}: expected {v!r}, observed {got!r}"
+    return None
+
+
 def _test() -> int:
-    """Bite-test for the bench's OWN isolation — the premises it pins.
+    """Bite-tests for the bench's OWN machinery: the isolation premises it
+    pins, and (2026-09-15) whether expect_updated_input can actually catch
+    a wrong rewrite value.
 
     Graduated from a throwaway probe, per this repo's rule that a manual
     investigation is unfinished while the check that produced its finding
@@ -255,7 +305,43 @@ def _test() -> int:
         bad += 1
         print("FAIL [register isolation]: the planted sentinel class reached "
               "the rendered output", file=sys.stderr)
-    print("replay-bench selftest: isolation pinned" if not bad
+
+    # ── Rewrite-value assertion: a discriminating PAIR (2026-09-15, dg-45
+    # judgment-desk ruling on the guard-rewrite arc's item-1 critique pass).
+    # A kind-only "rewrite" match proves a repair happened, never that it
+    # repaired to the RIGHT value — this proves expect_updated_input can
+    # actually FAIL before any real corpus case is allowed to rest on it
+    # passing (Fixing's instrument-pair rule: a probe proven only by
+    # agreement never varied the axis that matters). The pair is built
+    # here rather than in guards.jsonl because a corpus case cannot assert
+    # against a deliberately WRONG expectation of itself.
+    _rw_base = {"hook": "agent-model-gate.py", "expect": "rewrite",
+                "payload": {"tool_name": "Agent", "tool_input": {
+                    "subagent_type": "general-purpose", "model": "opus",
+                    "description": "Fix the tests"}}, "_line": 0}
+    _rw_ok = {**_rw_base,
+             "expect_updated_input": {"name": "opus-fix-the-tests"}}
+    _rw_wrong = {**_rw_base,
+                "expect_updated_input": {"name": "opus-DELIBERATELY-WRONG"}}
+    with tempfile.TemporaryDirectory(prefix="rb-selftest-rw-") as td2:
+        tmp2 = Path(td2)
+        o_ok, _, raw_ok = run_case(_rw_ok, tmp2, 0)
+        o_wrong, _, raw_wrong = run_case(_rw_wrong, tmp2, 1)
+    assert o_ok == "rewrite" and o_wrong == "rewrite", (o_ok, o_wrong)
+    mism_ok = _rewrite_value_mismatch(_rw_ok, raw_ok)
+    mism_wrong = _rewrite_value_mismatch(_rw_wrong, raw_wrong)
+    if mism_ok is not None:
+        bad += 1
+        print(f"FAIL [rewrite-value]: the CORRECT-value case was flagged "
+              f"as mismatched: {mism_ok}", file=sys.stderr)
+    if mism_wrong is None:
+        bad += 1
+        print("FAIL [rewrite-value]: the WRONG-value case was not "
+              "flagged — expect_updated_input does not discriminate",
+              file=sys.stderr)
+
+    print("replay-bench selftest: isolation pinned, rewrite-value "
+          "discriminates" if not bad
           else f"replay-bench selftest: {bad} FAILED")
     return 1 if bad else 0
 
@@ -283,31 +369,42 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="replay-bench-") as td:
         tmp = Path(td)
         for i, case in enumerate(cases):
-            observed, detail, _raw = run_case(case, tmp, i)
-            results.append((case, observed, detail))
+            observed, detail, raw = run_case(case, tmp, i)
+            # Value mismatch is only meaningful once the KIND already
+            # matches "rewrite" — a case whose kind is wrong has nothing
+            # coherent to compare updatedInput against.
+            value_mismatch = (_rewrite_value_mismatch(case, raw)
+                              if observed == "rewrite" else None)
+            results.append((case, observed, detail, value_mismatch))
 
     by_hook: dict[str, list] = {}
-    for case, observed, detail in results:
-        by_hook.setdefault(case["hook"], []).append((case, observed, detail))
+    for row in results:
+        by_hook.setdefault(row[0]["hook"], []).append(row)
 
     mismatches = 0
     print(f"replay-bench: {len(results)} cases from {corpus}")
     for hook in sorted(by_hook):
         rows = by_hook[hook]
-        bad = [r for r in rows if r[1] != r[0]["expect"]]
+        bad = [r for r in rows
+              if r[1] != r[0]["expect"] or r[3] is not None]
         mismatches += len(bad)
         status = "OK" if not bad else f"{len(bad)} MISMATCH"
         print(f"  {hook:<26} {len(rows):>3} cases  "
               f"{len(rows) - len(bad):>3} match  [{status}]")
-        for case, observed, detail in bad:
-            print(f"      line {case['_line']}: expected {case['expect']!r}, "
-                  f"observed {observed!r}")
+        for case, observed, detail, value_mismatch in bad:
+            if observed != case["expect"]:
+                print(f"      line {case['_line']}: expected "
+                      f"{case['expect']!r}, observed {observed!r}")
+            else:
+                print(f"      line {case['_line']}: kind {observed!r} "
+                      f"matched but the VALUE did not: {value_mismatch}")
             if case.get("note"):
                 print(f"        note: {case['note']}")
             print(f"        {detail}")
 
     expected_fires = [r for r in results if r[0]["expect"] != "silent"]
-    caught = [r for r in expected_fires if r[1] == r[0]["expect"]]
+    caught = [r for r in expected_fires
+             if r[1] == r[0]["expect"] and r[3] is None]
     false_fires = [r for r in results
                    if r[0]["expect"] == "silent" and r[1] in FIRE_KINDS]
     rate = (100.0 * len(caught) / len(expected_fires)) if expected_fires else 0.0
@@ -317,7 +414,7 @@ def main() -> int:
           f"({rate:.1f}%) of expected fires")
     print(f"  false fires: {len(false_fires)} "
           f"(fired where the corpus expects silence)")
-    for case, observed, _ in false_fires:
+    for case, observed, _, _ in false_fires:
         print(f"      line {case['_line']} {case['hook']}: fired {observed!r}")
     return 1 if mismatches else 0
 

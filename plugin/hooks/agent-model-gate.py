@@ -91,6 +91,36 @@ satisfied at all. That is deliberate and stays: the guarded failure
 does not stop being a failure because the schema moved, and the
 route in that state is the operator, never a silent workaround.
 
+Verb conversion, name lane (2026-09-15, guard-rewrite arc item 1,
+`docs/directives/2026-09-15-guard-rewrite-arc.md`): the missing-name
+and wrong-prefix denies above are now a REWRITE, not a bounce. The
+gate computes `<model>-<slug>` — slug from the existing `name` when
+one is present (prefixed as-is, even if it carries a stale model
+token) or from `description` otherwise (lowercased, anything outside
+`[a-z0-9_-]` collapsed to one `-`, trimmed, capped ~24 chars,
+fallback `task` on an empty result) — and emits it via
+`hookSpecificOutput.updatedInput` with NO `permissionDecision` field,
+the shape `docs/audits/wave0-probe-record-2026-09-15.md` found
+correct (arms b2/b3: applies with no forced allow, permission flow
+still runs unforced on a rewritten call). That record measured
+`updatedInput` on the `prompt` and `command` fields, never on `name`
+itself — the `name` rewrite generalizes from those two fields rather
+than resting on a direct probe of this one. Any state where the
+rewrite cannot be computed still denies (never a silent pass), though
+`_slugify`'s `task` fallback means this should not occur in practice.
+This is a verb CONVERSION under the three-verbs rule (CLAUDE.md):
+the lane carries its 2026-08-08 day-one-blocking status forward
+unconditionally — it was never a default-warn lane and is not being
+re-staged, just repaired instead of bounced. Unaffected: missing or
+denied model still denies (a routing forcing-function — the deny IS
+the point, choosing is what it exists to force), the title-mirror
+mismatch still denies and takes PRECEDENCE over a pending name
+rewrite (a call failing both checks gets the mismatch deny, never a
+silent partial repair), and the escalation/Workflow/fable lanes are
+untouched. Fire log: a rewrite logs `mode="rewrite"`, reason naming
+old name -> new name, so the fire-rate review can grade this lane
+like any other.
+
 Accepted residue: agent types that pin their model in their
 definition bypass the gate entirely for the model/title checks
 (ENFORCED_TYPES scope; the escalation lane below still applies);
@@ -143,52 +173,94 @@ def _title_re():
 
 
 def check(tool_input: dict) -> str | None:
-    """Return an error message, or None (= allow through)."""
+    """Return an error message for a lane that STILL DENIES, or None.
+
+    None covers three cases, not just "allow through": a
+    specialized/pinned agent type (nothing here applies), an enforced
+    type with a valid non-denied model and a clean title (nothing to
+    fix), and — since 2026-09-15 — an enforced type with a valid
+    non-denied model whose `name` is missing or wrongly prefixed.
+    That last case used to deny here; it is now a REWRITE, computed
+    by compute_name_rewrite() and applied in main() — check() itself
+    never emits it (see the docstring's "Verb conversion" note)."""
     subagent = tool_input.get("subagent_type")
     if subagent not in ENFORCED_TYPES:
         return None  # specialized/plugin agent: its definition pins the model
     model = tool_input.get("model")
-    if model in _allowed_models():
-        if model in policy()["deny_models"]:
-            return (
-                f"Model gate: `{model}` is denied by site policy "
-                "(deny_models in the dispatch-guards config). Choose "
-                "another tier."
-            )
-        name = (tool_input.get("name") or "").strip()
-        if not name:
-            return (
-                "Model gate: every generic dispatch is NAMED "
-                f"`{model}-<slug>` — the teammate panel renders the NAME, "
-                "so the name is the model's carrier; the title stays "
-                "clean prose and is no longer a model carrier "
-                f"({doc_ref('§5')}). Add name: \"{model}-<slug>\" "
-                f'(panel style: "{model}-<slug>  <clean description>").'
-            )
-        if not name.lower().startswith(model + "-"):
-            return (
-                f"Model gate: agent name {name!r} must start with "
-                f"`{model}-` — the teammate panel shows the NAME, not the "
-                "title, so the name carries the model too "
-                f'({doc_ref("§5")}). Example: "{model}-{name}".'
-            )
-        desc = (tool_input.get("description") or "").strip()
-        match = _title_re().match(desc)
-        if match and match.group(1).lower() != model:
-            return (
-                f"Model gate: title prefix {match.group(1).lower()!r} "
-                f"diverges from model field {model!r} — the prefix is a "
-                "verified mirror of the field; make them match."
-            )
+    if model not in _allowed_models():
+        return (
+            "Model gate: agent dispatch without an explicit `model` — the agent "
+            "would silently inherit the session model. Choose deliberately per "
+            "the model table (~/.claude/CLAUDE.md 'Model routing for "
+            "dispatches') or project routing (e.g. PROZESS.md §1a). Even an "
+            "intentional inherit must be made "
+            "explicit as model:\"fable\". Name the choice in your reply."
+        )
+    if model in policy()["deny_models"]:
+        return (
+            f"Model gate: `{model}` is denied by site policy "
+            "(deny_models in the dispatch-guards config). Choose "
+            "another tier."
+        )
+    desc = (tool_input.get("description") or "").strip()
+    match = _title_re().match(desc)
+    if match and match.group(1).lower() != model:
+        return (
+            f"Model gate: title prefix {match.group(1).lower()!r} "
+            f"diverges from model field {model!r} — the prefix is a "
+            "verified mirror of the field; make them match."
+        )
+    return None
+
+
+_SLUG_CAP = 24
+_SLUG_BAD = re.compile(r"[^a-z0-9_-]+")
+_SLUG_RUNS = re.compile(r"-{2,}")
+
+
+def _slugify(text: str) -> str:
+    """Lowercase; anything outside [a-z0-9_-] collapses to one '-';
+    dash runs collapse to one; leading/trailing '-' trimmed; capped
+    at _SLUG_CAP chars with a possible new trailing '-' trimmed again
+    (the cut can land exactly on a separator). Empty input, or input
+    that is nothing BUT disallowed characters, falls back to 'task'
+    rather than returning ''. Output charset is [a-z0-9_-] by
+    construction — nothing else can survive the substitution."""
+    s = (text or "").lower()
+    s = _SLUG_BAD.sub("-", s)
+    s = _SLUG_RUNS.sub("-", s)
+    s = s.strip("-")
+    s = s[:_SLUG_CAP].strip("-")
+    return s or "task"
+
+
+def compute_name_rewrite(tool_input: dict, model: str) -> str | None:
+    """The corrected `name` for a generic dispatch with a valid,
+    non-denied `model`, or None when the existing name already
+    carries the right prefix (case-insensitively) — no rewrite
+    needed. Slug source: the existing name when one is present
+    (prefixed as-is, per the settled design — a name already
+    carrying a DIFFERENT model's prefix is not stripped, only
+    re-prefixed), else `description`. Never raises: _slugify always
+    returns a non-empty [a-z0-9_-]+ string."""
+    name = (tool_input.get("name") or "").strip()
+    if name and name.lower().startswith(model.lower() + "-"):
         return None
-    return (
-        "Model gate: agent dispatch without an explicit `model` — the agent "
-        "would silently inherit the session model. Choose deliberately per "
-        "the model table (~/.claude/CLAUDE.md 'Model routing for "
-        "dispatches') or project routing (e.g. PROZESS.md §1a). Even an "
-        "intentional inherit must be made "
-        "explicit as model:\"fable\". Name the choice in your reply."
-    )
+    source = name or (tool_input.get("description") or "")
+    return f"{model}-{_slugify(source)}"
+
+
+def _rewrite_or_none(tool_input: dict, model: str) -> tuple[str | None, bool]:
+    """(new_name_or_None, ok). ok=False means the rewrite could not
+    be computed and the caller must deny rather than pass silently —
+    the directive's named fallback. compute_name_rewrite() does not
+    raise in practice (its slugifier always falls back to 'task'), so
+    this is a belt exercised only by a deliberately broken
+    compute_name_rewrite in --test, not by any known real input."""
+    try:
+        return compute_name_rewrite(tool_input, model), True
+    except Exception:
+        return None, False
 
 
 # Undelivered-text note (2026-08-05): text written in the SAME turn
@@ -339,6 +411,41 @@ def main() -> int:
         fire_log("dispatch-guards/agent-model-gate", "block", error, payload)
         print(error, file=sys.stderr)
         return 2  # blocking; stderr goes back as feedback to the main agent
+    # check() returned None: either a pinned type (nothing applies), or
+    # an enforced type with a valid non-denied model and a clean title.
+    # In the latter case a name issue may still need the REWRITE repair
+    # (2026-09-15 verb conversion — see module docstring).
+    subagent = tool_input.get("subagent_type")
+    model = tool_input.get("model")
+    if subagent in ENFORCED_TYPES and model in _allowed_models():
+        from _dispatch_common import fire_log
+        new_name, ok = _rewrite_or_none(tool_input, model)
+        if not ok:
+            reason = (
+                "Model gate: could not compute a `<model>-<slug>` name "
+                f"for this dispatch ({doc_ref('§5')}) — falling back to "
+                f'the explicit-name requirement. Add name: "{model}-'
+                '<slug>" yourself.'
+            )
+            fire_log("dispatch-guards/agent-model-gate", "block", reason, payload)
+            print(reason, file=sys.stderr)
+            return 2
+        if new_name is not None:
+            old_name = tool_input.get("name") or "(none)"
+            reason = (
+                f"Model gate: rewrote name {old_name!r} -> {new_name!r} "
+                f"({model}-<slug> convention; {doc_ref('§5')})."
+            )
+            new_input = dict(tool_input)
+            new_input["name"] = new_name
+            fire_log("dispatch-guards/agent-model-gate", "rewrite", reason, payload)
+            print(json.dumps({
+                "hookSpecificOutput": {
+                    "hookEventName": "PreToolUse",
+                    "updatedInput": new_input,
+                }
+            }))
+            return 0
     if needs_model_ask(tool_input):
         desc = (tool_input.get("description") or "").strip()
         ask(  # exits 0 with permissionDecision "ask"
@@ -369,21 +476,37 @@ if __name__ == "__main__":
         assert check({"subagent_type": "statusline-setup"}) is None
         assert check({"subagent_type": "plugin-dev:agent-creator"}) is None
         assert check({"subagent_type": "claude", "model": "nonsense"}) is not None
-        # Name lane made MANDATORY (2026-08-08): every generic dispatch is
-        # named `<model>-<slug>`; the title is no longer a model carrier.
-        # An UNNAMED dispatch blocks whatever its title says — including a
-        # title carrying the (now retired) `<model>: ` prefix, which the
-        # 2026-07-18 lane accepted. That flip is this lane's red case.
-        assert check({"model": "opus", "description": "opus: Fix tests"}) is not None
-        assert check({"model": "opus", "description": "Fix tests"}) is not None
-        assert check({"model": "opus"}) is not None           # no name, no title
-        assert check({"model": "opus", "description": "opus-fix-tests"}) is not None
+        # Name lane made MANDATORY (2026-08-08), then converted DENY -> REWRITE
+        # (2026-09-15): check() no longer denies on a missing/wrongly-prefixed
+        # name at all — that state is now a REWRITE, computed by
+        # compute_name_rewrite() and never reached through check(). A case
+        # below whose ONLY old defect was the name is check()-None now; the
+        # rewrite itself is asserted via compute_name_rewrite().
+        assert check({"model": "opus", "description": "opus: Fix tests"}) is None
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "opus: Fix tests"},
+            "opus") == "opus-opus-fix-tests"   # slug built from the whole
+            # description, including its own legacy "opus: " prefix — the
+            # design derives the slug from description verbatim, it does not
+            # strip a leading model token first.
+        assert check({"model": "opus", "description": "Fix tests"}) is None
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "Fix tests"},
+            "opus") == "opus-fix-tests"
+        assert check({"model": "opus"}) is None                # no name, no title
+        assert compute_name_rewrite({"model": "opus"}, "opus") == "opus-task"
+        assert check({"model": "opus", "description": "opus-fix-tests"}) is None
         assert check({"subagent_type": "Explore", "model": "sonnet",
-                      "description": "Scan repo"}) is not None
-        # A NAMED dispatch passes, whatever the title — clean prose, empty,
-        # or a degenerate leftover prefix: none of it is a carrier now.
+                      "description": "Scan repo"}) is None
+        assert compute_name_rewrite(
+            {"description": "Scan repo"}, "sonnet") == "sonnet-scan-repo"
+        # A NAMED dispatch with the right prefix needs no rewrite at all —
+        # compute_name_rewrite returns None, whatever the title.
         assert check({"model": "opus", "description": "Fix tests",
                       "name": "opus-fixer"}) is None
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "Fix tests", "name": "opus-fixer"},
+            "opus") is None
         assert check({"model": "opus", "description": "",
                       "name": "opus-fixer"}) is None          # no title at all
         assert check({"model": "opus", "description": "opus:",
@@ -393,15 +516,30 @@ if __name__ == "__main__":
         assert check({"subagent_type": "Explore", "model": "fable",
                       "name": "fable-arch-review",
                       "description": "Review architecture"}) is None
-        # The name must start `<model>-` (2026-07-19 lane, unchanged).
+        # A wrong-prefixed name (2026-07-19 lane) is now a REWRITE, not a
+        # deny: check() is None and compute_name_rewrite prefixes the
+        # existing name as the slug source.
         assert check({"model": "opus", "description": "Fix tests",
-                      "name": "fixer"}) is not None
+                      "name": "fixer"}) is None
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "Fix tests", "name": "fixer"},
+            "opus") == "opus-fixer"
         assert check({"model": "fable", "description": "Vet draft",
-                      "name": "draft-vet"}) is not None       # the observed gap
+                      "name": "draft-vet"}) is None            # the observed gap
+        assert compute_name_rewrite(                            # ...now self-heals
+            {"model": "fable", "description": "Vet draft", "name": "draft-vet"},
+            "fable") == "fable-draft-vet"
         assert check({"model": "opus", "description": "Fix tests",
                       "name": "Opus-Fixer"}) is None          # case-insensitive
+        assert compute_name_rewrite(
+            {"model": "opus", "description": "Fix tests", "name": "Opus-Fixer"},
+            "opus") is None                                    # already fine
         assert check({"model": "sonnet", "description": "Scan",
-                      "name": "opus-scanner"}) is not None    # wrong model in name
+                      "name": "opus-scanner"}) is None          # wrong model in name
+        assert compute_name_rewrite(
+            {"model": "sonnet", "description": "Scan", "name": "opus-scanner"},
+            "sonnet") == "sonnet-opus-scanner"  # re-prefixed, not stripped —
+            # the settled design takes the existing name as-is as the slug
         # Mirror check KEPT: a title that DOES carry `<model>: ` must match
         # the model field — a matching prefix is tolerated, not required.
         assert check({"model": "opus", "description": "opus: Fix tests",
@@ -410,9 +548,85 @@ if __name__ == "__main__":
                       "name": "opus-fixer"}) is not None      # mismatch denies
         assert check({"model": "opus", "name": "opus-mech-rerun",
                       "description": "sonnet: F-2 re-run"}) is not None
-        # …and a wrong name still fails even with a matching title prefix
+        # A wrong name is REWRITTEN when the title is clean or matches —
+        # nothing here needs an operator (2026-09-15: was a deny before the
+        # verb conversion).
         assert check({"model": "opus", "name": "mech-rerun",
-                      "description": "opus: F-2 re-run"}) is not None
+                      "description": "opus: F-2 re-run"}) is None
+        assert compute_name_rewrite(
+            {"model": "opus", "name": "mech-rerun",
+             "description": "opus: F-2 re-run"}, "opus") == "opus-mech-rerun"
+        # PRECEDENCE: a title MISMATCH still denies even when the name also
+        # needs a rewrite — main() only attempts the rewrite when check()
+        # returns None, so a mismatch pre-empts it. Locks in the module
+        # docstring's "takes PRECEDENCE" claim.
+        assert check({"model": "opus", "name": "mech-rerun",
+                      "description": "sonnet: F-2 re-run"}) is not None
+
+        # ── Rewrite mechanics: _slugify, compute_name_rewrite, the
+        # never-silent fallback, and the process-boundary shape replay-bench
+        # cannot score today (it has no "rewrite" outcome kind; see the
+        # critique-pass message to the judgment desk, 2026-09-15). ──
+        assert _slugify("") == "task"
+        assert _slugify("   ") == "task"
+        assert _slugify("!!!") == "task"       # nothing but disallowed chars
+        assert _slugify("A B_C-D!!e") == "a-b_c-d-e"
+        assert _slugify("x" * 30) == "x" * 24  # capped
+        # cap lands exactly on a separator -> the post-cap strip fires
+        assert _slugify("x" * 23 + "-" + "y" * 5) == "x" * 23
+        import re as _re_test
+        for _t in ["", "   ", "!!!", "A B_C-D!!e", "x" * 30,
+                  "x" * 23 + "-" + "y" * 5, "üñïçødé çhaos"]:
+            _s = _slugify(_t)
+            assert _s and _re_test.fullmatch(r"[a-z0-9_-]+", _s), (_t, _s)
+        # Never-silent fallback: force compute_name_rewrite to raise and
+        # confirm _rewrite_or_none reports NOT ok, rather than passing
+        # silently. compute_name_rewrite does not raise on any known input
+        # (the 'task' fallback covers empty slugs), so this is the only way
+        # to exercise the directive's named fallback at all.
+        _real_compute = compute_name_rewrite
+        globals()["compute_name_rewrite"] = lambda *a, **k: (_ for _ in ()).throw(
+            ValueError("forced"))
+        assert _rewrite_or_none({"model": "opus"}, "opus") == (None, False)
+        globals()["compute_name_rewrite"] = _real_compute
+        assert _rewrite_or_none({"model": "opus"}, "opus")[1] is True  # restored
+
+        # Process boundary: run the real script as a subprocess (stdin JSON
+        # -> stdout JSON), the same boundary replay-bench exercises for
+        # every OTHER hook — done here because replay-bench's KINDS has no
+        # "rewrite" entry yet and extending it is outside this lane's write
+        # boundary (dg-45 critique pass).
+        import subprocess as _sp_test
+        def _run_hook(payload, firelog):
+            env = dict(os_mod.environ)
+            env["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
+            env["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = firelog
+            return _sp_test.run(
+                [sys.executable, os_mod.path.realpath(__file__)],
+                input=json.dumps(payload), capture_output=True, text=True,
+                env=env)
+        _fl = os_mod.path.join(tempfile.mkdtemp(), "fires.jsonl")
+        _proc = _run_hook({"tool_name": "Agent", "tool_input": {
+            "subagent_type": "general-purpose", "model": "opus",
+            "description": "Fix the tests"}}, _fl)
+        assert _proc.returncode == 0, (_proc.returncode, _proc.stdout, _proc.stderr)
+        _out = json.loads(_proc.stdout)
+        _hso = _out["hookSpecificOutput"]
+        assert _hso["updatedInput"]["name"] == "opus-fix-the-tests", _hso
+        assert "permissionDecision" not in _hso, _hso  # wave0 b2/b3 shape
+        assert _hso["hookEventName"] == "PreToolUse"
+        # everything else in tool_input rides along unchanged
+        assert _hso["updatedInput"]["description"] == "Fix the tests"
+        _fires = [json.loads(_l) for _l in open(_fl, encoding="utf-8")]
+        assert any(_f["mode"] == "rewrite" for _f in _fires), _fires
+        assert any("opus-fix-the-tests" in _f["reason"] for _f in _fires), _fires
+        # a still-denied case (missing model) stays exit 2, nothing rewritten
+        _fl2 = os_mod.path.join(tempfile.mkdtemp(), "fires.jsonl")
+        _proc2 = _run_hook({"tool_name": "Agent", "tool_input": {
+            "subagent_type": "general-purpose",
+            "description": "Fix the tests"}}, _fl2)
+        assert _proc2.returncode == 2, (_proc2.returncode, _proc2.stdout)
+        assert _proc2.stdout.strip() == ""
         # ── Site-Policy (Config): deny + ask greifen ──
         with tempfile.NamedTemporaryFile("w", suffix=".json",
                                          delete=False) as tf:
@@ -430,8 +644,20 @@ if __name__ == "__main__":
                                     "description": "opus: Grind logs"})
         assert not needs_model_ask({"subagent_type": "plugin-dev:agent-creator",
                                     "model": "fable"})  # pinned type: bypass
-        assert "dispatch skill §5" in check(
-            {"model": "opus", "description": "Fix tests"})  # doc_ref greift
+        # doc_ref now renders into the REWRITE reason, not a check() deny —
+        # the name-missing case moved off check() entirely (2026-09-15).
+        _fl3 = os_mod.path.join(tempfile.mkdtemp(), "fires.jsonl")
+        env3 = dict(os_mod.environ)
+        env3["CLAUDE_DISPATCH_GUARDS_CONFIG"] = cfgp
+        env3["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = _fl3
+        _proc3 = _sp_test.run(
+            [sys.executable, os_mod.path.realpath(__file__)],
+            input=json.dumps({"tool_name": "Agent", "tool_input": {
+                "model": "opus", "description": "Fix tests"}}),
+            capture_output=True, text=True, env=env3)
+        assert _proc3.returncode == 0, (_proc3.returncode, _proc3.stdout)
+        _fires3 = [json.loads(_l) for _l in open(_fl3, encoding="utf-8")]
+        assert any("dispatch skill §5" in _f["reason"] for _f in _fires3), _fires3
         os_mod.unlink = None  # noqa: keep tempfile (test artifact)
         # Workflow lane (2026-07-19): every Workflow launch asks.
         assert needs_workflow_ask({"tool_name": "Workflow"})
