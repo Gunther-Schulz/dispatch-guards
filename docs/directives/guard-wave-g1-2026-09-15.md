@@ -39,13 +39,19 @@ The devbook is READ-ONLY grounding — dotfiles is outside your write set.
   ("Staged: it ships WARN and earns deny only through the fire-rate
   review") and `fire()`'s mode handling — dispatcher-read this session at
   the cited lines.
-- Fire record grounding the promotion (from dotfiles df-238's evidence
-  slot, desk-verified bookings; RE-VERIFY against the fire log yourself):
-  at least four commit-plan firings from one desk (wave-5 brief set, lane
-  E, df-3 build brief 2026-09-14), all true positives repaired
-  per-instance, no recorded false fire. IF the fire log shows a false
-  fire the promotion premise dies: STOP item half 1 and return the log
-  lines.
+- Fire record grounding the promotion (AMENDED 2026-09-15 post-dispatch,
+  per the lane's own verified read — this wording supersedes the
+  original): the fire log holds 47 commit-plan fires, all mode=warn, and
+  carries NO truth-value field, so "no false fire" is absence-of-record,
+  never a measured zero. One false-fire class IS recorded elsewhere and
+  REPAIRED (verifier-brief-citing-forms, 2026-08-15, 372dcc7, regression
+  test :1013-1018); 39 of the 47 fires post-date that repair, and the
+  desk-confirmed true positives (wave-5 set, lane E, df-3) all do. The
+  promotion premise as it actually stands: 39 post-repair warn fires, at
+  least six desk-confirmed true, the one known false-fire class repaired
+  and test-pinned, no false fire recorded in any carrier since. That
+  premise SUPPORTS the flip; the docstring's promotion record states it
+  in this honest form, not as a measured zero.
 - The pin-omission incident (new lane's motivation): the df-3 build brief
   2026-09-14 named a registered devbook section amended the same day and
   pinned nothing; caught by hand, no mechanism (dotfiles df-238 evidence
@@ -72,8 +78,14 @@ Absence rule, one rule not an enumeration: whatever the lane cannot read
 nothing-to-check via its could-not-verify branch per the repo's checker
 conventions. WARN text names the matched class, the pin recipe pointer
 (the devbook's own fingerprint paragraph), and that the pin must be
-recomputed from the FILE. Ordered before broader section checks would
-shadow it (the named-diagnostic ordering rule, devbook step 3).
+recomputed from the FILE. ORDERING (amended 2026-09-15, ratifying the
+lane's deviation): the new lane goes LAST in main(), after every deny
+lane — `fire()` exits in every mode, warn included, so an early warn
+lane would swallow the four shipped denies behind it; the original
+"ordered before broader checks" clause transferred the named-diagnostic
+rule from Report-pattern checkers to an exit-per-lane hook, where its
+mechanism does not hold. A pin-less brief shadowed by a deny is denied,
+repaired, and the pin WARN fires on retry — nothing lost permanently.
 
 ## Verifier (in order; real output pasted in the report)
 1. Red-first, both halves, per the devbook, pinned on the EXIT DECISION
@@ -94,7 +106,10 @@ Expected results are dispatcher-specified.
 ## Write boundaries
 Owned: plugin/hooks/brief-reminder.py, plugin/hooks/_dispatch_common.py
 (only if the mode knob genuinely lives there — prefer the lane-local
-knob), plugin.json (the bump), the hook's test file if separate.
+knob), plugin.json (the bump), the hook's test file if separate, and
+(GRANTED 2026-09-15 post-dispatch, closing the lane's reported gap)
+tools/corpus/guards.jsonl — extend it for BOTH halves per this repo's
+CLAUDE.md :155-157, in the same commits as the halves they cover.
 NOT owned: hooks.json (no new hook ENTRY — the new lane rides
 brief-reminder's existing wiring; if you find that impossible, STOP and
 return why), SKILL.md and references (rule text is dispatcher-authored
