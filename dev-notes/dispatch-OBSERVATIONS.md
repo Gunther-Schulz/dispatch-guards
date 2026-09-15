@@ -1467,6 +1467,17 @@ covers the false-fire direction. Evidence: this commit.
    co-writer; the tree provably carried only its own changes (HEAD
    identical, no foreign uncommitted hunk — shown by lane B's own
    git diff).
+**Firing record, 2026-09-15 (refinement candidate inside the
+accepted limit).** Drain desk dotfiles-f1, lifecycle wave 1: lane
+D's reservation still WARNing 38 minutes after the lane closed. The
+desk read the docstring's recorded tradeoff first ("on a fan-out
+that is constant" — the 2026-08-10 operator decision), so this is
+not a re-litigation; the refinement it proposes sits inside the
+accepted limit: the release predicate is per-COPY, so it cannot
+distinguish "this writer left work" from "a sibling is mid-flight",
+and only the first justifies holding. A finer-grain release is a
+predicate change for this entry's existing consumer seam.
+
 2. **Class:** lane lifecycle vs. claim lifecycle divergence: the
    claim register knows only the TTL, not a lane's booking-close — a
    dead writer reads to the successor exactly like a live one (a
@@ -3438,6 +3449,16 @@ fix follows the mechanism, not the symptom.
 
 **Consumer + drain seam.** The reservation gate's next predicate
 change; the retirement pass.
+
+**Firing record, 2026-09-15 (n=3, new candidate mechanism).** Drain
+desk dotfiles-f1, lifecycle wave 1, lane A: the gate named a repo
+that was not the one being committed to, twice in one wave. The
+desk offers — as probable cause, explicitly not a verdict, code
+path unread — that the attribution tracks the shell's CURRENT
+directory rather than the commit target. That is a concrete
+candidate for this entry's open "held unverified" question; the
+pre-formulated text stands, and the source read it demands now has
+a specific hypothesis to confirm or kill.
 
 ## 2026-08-27 — CLASS: a check over a carrier whose entries MOVE anchors on body text, never on a heading
 
