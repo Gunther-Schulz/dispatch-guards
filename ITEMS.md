@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 17
+added: 18
 compacted: 0
 
 ## dg-1
@@ -290,6 +290,8 @@ write-set: plugin/skills/ (new workflow-harvest skill), plugin/.claude-plugin/pl
 done-criterion: skill shipped in a dispatch-guards version bump + one harvested runbook landed in its owning repo + verifier (1) evidence recorded
 evidence: RELOCATED from dotfiles df-127 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: plugin/skills/ contains only 'dispatch' (plus its siblings) and no harvest skill exists — the skill is unbuilt. The item's stated trigger (the executor-skill landing) has SHIPPED, so it is unblocked. Original body: dotfiles claude/BACKLOG.md:1051-1116.
 blocked-by: NONE
+amend-reason: 2026-09-15 2026-09-15 form repair, judgment desk authorized: the slot's first entry was prose ('plugin/skills/ (new workflow-harvest skill)') so the wave join could not read it and the item sat outside every lane while grading READY. The boundary doctrine says a write-set names files that exist or ones the entry itself creates, so the skill's own subtree is the parseable form — trailing slash, the directory entry the join reads. Nothing invented: the path is derived from the skill name the requirement already states, and no layout beyond the subtree is asserted
+amended-write-set: 2026-09-15 plugin/skills/workflow-harvest/,plugin/.claude-plugin/plugin.json
 
 ## dg-35
 grade: READY
@@ -370,19 +372,6 @@ blocked-by: NONE
 amend-reason: 2026-09-15 premise line added: the bench this entry cites moves in wave 1 of the guard-rewrite arc
 amended-evidence: 2026-09-15 G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date. PREMISE MOVED 2026-09-15 (guard-rewrite arc wave 1): tools/replay-bench.py gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it, ordered after the decision checks. This entry was written against the PRE-rewrite-KIND bench, so its dispatcher re-reads classify() and KINDS before building — the warn-vs-context question stands, but the vocabulary it extends has moved.
 
-## dg-46
-grade: READY
-requirement: brief-reminder's missing_tail lane DENIES a brief lacking the §2 tail block, forcing recomposition of a multi-kilotoken call — 171 denies all-time. Append the correct tail via updatedInput for the mechanically decidable class; the AMBIGUOUS class keeps the existing refusal. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 2 + judgment-desk ruling 1, 2026-09-15
-goal: general-maintenance
-write-set: plugin/hooks/brief-reminder.py,tools/corpus/guards.jsonl,README.md
-done-criterion: the missing_tail lane is MODE-AWARE (decidable class rewrites under both deny and warn; ambiguous class takes the mode-aware exit; off = no rewrite and no deny); tail text read from the shipped forms.md at fire time — never a second copy in the hook — and a bite asserts the appended tail equals the forms.md tail under the same normalization the detector uses; channel line computed from name presence; docstring and README describe the lane as DELIVERING the tail into the effective prompt, never as a compliance guarantee; bites + guards.jsonl extended with the red-first arrangement and baseline stated; verify block green in full
-evidence: Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md — arms a7/a8: hook-injected prompt text reaches the subagent's effective prompt, control clean, and the agent QUOTED rather than obeyed it (delivery proven, obedience not). The lane's own deny text already computes the tail block, its source file and the name-decides-channel-line rule
-blocked-by: NONE
-amend-reason: 2026-09-15 2026-09-15 desk read of the tail-kind machinery during the wave-1 wait: the existing detector is circular at this lane's firing moment; one-directional rule proposed, ambiguous class preserved
-amended-evidence: 2026-09-15 Wave 0 probe record docs/audits/wave0-probe-record-2026-09-15.md (a7/a8 delivery proven, control clean). TAIL-KIND FINDING, desk read 2026-09-15, PROPOSAL awaiting the judgment desk: _tail_kind() (brief-reminder.py:368-386) decides kind from _SECTIONS_ANCHOR ('closing report (mandatory', execution-tail text) and _READONLY_ANCHORS (read-only-tail text) — all of which live INSIDE the tail. When missing_tail fires the tail is absent by definition, so _tail_kind returns 'none' by construction and CANNOT serve the rewrite: the existing detector is circular at exactly this lane's firing moment. Proposed decidable class, ONE DIRECTION ONLY: a brief carrying a write-boundary marker (_WRITE_BOUNDARY_MARKERS, brief-reminder.py:340-341) or a commit-plan marker declares writes, so the EXECUTION tail is decidable; everything else stays AMBIGUOUS and keeps the mode-aware refusal. Read-only is NOT positively decidable when the tail is absent — 'no writes' is asserted nowhere outside the tail itself. The two errors are asymmetric, which is the whole argument: appending an execution tail to a genuinely read-only lane over-specifies it harmlessly, while appending a read-only tail to a writing lane strips the commit/pathspec discipline and tells it 'no repo writes' — actively wrong. Channel line stays computed from name presence per the directive.
-amend-reason: 2026-09-15 2026-09-15 judgment-desk approval of the one-direction tail-kind rule with four riding requirements: substring residue named, fire log distinguishes outcomes, corpus cases value-asserted, missing_sections cited as precedent
-amended-done-criterion: 2026-09-15 the missing_tail lane is MODE-AWARE (decidable class rewrites under both deny and warn; ambiguous class takes the mode-aware exit; off = no rewrite and no deny). DECIDABLE CLASS, approved one-direction-only: a brief carrying a write-boundary marker (_WRITE_BOUNDARY_MARKERS) or a commit-plan marker declares writes, so the EXECUTION tail is appended; everything else is AMBIGUOUS and keeps the refusal. Read-only is never positively decided. The docstring carries the ASYMMETRY as the basis (execution tail on a read-only lane over-specifies harmlessly; read-only tail on a writing lane strips commit discipline, actively wrong), NAMES as accepted residue that the markers are SUBSTRING matches so a read-only brief merely DISCUSSING write boundaries false-fires into the execution-append — which lands in the harmless direction, and that is why one-direction survives it — and CITES missing_sections as the precedent that already decides from these same markers, so the rule reads as the hook's existing idiom extended. The fire log DISTINGUISHES the two outcomes (execution-tail appended vs ambiguous refusal) so the fire-rate review can grade whether the ambiguous class earns further work. Tail text read from the shipped forms.md at fire time, never a second copy; a bite asserts the appended tail equals the forms.md tail under the detector's own normalization. Channel line computed from name presence. Corpus cases: a write-marker brief to rewrite with the appended tail VALUE-asserted, a marker-less brief to the mode-aware refusal, red-first with the baseline stated. Full verify block green
-
 ## dg-47
 grade: PARKED
 requirement: the dispatch SKILL.md is ~17k tokens (68500 bytes measured 2026-09-15) and is re-billed into the prefix of every session that loads it; a skill-craft Pareto pass to cut it. Operational corpus, so governed by CLAUDE-maintenance: a structural restructure lands first, then takes a fresh-context vet before push. Record: docs/directives/2026-09-15-guard-rewrite-arc.md item 3
@@ -401,15 +390,11 @@ done-criterion: each of the three lanes either gains a mode-aware exit or carrie
 evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes are unaffected since deny() does not consult the modes at all; Wave 0 probe record finding 2 (live confirmation)
 blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
 
-## dg-49
-grade: READY
-requirement: agent-model-gate's description-derived slug does not strip a legacy '<model>: ' title prefix before slugifying, so a dispatch with description 'opus: Fix tests' and model opus is rewritten to name 'opus-opus-fix-tests'. The model is carried twice and the panel shows the doubling. The lane's own bite currently ENSHRINES this as the expected value, so fixing it means changing that expectation. Surfaced as a named deviation by lane sonnet-dg45-model-gate-rewrite, 2026-09-15, and confirmed by me in its test text. Record: dg-45 closing report slot (d), commit df4a850
+## dg-50
+grade: PARKED
+requirement: the model-doubling dg-49 fixed on the description path survives on the NAME path: a dispatch with name 'opus: legacy title' under model opus still rewrites to 'opus-opus-legacy-title', because compute_name_rewrite only tests whether the name already starts with '<model>-' and a colon form does not match. The wave-2 lane read dg-49's criterion literally (description only), which was correct, and PINNED this case with a bite so the behaviour is visible and reversible rather than latent. Record: dg-46/dg-49 closing report gap 1, commit f37862b, bite at plugin/hooks/agent-model-gate.py
 goal: general-maintenance
 write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
-done-criterion: a description-derived slug strips a leading '<model>: ' (and '<model>-') before slugifying; the existing bite expectation is updated with the change and a red-first arm shows the old expectation failing against the new implementation; agent-model-gate --test and replay-bench green; the SIBLING case stays untouched by decision (a name already carrying a different model's prefix is re-prefixed, not stripped)
-evidence: lane report slot (d); the expectation is visible in agent-model-gate.py's own --test text, which I read while mutation-testing it: check(...'opus: Fix tests') expects 'opus-opus-fix-tests'
-blocked-by: decision should the description-derived slug strip a legacy model title prefix, against the directive's literal spec
-amend-reason: 2026-09-15 2026-09-15 judgment-desk design, kept narrow for a zero-false-fire profile: only the call's own validated model word is stripped
-amended-done-criterion: 2026-09-15 a description-derived slug strips a LEADING model prefix before slugifying ONLY when that word equals the call's VALIDATED model (case-insensitive, separator ':' or '-' plus whitespace); a leading DIFFERENT model word is information and STAYS, which keeps this consistent with the sibling case that was ruled to stand. The enshrining bite flips in the same change and is proven RED against the current implementation with the baseline stated; agent-model-gate --test and replay-bench green; zero false fires
-promote-reason: 2026-09-15 decision answered in LEDGER.md this date; write-set, done-criterion and verifier already stated
-promoted-by: 2026-09-15 dispatch-guards-bc (judgment desk, guard-rewrite arc)
+done-criterion: either the strip extends to the name source under the same equals-the-validated-model test with the pinning bite flipped and red-first stated, or the docstring records why the name path deliberately keeps the doubling; no third state where the bite pins behaviour nobody decided
+evidence: the lane's own bite asserting 'opus-opus-legacy-title' (read by me at agent-model-gate.py:548); dg-49's amended done-criterion says 'description-derived', which is what scoped the fix
+blocked-by: decision should the legacy-model-prefix strip extend to the name source as well as the description
