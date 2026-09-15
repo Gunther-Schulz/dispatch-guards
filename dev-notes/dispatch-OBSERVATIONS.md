@@ -1840,6 +1840,64 @@ closes no horizon. Evidence: this commit.
    drain TOGETHER as one rewrite, since applying incident 2's
    text alone would re-mint this incident.
 
+### MERGE 2026-09-15 — 4th incident, the COMPETING-LINE route: a brief's channel line loses to one in a file the brief itself cites
+
+1. **Incident + basis:** dispatch-guards-c2 (executing desk,
+   guard-rewrite arc) dispatched lane
+   `sonnet-dg45-model-gate-rewrite` with a §2 tail naming
+   `dispatch-guards-c2` as the report address, and a grounding
+   basis listing the committed directive
+   `docs/directives/2026-09-15-guard-rewrite-arc.md` (9b4dbc5).
+   That directive carries its own `REPORT-CHANNEL: SendMessage
+   dispatch-guards-bc` line — the EXECUTING desk's channel to the
+   JUDGMENT desk, not the lane's. The lane read the committed
+   file's line as binding on itself and sent its critique-pass
+   escalation to the judgment desk. Nothing failed loudly: the
+   dispatcher did not know an escalation existed until the desk
+   ruled on it, and the desk did not know the lane had bypassed
+   its dispatcher. TWO findings in one incident, and the second
+   is the one that indicts this carrier: the brief ALSO named a
+   session name to a SUBAGENT — exactly incident 3 above,
+   re-minted by a desk that had not read this entry before
+   composing; the lane hit the wall, SendMessage redirected it to
+   `main`, and it reported that in its own closing message.
+   Basis: this session's dispatch, the desk's ruling message, the
+   lane's report. Scope beyond this arc, reported by dotfiles-89
+   and folded in: every desk-delegation directive on this machine
+   carries a REPORT-CHANNEL line scoped to its own receiving
+   desk, so any such directive listed in a lane's grounding basis
+   arms the same ambiguity.
+2. **Class:** the same one, and the route is new. Incident 2's
+   fix was IN FORCE and did not prevent it: the brief's line DID
+   name its recipient absolutely. What the existing predicate
+   does not cover is COMPETITION — a second channel line, correct
+   for its own reader, reaching the lane through a file the brief
+   itself commissioned it to read. A rule about how the brief's
+   line is PHRASED cannot close a route where the brief's line is
+   phrased correctly and simply loses. Incident 3's recurrence
+   here is a second-order finding of the same shape one level up:
+   the lesson existed, in this file, and did not reach the desk
+   composing the brief.
+3. **Pre-formulated rule text**, two halves — the author-side one
+   fixes the class at its source for every future directive, the
+   sender-side one covers the directives already committed:
+   (a) dispatch skill §1, the grounding-basis bullet: 'Where a
+   brief names a directive, handoff or runbook file in its
+   grounding basis, it states which of that file's channel lines
+   binds the LANE — a committed file's channel line is addressed
+   to its own reader and is not automatically the lane's, and a
+   lane pointed at the file will read it as its own.'
+   (b) dispatch skill §4, the handed-off-run channel bullet: 'A
+   directive's REPORT-CHANNEL line names its SCOPE — e.g.
+   `REPORT-CHANNEL (executing desk -> judgment desk): ...` — so
+   the ambiguity never reaches a brief that cites the file.'
+4. **Consumer + drain seam:** same as the host entry — the
+   forms.md channel-line block plus the two dispatch-skill
+   bullets above; drains TOGETHER with incidents 2 and 3 as one
+   rewrite, since applying any one text alone leaves the other
+   routes open.
+
+
 ## 2026-08-14 — fork skills are the residual spawn channel under the cap, and a fork is self-review by construction
 
 **APPLIED 2026-08-17** — §4 verdict routing: a `context: fork`
