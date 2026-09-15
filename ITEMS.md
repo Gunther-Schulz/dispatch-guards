@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 19
+added: 20
 compacted: 0
 
 ## dg-1
@@ -397,4 +397,13 @@ goal: general-maintenance
 write-set: /home/g/dev/Gunther-Schulz/lifecycle/plugin/cli/lifecycle
 done-criterion: either the CLI writes the attribution trailer on its own commits, or every committing verb offers --no-commit so the caller owns the commit and its trailer; the pre-push attribution guard stops flagging lifecycle auto-commits
 evidence: 494028d in this repo shows an empty trailer block and was flagged by the pre-push guard this date; the decision verb help lists no --no-commit flag while item add does
+blocked-by: NONE
+
+## dg-52
+grade: READY
+requirement: dev-notes/dispatch-OBSERVATIONS.md owes a maintenance pass: the session-start banner reported roughly 32 booked against roughly 0 drained over the last +30 percent stretch (33 commits), and this arc added a 4th incident to the channel-line entry on top of that. The carrier drains by applying each entry pre-formulated rule text or discarding it with a one-line reason, both recorded exits. Judgment-desk ruling at arc start 2026-09-15: flagged rather than ridden past, and booked as its own item at arc close rather than interleaved into a BUILD run
+goal: general-maintenance
+write-set: dev-notes/dispatch-OBSERVATIONS.md,plugin/skills/dispatch/SKILL.md,plugin/skills/dispatch/references/forms.md
+done-criterion: every entry in the carrier is either APPLIED (its pre-formulated rule text lands in the named consumer, with the commit ref recorded) or DISCARDED with a one-line reason; the channel-line entry drains as ONE rewrite covering incidents 2, 3 and 4 together, since applying any single text alone leaves the other routes open, per that entry own drain note
+evidence: session-start banner 2026-09-15: maintenance pass owed, booked ~32 vs drained ~0 over 33 commits; the channel-line entry own slot 4 states the three texts drain together; this arc added the 4th incident at e75221c
 blocked-by: NONE
