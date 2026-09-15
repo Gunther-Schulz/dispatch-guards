@@ -400,7 +400,7 @@ evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes a
 blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
 
 ## dg-49
-grade: PARKED
+grade: READY
 requirement: agent-model-gate's description-derived slug does not strip a legacy '<model>: ' title prefix before slugifying, so a dispatch with description 'opus: Fix tests' and model opus is rewritten to name 'opus-opus-fix-tests'. The model is carried twice and the panel shows the doubling. The lane's own bite currently ENSHRINES this as the expected value, so fixing it means changing that expectation. Surfaced as a named deviation by lane sonnet-dg45-model-gate-rewrite, 2026-09-15, and confirmed by me in its test text. Record: dg-45 closing report slot (d), commit df4a850
 goal: general-maintenance
 write-set: plugin/hooks/agent-model-gate.py,tools/corpus/guards.jsonl
@@ -409,3 +409,5 @@ evidence: lane report slot (d); the expectation is visible in agent-model-gate.p
 blocked-by: decision should the description-derived slug strip a legacy model title prefix, against the directive's literal spec
 amend-reason: 2026-09-15 2026-09-15 judgment-desk design, kept narrow for a zero-false-fire profile: only the call's own validated model word is stripped
 amended-done-criterion: 2026-09-15 a description-derived slug strips a LEADING model prefix before slugifying ONLY when that word equals the call's VALIDATED model (case-insensitive, separator ':' or '-' plus whitespace); a leading DIFFERENT model word is information and STAYS, which keeps this consistent with the sibling case that was ruled to stand. The enshrining bite flips in the same change and is proven RED against the current implementation with the baseline stated; agent-model-gate --test and replay-bench green; zero false fires
+promote-reason: 2026-09-15 decision answered in LEDGER.md this date; write-set, done-criterion and verifier already stated
+promoted-by: 2026-09-15 dispatch-guards-bc (judgment desk, guard-rewrite arc)
