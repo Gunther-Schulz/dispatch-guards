@@ -5818,3 +5818,36 @@ arrangement is."
 **Consumer + drain seam.** Dispatch skill amendment on the normal
 quota drain; until then the compose-time check is brief-author
 prose.
+
+## Symptom claims cross handoffs ungraded — the provenance rule reads as repo-state-only
+
+**Incident + basis.** The 2026-09-16 Marvel Rivals freeze handoff
+carried "sits in ntsync_schedule burning 1 CPU tick in 5.5 seconds"
+and a "250 ms band" as measurements; the receiving session built a
+trigger design on them within minutes, and the band later proved to
+be three MangoHud frametimes mixed with two GPU-idle run lengths
+from a different instrument — never one measurement. The
+retrospective (CachyOS-Setup
+docs/directives/2026-09-16-freeze-investigation-retrospective.md,
+"Also owed, smaller") names the mechanism: §1's per-line provenance
+grade is written against claims about the TARGET REPO's state, and
+symptom/measurement claims escape it because they arrive as
+narrative, in a finding's register, in sections no grade covers.
+
+**Class.** Label-over-body / ungraded-inheritance: a claim kind the
+provenance rule's wording does not reach, crossing the brief
+boundary with inherited standing. Same family as §4's "a claim is
+opened before it is REPEATED"; this is its brief-compose-time twin
+for measurement claims.
+
+**Pre-formulated text.** Widen §1's provenance bullet: "The grade
+covers every claim of FACT the brief asserts — repo state,
+MEASUREMENTS, symptom descriptions, environment behavior — not only
+repo-state citations: a number, band, duration or rate carries the
+instrument that produced it and the read that verified it, or 'from
+<source>, unverified'; a symptom description names its reporter and
+is quoted, never paraphrased (a paraphrased symptom is the
+label-over-body drift at the definition the work rests on)."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment at the
+normal quota drain; the freeze retrospective is the incident record.
