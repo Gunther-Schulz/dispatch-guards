@@ -6016,3 +6016,54 @@ it."
 **Consumer + drain seam.** references/forms.md channel-line block,
 normal quota drain; bundles with the entry above, both being
 single-block edits to the same skill.
+
+## 2026-09-18 — the dispatcher-as-co-writer clause reaches WRITE SETS and not the STATE PRECONDITIONS the desk itself invalidates
+
+**Incident + basis.** A judgment desk authorised a cross-repo migration
+to a peer desk and discharged its precondition itself: it read
+dotfiles' three carriers, found exactly one schema line each, read the
+tree clean with nothing unpushed, and told the peer in writing that
+"nobody is standing in what the migration would move". MINUTES LATER
+THE SAME DESK WROTE TO DOTFILES — a new SessionStart hook plus a
+settings.json registration, committed as 35eda96 and pushed. The peer,
+correctly re-running the state claim at apply time rather than
+inheriting it, measured a modified settings.json and an untracked hook
+file, re-read 30 seconds later and found a commit 22 seconds old. It
+reported a live foreign writer in the target repo. The foreign writer
+was the desk that had certified the repo quiet. Nothing was applied;
+the peer's re-run is the only reason this was caught before the act.
+
+**Class.** §1 already carries the dispatcher-as-co-writer clause, and
+its reach stops one category short. That clause is about WRITE SETS in
+a SHARED copy — the desk's uncommitted hunks sitting in the lane's
+paths. This is the same blind spot aimed at a STATE PRECONDITION about
+a DIFFERENT repo: the desk asserts a property of a workspace, and is
+itself the party that falsifies it. The enumeration is what fails in
+both — every co-writer list names third parties (peer session,
+operator, scheduled job, agent, human) and never the author of the
+list, because the author is reading itself as the boundary's composer
+rather than as a party inside it. A desk does not think of its own
+next act as foreign traffic.
+
+**Why nothing fires.** The precondition was TRUE when taken and the
+executed read was sound; there is no stale-premise tell, because the
+premise and its falsifier never appear in one output — they are two
+acts by one party, minutes apart, in different messages. The existing
+clause cannot catch it either: no write set was shared, no pathspec
+was involved, and the two repos are unrelated.
+
+**Pre-formulated rule text** (dispatch skill §1, extending the
+dispatcher-as-co-writer clause after its write-set sentences): "The
+same blind spot binds any STATE claim the desk certifies about a
+workspace, not only its write set: a desk asserting that a repo is
+clean, quiet, or unattended is asserting something about its OWN next
+acts too, and it is the one party the co-writer enumeration never
+lists. So a certified precondition names its expiry — the desk states
+that it will not write to the named workspace until the act completes,
+or the claim travels explicitly as re-checkable at apply time and the
+receiver is told to re-run it. A precondition the certifying desk can
+invalidate is a measurement, never a licence."
+
+**Consumer + drain seam.** Dispatch skill §1 amendment at the normal
+quota drain; the receiving desk's re-run at apply time is the working
+backstop meanwhile, and it worked here.
