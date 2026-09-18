@@ -5898,3 +5898,105 @@ label-over-body drift at the definition the work rests on)."
 
 **Consumer + drain seam.** Dispatch skill §1 amendment at the
 normal quota drain; the freeze retrospective is the incident record.
+
+## 2026-09-18 — CLASS: §1's critique-pass bullet says "every brief" while §1's own exception clauses already exempt two dispatch kinds, 520 lines earlier
+
+**Incident + basis.** A lifecycle read lane (dispatched by the peer
+desk lifecycle-7e for lc-192, the migrate.py read — a DISCOVERY
+dispatch) reported in its critique pass that two lines of its brief
+contradicted each other: the pasted READ-ONLY tail closes "No repo
+writes, no interim messages" (references/forms.md:361-363, read at
+the source repo, not the cache) while SKILL.md:601 commissions the
+critique pass on "Every brief — small ones included … returned on
+the tail block's channel". The lane named both lines, resolved it as
+specific-beats-boilerplate, sent the critique anyway, and flagged
+rather than guessing. Relayed to this desk by lifecycle-7e; both
+passages opened here before the entry was written.
+
+**The relayed statement located it wrongly, and the correction is
+the finding.** The report framed it as tail-versus-§1 and proposed
+widening the tail to "no interim messages except the commissioned
+critique pass". That fix points the wrong way. SKILL.md:76-79 —
+the discovery-dispatch exception — ALREADY says "no report files, no
+interim messages", for its own measured reason (each extra output
+medium re-writes the answer; the cost driver is output volume). The
+tail is a faithful restatement of that exception. The over-reaching
+sentence is the critique-pass bullet's word "every", which is
+already bounded by two exception clauses sitting ~520 lines above
+it, with no local signal at the bullet that the scope was ever
+narrowed. Widening the tail would have ADDED a critique pass to
+every discovery and verifier lane — contaminating verifier
+independence, which §1:70-74 exists to protect — on the strength of
+a contradiction correctly observed and wrongly diagnosed.
+
+**Class.** A universal quantifier written in a rule bullet whose
+scope was already carved out elsewhere in the same file, far enough
+away that neither site reads as qualified from the other. Distinct
+from the two existing collision entries above (2026-09-13, the
+base-check HALT and the reservation HALT): those are a DESK's brief
+contradicting the tail, repairable in that desk's next brief. This
+one is the SKILL contradicting itself, so every discovery and
+verifier brief composed from it inherits the contradiction, and the
+lane's critique pass has been reporting the instrument's own defect
+back to desks that could only read it as their own.
+
+**It bites in the silent direction.** A lane resolving it the other
+way simply sends no critique pass, and an absent critique message is
+indistinguishable from a brief with nothing wrong in it — which is
+exactly the signal the bullet exists to make dispatcher-visible.
+
+**Pre-formulated rule text** (SKILL.md, the critique-pass bullet's
+opening, replacing "Every brief — small ones included — asks"):
+"Every EXECUTION brief — small ones included — asks for ONE message
+before the lane's first build call … . Verifier and discovery
+dispatches are exempt by the exceptions at the head of this section
+and take the read-only tail's 'no interim messages' unchanged: a
+verifier has no Background lines to grade and the pass would carry
+dispatcher reasoning into the one dispatch kind that must not
+receive it; a discovery lane's brief contradiction is reported in
+its single findings message instead."
+The tail at references/forms.md:361-363 is CORRECT AS WRITTEN and
+is not edited.
+
+**Consumer + drain seam.** Dispatch skill §1 amendment at the normal
+quota drain. Until it lands, a desk composing a discovery or
+verifier brief states the exemption in one line, because the lane
+reads the bullet before it reads the exceptions.
+
+## 2026-09-18 — the named channel line names a ROLE, and the in-process spelling of that role is the one fill that refuses
+
+**Incident + basis.** Same lane, same message. The mailbox channel
+line reads `Report channel: SendMessage to the dispatcher — your
+final text reaches no one.` (references/forms.md:183-184). The
+dispatching desk filled "the dispatcher" with its own session name;
+the lane was IN-PROCESS, and SendMessage to a parent session's own
+address refuses with "this process's own main session". The lane
+routed to `main` on its own and reported the mismatch.
+
+**The sharpening, because the relayed version overstated it.** The
+form does not produce an unresolvable address — it produces NO
+address: "the dispatcher" is a role name, and the slot leaves the
+`to` value to the composing desk. What the entry records is that
+the desk's natural fill (its own session name, the thing it knows
+itself by) is precisely the fill that cannot resolve for the
+commonest lane kind, and nothing in the form says so. The failure
+is dispatcher-side and the form is what permits it.
+
+**Class.** A form slot whose fill is under-specified for the
+default case, where the obvious fill fails and the correct one
+(`main`) appears nowhere in the form. Adjacent to the existing
+sync-vs-mailbox lane-probe machinery, which tells a desk WHICH
+channel line to paste and never what to address it to.
+
+**Pre-formulated rule text** (references/forms.md, the named
+channel-line variant): "- named (mailbox teammate): `Report
+channel: SendMessage to <the dispatcher's address> — your final
+text reaches no one.` The address is `main` for an IN-PROCESS lane
+(a subagent of this session): a send aimed at the parent session's
+own name refuses as 'this process's own main session'. For a
+CROSS-SESSION peer it is that session's name as ListAgents prints
+it."
+
+**Consumer + drain seam.** references/forms.md channel-line block,
+normal quota drain; bundles with the entry above, both being
+single-block edits to the same skill.
