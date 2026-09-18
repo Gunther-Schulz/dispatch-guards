@@ -5963,22 +5963,38 @@ quota drain. Until it lands, a desk composing a discovery or
 verifier brief states the exemption in one line, because the lane
 reads the bullet before it reads the exceptions.
 
-## 2026-09-18 — the named channel line names a ROLE, and the in-process spelling of that role is the one fill that refuses
+## 2026-09-18 — the named channel line names a ROLE, and the desk's natural fill of that role is the one an in-process lane cannot use as given
 
-**Incident + basis.** Same lane, same message. The mailbox channel
-line reads `Report channel: SendMessage to the dispatcher — your
-final text reaches no one.` (references/forms.md:183-184). The
-dispatching desk filled "the dispatcher" with its own session name;
-the lane was IN-PROCESS, and SendMessage to a parent session's own
-address refuses with "this process's own main session". The lane
-routed to `main` on its own and reported the mismatch.
+**Incident + basis, n=2 the same day, two desks, DIVERGENT
+outcomes.** The mailbox channel line reads `Report channel:
+SendMessage to the dispatcher — your final text reaches no one.`
+(references/forms.md:183-184). Both desks filled "the dispatcher"
+with their own session name; both lanes were IN-PROCESS subagents.
+(a) A lifecycle read lane reported the send REFUSED with "this
+process's own main session" and routed to `main` instead.
+(b) This desk's own verb-enumeration lane reported the opposite in
+its closing line — the name "turned out to resolve to my own
+dispatcher" — having delivered all ten parts to `main`.
+
+**Which of the two the harness does is UNSETTLED HERE, and the
+entry says so rather than picking.** Both accounts are the lanes'
+testimony; neither desk executed the send itself, and no probe was
+run. The observations agree on everything the finding needs — the
+filled address was not usable as written, `main` was, and each lane
+had to work that out mid-run — and disagree only about whether the
+failure is a refusal or a silent redirection. A refusal is loud and
+costs a retry; a silent redirection would mean the two spellings
+are interchangeable for in-process lanes and the whole thing is
+cosmetic. That is the discriminating question, and it is one probe:
+one in-process lane instructed to send to its parent's session name
+and to report the tool result verbatim.
 
 **The sharpening, because the relayed version overstated it.** The
 form does not produce an unresolvable address — it produces NO
 address: "the dispatcher" is a role name, and the slot leaves the
 `to` value to the composing desk. What the entry records is that
 the desk's natural fill (its own session name, the thing it knows
-itself by) is precisely the fill that cannot resolve for the
+itself by) is at best ambiguous and at worst refused for the
 commonest lane kind, and nothing in the form says so. The failure
 is dispatcher-side and the form is what permits it.
 
