@@ -1004,6 +1004,53 @@ Both n=1, that day's harness version. Consequence taken now: the agent-model-gat
 
 Addendum 2026-08-15 (fable desk, PV-Georgendorf cwd, harness 2.1.232): both shapes now n=2, and the PINNED-TYPE exemption is implicated. An unnamed `claude-code-guide` dispatch (no `run_in_background` param) launched ASYNC, and its full final text was again delivered in the completion task-notification. New half: the skill text itself produced a denied call — forms.md §2 routes pinned-type dispatches to the synchronous channel line ("your final text IS the report"), the brief-reminder hook denied the mode/line contradiction (guard correct, fire logged), and the retry with the background line went through clean. So until the parked re-probe settles the channel rework, the pinned-type guidance instructs the exact form the guard bounces. Proposed rule change: forms.md's channel-line paragraph defaults pinned types to the BACKGROUND line too, keeping the sync line only where a sync launch has actually been observed; the re-probe item gains the pinned-type axis (agent type named/pinned × run_in_background). Basis: this session's transcript — deny text, retry, task-notification delivery.
 
+Addendum 2026-09-18 (opus judgment desk, CachyOS-Setup arc;
+harness as of this date). The NAMED lane has the same shape as the
+unnamed one above, WITH A HAZARD THE UNNAMED SHAPE DOES NOT HAVE.
+A named mailbox agent's final text DOES surface to the dispatcher --
+in the `result` field of its idle notification -- and it arrives
+TRUNCATED, carrying an explicit "[result truncated -- ask the agent
+for the rest via SendMessage]".
+
+n=2, two independent sightings, two sessions, same day: the
+dispatching desk received it from a named verifier lane, and the
+executing peer desk (cachyos-setup-39) observed the identical shape
+from its own attack lane and reported it unprompted.
+
+WHY THIS IS WORSE THAN THE SILENCE THE CHANNEL LINE PROMISES, which
+is the whole reason it earns an addendum rather than a footnote: a
+truncated report LOOKS COMPLETE. Silence is obvious and sends the
+reader to SendMessage; a report that ends mid-sentence in a field
+the reader was not told to distrust reads as the report. Measured
+consequence in the dispatching session: the notification carried
+findings F1 through F5 and cut off before F6 through F10, and the
+lost half contained the finding that stopped an irreversible-delete
+gate from being cleared. The desk did not lose it only because the
+lane had ALSO sent the full report by SendMessage, per the channel
+line -- i.e. the channel rule saved the case its own binding says
+cannot arise.
+
+The standing channel line for named lanes ("your final text reaches
+no one") is therefore FALSE AS WRITTEN and false in the dangerous
+direction: it tells the executor its final text is discarded, when
+in fact a truncated prefix of it reaches the dispatcher looking
+whole. An executor that believed the line and put nothing in
+SendMessage would be read, partially, with no gap marker.
+
+**Pre-formulated text.** forms.md §2, the named/mailbox channel
+line, gains its own sentence: "Your final text is NOT discarded --
+a TRUNCATED prefix of it reaches the dispatcher in the idle
+notification's `result` field, looking complete. Put the report in
+SendMessage regardless; a dispatcher reading only that field reads
+a prefix and cannot tell." And the dispatcher-side rule its mirror:
+a lane's `result` field is a PREFIX until the SendMessage report
+arrives, never a report -- the same grade as any other truncated
+view (operator corpus, Grounding: a partial view read as its whole
+body).
+
+**Consumer + drain seam.** forms.md §2 amendment at the normal
+quota drain. Basis: both sessions' transcripts, 2026-09-18.
+
 Resolution 2026-08-15 (opus desk, dispatch-guards cwd, harness
 2.1.232 — the controlled re-probe the entry above deferred to).
 **The axis this entry and the parked item were built on does not
