@@ -6094,3 +6094,30 @@ prefix: sonnet-luna-<slug>."
 
 **Consumer + drain seam:** the dispatch skill's maintenance pass;
 drains when both texts carry the composite form.
+
+## 2026-09-19 — luna extraction invented a figure pairing; wrapper source-check caught it
+
+**Incident + basis:** in a certified mechanical-read lane (codex
+gpt-5.6-luna over 13 local doc files), luna's extraction asserted the
+source was "internally inconsistent," citing a second threshold pair
+(30d/90d) beside the real one (14d/30d). The wrapper re-read the cited
+file: the pairing appears nowhere — luna composed it from an unrelated
+loose phrase ("90-day window") plus a CLI example. The wrapper's
+source-check caught it before relay; the extraction was otherwise
+accurate across five questions.
+
+**Class:** fabricated-figure inside an extraction — the certified cell's
+residual risk: an invented NUMBER wears the same dress as an extracted
+one, and only a source re-read discriminates. Sibling of the reference's
+existing transcript-audit rule (which covers scores), one register over.
+
+**Pre-formulated fix text** (for references/codex-routing.md, the
+mechanical-read bullet): "An extraction's FIGURES and any
+internal-inconsistency claim are re-read at the cited lines by the
+wrapper before relay — an invented number or a composed contradiction
+reads exactly like an extracted one, and the source check is the only
+discriminator (measured 2026-09-19: luna invented a 30/90 threshold pair
+from a loose phrase; wrapper caught it at the cited file)."
+
+**Consumer + drain seam:** the dispatch skill's maintenance pass; the
+class register's fire-rate review counts this as a luna-cell fire.
