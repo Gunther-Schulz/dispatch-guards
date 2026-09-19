@@ -6067,3 +6067,30 @@ invalidate is a measurement, never a licence."
 **Consumer + drain seam.** Dispatch skill §1 amendment at the normal
 quota drain; the receiving desk's re-run at apply time is the working
 backstop meanwhile, and it worked here.
+
+## 2026-09-19 — the codex reference and the model gate disagree about lane names
+
+**Incident + basis:** a codex-wrapper discovery lane named
+`luna-hermes-scout` per the codex reference's own Conduct clause ("Label
+such agents with the codex model as a name prefix so the real worker is
+visible") was DENIED by agent-model-gate: "agent name must start with
+`sonnet-`". The operator read the denial as "dispatch-guards is not
+codex-ready". It is codex-capable via the wrapper pattern; the two rules
+simply cannot both be satisfied by a name's FIRST token.
+`sonnet-luna-hermes-scout` satisfied both and dispatched clean.
+
+**Class:** two correct rules whose contracts intersect only in an
+undocumented composite form — the reader of either alone composes a name
+the other refuses, and the denial text names neither the other rule nor
+the composite.
+
+**Pre-formulated fix text** (for references/codex-routing.md, Conduct,
+the labeling sentence): "Label such agents with the codex model IN the
+name AFTER the Claude wrapper model's mandatory prefix —
+`sonnet-<codexmodel>-<slug>` — since the model gate keys on the first
+token and the panel shows the whole name." And for the gate's denial
+text, one clause: "for a codex wrapper, put the codex model after the
+prefix: sonnet-luna-<slug>."
+
+**Consumer + drain seam:** the dispatch skill's maintenance pass;
+drains when both texts carry the composite form.
