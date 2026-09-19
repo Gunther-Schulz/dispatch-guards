@@ -6121,3 +6121,25 @@ from a loose phrase; wrapper caught it at the cited file)."
 
 **Consumer + drain seam:** the dispatch skill's maintenance pass; the
 class register's fire-rate review counts this as a luna-cell fire.
+
+### 2026-09-19 — writer-claims TTL outlives closed lanes (relayed by the lifecycle round desk)
+
+- **Incident + basis:** the writer-claims hook fired twice in one evening at
+  the lifecycle build desk naming SUBAGENT LANES as possible live writers —
+  the asonnet-lc193 lane on items.py and the lc-174 lane on
+  test_declaration.py — while BOTH lanes were long closed in that repo's done
+  home and the tree held only the executing desk's own edits. MEASURED at
+  that desk (each instance checked at the carrier before dismissal: tree
+  state, diff deletion side, lane's closure), RELAYED here by the round desk
+  cachyos-setup-43.
+- **Class:** a stale claim registry — the claim's TTL is not keyed to the
+  lane's lifecycle, so a closed lane's claim keeps presenting as a
+  live-writer warning. Two instances, both closed lanes: a shape, not a
+  one-off. A warning that fires on legitimate work trains the override
+  reflex that kills the warning that matters.
+- **Pre-formulated fix:** expire or clear a lane's writer claims at the
+  lane's terminal event (closing report landed / lane retired), or key the
+  warning text to the lane's known state ("lane CLOSED — stale claim, not a
+  live writer") so the reader's check is named instead of implied.
+- **Consumer + drain:** the dispatch-guards maintainer at this carrier's next
+  drain pass; the retirement quota reads this entry like any other.
