@@ -6143,3 +6143,36 @@ class register's fire-rate review counts this as a luna-cell fire.
   live writer") so the reader's check is named instead of implied.
 - **Consumer + drain:** the dispatch-guards maintainer at this carrier's next
   drain pass; the retirement quota reads this entry like any other.
+
+### 2026-09-20 — the READ-ONLY tail forbids the critique pass the skill commissions
+
+- **Incident + basis:** a discovery lane (`sonnet-model-families`, wan2gp
+  desk) opened its commissioned critique pass by naming the brief's own
+  self-contradiction: the brief asks for "ONE short message before your
+  first research call … then continue without waiting", while the pasted
+  READ-ONLY tail ends "No repo writes, no interim messages." Both clauses
+  are in the skill as written — SKILL.md §1, "The critique pass is
+  commissioned, and its channel named" ("Every brief — small ones
+  included — asks for ONE message before the lane's first build call …
+  returned on the tail block's channel"), against references/forms.md
+  READ-ONLY tail, closing sentence ("No repo writes, no interim
+  messages."). Both read in-session at those lines. The lane resolved it
+  correctly — read the first as the permitted exception, flagged rather
+  than silently resolved — and said so explicitly; a lane resolving it the
+  other way suppresses the critique pass entirely, which is the one
+  output the desk cannot produce for itself.
+- **Class:** two invariant blocks, each pasted verbatim and each correct
+  alone, contradicting at their seam. The tail's "no interim messages"
+  was written against the report-splitting and progress-narration
+  failure; it reaches the commissioned critique pass by wording, not by
+  intent. The failure is silent in the dangerous direction: a suppressed
+  critique pass leaves no visible absence at the desk, which is exactly
+  the property §1 says commissioning it is meant to fix ("commissioning
+  it HERE is what makes its ABSENCE a dispatcher-visible finding").
+- **Pre-formulated fix:** amend the READ-ONLY tail's closing sentence to
+  carve the critique pass out by name — "No repo writes, and no interim
+  messages beyond the ONE critique-pass message the brief commissions."
+  The EXECUTION tail is not affected (it carries no such prohibition),
+  so the edit is one sentence in references/forms.md, READ-ONLY tail.
+- **Consumer + drain:** the dispatch-guards maintainer at this carrier's
+  next drain pass; the retirement quota reads this entry like any other.
