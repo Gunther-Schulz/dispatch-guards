@@ -6176,3 +6176,42 @@ class register's fire-rate review counts this as a luna-cell fire.
   so the edit is one sentence in references/forms.md, READ-ONLY tail.
 - **Consumer + drain:** the dispatch-guards maintainer at this carrier's
   next drain pass; the retirement quota reads this entry like any other.
+
+### 2026-09-20 — the §7 codex consult has no output at its moment (a full wave routed without it)
+
+**Incident + basis.** 2026-09-20, desk lifecycle-d9: a three-lane wave
+(erosion-probe verify run, a two-commit dotfiles build, a peer-desk
+grading sweep) was routed and dispatched with route lines naming
+sonnet/opus and the §7 consult never run — `command -v codex` succeeds
+on this machine, and the standing operator decision (site corpus,
+routing module tail) PREFERS certified codex roles during the trial.
+Caught by the OPERATOR, after the wave was in flight, asking whether
+the corpus says codex is preferred. Post-hoc consult against the
+certified-roles table: all three lanes fall in the measured
+exclusions (verify-shaped, multi-commit, review-shaped), so every
+route stood — which is exactly why the seam is invisible: a skipped
+consult that would not have changed the route leaves no symptom, and
+the first wave where it WOULD have (a mechanical-read fan-out owed to
+luna) ships on the Claude default silently.
+
+**Class.** Consult-with-no-output at its binding moment — the §6
+register-consult shape (already absorbed into §1's brief parts)
+recurring at the §7 seam: the consult sentence lives in a reference
+loaded on demand, the moment it binds is brief-writing, and nothing
+at that moment demands evidence the consult ran. The site corpus's
+"an obligation with no output leaves no visible absence," at a
+dispatch seam.
+
+**Pre-formulated rule text** (two candidate homes, one meaning: the
+site corpus routing module's route-line bullet — a corpus mint,
+operator GO required — or §1's brief skeleton as a slot): where
+`command -v codex` succeeds, a route line naming a Claude tier for a
+dispatch also names the codex disposition in a few words — "codex:
+luna" (routed) or "codex: excluded — <verify|review|multi-commit>" —
+so the consult's absence is visible in the reply the way an unnamed
+route already is.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass,
+or the operator's corpus-mint answer (asked 2026-09-20 in the same
+reply that booked this entry); n=1, operator-caught, routes unchanged
+by construction this time.
