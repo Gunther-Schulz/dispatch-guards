@@ -6243,3 +6243,45 @@ that message is HUNG, never working."
 **Consumer + drain seam.** The next dispatch-skill maintenance pass;
 n=1, desk-caught by reading stderr at a horizon check, one relaunch
 lost (~5 min).
+
+## 2026-09-24 — `codex exec` has live web search, and web research is an uncertified role nobody has probed
+
+**Incident + basis.** A discovery wave for lifecycle prior-art research
+needed web access; codex-routing.md is silent on whether `codex exec`
+can search at all, so the desk probed it (codex-cli 0.156.1, gpt-5.6-luna,
+`-s read-only`, this site's `~/.codex/config.toml` has no search key).
+Two probes, same question (latest release of steveyegge/beads):
+(a) with `-c web_search="live"` → stderr carried a `web search: <url>`
+line, answer "Sep 21, 2026"; (b) WITHOUT the flag → 5 `web search`
+lines on stderr, answer "v1.3.0, Sep 15, 2026" under the repo's new
+owner. Both checked against the GitHub API: v1.3.1-rc.1 (prerelease)
+2026-09-21, v1.3.0 (latest stable) 2026-09-15 — each probe answered a
+true, differently-scoped fact. So search is ON by default in exec here
+and the flag is accepted but not needed. Stamp drift beside it: the
+page is stamped "codex CLI 0.154.0"; installed is 0.156.1.
+
+**Class.** Missing capability binding + unmeasured role cell. The
+certified-roles table covers LOCAL mechanical read; WEB research
+(search, open, grade provenance) is a different role — its failure
+shape is fabricated or snippet-grade citations presented as opened,
+which structure-auditing codex (the reviewer finding) may be prone
+to. Unlisted, a desk either assumes luna's local-read certification
+carries over (the pass-never-infers-down rule forbids that) or
+doesn't know search exists and routes web work to Claude.
+
+**Pre-formulated rule text** (home: codex-routing.md). Harness
+bindings, one bullet: "Web search is available to `codex exec` and ON
+by default (0.156.1, measured 2026-09-24: `web search: <url>` lines on
+stderr are the trace; `-c web_search=\"live\"` is accepted). Prompt from
+a file via `-` with stdin redirected (`codex exec … - < prompt.md`),
+final message to a file with `-o <file>`." Certified roles, one
+line: "Web research: UNMEASURED at every tier — first probe running
+2026-09-24 (4 luna lanes, lifecycle prior-art wave); graded by the desk
+opening each [VERIFIED] citation. Until graded, codex web lanes run
+with desk-side citation spot-checks." Restamp the page header to the
+installed CLI.
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+the certification line's grade is owed by the lifecycle-prior-art
+desk (session 996fa1b7) when the wave returns — that desk appends the
+result here as an amendment to this entry.
