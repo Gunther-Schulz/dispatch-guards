@@ -6303,3 +6303,57 @@ floor held on one 4-lane wave (14/14 desk-opened citations); yield
 uncompared with Claude; desk spot-checks of [VERIFIED] citations stay
 owed per run." Outputs: lifecycle `docs/audits/2026-09-24-prior-art-*.md`
 (9055abc).
+
+## 2026-09-24 — the boundary-form CLOSE message still reanimates a lane, and the reanimated lane adopts FOREIGN work
+
+**Incident + basis.** Lifecycle peer desk lifecycle-b4 recorded the report
+of its sonnet lane `sonnet-arc-verbs` (lc-271 and lc-116, last commit
+95f5d25 at 19:18). Its items were closed at 19:42, and it sent the lane a
+close message at about 20:29. The close RESUMED the lane. Instead of
+re-idling, the lane found prove-rows processes live in `ps`, which belonged
+to the judgment desk (d9) and to d9's r1-r3 lane, not to it. It then
+polled them ("Checking prove-rows.py background processes") for about an
+hour: 1h31m of lifetime and 364k tokens, still climbing.
+
+How it was found:
+- b4 told d9 that both lanes read `completed`, and d9 relayed a CLOSABLE
+  verdict to the operator on that testimony.
+- The operator caught the error from a screenshot of b4's panel.
+- TaskStop ended it; the listing now reads `killed`.
+
+This is the second recurrence of the reanimation class after its fix was
+APPLIED, in wave 4 on 2026-08-27 (entry above: "a post-report message
+REANIMATES a lane"). That fix made the close the ONLY post-report message,
+in boundary form. Today the close itself was the reanimating message, and
+the lane found work anyway.
+
+**Class.** Reanimation by the close message, the case the applied fix
+assumed harmless. Plus a new sibling, FOREIGN-WORK ADOPTION: a resumed
+lane with no instruction takes whatever is running in the shared machine
+state as its own and waits on it. A `completed` read taken BEFORE the close
+says nothing about the lane AFTER it. The dispatcher's closable verdict
+rested on the stale read (course-corrections line, d9, 2026-09-24).
+
+**Pre-formulated rule text.**
+- (§4, "Ownership ends at the booked report", REPLACING the close-message
+  sentence): "Once the report is BOOKED and nothing further will be asked
+  of the lane, END it with TaskStop, never with a message. TaskStop is
+  terminal and wakes nothing, while every message, the close included,
+  resumes the lane from its transcript. Send a close message only while a
+  follow-up question is still owed. In that case, read the LISTING after
+  the answer, and TaskStop the lane once it reads idle. The lane is closed
+  when the listing says so, never when a report or a pre-close read says
+  so."
+- (executor skill, the box): "A process you did not start is not yours to
+  wait on. Before waiting on anything in `ps`, match it to your own task id
+  or PID. A run you cannot claim is someone else's, and you report it; you
+  never adopt it."
+- (§4, closable verdicts): "A peer's CLOSABLE claim carries its listing line
+  read AFTER its last message to each lane; without that line it is
+  testimony."
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass. Also a
+candidate for the agent-model-gate / report-enforcer hook family, if a
+PostToolUse lane on SendMessage to an in-process teammate whose report is
+recorded is computable. Unverified: the hook input may not carry the
+booking state, in which case this stays prose.
