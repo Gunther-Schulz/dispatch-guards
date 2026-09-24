@@ -6215,3 +6215,31 @@ route already is.
 or the operator's corpus-mint answer (asked 2026-09-20 in the same
 reply that booked this entry); n=1, operator-caught, routes unchanged
 by construction this time.
+
+## 2026-09-24 — `codex exec` in the background waits on stdin forever, and the wait reads as a working lane
+
+**Incident + basis.** A read-only luna lane launched from the Bash tool
+in the background (`codex exec -s read-only -m gpt-5.6-luna "<prompt>"`,
+prompt passed as an ARGUMENT) produced nothing for ~5 minutes; its
+stderr held one line, `Reading additional input from stdin...`, and
+the process sat in that read. Killed by PID, relaunched identically with
+`< /dev/null`: it ran to completion (173,685 tokens, output present).
+Measured in lifecycle session 09020605; the relaunch is the control.
+
+**Class.** A silent-instrument hang: the lane looks exactly like a lane
+that is working (process alive, no output yet), so only an artifact
+look at stderr distinguishes it. The harness-bindings section of
+`references/codex-routing.md` records exit-0-on-API-failure and
+quota-kill empties, and has no stdin binding.
+
+**Pre-formulated rule text** (home: codex-routing.md, Harness
+bindings, one bullet): "`codex exec` reads stdin even when the prompt is
+passed as an argument; launched with stdin open (a background Bash
+task, a pipe that never closes) it blocks forever, printing only
+`Reading additional input from stdin...` to stderr. Always close it:
+`codex exec … < /dev/null`. A codex lane whose stderr's last line is
+that message is HUNG, never working."
+
+**Consumer + drain seam.** The next dispatch-skill maintenance pass;
+n=1, desk-caught by reading stderr at a horizon check, one relaunch
+lost (~5 min).
