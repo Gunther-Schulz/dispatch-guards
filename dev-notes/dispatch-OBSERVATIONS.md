@@ -6357,3 +6357,27 @@ candidate for the agent-model-gate / report-enforcer hook family, if a
 PostToolUse lane on SendMessage to an in-process teammate whose report is
 recorded is computable. Unverified: the hook input may not carry the
 booking state, in which case this stays prose.
+
+## 2026-09-25 — baseline-swap without a fresh pre-swap snapshot (executor conduct)
+
+Incident + basis: a sonnet build lane (statiker st-85 tool half),
+establishing a red-first baseline by temporarily swapping the live
+file with a git-show'd historical copy, briefly left the live file
+reverted with NO backup of its final state — the backup `cp` in a
+prior compound command had been blocked by a deny hook and silently
+never ran. Caught by `git diff --stat` reading 0 changes where 130+
+were expected; recovered from an older scratch snapshot plus
+re-applying one Edit. Zero loss, self-disclosed in the closing
+report.
+Class: restore-path assumed valid from an earlier step — the
+Fixing corpus's "what was DONE is read off the object" at the
+executor's scratch grain, plus the denied-compound-command residue
+(a blocked command's earlier links never ran).
+Pre-formulated text (executor skill candidate): before any
+temporary swap of a live file (baseline comparison, bisect), the
+CURRENT live state is snapshotted to scratch IMMEDIATELY before
+the swap and the snapshot's existence is READ (ls) — never relied
+on from an earlier step, least of all one that shared a command
+with a denied link.
+Consumer + drain seam: executor skill's verify/conduct section;
+drain at that skill's next amendment pass.
