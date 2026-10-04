@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 20
+added: 21
 compacted: 0
 
 ## dg-1
@@ -407,3 +407,15 @@ write-set: dev-notes/dispatch-OBSERVATIONS.md,plugin/skills/dispatch/SKILL.md,pl
 done-criterion: every entry in the carrier is either APPLIED (its pre-formulated rule text lands in the named consumer, with the commit ref recorded) or DISCARDED with a one-line reason; the channel-line entry drains as ONE rewrite covering incidents 2, 3 and 4 together, since applying any single text alone leaves the other routes open, per that entry own drain note
 evidence: session-start banner 2026-09-15: maintenance pass owed, booked ~32 vs drained ~0 over 33 commits; the channel-line entry own slot 4 states the three texts drain together; this arc added the 4th incident at e75221c
 blocked-by: NONE
+
+## dg-53
+grade: PARKED
+requirement: Fire the goal question at the DISPATCH seam and log each firing, so lifecycle's drift-treatment arm counts dispatch-seam crossings from the record. Pointer: lifecycle docs/directives/2026-09-24-refocus-design-round.md §7 judge ruling 2 ('lc-277 stays OPEN on its dispatch seam') and lifecycle lc-277. The 2026-09-24 round reported this booked here; a slot search (goal-seam / goal seam / lc-277) found no entry — this books the named absence. Booked by the judgment desk tmp-ad placing lc-277's obligation per 2026-10-04 design round 2 D5.
+goal: general-maintenance
+write-set: plugin/hooks/brief-reminder.py
+done-criterion: A dispatch from a governed repo prints the goal question at brief time and appends a fire-log line that lifecycle tools/fire-window-tally.py counts as a goal seam (seam=dispatch); red-first: a dispatch without the print is shown refused-or-reminded before the change, counted after.
+evidence: RELAYED (lifecycle-4f, 2026-10-04 design round 2 D5): lifecycle's drift-treatment arm window closes 2026-10-18 (DERIVED there from the directive's 4 weeks) and D5 rules no mid-window arm change — build after the arm reports, or on the judgment desk's explicit lift
+blocked-by: NONE
+blocker-exercise: none-yet 2026-10-04
+amend-reason: 2026-10-04 typed blocker supplied for the PARKED grade; the add's NONE was a shape break
+amended-blocked-by: 2026-10-04 evidence [ "$(date +%F)" \> "2026-10-18" ]  # the drift-treatment arm window has closed; an earlier lift is the lifecycle judgment desk editing this blocker (D5, lifecycle docs/directives/2026-10-04-refocus-design-round-2.md: no arm change mid-window)
