@@ -327,6 +327,8 @@ done-criterion: Both lanes read the same stripped command; the red is demonstrat
 evidence: RELOCATED from dotfiles df-61 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; authorization chain is relayed-under-standing-delegation, NOT stated first-hand at this desk). Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: deny lane calls is_fused_push(strip_heredoc_bodies(cmd)) at push-claim-reminder.py:177, while the reminder lane's check() calls is_push_command(cmd) on the raw command — no strip. Original body: dotfiles BACKLOG.md:2256-2293.
 blocked-by: evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
 blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
+amend-reason: 2026-10-07 the build landed; the entry now records its commit, which the earlier park left only in the commit history
+amended-evidence: 2026-10-07 BUILT 2026-10-07 at 4c6adcab1e2e. MEASURED by the desk at the artifact: check() reads is_push_command(strip_heredoc_bodies(cmd)); bench 67 of 67, all hook bite-tests exit 0. RELAYED from lane sonnet-dg44-43-33 (report booked): red-first against the unmodified hook, the new bite asserted and corpus line 66 read expected silent, observed context. RECALLED from the earlier slot: relocated from dotfiles df-61, premise confirmed live 2026-09-12 at push-claim-reminder.py:177.
 
 ## dg-34
 grade: READY
@@ -348,6 +350,8 @@ done-criterion: forms.md §3b carries the bare-token sentence; ships in a versio
 evidence: 2026-09-12, df-151 discovery wave: lane B wrote its reasoning INTO the enum field under a brief that declared the vocabulary but not exclusivity; the carrier doctrine's open-vocabulary decay reproduced in a data file. Matrices and reading caveat preserved at dotfiles claude/records/. Booked by the judgment desk after the drainage desk's cost-test veto correctly refused a dotfiles-side booking (wrong reader path) and correctly refused --source operator on a desk's ask (testimony, not the decision). Write-set collides with dg-35/dg-36 — the three bundle into one forms.md release
 blocked-by: evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
 blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
+amend-reason: 2026-10-07 the build landed; the entry now records its commit
+amended-evidence: 2026-10-07 BUILT 2026-10-07 at 75450728f6be. MEASURED by the desk: section 3b Taxonomy carries the bare-token sentence; journal line at dotfiles db353a5. RECALLED from the earlier slot: df-151 discovery wave 2026-09-12, matrices at dotfiles claude/records/.
 
 ## dg-39
 grade: NEW
