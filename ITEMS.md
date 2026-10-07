@@ -248,6 +248,8 @@ write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:925-965
 blocked-by: external the dotfiles desk amends the registered-procedure devbook section (dotfiles CLAUDE.md), where these four probe-craft clauses land; the write is outside this repo
+amend-reason: 2026-10-07 the external wait now has an owner item on the desk that holds the write
+amended-blocked-by: 2026-10-07 external dotfiles item df-300 lands the four probe-craft clauses in the registered-procedure devbook section and its desk reports the outcome here; the write is outside this repo
 
 ## dg-28
 grade: READY
