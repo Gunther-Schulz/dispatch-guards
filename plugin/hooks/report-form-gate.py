@@ -34,7 +34,12 @@ is REFUTED: a line-start-only anchor finds ONE slot in a genuine
 single-paragraph report ("(a) done. (b) 275 OK. …"), drops below the
 threshold and goes silent on a real report (executed: an inline
 report missing `(e)` was quiet under it). The punctuation arm keeps
-the inline report. The lane's verb is unchanged: a staged warn
+the inline report. ACCEPTED RESIDUE of the anchor: a report whose
+slots are joined by bare spaces, with neither a line break nor
+sentence punctuation between them, is no longer counted and passes
+unseen, complete or not. The bench cases that used that joiner were
+re-joined one slot per line, so they still test the lane rather
+than its blind spot. The lane's verb is unchanged: a staged warn
 lane, its staging record carrying forward.
 Split-part reports (labeled 1/N, forms.md §2) fire per part in warn
 mode — a part legitimately carries a subset, which is why this lane
