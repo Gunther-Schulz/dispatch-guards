@@ -61,13 +61,14 @@ promote-reason: 2026-10-07 was READY under the old carrier and its premise is co
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-9
-grade: READY
+grade: PARKED
 requirement: READY 2026-08-20 — §1 brief rule: read the REAL instance before shipping a parser for a format the brief describes only in prose — record: BACKLOG.md:270
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:270-312
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
+blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-9)
 amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
@@ -80,6 +81,8 @@ promote-reason: 2026-10-07 was READY under the old carrier and its premise is co
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 amend-reason: 2026-10-07 the build landed; the entry records its commit and waits only on the release its done-criterion names
 amended-evidence: 2026-10-07 BUILT 2026-10-07 at 6571f0a,bf3befe. MEASURED by the desk: the schema-bearing bullet names the internal twin (real instance on disk, or say none exists); wrap, lint and drift clean. RECALLED from the earlier slot: legacy body in BACKLOG.md blob bb93897, premise confirmed live the same day by the read-only re-grade lane.
+amend-reason: 2026-10-07 built today; the only thing left is the release its done-criterion names, so the blocker is now that release
+amended-blocked-by: 2026-10-07 evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
 
 ## dg-10
 grade: READY
@@ -120,13 +123,14 @@ promote-reason: 2026-10-07 was READY under the old carrier and its premise is co
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-12
-grade: READY
+grade: PARKED
 requirement: READY 2026-08-20 (unparked same day — both named conditions met) — "site corpus" vs "operator corpus": one referent, two terms, and a grep-audit on either misses the other (corpus-harmony F12) — record: BACKLOG.md:405
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:405-453
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
+blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-12)
 amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
@@ -139,6 +143,8 @@ promote-reason: 2026-10-07 was READY under the old carrier and its premise is co
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 amend-reason: 2026-10-07 the build landed; the entry records its commit and waits only on the release its done-criterion names
 amended-evidence: 2026-10-07 BUILT 2026-10-07 at 6571f0a. MEASURED by the desk: six replacements; a wrap-aware count of the old term over plugin/skills reads 0, predicted before the edit. RECALLED from the earlier slot: legacy body in BACKLOG.md blob bb93897, premise confirmed live the same day by the read-only re-grade lane.
+amend-reason: 2026-10-07 built today; the only thing left is the release its done-criterion names, so the blocker is now that release
+amended-blocked-by: 2026-10-07 evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
 
 ## dg-13
 grade: PARKED
@@ -194,13 +200,14 @@ evidence: BACKLOG.md:788-833
 blocked-by: external a second repo records unowned worktrees accumulating, or a candidate retirement trigger gets a measured false-fire rate; until then only the reporting doctor ships
 
 ## dg-24
-grade: READY
+grade: PARKED
 requirement: PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a missing dependency tree (hang, not error) — record: BACKLOG.md:834
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:834-889
 blocked-by: evidence false  # the named missing evidence in the source body
+blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
 amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
 amended-goal: 2026-10-07 general-maintenance
 amended-write-set: 2026-10-07 plugin/skills/worktree/SKILL.md
@@ -211,6 +218,8 @@ promote-reason: 2026-10-07 the entry offered two exits and exit (b), scoping the
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 amend-reason: 2026-10-07 the build landed; the entry records its commit and waits only on the release its done-criterion names
 amended-evidence: 2026-10-07 BUILT 2026-10-07 at 7d91eae. MEASURED by the desk: clause inside the existing section, scoped to Node, other ecosystems stated unobserved. RECALLED from the earlier slot: legacy body in BACKLOG.md blob bb93897, premise confirmed live the same day by the read-only re-grade lane.
+amend-reason: 2026-10-07 built today; the only thing left is the release its done-criterion names, so the blocker is now that release
+amended-blocked-by: 2026-10-07 evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
 
 ## dg-26
 grade: READY
