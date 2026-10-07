@@ -123,6 +123,28 @@ blocker-moot: should the legacy-model-prefix strip extend to the name source as 
 closed-reason: 2026-09-15 wave 2b. The strip now applies to either slug source when the leading word equals the call's validated model; the canonical '<model>-' name short-circuits before the strip and a different model's word stays, asserted as a PAIR beside it so widening into the sibling case goes red. Red-first: green baseline, flipped expectation failed against the old implementation, green after. Both docstrings corrected in the same change — each had become false about its own behaviour. Verify block green in full, verified at the artifact by this desk
 closed-ref: 186edbb
 
+## dg-35
+grade: DONE
+requirement: The state-token rule covers CROSSED messages but not STANDSTILL: naming a peer a state as a barrier obliges an update when that state moves — record: dotfiles claude/BACKLOG.md:399-469 (frozen legacy carrier, blob 0e5fa2e2)
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/forms.md
+done-criterion: the extended state-token clause fires on the motivating incident (a named blocker with no stated end) and stays silent on an ordinary fact message, plus a JOURNAL line in the same commit
+evidence: RELOCATED from dotfiles df-102 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: forms.md:251-270 states the crossing half only; a targeted sweep for any clause obliging an update when a named barrier-state MOVES returned zero, with 'ping' (3 hits) as positive control proving the instrument reached the file. Original requirement verbatim (German, quoted as provenance): 'die State-Token-Regel deckt gekreuzte Nachrichten, aber nicht den STILLSTAND: wer einem Peer einen Zustand als Schranke nennt, schuldet ihm die Aktualisierung, wenn der Zustand sich bewegt'.
+blocked-by: NONE
+closed-reason: 2026-10-07 State tokens passage of the forms reference extended in place: a named blocking state owes its end. Verifier pair read against the landed text: the motivating hold fires, a plain fact message stays silent. Journal line: dotfiles db353a5 (separate repo, so same session rather than same commit). Reaches sessions with the 0.11.27 release, which is the operator act.
+closed-met: dg-37
+closed-decided: none
+closed-ref: 75450728f6bebc3e227c81f2cfad7e66760a8e30
+
+## dg-36
+grade: DROPPED
+requirement: The dispatch skill leaves the 'an enumeration that already exists is not re-routed' step DERIVED rather than stated, so a reader reaches it only by inference — record: dotfiles claude/BACKLOG.md:1012-1021 (frozen legacy carrier, blob 0e5fa2e2)
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/forms.md
+done-criterion: the dispatch skill STATES the step rather than leaving it derived: section 3b or 4 says in its own text that an enumeration which already exists is not re-routed, so a reader reaches it by reading rather than by inference. Red-first: a grep of the current skill text for that step returns nothing while the behaviour is nonetheless expected of dispatchers
+evidence: RELOCATED from dotfiles df-125 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE — the item's own red-first reproduces: a sweep of plugin/skills/dispatch/ for 'already exists/enumerated' returned ZERO, with 'enumeration' (8 hits in forms.md) as positive control proving the instrument reached the text. Original body: dotfiles claude/BACKLOG.md:1012-1021.
+blocked-by: NONE
+
 ## Archive (pre-migration)
 
 

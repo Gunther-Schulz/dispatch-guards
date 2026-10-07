@@ -338,24 +338,6 @@ blocked-by: NONE
 amend-reason: 2026-09-15 2026-09-15 form repair, judgment desk authorized: the slot's first entry was prose ('plugin/skills/ (new workflow-harvest skill)') so the wave join could not read it and the item sat outside every lane while grading READY. The boundary doctrine says a write-set names files that exist or ones the entry itself creates, so the skill's own subtree is the parseable form — trailing slash, the directory entry the join reads. Nothing invented: the path is derived from the skill name the requirement already states, and no layout beyond the subtree is asserted
 amended-write-set: 2026-09-15 plugin/skills/workflow-harvest/,plugin/.claude-plugin/plugin.json
 
-## dg-35
-grade: READY
-requirement: The state-token rule covers CROSSED messages but not STANDSTILL: naming a peer a state as a barrier obliges an update when that state moves — record: dotfiles claude/BACKLOG.md:399-469 (frozen legacy carrier, blob 0e5fa2e2)
-goal: general-maintenance
-write-set: plugin/skills/dispatch/references/forms.md
-done-criterion: the extended state-token clause fires on the motivating incident (a named blocker with no stated end) and stays silent on an ordinary fact message, plus a JOURNAL line in the same commit
-evidence: RELOCATED from dotfiles df-102 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: forms.md:251-270 states the crossing half only; a targeted sweep for any clause obliging an update when a named barrier-state MOVES returned zero, with 'ping' (3 hits) as positive control proving the instrument reached the file. Original requirement verbatim (German, quoted as provenance): 'die State-Token-Regel deckt gekreuzte Nachrichten, aber nicht den STILLSTAND: wer einem Peer einen Zustand als Schranke nennt, schuldet ihm die Aktualisierung, wenn der Zustand sich bewegt'.
-blocked-by: NONE
-
-## dg-36
-grade: READY
-requirement: The dispatch skill leaves the 'an enumeration that already exists is not re-routed' step DERIVED rather than stated, so a reader reaches it only by inference — record: dotfiles claude/BACKLOG.md:1012-1021 (frozen legacy carrier, blob 0e5fa2e2)
-goal: general-maintenance
-write-set: plugin/skills/dispatch/references/forms.md
-done-criterion: the dispatch skill STATES the step rather than leaving it derived: section 3b or 4 says in its own text that an enumeration which already exists is not re-routed, so a reader reaches it by reading rather than by inference. Red-first: a grep of the current skill text for that step returns nothing while the behaviour is nonetheless expected of dispatchers
-evidence: RELOCATED from dotfiles df-125 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE — the item's own red-first reproduces: a sweep of plugin/skills/dispatch/ for 'already exists/enumerated' returned ZERO, with 'enumeration' (8 hits in forms.md) as positive control proving the instrument reached the text. Original body: dotfiles claude/BACKLOG.md:1012-1021.
-blocked-by: NONE
-
 ## dg-37
 grade: READY
 requirement: enumeration and matrix briefs: the bucket field carries the BARE TOKEN and nothing else; all qualification goes in the evidence field. forms.md §3b declares closed vocabularies but never field-exclusivity, and the gap let a lane decorate the enum — the one real FAIL-OPEN in a 25-row matrix was invisible to every tally, caught by a Counter, invisible to a read — record: dotfiles claude/records/df151-matrices-2026-09-12.md
