@@ -367,6 +367,119 @@ closed-met: none
 closed-decided: none
 closed-ref: 1ca4e0f210543724fc4efbbdb2d33c8555aff4c7
 
+## dg-10
+grade: DONE
+requirement: READY 2026-08-20 — `_dispatch_common.fire()` hardcodes `hookEventName: "PreToolUse"`, so the next non-PreToolUse lane that reaches for it ships a guard whose injection never lands — record: BACKLOG.md:313
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:313-352
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-10)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/_dispatch_common.py
+amended-done-criterion: 2026-10-07 fire() takes the hook event as a parameter defaulting to PreToolUse; a bite asserts that a call naming another event emits that event in hookSpecificOutput.hookEventName and that the default is unchanged; replay-bench totals unchanged with 0 mismatch. The Stop-lane consumer the legacy verifier named was reverted (286484a), so no consumer change is in scope.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): plugin/hooks/_dispatch_common.py:266 `def fire(reason: str, source: str = "dispatch-guards", payload: dict | None = None, default_mode: str = "deny")` - no `event` parameter; :284 `"hookEventName": "PreToolUse",` inside fire(); also :161 and :202 in the deny/ask payloads. handoff-report-gate.py missing (reverted at 286484a), so the 'local duplicate' half of the body is moot; the latent defect stands. | RELAYED, adjacent record: LEDGER.md:172 records handoff-report-gate reverted (0b666fc -> 286484a); no entry closes the fire() parameter. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 fire() and the deny payload take the hook event, default PreToolUse. Red first: the new bite failed on the unmodified file with an unexpected-keyword error. Desk re-ran: all 16 hook bite-tests exit 0, bench 73 of 73. The recorded limit stays in the docstring.
+closed-met: dg-1, dg-26, dg-18, dg-28
+closed-decided: none
+closed-ref: 6677bdc6fecf223d0b851003b037e628c06a40f6
+
+## dg-1
+grade: DONE
+requirement: READY 2026-08-27 (wave-4 peer desk, from lane `opus-lc44-48-49`'s finding on an instrument it does not own) — `report-form-gate` scores a message ABOUT a report as a report, and its obvious repair is unsafe — record: BACKLOG.md:10
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:10-55
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-1)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/report-form-gate.py,tools/corpus/guards.jsonl
+amended-done-criterion: 2026-10-07 Verifier: those five arms as gate-level payload tests (the real binary over stdin, not the predicate alone), plus the false-fire probe ... run the gate against its OWN docstring and against this entry's text; both must stay quiet. Done-criterion: the five arms pass at gate level, the two self-matching probes are quiet, and the existing report-form bites stay green.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python read of plugin/hooks/report-form-gate.py -> line 55: `_SLOT_RE = re.compile(r"\(([a-h])\)")` (unchanged; body cited :55) and line 59 `return set(_SLOT_RE.findall(message))`. Positive control: same read found REPORT_MIN_SLOTS = 4 at :53. Designed replacement regex `(?:^|(?<=[.;:!?]\s))` has 0 hits in the file. Not exercised: I did not run the gate on the ping payload (read-only lane). | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 Slot markers count only at line start or after sentence punctuation. Lane-run arms on the real hook: the ping and the four-letter prose mention fired before and are quiet now; the missing-slot reports still fire; the line-start-only alternative was shown losing the inline report. Residue (bare-space-joined reports) named in the docstring.
+closed-met: dg-10, dg-26, dg-18, dg-28
+closed-decided: none
+closed-ref: b55da9543d23bbc242906be22dc23145c6d7273e, 8a614834b9d0fe74f0521772cd038bf5c1f5d3ff
+
+## dg-26
+grade: DONE
+requirement: PARKED 2026-08-10 — replay-bench corpus does not cover writer-claims-gate (0 cases), and relief may not be expressible there at all — record: BACKLOG.md:899
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:899-924
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision the missing decision named in the source body: answer it, then re-grade (item dg-26)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 tools/replay-bench.py
+amended-done-criterion: 2026-10-07 The bench carries a declared exclusion set (writer-claims-gate and writer-reservation-gate, each with its reason: stateful) and VERIFIES it: a hook under plugin/hooks with zero corpus cases that is not in the set fails the run, and so does a set member that has cases. Red-first: remove one member from the set and the bench goes red naming it.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): tools/corpus/guards.jsonl: 67 cases, hook counts brief-reminder 17, subagent-push-gate 11, agent-model-gate 10, amend-gate 7, message-payload-gate 6, report-form-gate 6, dispatch-skill-gate 4, push-claim-reminder 3, worktree-config-gate 3 - 0 for writer-claims-gate and writer-reservation-gate. tools/replay-bench.py:14-17 now declares 'Boundary: STATELESS guards only. `writer-claims-gate` is EXCLUDED' (partial decision, prose docstring only; regex EXCLUDED|exclusion -> that 1 hit, so no code verifies it, and writer-reservation-gate is not named there). | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 the missing decision is made: a declared exclusion the bench verifies. The bench already states the stateless boundary in its docstring, and extending the fixture model to seed gate state would rebuild what each gate's own --test already does
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 The bench declares two stateful-excluded and four uncovered hooks and verifies the declaration against the hooks directory on every unfiltered run: 9 covered, 2 excluded, 4 declared. Its selftest shows a removed member, a phantom member and an undeclared file each named.
+closed-met: dg-10, dg-1, dg-18, dg-28
+closed-decided: none
+closed-ref: 37f111692ceb49e3108bc2eb02e1fea8cc4a0a8c
+
+## dg-18
+grade: DONE
+requirement: PARKED 2026-08-15 — report-enforcer asks the stopping agent a question it may not be able to answer: which LANE it is in — record: BACKLOG.md:643
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:643-679
+blocked-by: NONE
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/report-enforcer.py
+amended-done-criterion: 2026-10-07 A probe records whether the SubagentStop hook input (or the stopping agent's own context) carries the dispatch name. If it does, the hook selects the lane branch itself and the self-classification text goes; if it does not, the docstring's soft-spot note states the probe and its result instead of calling the question unestablished. Either way a bite pins the outcome.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): plugin/hooks/report-enforcer.py:17 `Known soft spot: the LANE judgment is delegated to the stopping` ... :20 `subagent can even observe its own lane is unestablished` - docstring still states the open question; :72 `If you are a NAMED/mailbox agent` and :83 `If you are an UNNAMED subagent` - branch still self-classified. The body's CORRECTION (vocabulary repaired, NAMED/mailbox vs UNNAMED) is visible at :5-10. Probe not run. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 the named missing evidence is a probe a lane can run, not a wait: the item now asks for the probe and for either outcome's repair
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 report-enforcer computes the lane from the agent id shape and states only that lane's duty; an unrecognised shape still gets both. Shapes measured over the fire log by the lane (3760 named, 322 bare a+16 hex, correcting the brief). That SubagentStop input carries the same shape is derived, not measured.
+closed-met: dg-10, dg-1, dg-26, dg-28
+closed-decided: none
+closed-ref: 1ecf003f7cc99c5426ef7d625291dbd0238649c0
+
+## dg-28
+grade: DONE
+requirement: PARKED 2026-08-10 — neutralize the remaining `CLAUDE.md` mentions in HOOK docstrings and one runtime string for outside sharing — record: BACKLOG.md:966
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:966-979
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: fill goal, write-set, done-criterion and evidence, or drop (item dg-28)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/agent-model-gate.py,plugin/hooks/brief-reminder.py,plugin/hooks/discovery-volume-reminder.py,plugin/hooks/dispatch-log.py,plugin/hooks/push-claim-reminder.py,plugin/hooks/subagent-push-gate.py
+amended-done-criterion: 2026-10-07 No hook docstring or runtime string names the operator's CLAUDE.md as if every site had one: each mention reads 'site corpus' (the skills' surviving term, dg-12) or names the file as this site's example. The runtime string at discovery-volume-reminder.py:85 changes with a bench or bite case pinning the new text; every hook --test and the bench stay green.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python count of literal 'CLAUDE.md' per hook file: agent-model-gate 7, brief-reminder 8, discovery-volume-reminder 3, dispatch-log 1, push-claim-reminder 1, subagent-push-gate 1, all others 0 (six files now vs body's five). discovery-volume-reminder.py:85 `"context — the discovery-dispatch rule may apply (CLAUDE.md "` still in the runtime string. Trigger: this repo is PUBLIC per CLAUDE.md '## Carve-outs' (gh visibility claim recorded there; not re-run), which bears on the trigger but whether a 'decision to publish' was taken is judgment. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 its trigger (the plugin shared outside this site) has fired: the repo is public
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 All 21 CLAUDE.md mentions in the hooks dispositioned: 11 changed to the site-corpus wording (three of them runtime strings, one pinned by a new bite), 10 kept as this repo's own file, an evidence pointer or fixture data.
+closed-met: dg-10, dg-1, dg-26, dg-18
+closed-decided: none
+closed-ref: 63510ab04e60407e949337aee6974e16d00eb25c
+
 ## Archive (pre-migration)
 
 
