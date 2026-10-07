@@ -1,6 +1,6 @@
 ---
 name: dispatch
-description: Brief, report, and integration discipline for delegating work to subagents — decision-complete briefs, closing-report and roadmap forms, dispatcher duties, tier-readiness register, Codex routing. Use when dispatching or delegating work to another agent (Agent/Task/Workflow tools), writing a dispatch brief, running parallel agents or agent worktrees, demanding or booking a subagent's closing report, integrating or pushing agent commits, or certifying a recurring procedure for a cheaper tier. Not for deciding WHETHER to dispatch — the model-routing table in the operator corpus governs that.
+description: Brief, report, and integration discipline for delegating work to subagents — decision-complete briefs, closing-report and roadmap forms, dispatcher duties, tier-readiness register, Codex routing. Use when dispatching or delegating work to another agent (Agent/Task/Workflow tools), writing a dispatch brief, running parallel agents or agent worktrees, demanding or booking a subagent's closing report, integrating or pushing agent commits, or certifying a recurring procedure for a cheaper tier. Not for deciding WHETHER to dispatch — the model-routing table in the site's always-loaded rule corpus governs that.
 ---
 
 # Dispatch discipline — briefs, reports, and guards for delegated agent work
@@ -64,7 +64,7 @@ A brief is decision-complete only when a fresh context could execute
 it without making any design or placement decision — system
 placement (which rules apply, where the work belongs) is itself a
 decision, pre-filled so the dispatch verifies rather than derives
-it. (Canonical here; the operator corpus routing module points to
+it. (Canonical here; the site corpus routing module points to
 this section.)
 
 **Exception — verifier dispatches:** a fresh-context verifier gets the
@@ -96,8 +96,8 @@ Mandatory parts (execution briefs):
   on shape, not location; where a tool hardcodes home paths, the
   brief names the tool's env override (CLAUDE_CONFIG_DIR-class)
   instead of a fakehome mirror. Source: the shape-keyed protection
-  fact is canonical in the operator corpus (CLAUDE.md, Shell and
-  privilege, the config-directory binding); this clause is its
+  fact is canonical in the site corpus (Shell and privilege, the
+  config-directory binding); this clause is its
   subagent-scratch application — amending either home means auditing
   the other.
 - **Files to read, listed — never paraphrased.** Bind the source files
@@ -669,7 +669,13 @@ Mandatory parts (execution briefs):
   document text — never on a summarizer/condensed rendering (WebFetch
   summaries have contradicted the raw doc at exactly the load-bearing
   line). Contradiction between summary
-  and raw text → raw text wins, surface the discrepancy.
+  and raw text → raw text wins, surface the discrepancy. The
+  internal twin: where the brief describes a data shape the lane
+  must parse and a real instance exists on disk, the brief names
+  that instance as a mandatory read. Where none exists, the brief
+  says so. A fixture built from the lane's own guess of the shape
+  stays green under the wrong parser, so only the real instance
+  can catch the guess.
 - **Below the session model, the grounding basis names the executor
   skill load FIRST** (`dispatch-guards:executor` — conduct of
   execution, under-report principle, devbook form): the conduct
@@ -1107,7 +1113,7 @@ the machine-bootstrap doctor's fingerprint check. Per-repo
 `READINESS.json` at repo root carries only EXCLUSIONS (this repo's
 silent-AND-outward procedures — per-repo forever, the repo knows
 its own outward surfaces) and DEVIATIONS (where this repo departs
-from a class certification); role line: operator corpus, file
+from a class certification); role line: site corpus, file
 roles. No register without a consumer — a register nothing reads is
 dead weight, don't create it; the consult-moment lives in §1's brief
 parts (source label: the clause there is the one rule, this is its

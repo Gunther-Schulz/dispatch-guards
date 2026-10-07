@@ -104,7 +104,7 @@ The evidence:
   statistical findings — briefed to refute — and a session's own
   booked verdicts); run mechanical verifiers anywhere, and skip
   instructed "double-check yourself" prose everywhere (source: the
-  operator corpus' fresh-context verification rule, Insurance).
+  site corpus's fresh-context verification rule, Insurance).
 
 Site-overlay slots — the ranked model table with its staleness
 stamp, which model each role names, pool/cost bindings, standing

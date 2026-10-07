@@ -1,6 +1,6 @@
 ---
 name: executor
-description: Conduct-of-execution discipline for a session running briefed or devbook work — grounding literalism, verify with the check's own output, gaps surface never bridge, escalation returns the question, the box, the report. Use when executing a dispatch brief or a repo devbook/runbook procedure, when reporting on executed work, or when writing or grading a repo devbook against the devbook form. Counterpart of the dispatch skill (the sending side). Not for deciding what to build or whether to dispatch — the brief carries the first, the operator corpus the second.
+description: Conduct-of-execution discipline for a session running briefed or devbook work — grounding literalism, verify with the check's own output, gaps surface never bridge, escalation returns the question, the box, the report. Use when executing a dispatch brief or a repo devbook/runbook procedure, when reporting on executed work, or when writing or grading a repo devbook against the devbook form. Counterpart of the dispatch skill (the sending side). Not for deciding what to build or whether to dispatch — the brief carries the first, the site's always-loaded rule corpus the second.
 ---
 
 # Executor discipline — conduct, under-report principle, devbook form
