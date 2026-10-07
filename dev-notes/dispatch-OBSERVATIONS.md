@@ -6460,3 +6460,34 @@ finding."
 (`references/forms.md`, the delivery binding), at the consolidation
 pass booked under dg-52. Same class as the 2026-08-27 delivery
 entry; merge there rather than landing a sibling.
+
+## 2026-10-07 — CLASS: a quiet commit inside a compound command leaves no commit mark, and the EXECUTION tail does not say so
+
+**Incident + basis.** Two sources. RELAYED from the dotfiles desk
+(`dotfiles-2b`), measured there by lane `opus-w7-df301` over real
+transcripts and not re-measured here: of the quiet commit calls
+whose output carries dotfiles' pre-commit note, 8 carry it alone
+and 785 carry it among other lines (an exit-code echo, a log, a
+status in the same command). The mark recorder can claim only the
+first kind; a loud commit is marked from its own printed sha.
+OBSERVED at this desk the same day: the pre-push guard listed four
+of this desk's own commits as "unbooked, WITHOUT A MARK", each made
+with `git commit -q` inside a compound command, and named the
+quiet flag as the cause in its own text. Dotfiles decided against
+a looser acceptor on its side (its LEDGER, decision line of this
+date; not opened here).
+
+**Class.** A recorder keyed to an output only one calling form
+produces. The lane's commit is real and correctly trailered, and
+the push guard still cannot say who made it.
+
+**Pre-formulated rule text** (forms.md EXECUTION tail, the commit
+paragraph; the tail and its byte fixture `EXECUTION_TAIL_BG` ride
+one commit): "Commit without `-q`: the commit's own printed line
+is what marks it as yours, and a quiet commit reaches the push
+guard unattributed."
+
+**Consumer + drain seam.** `references/forms.md`, the EXECUTION
+tail, with dg-11 (same paragraph, same fixture) or at the
+consolidation pass booked under dg-52, whichever opens that tail
+first.
