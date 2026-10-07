@@ -36,7 +36,17 @@ Matching, reminder lane: the shared token matcher
 (_dispatch_common.is_push_command) — mirrors subagent-push-gate by
 construction (same function). Quoted text mentioning push (commit
 messages, paths) does not fire; `git stash push` (purely local) is
-exempt.
+exempt. BOTH lanes read the heredoc-STRIPPED command (2026-10-07,
+dg-33): the reminder lane formerly read the raw command, so a
+`git push` line inside a heredoc body — text being written — drew a
+claim-check reminder the deny lane had already stopped firing on.
+The stripping is the deny lane's own function, opener lines kept, so
+a real push on the opener line or after the heredoc still reminds.
+Verb unchanged: a context reminder (an advisory has no deny or
+rewrite to convert to). Accepted residue: a push mention inside a
+quoted `-m "..."` argument is NOT covered by heredoc stripping;
+what keeps it quiet is the token matcher's own quote handling, not
+this change.
 
 Matching, deny lane: command-position regexes, deliberately NOT the
 token matcher — the question here is composition (does a push share
@@ -196,7 +206,7 @@ def check(payload: dict) -> str | None:
     if is_subagent(payload):
         return None
     cmd = (payload.get("tool_input") or {}).get("command", "") or ""
-    if is_push_command(cmd):
+    if is_push_command(strip_heredoc_bodies(cmd)):
         return reminder_text()
     return None
 
@@ -478,6 +488,34 @@ if __name__ == "__main__":
         assert _incident_lines[0]["guard"] == "push-claim-reminder", \
             _incident_lines[0]
         assert _incident_lines[0]["mode"] == "deny", _incident_lines[0]
+
+        # (xiv) the REMINDER lane reads the stripped command too
+        # (2026-10-07, dg-33): a heredoc BODY line starting `git push`
+        # is text being written, so no claim-check reminder; a real push
+        # on the opener line, or after the heredoc, still reminds.
+        _rem_body = (
+            "git commit -F - <<'EOF'\n"
+            "release notes:\n"
+            "git push origin main\n"
+            "EOF\n"
+        )
+        assert check({**main_s, "tool_input": {"command": _rem_body}}) is None
+        _rem_opener = (
+            "git commit -F - <<'EOF' && git push origin main\n"
+            "a commit message body\n"
+            "EOF\n"
+        )
+        assert check({**main_s, "tool_input": {"command": _rem_opener}}) is not None
+        _rem_after = (
+            "cat > /tmp/note.txt <<'EOF'\n"
+            "a note body\n"
+            "EOF\n"
+            "git push origin main"
+        )
+        assert check({**main_s, "tool_input": {"command": _rem_after}}) is not None
+        # accepted residue (docstring): a push mention inside a quoted
+        # -m argument is not covered by heredoc stripping
+        assert check({**main_s, "tool_input": {"command": 'git commit -m "x\ngit push origin main"'}}) is None  # shlex folds the quoted text: silent today, via the token matcher, not via stripping
 
         print("push-claim-reminder: all tests passed")
         sys.exit(0)
