@@ -670,12 +670,11 @@ Mandatory parts (execution briefs):
   summaries have contradicted the raw doc at exactly the load-bearing
   line). Contradiction between summary
   and raw text → raw text wins, surface the discrepancy. The
-  internal twin: where the brief describes a data shape the lane
-  must parse and a real instance exists on disk, the brief names
-  that instance as a mandatory read. Where none exists, the brief
-  says so. A fixture built from the lane's own guess of the shape
-  stays green under the wrong parser, so only the real instance
-  can catch the guess.
+  internal twin is a data shape the lane must parse. Where a real
+  instance exists on disk, the brief names it as a mandatory
+  read. Where none exists, the brief says so. A fixture built
+  from the lane's own guess of the shape stays green under the
+  wrong parser. Only the real instance can catch the guess.
 - **Below the session model, the grounding basis names the executor
   skill load FIRST** (`dispatch-guards:executor` — conduct of
   execution, under-report principle, devbook form): the conduct
