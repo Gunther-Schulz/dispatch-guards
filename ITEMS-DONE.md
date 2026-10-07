@@ -298,6 +298,75 @@ closed-met: none
 closed-decided: none
 closed-ref: 5ef5b32c1ca957236b29ec5d86d608c99683984d
 
+## dg-30
+grade: DONE
+requirement: READY 2026-08-28 (wave-5 peer desk `dotfiles-a7`, found while verifying item S) — the 69-column wrap check in `CLAUDE.md` §Verify is VACUOUS once the work is committed — record: BACKLOG.md:1010
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:1010-1041
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-30)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 CLAUDE.md
+amended-done-criterion: 2026-10-07 Verifier: the check run twice on a clean tree — once as written against `HEAD`, once against a base that predates real edits — must give DIFFERENT results ... Done-criterion: the command names an explicit comparison base rather than `HEAD`, or it states could-not-verify when its diff is empty.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): CLAUDE.md:179 `d=subprocess.run(['git','diff','-U0','HEAD','--',` and :185 `print(*bad,sep=chr(10)) if bad else print('wrap: clean')` - still HEAD-based with no zero-bytes branch. Not exercised (would need a committed-range plant). | RELAYED, adjacent record: LEDGER.md:178 records the same defect as OPEN-observed at the peer desk ('as written it diffs against `HEAD`, so with a clean tree it grades 0 bytes and prints `wrap: clean` vacuously') - no fix recorded. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 The wrap check names its base and reports how many lines it graded; zero reads NOT GRADED. Three arms run as written, incl. a planted 80-column line going red.
+closed-met: dg-4
+closed-decided: none
+closed-ref: 3fe740578458838ea249c94e66ae9c49f0dcf390
+
+## dg-4
+grade: DONE
+requirement: READY 2026-08-27 (wave-4 peer desk, lanes A and A2 independently) — the `forms.md` EXECUTION tail and its byte-fixture cannot be committed separately, and nothing says so — record: BACKLOG.md:101
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:101-121
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-4)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 CLAUDE.md
+amended-done-criterion: 2026-10-07 Verifier: the sentence is present and names both paths; a reader briefing that write set finds it before writing. Done-criterion: the sentence exists and names `references/forms.md` and `plugin/hooks/brief-reminder.py` together.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python normalized-phrase search over CLAUDE.md: 'forms.md' 0 hits, 'EXECUTION_TAIL_BG' 0 hits, 'EXECUTION tail' 0 hits. Positive control: same file DOES contain '## Carve-outs' at :193 and 'Verify' section :122. Coupling itself still exists: tools/check-doc-drift.py:234 `def check_execution_tail_fixture`, :269 reads "EXECUTION_TAIL_BG", :438 registered; brief-reminder.py:1129 defines EXECUTION_TAIL_BG. | RELAYED, adjacent record: LEDGER.md:175 books the same coupling as 'Booked READY as a Verify-prose sentence' (the sentence itself is not in CLAUDE.md). | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 The Verify prose names references/forms.md and plugin/hooks/brief-reminder.py together as one-commit coupled.
+closed-met: dg-30
+closed-decided: none
+closed-ref: 3fe740578458838ea249c94e66ae9c49f0dcf390
+
+## dg-6
+grade: DONE
+requirement: READY 2026-08-27 (operator decision, via the wave-3 judgment desk) — the observation carriers are English. THE BULK IS DONE (`437159c`, lane `sonnet-d2-carriers`); a NAMED residue of six lines remains — record: BACKLOG.md:137
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:137-190
+blocked-by: NONE
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-6)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 dev-notes/dispatch-OBSERVATIONS.md,dev-notes/worktree-OBSERVATIONS.md
+amended-done-criterion: 2026-10-07 Verifier: `python3 tools/check-doc-drift.py` 7/7 `[ok]` INCLUDING "observations tail" and `--test` green - run before and after ... append-marker occurrence count per file is still exactly 1 ... Done-criterion: the only German remaining under `dev-notes/` is the three parsed literals named above, enumerated in the closing report - NOT a grep returning 0.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python line read: dev-notes/dispatch-OBSERVATIONS.md:3132-3135 and dev-notes/worktree-OBSERVATIONS.md:306-309 each still carry `<!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist / die lebende Liste. Abgeflossenes steht OBERHALB. Der / doc-drift-Check erzwingt genau diese Reihenfolge, ... -->` (German lines 2-4 present). Marker occurrence count 1 per file (1 hit each for 'NEUE EINTR'). Line numbers differ from body's 2737-2740 (files grew). Not run: check-doc-drift.py. | RELAYED, adjacent record: LEDGER.md:177 books D2 (437159c) and the correction 'lines 2-4 in each of the two carriers, six lines in total, are ordinary German prose ... the wider sweep may translate freely' - residue not closed anywhere. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+closed-reason: 2026-10-07 Marker comments translated around the byte-identical parsed phrase in both carriers; drift check 7 of 7 before and after; only the three parsed literals remain German.
+closed-met: none
+closed-decided: none
+closed-ref: 1ca4e0f210543724fc4efbbdb2d33c8555aff4c7
+
 ## Archive (pre-migration)
 
 
