@@ -128,7 +128,8 @@ def _has_chain_operator(cmd: str) -> bool:
 
 
 def _deny_payload(reason: str, source: str = "dispatch-guards",
-                  payload: dict | None = None) -> dict:
+                  payload: dict | None = None,
+                  event: str = "PreToolUse") -> dict:
     """Build the deny JSON. Source-tagged and dual-field by design:
     permissionDecisionReason reaches the MODEL, systemMessage the user's
     UI — a deny carrying only one of them leaves the other audience with
@@ -150,7 +151,10 @@ def _deny_payload(reason: str, source: str = "dispatch-guards",
     replacing or reordering the lane's own text) — the single render
     site every Bash deny lane passes through, so the note ships without
     a per-hook copy to drift. No payload, or a command with no chaining
-    operator, leaves reason untouched."""
+    operator, leaves reason untouched.
+
+    event is the hookEventName the payload carries (default
+    "PreToolUse", the event of every caller that exists; see fire())."""
     cmd = (payload or {}).get("tool_input", {}).get("command")
     if isinstance(cmd, str) and _has_chain_operator(cmd):
         reason = f"{reason} {_CHAIN_NOTE}"
@@ -158,7 +162,7 @@ def _deny_payload(reason: str, source: str = "dispatch-guards",
     return {
         "systemMessage": tagged,
         "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
+            "hookEventName": event,
             "permissionDecision": "deny",
             "permissionDecisionReason": tagged,
         },
@@ -264,7 +268,8 @@ def guard_mode(source: str, default: str = "deny") -> str:
 
 
 def fire(reason: str, source: str = "dispatch-guards",
-         payload: dict | None = None, default_mode: str = "deny") -> None:
+         payload: dict | None = None, default_mode: str = "deny",
+         event: str = "PreToolUse") -> None:
     """Mode-aware deny: the single exit for every deny lane.
 
     deny → the standard deny JSON (exit). warn → additionalContext
@@ -272,16 +277,26 @@ def fire(reason: str, source: str = "dispatch-guards",
     not block; how staged lanes earn promotion: dev-notes harvest note.
     off → logged, silent (exit). Every mode logs to the fire log
     first, so a staged lane's false-fire rate is countable before it
-    ever denies real work."""
+    ever denies real work.
+
+    event (dg-10) is the hookEventName both emitting branches write.
+    It defaults to "PreToolUse" because every caller that exists is a
+    PreToolUse lane, so no existing call moves; a Stop, SubagentStop
+    or PostToolUse lane passes its own event. Verb: none changes —
+    this is plumbing under the existing lanes. RECORDED LIMIT: that
+    the harness requires a matching hookEventName for the injection
+    to be delivered is a convention read from report-enforcer's
+    bites, not a measured harness behaviour; a session tightening
+    this should measure it rather than inherit it."""
     mode = guard_mode(source, default_mode)
     fire_log(source, mode, reason, payload)
     if mode == "deny":
-        print(json.dumps(_deny_payload(reason, source, payload)))
+        print(json.dumps(_deny_payload(reason, source, payload, event)))
     elif mode == "warn":
         print(json.dumps({
             "systemMessage": f"[{source}] WARN (staging): {reason}",
             "hookSpecificOutput": {
-                "hookEventName": "PreToolUse",
+                "hookEventName": event,
                 "additionalContext": (
                     f"[{source}] WARN — staging mode, this lane would "
                     f"DENY: {reason}"),
@@ -751,6 +766,40 @@ if __name__ == "__main__" and "--test" in sys.argv:
 
         code, out = run_fire(source="dispatch-guards/x-gate")  # off
         assert code == 0 and out == "", (code, repr(out))
+
+        # ── fire(event=...): the emitted hookEventName follows the
+        # caller's event in BOTH the warn and the deny branch, and the
+        # default stays PreToolUse (dg-10). Each branch is a pair: the
+        # named event arrives, and the unnamed call still says
+        # PreToolUse. The warn/deny sources are the config's own
+        # (amend-gate = warn, unlisted = deny), so no mode is rebound.
+        # (own fire log, so the five-line log assertion below stays
+        # about the fires it counts)
+        _main_log = os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"]
+
+        def run_fire_event(source, **kw):
+            os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = td + "/ev.jsonl"
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                try:
+                    fire("R", source=source, payload={"session_id": "s1"},
+                         **kw)
+                except SystemExit as e:
+                    assert e.code == 0
+            os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"] = _main_log
+            return json.loads(buf.getvalue())["hookSpecificOutput"]
+
+        for _src, _kind in (("dispatch-guards/amend-gate", "warn"),
+                            ("dispatch-guards/unlisted", "deny")):
+            _named = run_fire_event(_src, event="Stop")
+            assert _named["hookEventName"] == "Stop", (_kind, _named)
+            _dflt = run_fire_event(_src)
+            assert _dflt["hookEventName"] == "PreToolUse", (_kind, _dflt)
+        # the warn branch really was the warn branch, the deny the deny
+        assert "additionalContext" in run_fire_event(
+            "dispatch-guards/amend-gate", event="Stop")
+        assert run_fire_event("dispatch-guards/unlisted",
+                              event="Stop")["permissionDecision"] == "deny"
 
         # ── ask(): logged and emitting the dialog payload ──
         buf = io.StringIO()
