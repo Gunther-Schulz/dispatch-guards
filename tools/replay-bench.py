@@ -11,10 +11,19 @@ regressions as data rather than as assertions buried in a hook file
 (`"note"` on those cases records which incident they descend from).
 Survey items 2+4 converge here: this IS the end-to-end deny-arm test.
 
-Boundary: STATELESS guards only. `writer-claims-gate` is EXCLUDED —
-it is stateful (a claims store seeded across a PostToolUse/PreToolUse
-pair), and its end-to-end coverage lives inside its own `--test`,
-which can seed that state. The bench never seeds state.
+Boundary: STATELESS guards only. The bench never seeds state, so the
+stateful gates are EXCLUDED by a declared dict (EXCLUDED_STATEFUL:
+`writer-claims-gate` — a claims store seeded across a
+PostToolUse/PreToolUse pair — and `writer-reservation-gate` — a
+reservation object inside a real git dir): a stdin-only case for
+either would be a vacuous `silent`, and each one's end-to-end
+coverage lives inside its own `--test`, which can seed that state.
+A hook with no corpus case that is NOT stateful is a named debt, the
+second declared dict (UNCOVERED_DECLARED). Both dicts are VERIFIED on
+every full run (no `--hook`): every plugin/hooks/*.py (the directory
+read at run time, minus _dispatch_common.py) has a corpus case or
+sits in exactly one dict, no member has a case, no member names a
+missing file; a violation prints the hook and the rule and exits 1.
 
 Isolation: every run pins CLAUDE_DISPATCH_GUARDS_CONFIG,
 CLAUDE_DISPATCH_GUARDS_FIRELOG, CLAUDE_DISPATCH_GUARDS_CLAIMS and
@@ -94,6 +103,62 @@ FIRE_KINDS = ("deny", "ask", "context", "warn", "block", "rewrite")
 # additionalContext, so an ordinary reminder that merely quotes it stays
 # "context" (dg-44, 2026-10-07).
 WARN_MARKER = " WARN (staging): "
+
+# Declared coverage limits (dg-26, 2026-10-07): hook basename -> reason.
+# coverage_violations() checks both against the hooks directory and the
+# corpus on every full run, so neither can age silently.
+EXCLUDED_STATEFUL = {
+    "writer-claims-gate.py": "stateful: needs a claims store seeded "
+        "across a PostToolUse/PreToolUse pair, which the bench never "
+        "provides; a stdin-only case would be a vacuous silent",
+    "writer-reservation-gate.py": "stateful: needs a real git fixture "
+        "repo plus a reservation object in its git dir, which the "
+        "bench never provides; a stdin-only case would be a vacuous "
+        "silent",
+}
+_NO_CASE_YET = "no corpus case yet; covered by its own --test only"
+UNCOVERED_DECLARED = {
+    "discovery-volume-reminder.py": _NO_CASE_YET,
+    "dispatch-log.py": _NO_CASE_YET,
+    "report-enforcer.py": _NO_CASE_YET,
+    "report-reminder.py": _NO_CASE_YET,
+}
+# the shared module is not a hook
+NOT_A_HOOK = "_dispatch_common.py"
+
+
+def coverage_violations(cases: list[dict], hooks_dir: Path | None = None,
+                        excluded: dict | None = None,
+                        uncovered: dict | None = None) -> list[str]:
+    """One line per violated coverage rule, [] when clean. The hook list
+    is read from the directory at call time, never from a restated list;
+    the dicts default to the module's declared ones at call time too, so
+    a test that mutates them in-process reaches this check."""
+    hooks_dir = HOOKS if hooks_dir is None else hooks_dir
+    excluded = EXCLUDED_STATEFUL if excluded is None else excluded
+    uncovered = UNCOVERED_DECLARED if uncovered is None else uncovered
+    on_disk = sorted(p.name for p in hooks_dir.glob("*.py")
+                     if p.name != NOT_A_HOOK)
+    with_cases = {c["hook"] for c in cases}
+    out = []
+    for name in on_disk:
+        in_ex, in_un = name in excluded, name in uncovered
+        if in_ex and in_un:
+            out.append(f"{name}: declared in BOTH EXCLUDED_STATEFUL and "
+                       "UNCOVERED_DECLARED (exactly one allowed)")
+        if name not in with_cases and not in_ex and not in_un:
+            out.append(f"{name}: no corpus case and in neither "
+                       "EXCLUDED_STATEFUL nor UNCOVERED_DECLARED")
+    for label, decl in (("EXCLUDED_STATEFUL", excluded),
+                        ("UNCOVERED_DECLARED", uncovered)):
+        for name in sorted(decl):
+            if name not in on_disk:
+                out.append(f"{name}: named in {label} but no such hook "
+                           f"file under {hooks_dir}")
+            elif name in with_cases:
+                out.append(f"{name}: in {label} but has corpus cases "
+                           "(remove it from the dict)")
+    return out
 
 
 def classify(returncode: int, stdout: str) -> str:
@@ -444,9 +509,101 @@ def _test() -> int:
               "'context') - the fixture does not reach the hook",
               file=sys.stderr)
 
+    # ── Coverage verification (dg-26): the declared dicts are checked
+    # against the real directory and corpus. Baseline first (unmodified
+    # dicts must be CLEAN, else every red below proves nothing), then
+    # each rule mutated in-process, the mutation always restored:
+    # a member removed, a phantom added, a member that has cases, a
+    # hook in both dicts, an undeclared hook file, and the whole main()
+    # path (exit code + the printed violation line).
+    import contextlib
+    import io
+    full = load_corpus(DEFAULT_CORPUS, None)
+    base = coverage_violations(full)
+    if base:
+        bad += 1
+        print(f"FAIL [coverage baseline]: unmodified dicts not clean: "
+              f"{base}", file=sys.stderr)
+
+    def _arm(label, mutate, restore, hook, want_rule):
+        nonlocal_bad = 0
+        try:
+            mutate()
+            got = coverage_violations(full)
+        finally:
+            restore()
+        named = [v for v in got if v.startswith(hook + ":")
+                 and want_rule in v]
+        if len(named) != 1 or len(got) != 1:
+            nonlocal_bad = 1
+            print(f"FAIL [coverage, {label}]: want exactly one violation "
+                  f"naming {hook} ({want_rule!r}), got {got}",
+                  file=sys.stderr)
+        return nonlocal_bad
+
+    _ex, _un = dict(EXCLUDED_STATEFUL), dict(UNCOVERED_DECLARED)
+
+    def _restore():
+        EXCLUDED_STATEFUL.clear()
+        EXCLUDED_STATEFUL.update(_ex)
+        UNCOVERED_DECLARED.clear()
+        UNCOVERED_DECLARED.update(_un)
+
+    bad += _arm("member removed",
+                lambda: EXCLUDED_STATEFUL.pop("writer-claims-gate.py"),
+                _restore, "writer-claims-gate.py", "neither")
+    bad += _arm("phantom member",
+                lambda: UNCOVERED_DECLARED.update({"no-such-hook.py": "x"}),
+                _restore, "no-such-hook.py", "no such hook file")
+    bad += _arm("member with cases",
+                lambda: UNCOVERED_DECLARED.update(
+                    {"brief-reminder.py": "x"}),
+                _restore, "brief-reminder.py", "has corpus cases")
+    bad += _arm("in both dicts",
+                lambda: UNCOVERED_DECLARED.update(
+                    {"writer-claims-gate.py": "x"}),
+                _restore, "writer-claims-gate.py", "BOTH")
+    with tempfile.TemporaryDirectory(prefix="rb-selftest-hooks-") as hd:
+        hdp = Path(hd)
+        for name in os.listdir(HOOKS):
+            if name.endswith(".py"):
+                (hdp / name).write_text("", encoding="utf-8")
+        (hdp / "brand-new-gate.py").write_text("", encoding="utf-8")
+        got = coverage_violations(full, hooks_dir=hdp)
+        if (len(got) != 1 or not got[0].startswith("brand-new-gate.py:")):
+            bad += 1
+            print(f"FAIL [coverage, undeclared hook file]: got {got}",
+                  file=sys.stderr)
+    # the whole path: main() over the real corpus with one member
+    # removed exits 1 and prints the violation; restored, it exits 0
+    _argv = sys.argv
+    try:
+        sys.argv = ["replay-bench.py"]
+        results = []
+        for mutate in (lambda: EXCLUDED_STATEFUL.pop(
+                "writer-claims-gate.py"), lambda: None):
+            _restore()
+            mutate()
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = main()
+            results.append((rc, buf.getvalue()))
+    finally:
+        sys.argv = _argv
+        _restore()
+    (rc_red, out_red), (rc_ok, out_ok) = results
+    if (rc_red != 1 or "COVERAGE VIOLATION writer-claims-gate.py" not in
+            out_red):
+        bad += 1
+        print(f"FAIL [coverage, main red]: rc={rc_red}", file=sys.stderr)
+    if rc_ok != 0 or "COVERAGE VIOLATION" in out_ok:
+        bad += 1
+        print(f"FAIL [coverage, main baseline]: rc={rc_ok}",
+              file=sys.stderr)
+
     print("replay-bench selftest: isolation pinned, rewrite-value "
           "discriminates, warn classified, register fixture reaches the "
-          "hook" if not bad
+          "hook, coverage dicts verified" if not bad
           else f"replay-bench selftest: {bad} FAILED")
     return 1 if bad else 0
 
@@ -521,7 +678,23 @@ def main() -> int:
           f"(fired where the corpus expects silence)")
     for case, observed, _, _ in false_fires:
         print(f"      line {case['_line']} {case['hook']}: fired {observed!r}")
-    return 1 if mismatches else 0
+    violations = []
+    if not args.hook:
+        # coverage verification (dg-26): only over the FULL corpus, since
+        # a --hook run selects a subset and every other hook would read
+        # as uncovered
+        violations = coverage_violations(cases)
+        on_disk = [p.name for p in HOOKS.glob("*.py")
+                   if p.name != NOT_A_HOOK]
+        covered = {c["hook"] for c in cases}
+        print(f"  coverage:    {len(covered & set(on_disk))} hooks covered, "
+              f"{len(set(EXCLUDED_STATEFUL) & set(on_disk))} "
+              "stateful-excluded, "
+              f"{len(set(UNCOVERED_DECLARED) & set(on_disk))} "
+              "uncovered-declared")
+        for v in violations:
+            print(f"      COVERAGE VIOLATION {v}")
+    return 1 if mismatches or violations else 0
 
 
 if __name__ == "__main__":
