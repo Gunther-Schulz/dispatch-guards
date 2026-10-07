@@ -145,6 +145,15 @@ done-criterion: the dispatch skill STATES the step rather than leaving it derive
 evidence: RELOCATED from dotfiles df-125 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; relayed-under-standing-delegation, NOT first-hand at this desk). Source is 'operator' because the BOOKING is the operator's instruction (df-167: relocation only, none of the 12 executed in this pass), not because the operator authored the finding — the cost test's do-it-now veto is answered by that constraint, not waived. Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE — the item's own red-first reproduces: a sweep of plugin/skills/dispatch/ for 'already exists/enumerated' returned ZERO, with 'enumeration' (8 hits in forms.md) as positive control proving the instrument reached the text. Original body: dotfiles claude/BACKLOG.md:1012-1021.
 blocked-by: NONE
 
+## dg-51
+grade: DROPPED
+requirement: the lifecycle CLI auto-commits without an AI attribution trailer, so every "lifecycle: ledger decision" commit lands unattributed and the machine pre-push guard flags it as unbooked-without-a-mark. Observed 2026-09-15 on 494028d in this repo: author is the operator, trailer block EMPTY, guard could not determine who made it. The operator corpus requires explicit AI attribution on commits published under the operator accounts, so the tool produces the violation by construction rather than its caller slipping. Worse for the caller: the decision verb offers no --no-commit, unlike item add / item amend / item close, so a caller cannot take the commit over and attribute it. Record: push of 95cd0fb, guard-rewrite arc wave 2
+goal: general-maintenance
+write-set: /home/g/dev/Gunther-Schulz/lifecycle/plugin/cli/lifecycle
+done-criterion: either the CLI writes the attribution trailer on its own commits, or every committing verb offers --no-commit so the caller owns the commit and its trailer; the pre-push attribution guard stops flagging lifecycle auto-commits
+evidence: 494028d in this repo shows an empty trailer block and was flagged by the pre-push guard this date; the decision verb help lists no --no-commit flag while item add does
+blocked-by: NONE
+
 ## Archive (pre-migration)
 
 

@@ -417,15 +417,6 @@ done-criterion: each of the three lanes either gains a mode-aware exit or carrie
 evidence: plugin/hooks/brief-reminder.py main() comment: the four deny() lanes are unaffected since deny() does not consult the modes at all; Wave 0 probe record finding 2 (live confirmation)
 blocked-by: decision should deny() consult guard_modes globally, given a fire-rate case for demoting any of the other three lanes
 
-## dg-51
-grade: READY
-requirement: the lifecycle CLI auto-commits without an AI attribution trailer, so every "lifecycle: ledger decision" commit lands unattributed and the machine pre-push guard flags it as unbooked-without-a-mark. Observed 2026-09-15 on 494028d in this repo: author is the operator, trailer block EMPTY, guard could not determine who made it. The operator corpus requires explicit AI attribution on commits published under the operator accounts, so the tool produces the violation by construction rather than its caller slipping. Worse for the caller: the decision verb offers no --no-commit, unlike item add / item amend / item close, so a caller cannot take the commit over and attribute it. Record: push of 95cd0fb, guard-rewrite arc wave 2
-goal: general-maintenance
-write-set: /home/g/dev/Gunther-Schulz/lifecycle/plugin/cli/lifecycle
-done-criterion: either the CLI writes the attribution trailer on its own commits, or every committing verb offers --no-commit so the caller owns the commit and its trailer; the pre-push attribution guard stops flagging lifecycle auto-commits
-evidence: 494028d in this repo shows an empty trailer block and was flagged by the pre-push guard this date; the decision verb help lists no --no-commit flag while item add does
-blocked-by: NONE
-
 ## dg-52
 grade: READY
 requirement: dev-notes/dispatch-OBSERVATIONS.md owes a maintenance pass: the session-start banner reported roughly 32 booked against roughly 0 drained over the last +30 percent stretch (33 commits), and this arc added a 4th incident to the channel-line entry on top of that. The carrier drains by applying each entry pre-formulated rule text or discarding it with a one-line reason, both recorded exits. Judgment-desk ruling at arc start 2026-09-15: flagged rather than ridden past, and booked as its own item at arc close rather than interleaved into a BUILD run
