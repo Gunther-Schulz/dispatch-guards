@@ -50,7 +50,7 @@
     },
     "ledger lines": {
       "home": "LEDGER.md",
-      "writer": "verb:ledger add, session",
+      "writer": "verb:ledger add decision, verb:ledger add dropped, verb:ledger add rejected, verb:ledger add superseded, session",
       "reader": [
         "verb:ledger rejected",
         "verb:item add"
