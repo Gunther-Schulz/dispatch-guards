@@ -14,14 +14,20 @@ its report as final text, goes idle, and the dispatcher never sees it.
 closes the other side — it nudges the stopping SUBAGENT to SEND it before
 going idle, replacing the manual re-demand loop.
 
-Known soft spot: the LANE judgment is delegated to the stopping
-agent and has been misjudged once (agent-side; the channel line in
-the brief tail is the dispatcher-side cure — forms.md §2). Whether a
-subagent can even observe its own lane is unestablished — the
-deciding fact is whether the dispatch carried a `name`, which the
-agent may not see; tracked as a PARKED backlog item, and the
-instruction below therefore states BOTH duties rather than resting
-on the self-classification.
+Lane (dg-18): the hook COMPUTES the lane from the hook input's
+`agent_id` instead of asking the agent to classify itself (a
+judgment misjudged once). `^a[0-9a-f]{16}$` → UNNAMED lane: the
+injected text states only the final-text duty. `^a.+-[0-9a-f]{16}$`
+(the dispatch name, non-empty, between the leading `a` and the final
+`-<16 hex>`) → NAMED lane: only the SendMessage duty. Absent or any
+other shape → UNDETERMINED: both duties, as before. As of
+2026-10-07: agent_id shapes measured over the fire log's PreToolUse
+rows (3760 named-shaped, 322 bare-hex `a` + 16 hex — 17 characters in
+all, zero rows with 17 hex — of 6025 rows); that SubagentStop input
+carries the same shape is derived, and the UNDETERMINED branch is
+what holds if it does not. Verb: context reminder, unchanged. The
+channel line in the brief tail stays the dispatcher-side cure
+(forms.md §2).
 
 Mechanism (verified against the Claude Code hooks reference, as-of
 2026-07-18): on SubagentStop, `hookSpecificOutput.additionalContext` is
@@ -49,6 +55,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
@@ -62,13 +69,49 @@ def max_chars() -> int:
     return v if isinstance(v, int) and v > 0 else DEFAULT_MAX
 
 
-def instruction() -> str:
-    return (
+_UNNAMED_ID = re.compile(r"^a[0-9a-f]{16}$")
+_NAMED_ID = re.compile(r"^a(.+)-[0-9a-f]{16}$")
+
+
+def lane(payload: dict) -> str:
+    """The stopping agent's lane, computed from the hook input's
+    `agent_id`: "unnamed" (`a` + 16 hex), "named" (`a` + the dispatch
+    name + `-` + 16 hex, name non-empty), else "undetermined" (absent
+    or any other shape). A non-string id is undetermined."""
+    aid = payload.get("agent_id")
+    if not isinstance(aid, str):
+        return "undetermined"
+    if _UNNAMED_ID.match(aid):
+        return "unnamed"
+    if _NAMED_ID.match(aid):
+        return "named"
+    return "undetermined"
+
+
+def instruction(which: str = "undetermined") -> str:
+    """The injected text: the shared opening, then the duty of the
+    computed lane — the NAMED sendmessage duty, the UNNAMED final-text
+    duty, or both when the lane is undetermined. Selection only: the
+    sentences are the same in every branch."""
+    parts = [_OPENING]
+    if which in ("named", "undetermined"):
+        parts.append(_named_duty())
+    if which in ("unnamed", "undetermined"):
+        parts.append(_UNNAMED_DUTY)
+    return "".join(parts)
+
+
+_OPENING = (
         "Closing-report check: FIRST — if a backgrounded task of yours "
         "(a long check, a replay) is still RUNNING, do not close on a "
         "guess: AWAIT it via TaskOutput(block=true) and report its real "
         "result, or send an INTERIM report that says so and names what "
         "remains — ending your turn with it running orphans the work. "
+)
+
+
+def _named_duty() -> str:
+    return (
         "If you are a NAMED/mailbox agent — your dispatch carried "
         "an agent name, and no completion notification fires for it "
         "(your final text does NOT reach your dispatcher) — send your "
@@ -80,7 +123,12 @@ def instruction() -> str:
         "context for the rest of its session; oversized sends are "
         "denied by a gate, costing you a rewrite). Already SENT it via "
         "SendMessage? Do not send twice — that idempotency applies to "
-        "SendMessage ONLY. If you are an UNNAMED subagent, your "
+        "SendMessage ONLY. "
+    )
+
+
+_UNNAMED_DUTY = (
+        "If you are an UNNAMED subagent, your "
         "final text IS the report — the completion notification "
         "delivers it verbatim — and only your LAST text block is "
         "delivered: so if you already wrote the report above, RE-EMIT "
@@ -89,7 +137,7 @@ def instruction() -> str:
         "DELETES the report — the dispatcher receives the "
         "acknowledgement instead. Re-emitting costs tokens; not "
         "re-emitting costs the whole report. Do NOT call SendMessage."
-    )
+)
 
 
 def check(payload: dict) -> str | None:
@@ -104,7 +152,7 @@ def check(payload: dict) -> str | None:
     """
     if payload.get("stop_hook_active"):
         return None
-    return instruction()
+    return instruction(lane(payload))
 
 
 def output_json(context: str) -> str:
@@ -137,6 +185,46 @@ if __name__ == "__main__":
 
         os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
         _reset_policy_cache()
+        # ── dg-18: the lane is COMPUTED from agent_id, one bite per
+        # branch. NAMED = `a<dispatch name>-<16 hex>`, UNNAMED = `a`
+        # + 16 hex, anything else UNDETERMINED (both duties). Each
+        # branch asserts what its text must carry AND what it must not.
+        _NAMED = "asonnet-sweep-runbook-c250a42011b97de5"
+        _UNNAMED = "a039e1b6a68407207"
+        for _aid, _want in (
+                (_NAMED, "named"), (_UNNAMED, "unnamed"),
+                ("asonnet-x-0123456789abcdef", "named"),
+                ("a0123456789abcdef", "unnamed"),        # a + 16 hex
+                ("a0123456789abcdef0", "undetermined"),  # 17 hex
+                ("a0123456789abcde", "undetermined"),    # 15 hex
+                ("a-0123456789abcdef", "undetermined"),  # empty name
+                ("asonnet-x-0123456789abcde", "undetermined"),  # 15 hex
+                ("a0123456789abcdeg", "undetermined"),   # not hex
+                ("a1", "undetermined"), ("", "undetermined"),
+                (None, "undetermined"), (12345, "undetermined")):
+            assert lane({"agent_id": _aid}) == _want, (_aid, _want)
+        assert lane({}) == "undetermined"
+        t_named = check({"agent_id": _NAMED}).lower()
+        assert "named/mailbox" in t_named and "sendmessage" in t_named
+        assert "do not send twice" in t_named
+        assert "unnamed subagent" not in t_named, "named lane got both"
+        assert "re-emit" not in t_named and "last text block" not in t_named
+        assert "do not call sendmessage" not in t_named
+        t_unnamed = check({"agent_id": _UNNAMED}).lower()
+        assert "re-emit it in full" in t_unnamed
+        assert "last text block" in t_unnamed
+        assert "named/mailbox" not in t_unnamed, "unnamed lane got both"
+        assert "do not send twice" not in t_unnamed
+        assert "closing report now via sendmessage" not in t_unnamed
+        t_both = check({"agent_id": "a1"}).lower()
+        assert "named/mailbox" in t_both and "re-emit it in full" in t_both
+        # the shared opening (await a running task) rides every branch
+        for _t in (t_named, t_unnamed, t_both):
+            assert "closing-report check: first" in _t
+        assert "max 3000 chars" in t_named        # payload clause: named
+        # the loop-breaker still silences each lane
+        assert check({"agent_id": _NAMED, "stop_hook_active": True}) is None
+        assert check({"agent_id": _UNNAMED, "stop_hook_active": True}) is None
         # injects on a fresh SubagentStop payload (event is the gate)
         assert check({"agent_id": "a1", "hook_event_name": "SubagentStop"}) is not None
         assert check({}) is not None
