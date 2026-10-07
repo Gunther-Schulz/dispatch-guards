@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 21
+added: 22
 compacted: 0
 
 ## dg-5
@@ -308,3 +308,12 @@ blocked-by: NONE
 blocker-exercise: none-yet 2026-10-04
 amend-reason: 2026-10-04 typed blocker supplied for the PARKED grade; the add's NONE was a shape break
 amended-blocked-by: 2026-10-04 evidence [ "$(date +%F)" \> "2026-10-18" ]  # the drift-treatment arm window has closed; an earlier lift is the lifecycle judgment desk editing this blocker (D5, lifecycle docs/directives/2026-10-04-refocus-design-round-2.md: no arm change mid-window)
+
+## dg-54
+grade: READY
+requirement: subagent-push-gate denies a subagent's compound command when the text git push appears only inside a heredoc BODY (a comment in an inline Python script), so nothing in the command runs. The deny lane of push-claim-reminder and, since dg-33, its reminder lane strip heredoc bodies before matching; this gate does not.
+goal: general-maintenance
+write-set: plugin/hooks/subagent-push-gate.py,plugin/hooks/push-claim-reminder.py,plugin/hooks/_dispatch_common.py,tools/corpus/guards.jsonl
+done-criterion: strip_heredoc_bodies moves to _dispatch_common (one home, both hooks import it) and subagent-push-gate matches the stripped command. Red first on the unmodified gate: a heredoc whose body carries a comment naming git push is DENIED; green after. Must not move: a real git push on a heredoc's opener line or after the heredoc is still denied. Both directions as --test bites and as corpus cases; bench and every hook --test green. Verb stays deny.
+evidence: MEASURED 2026-10-07 by the desk at HEAD 4d7e73f, the real hook over stdin with a subagent agent_id (scratch probe, five arms): heredoc body with a comment naming git push -> DENY; the same with an apostrophe in the comment -> DENY; body with the bare word push only -> silent; a real git push -> DENY (control); no push anywhere -> silent (control). RELAYED from the dotfiles desk (dotfiles-2b) the same day: dotfiles lane opus-w7-df306 had a compound command refused whole on plugin 0.11.26, cause inferred by that lane. RELAYED from this session's read-only enumeration: dev-notes/dispatch-OBSERVATIONS.md entry at line 4956 names the same gap.
+blocked-by: NONE
