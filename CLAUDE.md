@@ -172,23 +172,45 @@ python3 plugin/skills/worktree/scripts/worktree_doctor.py --test
 python3 tools/check-doc-drift.py
 
 # 4. Manifests parse, and corpus markdown stays inside 69 columns.
+#    The wrap check grades every line ADDED since a named base, in
+#    commits and in the working tree alike. The base is origin/main
+#    unless WRAP_BASE names another. Against HEAD it graded the
+#    working tree only, and on a clean tree printed "clean" over zero
+#    lines: after the commit, which is when a reviewer runs it. It
+#    prints how many lines it graded, and says NOT GRADED when that
+#    number is zero.
 python3 -c "import json;[json.load(open(f)) for f in \
   ['plugin/.claude-plugin/plugin.json','.claude-plugin/marketplace.json']]"
 python3 -c "
-import subprocess,sys
-d=subprocess.run(['git','diff','-U0','HEAD','--',
+import os,subprocess,sys
+base=os.environ.get('WRAP_BASE','origin/main')
+r=subprocess.run(['git','diff','-U0',base,'--',
                   'plugin/skills/dispatch','plugin/skills/executor'],
-                 capture_output=True,text=True).stdout
-bad=[l[1:] for l in d.split(chr(10))
-     if l.startswith('+') and not l.startswith('+++')
-     and len(l)-1>69 and not l[1:].lstrip().startswith('description:')]
-print(*bad,sep=chr(10)) if bad else print('wrap: clean')
+                 capture_output=True,text=True)
+if r.returncode: sys.exit('wrap: could not diff against '+base+': '+r.stderr.strip())
+added=[l[1:] for l in r.stdout.split(chr(10))
+       if l.startswith('+') and not l.startswith('+++')]
+bad=[l for l in added
+     if len(l)>69 and not l.lstrip().startswith('description:')]
+print(*bad,sep=chr(10))
+print('wrap: NOT GRADED, 0 added lines against '+base if not added
+      else 'wrap: %d over 69 of %d added lines against %s'%(len(bad),len(added),base))
 sys.exit(1 if bad else 0)"
 ```
+
+A list of these commands copied into a brief is checked by COUNT
+against this block: a dropped check is invisible from inside the list.
 
 A guard change additionally extends `tools/corpus/guards.jsonl` — the
 bench scores only the cases the corpus enumerates, so an unextended
 corpus reports clean on an untested lane.
+
+An edit to the EXECUTION tail in
+`plugin/skills/dispatch/references/forms.md` and the
+`EXECUTION_TAIL_BG` literal in `plugin/hooks/brief-reminder.py` ride
+ONE commit: the drift check compares the two on normalized text, so a
+tail edit is red until the literal moves with it. A brief whose write
+set holds one of the two files and not the other cannot land.
 
 ## Carve-outs
 
