@@ -35,6 +35,13 @@ Corpus format (JSONL, one case per line):
                                       # CLAUDE_DISPATCH_GUARDS_CONFIG
     "transcript_events": [...]        # written to a temp .jsonl whose path
                                       # is injected as payload.transcript_path
+    "register": {...}                 # written as JSON to tmp/register-<i>.json
+                                      # and pinned as
+                                      # CLAUDE_DISPATCH_GUARDS_REGISTER
+                                      # (dg-43, 2026-10-07); absent, the pin
+                                      # stays a path that never exists
+                                      # (register-<i>-absent.json). Register
+                                      # shape: {"prozesse": [{"id": ...}]}
     "note": "<why this case exists>"  # carried by every regression case
     "expect_updated_input": {...}     # "rewrite" cases only (2026-09-15):
                                       # key/value pairs the observed
@@ -161,8 +168,17 @@ def run_case(case: dict, tmp: Path, index: int) -> tuple[str, str, str]:
     # additionalContext carried three real register rows under the real
     # HOME and the absence line under an empty one. Per-index path, so a
     # future case can write its own register fixture there.
-    env["CLAUDE_DISPATCH_GUARDS_REGISTER"] = str(
-        tmp / f"register-{index}-absent.json")
+    # A case's own `register` fixture (dg-43, 2026-10-07) replaces the
+    # absent-path pin with a real file, so a lane whose firing arm needs
+    # a readable register is reachable end to end through the process
+    # boundary, not only through the hook's --test.
+    if "register" in case:
+        reg = tmp / f"register-{index}.json"
+        reg.write_text(json.dumps(case["register"]), encoding="utf-8")
+        env["CLAUDE_DISPATCH_GUARDS_REGISTER"] = str(reg)
+    else:
+        env["CLAUDE_DISPATCH_GUARDS_REGISTER"] = str(
+            tmp / f"register-{index}-absent.json")
 
     if "raw" in case:
         stdin = case["raw"]
@@ -390,8 +406,47 @@ def _test() -> int:
             print(f"FAIL [warn classify, {_label}]: expected {_want!r}, "
                   f"got {_got!r}", file=sys.stderr)
 
+    # ── Register fixture reaches the hook (2026-10-07, dg-43): the same
+    # brief with and without a `register` key must observe DIFFERENT
+    # kinds — warn with a register certifying the class it cites,
+    # context (could-not-verify silence on the pin lane) without one.
+    _reg_base = {"hook": "brief-reminder.py", "_line": 0,
+                 "payload": {"tool_name": "Agent", "tool_input": {
+                     "name": "sonnet-x", "prompt": (
+                         "REGISTERED-CLASS dispatch: selftest-fixture-class."
+                         "\nGrounding basis: read src/spec.md first.\n"
+                         "Write boundaries: you own src/foo.py; commits by "
+                         "pathspec, never -A.\nCommit plan: one commit by "
+                         "pathspec.\nClosing report (mandatory; the "
+                         "project's own report form if it defines one, else "
+                         "the \u00a72 form here \u2014 never both; "
+                         "\"none\" is a valid slot answer, silence is "
+                         "not): (a) items completed w/ evidence, (b) checks "
+                         "RUN w/ real output, (c) gaps surfaced, (d) "
+                         "deviations w/ reason, (e) candidate lessons, (f) "
+                         "files touched + commit hashes (unpushed), (g) "
+                         "what was NOT verified, (h) sources actually "
+                         "read.\nA missing decision, file, or value is "
+                         "surfaced as a gap, never bridged with a guess.\n"
+                         "Report channel: SendMessage to the dispatcher "
+                         "\u2014 your final text reaches no one.")}}}
+    _reg_with = {**_reg_base, "expect": "warn", "register": {"prozesse": [
+        {"id": "selftest-fixture-class", "tier": "sonnet",
+         "status": "ready", "klasse": "selftest"}]}}
+    _reg_without = {**_reg_base, "expect": "context"}
+    with tempfile.TemporaryDirectory(prefix="rb-selftest-reg-") as td3:
+        _o_with = run_case(_reg_with, Path(td3), 0)[0]
+        _o_without = run_case(_reg_without, Path(td3), 1)[0]
+    if (_o_with, _o_without) != ("warn", "context"):
+        bad += 1
+        print(f"FAIL [register fixture]: with-register observed "
+              f"{_o_with!r} (want 'warn'), without {_o_without!r} (want "
+              "'context') - the fixture does not reach the hook",
+              file=sys.stderr)
+
     print("replay-bench selftest: isolation pinned, rewrite-value "
-          "discriminates, warn classified" if not bad
+          "discriminates, warn classified, register fixture reaches the "
+          "hook" if not bad
           else f"replay-bench selftest: {bad} FAILED")
     return 1 if bad else 0
 
