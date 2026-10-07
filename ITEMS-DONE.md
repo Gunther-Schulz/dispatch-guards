@@ -182,6 +182,122 @@ closed-met: dg-44, dg-33
 closed-decided: none
 closed-ref: 0f69a5eb1ea9a83d27fe8373acf7881b033fed01
 
+## dg-20
+grade: DONE
+requirement: READY 2026-08-11 — a Bash deny does not say that NOTHING in the command ran, and the compound-command case bites — record: BACKLOG.md:724
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:724-760
+blocked-by: NONE
+not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-20)
+blocker-moot: regrade: was READY under the old carrier: READY is judged, never inherited (item dg-20)
+closed-reason: 2026-10-07 Overtaken before the migration: the chained-command note ships in the deny renderer (_dispatch_common.py:72, :155). Found built by the 2026-10-07 re-grade pass; the legacy carrier never recorded the closure.
+closed-met: none
+closed-decided: none
+closed-ref: 1abe70a5e6d2d12f4e3f48bb462a56b156e72d52
+
+## dg-2
+grade: DONE
+requirement: READY 2026-08-27 (judgment desk, from the wave-4 two-channel finding) — `brief-reminder` demands a SECTION PIN on any brief that names a class devbook — record: BACKLOG.md:56
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:56-75
+blocked-by: NONE
+not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-2)
+blocker-moot: regrade: was READY under the old carrier: READY is judged, never inherited (item dg-2)
+closed-reason: 2026-10-07 Overtaken before the migration: the staged devbook-pin lane ships in brief-reminder (missing_devbook_pin, :691) since 0.11.22. Found built by the 2026-10-07 re-grade pass.
+closed-met: none
+closed-decided: none
+closed-ref: 019e85629b11f07d385377326fe18d0e5f4324ff, 567a94002f0a7bc67c269248880c736b4b98166f
+
+## dg-19
+grade: DONE
+requirement: READY 2026-08-11 — the §6 register consult has no mechanism at the moment it is owed, and the skill already records that this fails — record: BACKLOG.md:680
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:680-723
+blocked-by: NONE
+not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
+amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
+amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-19)
+blocker-moot: regrade: was READY under the old carrier: READY is judged, never inherited (item dg-19)
+closed-reason: 2026-10-07 Overtaken before the migration: brief-reminder renders the readiness register rows at dispatch (register_lines, :843). Seen firing on this session's own dispatches 2026-10-07.
+closed-met: none
+closed-decided: none
+closed-ref: 4e7f61a10d2272fdc21d19c87135e6981b0b0c49
+
+## dg-15
+grade: DROPPED
+requirement: PARKED 2026-08-18 — a report-form lane for UNDISPOSITIONED skips: the count is computable, the disposition is not — record: BACKLOG.md:577
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:577-598
+blocked-by: NONE
+blocker-moot: evidence false  # the named missing evidence in the source body (the predicate exited 1 at this close: not arrived; this item was dropped)
+
+## dg-17
+grade: DROPPED
+requirement: PARKED 2026-08-15 — `isolation: "remote"` is a lane cell the probe matrix never covered — record: BACKLOG.md:630
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:630-642
+blocked-by: NONE
+blocker-moot: evidence false  # the named missing evidence in the source body (the predicate exited 1 at this close: not arrived; this item was dropped)
+
+## dg-21
+grade: DROPPED
+requirement: PARKED 2026-08-10 — writer-claims-gate cannot see shell-redirect writes, so its claims store has a hole of unknown size — record: BACKLOG.md:761
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:761-778
+blocked-by: NONE
+blocker-moot: evidence false  # the named missing evidence in the source body (the predicate exited 1 at this close: not arrived; this item was dropped)
+
+## dg-22
+grade: DROPPED
+requirement: PARKED 2026-08-17 — the built half is gone; only the trigger is still parked — record: BACKLOG.md:779
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:779-787
+blocked-by: NONE
+blocker-moot: evidence false  # the named missing evidence in the source body (the predicate exited 1 at this close: not arrived; this item was dropped)
+
+## dg-25
+grade: DROPPED
+requirement: PARKED 2026-08-06 — harvest deferred list: two §2/§4 corpus candidates — record: BACKLOG.md:890
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:890-898
+blocked-by: NONE
+blocker-moot: evidence false  # the named missing evidence in the source body (the predicate exited 1 at this close: not arrived; this item was dropped)
+
+## dg-3
+grade: DONE
+requirement: PARKED 2026-08-27 (wave-4 peer desk) — this repo declares no `## Carve-outs` heading, so every session re-derives from scratch whether pushing it is an outward act — record: BACKLOG.md:76
+goal: UNKNOWN
+write-set: UNKNOWN
+done-criterion: UNKNOWN
+evidence: BACKLOG.md:76-100
+blocked-by: NONE
+amend-reason: 2026-10-07 the blocker was the migration placeholder (literal false); the missing confirmation it stood for arrived 2026-08-27 and is recorded in CLAUDE.md
+amended-blocked-by: 2026-10-07 NONE
+closed-reason: 2026-10-07 Overtaken before the migration: CLAUDE.md carries the Carve-outs heading (line 193) naming the venue, the two excluded acts and the operator decision. Found by the 2026-10-07 re-grade pass.
+closed-met: none
+closed-decided: none
+closed-ref: 5ef5b32c1ca957236b29ec5d86d608c99683984d
+
 ## Archive (pre-migration)
 
 

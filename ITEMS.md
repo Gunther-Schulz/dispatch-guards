@@ -4,319 +4,330 @@ added: 21
 compacted: 0
 
 ## dg-1
-grade: NEW
+grade: READY
 requirement: READY 2026-08-27 (wave-4 peer desk, from lane `opus-lc44-48-49`'s finding on an instrument it does not own) — `report-form-gate` scores a message ABOUT a report as a report, and its obvious repair is unsafe — record: BACKLOG.md:10
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:10-55
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-1)
-
-## dg-2
-grade: NEW
-requirement: READY 2026-08-27 (judgment desk, from the wave-4 two-channel finding) — `brief-reminder` demands a SECTION PIN on any brief that names a class devbook — record: BACKLOG.md:56
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:56-75
-blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
-amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
-amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-2)
-
-## dg-3
-grade: NEW
-requirement: PARKED 2026-08-27 (wave-4 peer desk) — this repo declares no `## Carve-outs` heading, so every session re-derives from scratch whether pushing it is an outward act — record: BACKLOG.md:76
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:76-100
-blocked-by: evidence false  # the named missing evidence in the source body
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/report-form-gate.py,tools/corpus/guards.jsonl
+amended-done-criterion: 2026-10-07 Verifier: those five arms as gate-level payload tests (the real binary over stdin, not the predicate alone), plus the false-fire probe ... run the gate against its OWN docstring and against this entry's text; both must stay quiet. Done-criterion: the five arms pass at gate level, the two self-matching probes are quiet, and the existing report-form bites stay green.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python read of plugin/hooks/report-form-gate.py -> line 55: `_SLOT_RE = re.compile(r"\(([a-h])\)")` (unchanged; body cited :55) and line 59 `return set(_SLOT_RE.findall(message))`. Positive control: same read found REPORT_MIN_SLOTS = 4 at :53. Designed replacement regex `(?:^|(?<=[.;:!?]\s))` has 0 hits in the file. Not exercised: I did not run the gate on the ping payload (read-only lane). | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-4
-grade: NEW
+grade: READY
 requirement: READY 2026-08-27 (wave-4 peer desk, lanes A and A2 independently) — the `forms.md` EXECUTION tail and its byte-fixture cannot be committed separately, and nothing says so — record: BACKLOG.md:101
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:101-121
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-4)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 CLAUDE.md
+amended-done-criterion: 2026-10-07 Verifier: the sentence is present and names both paths; a reader briefing that write set finds it before writing. Done-criterion: the sentence exists and names `references/forms.md` and `plugin/hooks/brief-reminder.py` together.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python normalized-phrase search over CLAUDE.md: 'forms.md' 0 hits, 'EXECUTION_TAIL_BG' 0 hits, 'EXECUTION tail' 0 hits. Positive control: same file DOES contain '## Carve-outs' at :193 and 'Verify' section :122. Coupling itself still exists: tools/check-doc-drift.py:234 `def check_execution_tail_fixture`, :269 reads "EXECUTION_TAIL_BG", :438 registered; brief-reminder.py:1129 defines EXECUTION_TAIL_BG. | RELAYED, adjacent record: LEDGER.md:175 books the same coupling as 'Booked READY as a Verify-prose sentence' (the sentence itself is not in CLAUDE.md). | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-5
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-27 (wave-4 peer desk, lane A2 gap 3) — §1's `## Background` slot now states two overlapping demands in adjacent lines — record: BACKLOG.md:122
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:122-136
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: dg-47
 
 ## dg-6
-grade: NEW
+grade: READY
 requirement: READY 2026-08-27 (operator decision, via the wave-3 judgment desk) — the observation carriers are English. THE BULK IS DONE (`437159c`, lane `sonnet-d2-carriers`); a NAMED residue of six lines remains — record: BACKLOG.md:137
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:137-190
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-6)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 dev-notes/dispatch-OBSERVATIONS.md,dev-notes/worktree-OBSERVATIONS.md
+amended-done-criterion: 2026-10-07 Verifier: `python3 tools/check-doc-drift.py` 7/7 `[ok]` INCLUDING "observations tail" and `--test` green - run before and after ... append-marker occurrence count per file is still exactly 1 ... Done-criterion: the only German remaining under `dev-notes/` is the three parsed literals named above, enumerated in the closing report - NOT a grep returning 0.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python line read: dev-notes/dispatch-OBSERVATIONS.md:3132-3135 and dev-notes/worktree-OBSERVATIONS.md:306-309 each still carry `<!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist / die lebende Liste. Abgeflossenes steht OBERHALB. Der / doc-drift-Check erzwingt genau diese Reihenfolge, ... -->` (German lines 2-4 present). Marker occurrence count 1 per file (1 hit each for 'NEUE EINTR'). Line numbers differ from body's 2737-2740 (files grew). Not run: check-doc-drift.py. | RELAYED, adjacent record: LEDGER.md:177 books D2 (437159c) and the correction 'lines 2-4 in each of the two carriers, six lines in total, are ordinary German prose ... the wider sweep may translate freely' - residue not closed anywhere. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-7
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-26 — depth-2 dispatch: a desk-tier middle agent that fans out, under the same hook-controlled robustness and operator transparency as depth 1 (operator decision: worth trying; robust or not at all) — record: BACKLOG.md:191
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:191-225
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: decision does the operator open a depth-2 trial with CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH raised above 1, so one planted grandchild dispatch can show whether the gates see it
+not-derivable: 2026-10-07 the spawn-depth value is an operator-pinned setting (dotfiles claude/settings.json:7); reversing a pin is never derivable by a desk, and no ledger line or directive opens the trial
 
 ## dg-8
-grade: NEW
+grade: READY
 requirement: READY 2026-08-20 — audit every hook's `--test` for the recompose-instead-of-invoke shape: a bite that rebuilds a function's callees by hand cannot see that function lose its wiring — record: BACKLOG.md:226
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:226-269
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-8)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/
+amended-done-criterion: 2026-10-07 Verifier / red-first, per hook touched: delete the emitting call site from `main()` in a scratch copy → the new bite must go RED; restore → green ... Done when every hook is either covered by an end-to-end bite or recorded here as deliberately exempt with its reason, and the count of each is stated rather than implied.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-UNCHECKABLE): Settling needs a per-hook mutation experiment (delete emitting call, watch the bite) - not read-only. Partial read-only signal: Python scan of each hook's text after '"--test"' counts `main()` calls: agent-model-gate 5, amend-gate 2, brief-reminder 8, discovery-volume 1, dispatch-log 3, dispatch-skill-gate 3, message-payload 1, push-claim 1, report-enforcer 5, report-form 2, report-reminder 1, subagent-push 1, worktree-config 1, writer-claims 3, writer-reservation 3, _dispatch_common 0 (library). A main() call in the test does not show it covers each emitted output. Searched LEDGER.md and ITEMS-DONE.md for 'recompose', 'end-to-end bite', 'liveness net': 0 hits each (control: other keywords hit in LEDGER.md) - no audit record found. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-9
-grade: NEW
+grade: READY
 requirement: READY 2026-08-20 — §1 brief rule: read the REAL instance before shipping a parser for a format the brief describes only in prose — record: BACKLOG.md:270
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:270-312
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-9)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/skills/dispatch/SKILL.md
+amended-done-criterion: 2026-10-07 Verifier: doc-drift green, the 69-column wrap block, and a reader test — the widened bullet covers the register case without naming it. Done when the clause is in §1 and the plugin is released.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): plugin/skills/dispatch/SKILL.md:666 `- **Schema-bearing external facts: raw source text only.** When the` - bullet present; normalized phrase search over SKILL.md: 'real instance' 0, 'no fixture exists' 0, 'on disk' 0 (control: 'Schema-bearing external facts' 1 hit, same instrument). Widening clause absent. | RELAYED, adjacent record: LEDGER.md:172 states the lesson ('LEHRE, an den Skill-Text zu geben: ... die reale Instanz lesen') but does not record it landed. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-10
-grade: NEW
+grade: READY
 requirement: READY 2026-08-20 — `_dispatch_common.fire()` hardcodes `hookEventName: "PreToolUse"`, so the next non-PreToolUse lane that reaches for it ships a guard whose injection never lands — record: BACKLOG.md:313
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:313-352
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-10)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/_dispatch_common.py
+amended-done-criterion: 2026-10-07 fire() takes the hook event as a parameter defaulting to PreToolUse; a bite asserts that a call naming another event emits that event in hookSpecificOutput.hookEventName and that the default is unchanged; replay-bench totals unchanged with 0 mismatch. The Stop-lane consumer the legacy verifier named was reverted (286484a), so no consumer change is in scope.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): plugin/hooks/_dispatch_common.py:266 `def fire(reason: str, source: str = "dispatch-guards", payload: dict | None = None, default_mode: str = "deny")` - no `event` parameter; :284 `"hookEventName": "PreToolUse",` inside fire(); also :161 and :202 in the deny/ask payloads. handoff-report-gate.py missing (reverted at 286484a), so the 'local duplicate' half of the body is moot; the latent defect stands. | RELAYED, adjacent record: LEDGER.md:172 records handoff-report-gate reverted (0b666fc -> 286484a); no entry closes the fire() parameter. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-11
-grade: NEW
+grade: READY
 requirement: READY 2026-08-20 — two unlabeled restatements in the forms.md EXECUTION tail (corpus-harmony F7 + F13) — record: BACKLOG.md:353
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:353-404
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-11)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/skills/dispatch/references/forms.md,plugin/hooks/brief-reminder.py
+amended-done-criterion: 2026-10-07 Verifier: `python3 tools/check-doc-drift.py` green ... the 69-column wrap block ..., and a reader test — each labeled clause names the section it borrows from. Done when both labels are in the tail and the plugin is released.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): git show 3150a14:plugin/skills/dispatch/references/forms.md: EXECUTION tail starts :281; skip-count clause :290-294 and pathspec/shared-index clause :322-332 carry no `(source: ...)` parenthetical (the only labels in the tail are :286 `(source: §2, the delivery binding)`, :334-335 `(source: §1 amend rule)`, :337-338 `(source: §4 ownership rule)`). The third item: forms.md:82 `An idle agent without a report gets the report demanded (SendMessage),` still present; 'demanded via SendMessage' 0 hits (normalized; control: 'the report demanded (SendMessage)' 1 hit). Line number is 82, not the body's 52 (file grew). Desk is editing the file concurrently; read is of 3150a14. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-12
-grade: NEW
+grade: READY
 requirement: READY 2026-08-20 (unparked same day — both named conditions met) — "site corpus" vs "operator corpus": one referent, two terms, and a grep-audit on either misses the other (corpus-harmony F12) — record: BACKLOG.md:405
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:405-453
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-12)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/skills/dispatch/SKILL.md,plugin/skills/dispatch/references/routing.md,plugin/skills/executor/SKILL.md
+amended-done-criterion: 2026-10-07 Verifier: after the sweep, `grep -o "operator corpus"` over `plugin/skills/` returns exactly the carve-outs named above and nothing else — stated as a number before the edit ... Done when that count matches and the plugin is released.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python normalized count of 'operator corpus' now: dispatch/SKILL.md 4 (:3, :67, :99, :1110), forms.md (3150a14) 0, routing.md 1 (:107), executor/SKILL.md 1 (:3), worktree/SKILL.md 0 = 6; body measured 6 operator ('SKILL.md 9/4, forms.md 2/0, routing.md 1/1, executor 1/1'). Sweep not done: count unchanged (site-corpus count rose 13 -> 15 by my count: 9+2+3+1, routing.md 1->3, so another hand added 'site corpus' but replaced no 'operator corpus'). Whether the 4 SKILL.md hits include the two named carve-out footers needs a read I did not do. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-13
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-20 — a PDF-extraction recipe sits among the executor's format-agnostic conduct rules (corpus-harmony F14) — record: BACKLOG.md:454
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:454-487
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: external the executor skill's next consolidation pass decides the PDF recipe's home (a references file, a lens outside this repo, or retirement); fire-silence alone does not discriminate, and the cut belongs to consolidation
 
 ## dg-14
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-20 (was READY 2026-08-17; BUILT, then REVERTED at `286484a`) — a marker-gated Stop lane for handed-off desks — record: BACKLOG.md:488
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:488-576
-blocked-by: evidence false  # the named missing evidence in the source body
-
-## dg-15
-grade: NEW
-requirement: PARKED 2026-08-18 — a report-form lane for UNDISPOSITIONED skips: the count is computable, the disposition is not — record: BACKLOG.md:577
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:577-598
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: external a real transcript of a session RECEIVING a peer handoff is in hand to define the ending turn against; the reverted build (286484a) failed on a hand-built fixture and on telling receiving from reading
 
 ## dg-16
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-15 — the channel lanes read the PROMPT as a flat substring haystack, and three shapes slip through — record: BACKLOG.md:599
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:599-629
-blocked-by: evidence false  # the named missing evidence in the source body
-
-## dg-17
-grade: NEW
-requirement: PARKED 2026-08-15 — `isolation: "remote"` is a lane cell the probe matrix never covered — record: BACKLOG.md:630
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:630-642
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: external the next guard fire-rate review reads the channel lane's fires and rules whether a prose channel sentence stays an accepted form; tightening the predicate before that risks denying legitimate briefs
 
 ## dg-18
-grade: NEW
+grade: READY
 requirement: PARKED 2026-08-15 — report-enforcer asks the stopping agent a question it may not be able to answer: which LANE it is in — record: BACKLOG.md:643
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:643-679
 blocked-by: evidence false  # the named missing evidence in the source body
-
-## dg-19
-grade: NEW
-requirement: READY 2026-08-11 — the §6 register consult has no mechanism at the moment it is owed, and the skill already records that this fails — record: BACKLOG.md:680
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:680-723
-blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
-amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
-amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-19)
-
-## dg-20
-grade: NEW
-requirement: READY 2026-08-11 — a Bash deny does not say that NOTHING in the command ran, and the compound-command case bites — record: BACKLOG.md:724
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:724-760
-blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
-amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
-amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-20)
-
-## dg-21
-grade: NEW
-requirement: PARKED 2026-08-10 — writer-claims-gate cannot see shell-redirect writes, so its claims store has a hole of unknown size — record: BACKLOG.md:761
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:761-778
-blocked-by: evidence false  # the named missing evidence in the source body
-
-## dg-22
-grade: NEW
-requirement: PARKED 2026-08-17 — the built half is gone; only the trigger is still parked — record: BACKLOG.md:779
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:779-787
-blocked-by: evidence false  # the named missing evidence in the source body
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/report-enforcer.py
+amended-done-criterion: 2026-10-07 A probe records whether the SubagentStop hook input (or the stopping agent's own context) carries the dispatch name. If it does, the hook selects the lane branch itself and the self-classification text goes; if it does not, the docstring's soft-spot note states the probe and its result instead of calling the question unestablished. Either way a bite pins the outcome.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): plugin/hooks/report-enforcer.py:17 `Known soft spot: the LANE judgment is delegated to the stopping` ... :20 `subagent can even observe its own lane is unestablished` - docstring still states the open question; :72 `If you are a NAMED/mailbox agent` and :83 `If you are an UNNAMED subagent` - branch still self-classified. The body's CORRECTION (vocabulary repaired, NAMED/mailbox vs UNNAMED) is visible at :5-10. Probe not run. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 the named missing evidence is a probe a lane can run, not a wait: the item now asks for the probe and for either outcome's repair
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-23
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-08 — worktree LIFECYCLE: nobody removes worktrees, and the sweep that does has no ownership predicate. Named missing evidence: whether this generalises beyond one repo, and a false-fire rate for any retirement trigger before… — record: BACKLOG.md:788
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:788-833
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: external a second repo records unowned worktrees accumulating, or a candidate retirement trigger gets a measured false-fire rate; until then only the reporting doctor ships
 
 ## dg-24
-grade: NEW
+grade: READY
 requirement: PARKED 2026-08-05 — worktree skill: name the failure SHAPE of a missing dependency tree (hang, not error) — record: BACKLOG.md:834
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:834-889
 blocked-by: evidence false  # the named missing evidence in the source body
-
-## dg-25
-grade: NEW
-requirement: PARKED 2026-08-06 — harvest deferred list: two §2/§4 corpus candidates — record: BACKLOG.md:890
-goal: UNKNOWN
-write-set: UNKNOWN
-done-criterion: UNKNOWN
-evidence: BACKLOG.md:890-898
-blocked-by: evidence false  # the named missing evidence in the source body
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/skills/worktree/SKILL.md
+amended-done-criterion: 2026-10-07 The clause lands inside the existing section 'A fresh worktree has no untracked state', scoped to the ecosystem it was measured in (Node: a missing dependency tree presents as a hang, not an error), saying outright that other ecosystems are unobserved. Exit (b) of the entry's two is the one taken. Released with the next version.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): plugin/skills/worktree/SKILL.md:99 `## A fresh worktree has no untracked state` present (body cited :87; file moved); regex /900|node_modules|hang|wedge/ over SKILL.md -> only 2 unrelated hits (:99 heading text, :201); dev-notes/worktree-OBSERVATIONS.md /node_modules|900|hang|wedge/ -> 4 hits, all unrelated ('unchanged', 'git log -L'); control: that file has 63 'worktree' hits. Clause absent; no second-ecosystem record found. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 the entry offered two exits and exit (b), scoping the clause to the measured ecosystem, needs no further evidence
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-26
-grade: NEW
+grade: READY
 requirement: PARKED 2026-08-10 — replay-bench corpus does not cover writer-claims-gate (0 cases), and relief may not be expressible there at all — record: BACKLOG.md:899
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:899-924
 blocked-by: decision the missing decision named in the source body: answer it, then re-grade
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision the missing decision named in the source body: answer it, then re-grade (item dg-26)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 tools/replay-bench.py
+amended-done-criterion: 2026-10-07 The bench carries a declared exclusion set (writer-claims-gate and writer-reservation-gate, each with its reason: stateful) and VERIFIES it: a hook under plugin/hooks with zero corpus cases that is not in the set fails the run, and so does a set member that has cases. Red-first: remove one member from the set and the bench goes red naming it.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): tools/corpus/guards.jsonl: 67 cases, hook counts brief-reminder 17, subagent-push-gate 11, agent-model-gate 10, amend-gate 7, message-payload-gate 6, report-form-gate 6, dispatch-skill-gate 4, push-claim-reminder 3, worktree-config-gate 3 - 0 for writer-claims-gate and writer-reservation-gate. tools/replay-bench.py:14-17 now declares 'Boundary: STATELESS guards only. `writer-claims-gate` is EXCLUDED' (partial decision, prose docstring only; regex EXCLUDED|exclusion -> that 1 hit, so no code verifies it, and writer-reservation-gate is not named there). | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 the missing decision is made: a declared exclusion the bench verifies. The bench already states the stateless boundary in its docstring, and extending the fixture model to seed gate state would rebuild what each gate's own --test already does
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-27
-grade: NEW
+grade: PARKED
 requirement: PARKED 2026-08-10 — two probe-craft clauses for the class devbook, batched to spare the register fingerprint — record: BACKLOG.md:925
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:925-965
-blocked-by: evidence false  # the named missing evidence in the source body
+blocked-by: external the dotfiles desk amends the registered-procedure devbook section (dotfiles CLAUDE.md), where these four probe-craft clauses land; the write is outside this repo
 
 ## dg-28
-grade: NEW
+grade: READY
 requirement: PARKED 2026-08-10 — neutralize the remaining `CLAUDE.md` mentions in HOOK docstrings and one runtime string for outside sharing — record: BACKLOG.md:966
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:966-979
 blocked-by: decision regrade: fill goal, write-set, done-criterion and evidence, or drop
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: fill goal, write-set, done-criterion and evidence, or drop (item dg-28)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/hooks/agent-model-gate.py,plugin/hooks/brief-reminder.py,plugin/hooks/discovery-volume-reminder.py,plugin/hooks/dispatch-log.py,plugin/hooks/push-claim-reminder.py,plugin/hooks/subagent-push-gate.py
+amended-done-criterion: 2026-10-07 No hook docstring or runtime string names the operator's CLAUDE.md as if every site had one: each mention reads 'site corpus' (the skills' surviving term, dg-12) or names the file as this site's example. The runtime string at discovery-volume-reminder.py:85 changes with a bench or bite case pinning the new text; every hook --test and the bench stay green.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): Python count of literal 'CLAUDE.md' per hook file: agent-model-gate 7, brief-reminder 8, discovery-volume-reminder 3, dispatch-log 1, push-claim-reminder 1, subagent-push-gate 1, all others 0 (six files now vs body's five). discovery-volume-reminder.py:85 `"context — the discovery-dispatch rule may apply (CLAUDE.md "` still in the runtime string. Trigger: this repo is PUBLIC per CLAUDE.md '## Carve-outs' (gh visibility claim recorded there; not re-run), which bears on the trigger but whether a 'decision to publish' was taken is judgment. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 its trigger (the plugin shared outside this site) has fired: the repo is public
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-29
-grade: NEW
+grade: READY
 requirement: READY — A file handoff between two live writers is evidenced by a commit hash, never by a stated intention — record: BACKLOG.md:980
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:980-1009
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-29)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 plugin/skills/dispatch/SKILL.md,plugin/hooks/brief-reminder.py
+amended-done-criterion: 2026-10-07 Verifier: brief-reminder's own bite tests — a handoff message naming no hash draws the advisory; one naming a hash does not. Done-criterion: the clause in §1 beside the one-writer rule, and its bite pair green.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): dispatch/SKILL.md normalized phrase search: 'commits first' 0, 'names the hash' 0, 'a handoff of a file' 0, 'file handoff' 0, 'stated intention' 0; control: 'clean tree' 1 hit and 'serialize' 5 hits in the same file. Nearest text: SKILL.md 'disjointness is per file, and commits serialize on shared files' - the body-named clause (releasing party commits first, names the hash; receiver verifies clean tree) is not present. The closest LEDGER entry (:186) adds the DISPATCHER as co-writer, a different clause. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-30
-grade: NEW
+grade: READY
 requirement: READY 2026-08-28 (wave-5 peer desk `dotfiles-a7`, found while verifying item S) — the 69-column wrap check in `CLAUDE.md` §Verify is VACUOUS once the work is committed — record: BACKLOG.md:1010
 goal: UNKNOWN
 write-set: UNKNOWN
 done-criterion: UNKNOWN
 evidence: BACKLOG.md:1010-1041
 blocked-by: decision regrade: was READY under the old carrier: READY is judged, never inherited
-not-derivable: a re-grade is a judgment about this one entry's source body; no ledger line, audit or declaration settles it before the desk reads that body
 amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item of its branch, so one ledger answer cleared all of them; it now names this item
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-30)
+amend-reason: 2026-10-07 2026-10-07 re-grade pass: slots filled from the legacy body and a same-day premise check against the repo
+amended-goal: 2026-10-07 general-maintenance
+amended-write-set: 2026-10-07 CLAUDE.md
+amended-done-criterion: 2026-10-07 Verifier: the check run twice on a clean tree — once as written against `HEAD`, once against a base that predates real edits — must give DIFFERENT results ... Done-criterion: the command names an explicit comparison base rather than `HEAD`, or it states could-not-verify when its diff is empty.
+amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum, 2026-10-07 (premise token PREMISE-LIVE): CLAUDE.md:179 `d=subprocess.run(['git','diff','-U0','HEAD','--',` and :185 `print(*bad,sep=chr(10)) if bad else print('wrap: clean')` - still HEAD-based with no zero-bytes branch. Not exercised (would need a committed-range plant). | RELAYED, adjacent record: LEDGER.md:178 records the same defect as OPEN-observed at the peer desk ('as written it diffs against `HEAD`, so with a clean tree it grades 0 bytes and prints `wrap: clean` vacuously') - no fix recorded. | Original body: BACKLOG.md blob bb93897, the line range in the first evidence line above.
+amended-blocked-by: 2026-10-07 NONE
+promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
+promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
 
 ## dg-33
 grade: PARKED
@@ -384,6 +395,8 @@ write-set: hooks/,plugin/skills/dispatch/SKILL.md
 done-criterion: red-first: a replayed two-lane dispatch with identical assigned scratch paths is refused naming both lanes; distinct-slug pair passes; predicate needs the Scratch assignment machine-readable, so the skeleton line change lands in the same item; bite registered per this repo's guard conventions
 evidence: wave-A measurement relayed by dotfiles-a8 2026-09-15, mechanism verified at dotfiles-89 (mtime attribution, reflog empty); dispatch skill section 1 slug rule exists but skeleton does not force it
 blocked-by: NONE
+amend-reason: 2026-10-07 the slot named hooks/, a path under no tracked directory; the guards live under plugin/hooks/
+amended-write-set: 2026-10-07 plugin/hooks/,plugin/skills/dispatch/SKILL.md
 
 ## dg-47
 grade: PARKED
