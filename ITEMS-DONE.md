@@ -154,6 +154,34 @@ done-criterion: either the CLI writes the attribution trailer on its own commits
 evidence: 494028d in this repo shows an empty trailer block and was flagged by the pre-push guard this date; the decision verb help lists no --no-commit flag while item add does
 blocked-by: NONE
 
+## dg-44
+grade: DONE
+requirement: replay-bench classify() folds a WARN into the 'context' bucket, the same as the ordinary reminder line, so no corpus case can assert a warn AS a warn — a staged lane's fire and its silence read identically to the bench. Distinct from the register-fixture gap and survives it. Add a warn kind to the bench vocabulary. Found by the G1 lane 2026-09-15, report slot (c)3
+goal: general-maintenance
+write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
+done-criterion: classify() distinguishes warn from context; at least one corpus case asserts kind=warn and goes red when the lane is silenced (red-first); existing 59 cases unchanged in verdict; bench selftest green
+evidence: G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date
+blocked-by: NONE
+amend-reason: 2026-09-15 premise line added: the bench this entry cites moves in wave 1 of the guard-rewrite arc
+amended-evidence: 2026-09-15 G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date. PREMISE MOVED 2026-09-15 (guard-rewrite arc wave 1): tools/replay-bench.py gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it, ordered after the decision checks. This entry was written against the PRE-rewrite-KIND bench, so its dispatcher re-reads classify() and KINDS before building — the warn-vs-context question stands, but the vocabulary it extends has moved.
+closed-reason: 2026-10-07 classify() returns warn on the top-level staging marker; one case relabelled (report-form-gate, corpus line 20). Red shown by silencing that lane through guard_modes: expected warn, observed silent. Desk re-ran at the artifact: 67 of 67, selftest green.
+closed-met: dg-43, dg-33
+closed-decided: none
+closed-ref: 2a770d39bb839f85038e249c7393f5bce9e6e714
+
+## dg-43
+grade: DONE
+requirement: replay-bench cannot exercise the devbook-pin lane's FIRING direction: CLAUDE_DISPATCH_GUARDS_REGISTER is pinned to a per-index ABSENT path and the case schema has no register-fixture key, so under the bench that lane sits permanently in its could-not-verify branch and its corpus case can only guard false fires. Add a register key to the case schema (a fixture the bench materialises per case) so the lane's positive direction is bench-coverable. Found by the G1 lane 2026-09-15, report slot (c)2
+goal: general-maintenance
+write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
+done-criterion: a corpus case carrying a register fixture drives the pin lane to its WARN and the bench asserts it as a fire; the absent-register cases keep their could-not-verify silence; bench selftest green
+evidence: G1 report slot (c)2 + the lane's read of the bench env pinning; the second corpus case (019e856) documents itself as false-fire-only
+blocked-by: NONE
+closed-reason: 2026-10-07 A case may carry a register fixture; corpus line 65 drives the devbook-pin lane to its warn and the bench asserts it. Red shown by deleting the fixture: expected warn, observed context. Line 63 keeps its could-not-verify silence.
+closed-met: dg-44, dg-33
+closed-decided: none
+closed-ref: 0f69a5eb1ea9a83d27fe8373acf7881b033fed01
+
 ## Archive (pre-migration)
 
 

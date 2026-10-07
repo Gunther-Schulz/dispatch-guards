@@ -319,13 +319,14 @@ amend-reason: 2026-10-05 lc-312: the migrated question was shared by every item 
 amended-blocked-by: 2026-10-05 decision regrade: was READY under the old carrier: READY is judged, never inherited (item dg-30)
 
 ## dg-33
-grade: READY
+grade: PARKED
 requirement: `push-claim-reminder`'s REMINDER lane matches the raw command while the DENY lane strips heredoc bodies, so any commit whose MESSAGE mentions pushing draws a push advisory — record: dotfiles BACKLOG.md:2256-2293 (frozen legacy carrier, blob c95b4af2)
 goal: general-maintenance
 write-set: plugin/hooks/push-claim-reminder.py
 done-criterion: Both lanes read the same stripped command; the red is demonstrated over a stated green baseline; every existing `--test` case stays green; released and pinned, since a hook change reaches running sessions only through a release.
 evidence: RELOCATED from dotfiles df-61 under df-167 (operator decision 2026-09-12, relayed through judgment desk dotfiles-85 from drain desk dotfiles-49; authorization chain is relayed-under-standing-delegation, NOT stated first-hand at this desk). Premise RE-ASKED at this artifact 2026-09-12 and CONFIRMED LIVE: deny lane calls is_fused_push(strip_heredoc_bodies(cmd)) at push-claim-reminder.py:177, while the reminder lane's check() calls is_push_command(cmd) on the raw command — no strip. Original body: dotfiles BACKLOG.md:2256-2293.
-blocked-by: NONE
+blocked-by: evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
+blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
 
 ## dg-34
 grade: READY
@@ -339,13 +340,14 @@ amend-reason: 2026-09-15 2026-09-15 form repair, judgment desk authorized: the s
 amended-write-set: 2026-09-15 plugin/skills/workflow-harvest/,plugin/.claude-plugin/plugin.json
 
 ## dg-37
-grade: READY
+grade: PARKED
 requirement: enumeration and matrix briefs: the bucket field carries the BARE TOKEN and nothing else; all qualification goes in the evidence field. forms.md §3b declares closed vocabularies but never field-exclusivity, and the gap let a lane decorate the enum — the one real FAIL-OPEN in a 25-row matrix was invisible to every tally, caught by a Counter, invisible to a read — record: dotfiles claude/records/df151-matrices-2026-09-12.md
 goal: general-maintenance
 write-set: plugin/skills/dispatch/references/forms.md,plugin/.claude-plugin/plugin.json,LEDGER.md
 done-criterion: forms.md §3b carries the bare-token sentence; ships in a version bump per the release flow; the JOURNAL line rides the same session in dotfiles per the dispatch-guards convention
 evidence: 2026-09-12, df-151 discovery wave: lane B wrote its reasoning INTO the enum field under a brief that declared the vocabulary but not exclusivity; the carrier doctrine's open-vocabulary decay reproduced in a data file. Matrices and reading caveat preserved at dotfiles claude/records/. Booked by the judgment desk after the drainage desk's cost-test veto correctly refused a dotfiles-side booking (wrong reader path) and correctly refused --source operator on a desk's ask (testimony, not the decision). Write-set collides with dg-35/dg-36 — the three bundle into one forms.md release
-blocked-by: NONE
+blocked-by: evidence test -d $HOME/.claude/plugins/cache/dispatch-guards-marketplace/dispatch-guards/0.11.27  # built and verified; waits only on the 0.11.27 release reaching the installed plugin (operator act). A release that skips 0.11.27 needs this path edited
+blocker-exercise: 2026-10-07 live 1 | accept arm: the same test over the installed 0.11.26 directory exits 0 (run 2026-10-07); refuse arm: the predicate as written exits 1 today, 0.11.27 not being installed
 
 ## dg-39
 grade: NEW
@@ -378,26 +380,6 @@ write-set: hooks/,plugin/skills/dispatch/SKILL.md
 done-criterion: red-first: a replayed two-lane dispatch with identical assigned scratch paths is refused naming both lanes; distinct-slug pair passes; predicate needs the Scratch assignment machine-readable, so the skeleton line change lands in the same item; bite registered per this repo's guard conventions
 evidence: wave-A measurement relayed by dotfiles-a8 2026-09-15, mechanism verified at dotfiles-89 (mtime attribution, reflog empty); dispatch skill section 1 slug rule exists but skeleton does not force it
 blocked-by: NONE
-
-## dg-43
-grade: READY
-requirement: replay-bench cannot exercise the devbook-pin lane's FIRING direction: CLAUDE_DISPATCH_GUARDS_REGISTER is pinned to a per-index ABSENT path and the case schema has no register-fixture key, so under the bench that lane sits permanently in its could-not-verify branch and its corpus case can only guard false fires. Add a register key to the case schema (a fixture the bench materialises per case) so the lane's positive direction is bench-coverable. Found by the G1 lane 2026-09-15, report slot (c)2
-goal: general-maintenance
-write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
-done-criterion: a corpus case carrying a register fixture drives the pin lane to its WARN and the bench asserts it as a fire; the absent-register cases keep their could-not-verify silence; bench selftest green
-evidence: G1 report slot (c)2 + the lane's read of the bench env pinning; the second corpus case (019e856) documents itself as false-fire-only
-blocked-by: NONE
-
-## dg-44
-grade: READY
-requirement: replay-bench classify() folds a WARN into the 'context' bucket, the same as the ordinary reminder line, so no corpus case can assert a warn AS a warn — a staged lane's fire and its silence read identically to the bench. Distinct from the register-fixture gap and survives it. Add a warn kind to the bench vocabulary. Found by the G1 lane 2026-09-15, report slot (c)3
-goal: general-maintenance
-write-set: tools/replay-bench.py,tools/corpus/guards.jsonl
-done-criterion: classify() distinguishes warn from context; at least one corpus case asserts kind=warn and goes red when the lane is silenced (red-first); existing 59 cases unchanged in verdict; bench selftest green
-evidence: G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date
-blocked-by: NONE
-amend-reason: 2026-09-15 premise line added: the bench this entry cites moves in wave 1 of the guard-rewrite arc
-amended-evidence: 2026-09-15 G1 report slot (c)3; classify() read by the lane; bench totals 59/59 this date. PREMISE MOVED 2026-09-15 (guard-rewrite arc wave 1): tools/replay-bench.py gains a 'rewrite' KIND and classify() maps updatedInput-without-permissionDecision to it, ordered after the decision checks. This entry was written against the PRE-rewrite-KIND bench, so its dispatcher re-reads classify() and KINDS before building — the warn-vs-context question stands, but the vocabulary it extends has moved.
 
 ## dg-47
 grade: PARKED
