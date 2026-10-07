@@ -6381,3 +6381,47 @@ on from an earlier step, least of all one that shared a command
 with a denied link.
 Consumer + drain seam: executor skill's verify/conduct section;
 drain at that skill's next amendment pass.
+
+## 2026-10-07 — CLASS: an unattended lane's permission dialog is a silent, permanent stall, and it reads as a working lane (n=2, one session)
+
+**Incident + basis.** RELAYED from the statiker meta session
+(`statiker-30`), booked here by the lifecycle drain desk on that
+session's four slots; nothing below was observed at the booking
+desk, and the two statiker records were not opened by it. Two
+read-only opus review lanes each finished their analysis (about 34
+tool calls) and then stalled for good on a permission dialog with
+no operator present, sending no report. First: a search pattern
+containing angle brackets (`<version>/plugin`), which the shell
+reads as redirection. Second: executing a hook script file
+directly. One sat 37 minutes until the horizon fired; the other
+was caught at four minutes by a poll keyed on a tool call left
+pending. The lanes' reasoning is not stored, so nothing was
+recoverable. Three later lanes briefed with plumbing rules
+completed. Records, in statiker:
+`docs/audits/2026-10-07-eve-review-dispositions.md` ("What ran"),
+`dev-notes/2026-10-07-repair-series-analysis.md` (C2).
+
+**Class.** Environment refusal read as a working lane: a dialog
+nobody is present to answer produces no event at all, so the lane
+is indistinguishable from one still thinking. Neighbours, not the
+same class: the 2026-09-24 `codex exec` stdin hang (same costume,
+different mechanism, fixed at the launch line) and the 2026-08-26
+plugin-cache Bash read (the same prompt, with an operator present
+to answer it).
+
+**Pre-formulated rule text** (a tail clause for lanes dispatched
+while nobody watches the terminal; the wording that completed is
+statiker `docs/directives/2026-10-07-sonnet-repair-0205-brief.md`,
+section SHELL PLUMBING): "Nobody is present to answer a permission
+dialog, and a command that raises one stalls the lane for good. So:
+no angle brackets or redirection in a shell command, no `cd`
+prefix, one plain command per call, probes as Python files run
+with `python3 <absolute path>`, never a script executed directly,
+`git -C <repo>`. What cannot be done that way is reported as a
+gap." Dispatcher half (§4, the wait): "The poll also fires on a
+tool call pending past a few minutes, and a lane near the end of a
+long analysis sends its report in parts as it goes."
+
+**Consumer + drain seam.** The dispatch skill's forms reference
+(`references/forms.md`, the read-only and execution tails), at the
+next dispatch-guards maintenance round.
