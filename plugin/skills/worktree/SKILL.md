@@ -108,6 +108,13 @@ dependencies shared by symlink. Record the probe's executed output as
 the isolation basis. A check that silently measures the main checkout
 from inside a worktree reports on code nobody is testing.
 
+The absence has a failure SHAPE, measured in one ecosystem only. A
+Node worktree without its `node_modules` does not error: the suite
+wedges until its timeout (900 seconds where measured) and reads as a
+hang. Provision the tree before running anything that imports; a
+symlink to the main checkout's tree serves, and passes the probe
+above. Other ecosystems are unobserved here, not cleared.
+
 That probe covers the package, never the NEIGHBOURHOOD. A worktree
 sits outside the directory where the main checkout stands among its
 sibling repos, so code reaching a neighbour by relative path
