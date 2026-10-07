@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PreToolUse(SendMessage) gate: a report-shaped message must carry all
+r"""PreToolUse(SendMessage) gate: a report-shaped message must carry all
 required closing-report slots.
 
 The computable slice of schema-validating the §2 closing report
@@ -21,6 +21,21 @@ READ-ONLY tail), or a §2-exempt project form.
 Predicate: ≥ REPORT_MIN_SLOTS distinct markers from (a)–(h) →
 report-shaped; required set REQUIRED_SLOTS (a–g; h is
 execution-tail-only) minus found → fire naming the missing slots.
+A marker COUNTS only at line start or after sentence-ending
+punctuation (dg-1, 2026-10-07): `_SLOT_RE` is
+`(?:^|(?<=[.;:!?]\s))\s*(?:-\s*)?\(([a-h])\)` under `re.M`. The
+measured false-fire class of the old unanchored form
+(`\(([a-h])\)` anywhere): a message that merely ENUMERATES slot
+letters mid-sentence — a state-token ping, which §2 tells a lane to
+send INSTEAD of re-sending a report — reached REPORT_MIN_SLOTS and
+was graded a report missing `(b)`; the backlog entry's own body text
+fired the same way (measured: missing (d)–(g)). The obvious repair
+is REFUTED: a line-start-only anchor finds ONE slot in a genuine
+single-paragraph report ("(a) done. (b) 275 OK. …"), drops below the
+threshold and goes silent on a real report (executed: an inline
+report missing `(e)` was quiet under it). The punctuation arm keeps
+the inline report. The lane's verb is unchanged: a staged warn
+lane, its staging record carrying forward.
 Split-part reports (labeled 1/N, forms.md §2) fire per part in warn
 mode — a part legitimately carries a subset, which is why this lane
 must never run "deny" without a split-aware exemption; recorded
@@ -52,7 +67,8 @@ _SOURCE = "dispatch-guards/report-form-gate"
 
 REPORT_MIN_SLOTS = 4
 REQUIRED_SLOTS = set("abcdefg")  # (h) rides the execution tail only
-_SLOT_RE = re.compile(r"\(([a-h])\)")
+_SLOT_RE = re.compile(
+    r"(?:^|(?<=[.;:!?]\s))\s*(?:-\s*)?\(([a-h])\)", re.M)
 
 
 def found_slots(message: str) -> set:
@@ -111,7 +127,10 @@ if __name__ == "__main__":
         _reset_policy_cache()
 
         def report(slots: str) -> str:
-            return " ".join(f"({s}) content of {s}" for s in slots)
+            # one slot per line, the §2 form's own layout: the anchored
+            # marker (dg-1) no longer counts a bare space-joined "(b)"
+            # mid-sentence, which is the false-fire class it removes
+            return "\n".join(f"({s}) content of {s}" for s in slots)
 
         sub = {"tool_name": "SendMessage", "agent_id": "a1"}
 
@@ -187,6 +206,71 @@ if __name__ == "__main__":
             os.environ["CLAUDE_DISPATCH_GUARDS_CONFIG"] = "/nonexistent"
             del os.environ["CLAUDE_DISPATCH_GUARDS_FIRELOG"]
             _reset_policy_cache()
+
+        # ── dg-1: slot markers are anchored. Gate-level arms: the REAL
+        # hook script over stdin, never the predicate alone. Expected
+        # outcomes come from what a message IS (a report, or a message
+        # about one), not from the regex. Each arm that must be quiet
+        # also has a mirror that must fire, so "quiet" cannot be a
+        # gate that went deaf.
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as td2:
+            genv = dict(os.environ,
+                        CLAUDE_DISPATCH_GUARDS_CONFIG="/nonexistent",
+                        CLAUDE_DISPATCH_GUARDS_FIRELOG=td2 + "/f.jsonl")
+
+            def gate(msg: str):
+                """(exit code, stdout) of the real hook on one message."""
+                p = {**sub, "tool_input": {"message": msg}}
+                r = subprocess.run(
+                    [sys.executable, os.path.realpath(__file__)],
+                    input=json.dumps(p), env=genv,
+                    capture_output=True, text=True)
+                return r.returncode, r.stdout.strip()
+
+            def fires(msg: str, missing: str | None = None) -> bool:
+                code, out = gate(msg)
+                assert code == 0, (code, out)
+                if not out:
+                    return False
+                if missing is not None:
+                    assert f"missing required slot(s) {missing}." in out, out
+                return True
+
+            # (1) a ping that enumerates slot letters → quiet. The
+            # six-letter form clears REPORT_MIN_SLOTS (the unanchored
+            # regex fired on it, missing (b)); the item-text form is the
+            # original wording.
+            assert not fires("slots (a)-(h) are all landed; part 5/7 "
+                             "carried gaps (c)")
+            assert not fires("ack: slots (a), (c), (d), (e), (f), (g) "
+                             "are all landed; part 5/7 carried gaps (c)")
+            # (2) prose mentioning slot letters mid-sentence → quiet
+            # (four letters, so the OLD regex fires; three is the
+            # below-threshold control)
+            assert not fires("Before the second pass the (a) items and "
+                             "the (b) evidence and the (c) gaps and (d) "
+                             "deviations are rechecked in order.")
+            assert not fires("Before the second pass the (a) items and "
+                             "the (b) evidence and the (c) gaps are "
+                             "rechecked in order.")
+            # (3) inline one-paragraph report: recognised, quiet when
+            # complete; the mirror (missing (e)) must FIRE, which is what
+            # proves it was recognised (a line-start-only anchor reads
+            # it as a non-report and is quiet on both)
+            inline = ("(a) done. (b) 275 OK. (c) none. (d) none. (e) "
+                      "none. (f) x. (g) none.")
+            assert not fires(inline)
+            assert fires(inline.replace("(e) none. ", ""), "(e)")
+            # (4) line-start report: recognised (complete → quiet)
+            assert not fires(report("abcdefg"))
+            # (5) a report missing (b) → fires, naming it
+            assert fires(report("acdefg"), "(b)")
+            # self-match probe: the gate on its OWN docstring is quiet
+            assert not fires(__doc__)
+            # (the second probe, over the backlog entry's body text, is
+            # the corpus case noted dg-1 in tools/corpus/guards.jsonl)
 
         print("report-form-gate: all tests passed")
         sys.exit(0)
