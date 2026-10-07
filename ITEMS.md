@@ -78,6 +78,8 @@ amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum
 amended-blocked-by: 2026-10-07 NONE
 promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+amend-reason: 2026-10-07 the build landed; the entry records its commit and waits only on the release its done-criterion names
+amended-evidence: 2026-10-07 BUILT 2026-10-07 at 6571f0a,bf3befe. MEASURED by the desk: the schema-bearing bullet names the internal twin (real instance on disk, or say none exists); wrap, lint and drift clean. RECALLED from the earlier slot: legacy body in BACKLOG.md blob bb93897, premise confirmed live the same day by the read-only re-grade lane.
 
 ## dg-10
 grade: READY
@@ -135,6 +137,8 @@ amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum
 amended-blocked-by: 2026-10-07 NONE
 promote-reason: 2026-10-07 was READY under the old carrier and its premise is confirmed live today; the legacy body states design, verifier and write-set, now carried in the slots
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+amend-reason: 2026-10-07 the build landed; the entry records its commit and waits only on the release its done-criterion names
+amended-evidence: 2026-10-07 BUILT 2026-10-07 at 6571f0a. MEASURED by the desk: six replacements; a wrap-aware count of the old term over plugin/skills reads 0, predicted before the edit. RECALLED from the earlier slot: legacy body in BACKLOG.md blob bb93897, premise confirmed live the same day by the read-only re-grade lane.
 
 ## dg-13
 grade: PARKED
@@ -205,6 +209,8 @@ amended-evidence: 2026-10-07 RELAYED from the read-only lane sonnet-regrade-enum
 amended-blocked-by: 2026-10-07 NONE
 promote-reason: 2026-10-07 the entry offered two exits and exit (b), scoping the clause to the measured ecosystem, needs no further evidence
 promoted-by: 2026-10-07 dispatch-guards-99 (opus desk, operator-delegated 2026-10-07: all decisions as the desk recommends)
+amend-reason: 2026-10-07 the build landed; the entry records its commit and waits only on the release its done-criterion names
+amended-evidence: 2026-10-07 BUILT 2026-10-07 at 7d91eae. MEASURED by the desk: clause inside the existing section, scoped to Node, other ecosystems stated unobserved. RECALLED from the earlier slot: legacy body in BACKLOG.md blob bb93897, premise confirmed live the same day by the read-only re-grade lane.
 
 ## dg-26
 grade: READY
