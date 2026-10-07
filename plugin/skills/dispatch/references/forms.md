@@ -276,7 +276,24 @@ construction — hold it until the final part lands; only a
 directive that must STOP work (a killed premise, an abort)
 justifies interrupting a report mid-series (measured: the one
 same-session crossing that was not message-timing luck was a
-supplement sent between parts 2/3 and 3/3).
+supplement sent between parts 2/3 and 3/3). A token naming a
+BLOCKING state owes one message more. A blocking state is a hold,
+a lock, a "not yet": a statement that forbids the receiver an
+act. The crossing rule never asks for that message, because no
+second message exists to cross. Whoever names the block sends
+its END when the state lifts, to the same address, in the same
+work stretch. It is the same minimal ping, triggered by the
+state change instead of a crossing. To the receiver a token
+standing still reads exactly like one still valid, so the block
+outlives its cause in silence. Measured: a peer kept a named
+hold for hours after it had been lifted at the naming session.
+Reading the artifact found it; no message did. The trigger is
+the block alone. A block ends by construction, at an event with
+a timestamp. An ordinary fact (a pin, a version) has a successor
+value and no end, and owes no follow-up; demanding one would
+turn every fact message into a standing debt. (Source: the site
+corpus's peer-traffic rule, facts sent when they land; this is
+its case where the receiver awaits nothing.)
 
 EXECUTION tail (any dispatch that writes):
 
@@ -394,7 +411,12 @@ enumeration.
                  what matters is the grader's call, not yours.
     Taxonomy:    closed difference classes; each item carries
                  exactly one label: ABSENT / REWORDED / WEAKENED /
-                 RELOCATED / ADDITION / TAIL-DIFF.
+                 RELOCATED / ADDITION / TAIL-DIFF. The label
+                 field holds the BARE TOKEN and nothing else;
+                 every qualifier goes in the evidence field. A
+                 decorated label ("WEAKENED (partly)") drops out
+                 of every tally unseen, and a count over the
+                 field is the only reader that notices.
     Known noise: exclusions named and defined exactly (a pattern, not
                  a vibe); excluded items are still LISTED separately,
                  never silently dropped.
