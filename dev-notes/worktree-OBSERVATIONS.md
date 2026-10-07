@@ -303,7 +303,7 @@ the committed work survived; their retirement is a separate question.
 
 New observations go at the file's end, under this heading.
 
-<!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
-     die lebende Liste. Abgeflossenes steht OBERHALB. Der
-     doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
-     Anhängen am EOF sonst im abgeflossenen Abschnitt landet. -->
+<!-- NEUE EINTRÄGE ANS DATEI-ENDE (new entries go at the end of
+     the file, under "## Offen", the live list). Drained entries sit
+     ABOVE. The doc-drift check enforces exactly this order, because
+     an append at EOF would otherwise land in the drained section. -->

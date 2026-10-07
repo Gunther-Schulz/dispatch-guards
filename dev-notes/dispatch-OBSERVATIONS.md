@@ -3129,10 +3129,10 @@ the round — the booking is the exit, not a deferral. Immediate
 consumer: any session accepting a handoff today — ask for the
 fallback by hand until the mint lands.
 
-<!-- NEUE EINTRÄGE ANS DATEI-ENDE, UNTER "## Offen" — dies ist
-     die lebende Liste. Abgeflossenes steht OBERHALB. Der
-     doc-drift-Check erzwingt genau diese Reihenfolge, weil ein
-     Anhängen am EOF sonst im abgeflossenen Abschnitt landet. -->
+<!-- NEUE EINTRÄGE ANS DATEI-ENDE (new entries go at the end of
+     the file, under "## Offen", the live list). Drained entries sit
+     ABOVE. The doc-drift check enforces exactly this order, because
+     an append at EOF would otherwise land in the drained section. -->
 
 - 2026-08-18 **writer-reservation-gate names the WRONG repo on
   cross-repo commits** (n=2 the same evening, both from a dotfiles
