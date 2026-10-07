@@ -3,7 +3,7 @@
 landed in MAIN-session context.
 
 Root cause this tripwires (third loaded-but-inert instance of the
-routing rule, 2026-08-05): CLAUDE.md's model-routing rule names the
+routing rule, 2026-08-05): the site corpus's model-routing rule names the
 tell ("the second consecutive discovery call in the main session")
 and the skip condition ("met carrying the running work's momentum"),
 and still did not fire on a 72KB dependents sweep run inline — the
@@ -11,7 +11,7 @@ route-named-in-the-GO-reply convention surfaced the miss to the
 operator, not at the moment. Per the precipitation rule the
 computable slice precipitates: ONE search-shaped tool result above a
 size threshold entering main-session context. The judgment half —
-should this have been a dispatch? — stays prose (CLAUDE.md model
+should this have been a dispatch? — stays prose (site corpus model
 routing; dispatch skill §1 discovery exception); this hook only
 reminds, never blocks. Seam split: dispatch-skill-gate covers the
 DISPATCH moment; this covers the missed-dispatch symptom upstream
@@ -82,7 +82,7 @@ def check(payload: dict) -> str | None:
         return None
     return (
         f"A ~{size // 1000}KB search result just entered main-session "
-        "context — the discovery-dispatch rule may apply (CLAUDE.md "
+        "context — the discovery-dispatch rule may apply (site corpus "
         "model routing; dispatch skill §1, discovery exception): a "
         "question statable complete before its answer is known is "
         "briefable, and sweeps belong in a reader dispatch that "
@@ -127,6 +127,11 @@ if __name__ == "__main__":
             "persistedOutputPath": "/tmp/x", "persistedOutputSize": 108894}}
         assert check(truncated)
         assert response_size(truncated["tool_response"]) >= 108894
+        # The runtime text names the site corpus, never one site's
+        # file (dg-28): pinned, so the wording cannot drift back.
+        _text = check(truncated)
+        assert "(site corpus model routing;" in _text, _text
+        assert "CLAUDE.md" not in _text, _text
 
         # Under threshold → silent.
         assert check({"tool_name": "Bash",

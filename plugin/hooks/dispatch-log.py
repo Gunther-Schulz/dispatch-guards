@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PostToolUse(Agent|Task) logger: one JSONL line per subagent dispatch.
 
-Purpose: the model-routing table (CLAUDE.md) and the dispatch skill
+Purpose: the model-routing table (site corpus) and the dispatch skill
 call for accumulated dispatch evidence; this hook is the mechanical
 collector. It records ONLY mechanical facts (never judgments — outcome/
 class/verification live with whoever dispatched, e.g. the PBS journal):

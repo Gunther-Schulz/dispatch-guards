@@ -2,7 +2,7 @@
 """PreToolUse gate: agent dispatches must choose the model EXPLICITLY.
 
 Enforces the mechanical half of the model-routing discipline
-(~/.claude/CLAUDE.md "Model routing for dispatches"; project-side e.g.
+(site corpus "Model routing for dispatches"; project-side e.g.
 pbs-doc/PROZESS.md §1a): an agent spawn with no `model` field still
 inherits the session model (most expensive case: Fable) — the gate blocks
 the call and forces a deliberate choice. Whether the choice is CORRECT no
@@ -23,7 +23,7 @@ field — the doubling is a verified mirror (mini-checksum), not a
 second truth source. Scope: only the generic ENFORCED_TYPES below;
 agents whose definition pins their model need neither field nor prefix.
 
-Fable brake (2026-07-19, fail-safe for the CLAUDE.md fable cost
+Fable brake (2026-07-19, fail-safe for the site corpus fable cost
 facts): EVERY fable dispatch forces the permission
 dialog — an explicit model choice proved insufficient cost control
 when a review harness fanned out 8×fable (~100k tokens each) on one
@@ -56,7 +56,7 @@ title prefix stays required (it is then the only visible carrier).
 When a title prefix IS present it must still mirror the model field;
 the mini-checksum is unchanged. Observed live: a named dispatch
 renders as "<name>  <prompt excerpt>" with the title absent entirely.
-Corpus homes: the dispatch skill §1 + CLAUDE.md veto-gate
+Corpus homes: the dispatch skill §1 + site corpus veto-gate
 conventions, amended the same day — this hook is their enforcement,
 and the amendment landing without it was the divergence that
 surfaced the lane.
@@ -202,7 +202,7 @@ def check(tool_input: dict) -> str | None:
         return (
             "Model gate: agent dispatch without an explicit `model` — the agent "
             "would silently inherit the session model. Choose deliberately per "
-            "the model table (~/.claude/CLAUDE.md 'Model routing for "
+            "the model table (site corpus 'Model routing for "
             "dispatches') or project routing (e.g. PROZESS.md §1a). Even an "
             "intentional inherit must be made "
             "explicit as model:\"fable\". Name the choice in your reply."
@@ -308,7 +308,7 @@ def _rewrite_or_none(tool_input: dict, model: str) -> tuple[str | None, bool]:
 # before a gated call is not rendered — the ask dialog is all the
 # operator sees, so an explanation composed before the call is hidden
 # exactly at the approval moment (corpus: "text preceding a
-# permission-GATED call fails hardest", CLAUDE.md Recommending &
+# permission-GATED call fails hardest", site corpus Recommending &
 # reporting). Probe-verified binding (as-of 2026-08-05): the current
 # turn's assistant text blocks are already flushed to the transcript
 # when PreToolUse fires, so the hook can measure them. The note rides
@@ -491,7 +491,7 @@ def main() -> int:
         desc = (tool_input.get("description") or "").strip()
         ask(  # exits 0 with permissionDecision "ask"
             f"⚠️ FABLE-DISPATCH: {desc!r}. Teuerste Stufe; ihr "
-            "komparativer Vorteil laut CLAUDE.md: Fresh-Context-Verdikt "
+            "komparativer Vorteil laut Site-Corpus: Fresh-Context-Verdikt "
             "auf begrenztem Artefakt. Die Entscheidung ist getroffen — "
             "abbrechen, wenn der Einsatz sie nicht rechtfertigt."
             + undelivered_note(payload),

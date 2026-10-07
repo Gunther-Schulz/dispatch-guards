@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PreToolUse(Bash) gate: subagents must not push.
 
-Enforces the integration rule mechanically (global CLAUDE.md
+Enforces the integration rule mechanically (site corpus
 "Dispatched work" / dispatch skill §1): subagents commit
 unpushed; pushing is the dispatcher's act, after verification.
 
