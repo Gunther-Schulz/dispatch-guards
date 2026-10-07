@@ -26,7 +26,7 @@ claims store.
 Corpus format (JSONL, one case per line):
 
     {"hook": "<basename>.py",
-     "expect": "deny"|"ask"|"context"|"block"|"silent"|"rewrite",
+     "expect": "deny"|"ask"|"context"|"warn"|"block"|"silent"|"rewrite",
      "payload": {...}}                # the hook-input JSON
 
   optional keys:
@@ -56,6 +56,8 @@ Outcome classification of one run:
     exit 0, JSON stdout, permissionDecision deny    -> deny
     exit 0, JSON stdout, permissionDecision ask     -> ask
     exit 0, JSON stdout, updatedInput, no decision  -> rewrite
+    exit 0, JSON stdout, systemMessage carrying fire()'s own
+      " WARN (staging): " marker + additionalContext -> warn
     exit 0, JSON stdout, additionalContext only     -> context
     anything else (unparseable stdout, other exit)  -> error (always a miss)
 
@@ -77,8 +79,14 @@ REPO = Path(__file__).resolve().parent.parent
 HOOKS = REPO / "plugin" / "hooks"
 DEFAULT_CORPUS = Path(__file__).resolve().parent / "corpus" / "guards.jsonl"
 
-KINDS = ("deny", "ask", "context", "block", "silent", "rewrite")
-FIRE_KINDS = ("deny", "ask", "context", "block", "rewrite")
+KINDS = ("deny", "ask", "context", "warn", "block", "silent", "rewrite")
+FIRE_KINDS = ("deny", "ask", "context", "warn", "block", "rewrite")
+
+# fire()'s warn-mode emitter (_dispatch_common.fire) writes this marker into
+# the TOP-LEVEL systemMessage; it is matched there only, never in prose of
+# additionalContext, so an ordinary reminder that merely quotes it stays
+# "context" (dg-44, 2026-10-07).
+WARN_MARKER = " WARN (staging): "
 
 
 def classify(returncode: int, stdout: str) -> str:
@@ -111,6 +119,16 @@ def classify(returncode: int, stdout: str) -> str:
     # still classifies by its decision, never silently as a rewrite.
     if "updatedInput" in hso:
         return "rewrite"
+    # WARN (2026-10-07, dg-44): a staged lane's fire() warn carries the
+    # marker in the top-level systemMessage beside additionalContext.
+    # Before this branch it classified as "context", identical to an
+    # ordinary reminder, so a staged lane silenced or promoted to deny
+    # moved a case between kinds the bench could not tell apart from a
+    # plain reminder going quiet.
+    sm = j.get("systemMessage")
+    if (isinstance(sm, str) and WARN_MARKER in sm
+            and "additionalContext" in hso):
+        return "warn"
     if "additionalContext" in hso:
         return "context"
     return "error"
@@ -340,8 +358,40 @@ def _test() -> int:
               "flagged — expect_updated_input does not discriminate",
               file=sys.stderr)
 
+    # ── Warn-kind classification (2026-10-07, dg-44): a discriminating
+    # PAIR over classify() itself. The first stdout has fire()'s own
+    # warn shape; the second is the same body with the top-level
+    # systemMessage marker removed, which must fall back to "context";
+    # the third carries the marker only inside additionalContext prose,
+    # which must also stay "context".
+    _warn_out = json.dumps({
+        "systemMessage": "[x/y] WARN (staging): r",
+        "hookSpecificOutput": {"hookEventName": "PreToolUse",
+                               "additionalContext": "[x/y] WARN — staging "
+                                                    "mode, this lane would "
+                                                    "DENY: r"}})
+    _nomark_out = json.dumps({
+        "systemMessage": "[x/y] r",
+        "hookSpecificOutput": {"hookEventName": "PreToolUse",
+                               "additionalContext": "[x/y] WARN — staging "
+                                                    "mode, this lane would "
+                                                    "DENY: r"}})
+    _prose_out = json.dumps({
+        "hookSpecificOutput": {"hookEventName": "PreToolUse",
+                               "additionalContext": "quotes WARN (staging): "
+                                                    "in prose"}})
+    for _label, _out, _want in (("warn shape", _warn_out, "warn"),
+                                ("marker removed", _nomark_out, "context"),
+                                ("marker in prose only", _prose_out,
+                                 "context")):
+        _got = classify(0, _out)
+        if _got != _want:
+            bad += 1
+            print(f"FAIL [warn classify, {_label}]: expected {_want!r}, "
+                  f"got {_got!r}", file=sys.stderr)
+
     print("replay-bench selftest: isolation pinned, rewrite-value "
-          "discriminates" if not bad
+          "discriminates, warn classified" if not bad
           else f"replay-bench selftest: {bad} FAILED")
     return 1 if bad else 0
 
