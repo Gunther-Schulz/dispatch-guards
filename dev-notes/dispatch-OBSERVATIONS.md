@@ -6425,3 +6425,38 @@ long analysis sends its report in parts as it goes."
 **Consumer + drain seam.** The dispatch skill's forms reference
 (`references/forms.md`, the read-only and execution tails), at the
 next dispatch-guards maintenance round.
+
+## 2026-10-07 — CLASS: the dispatcher's own long turn holds its lanes' reports, and the held reports read as silent lanes
+
+**Incident + basis.** Observed at the dispatching desk
+(dispatch-guards-99, backlog drain). Three read-only lanes sent
+their closing reports at 18:23 UTC; the lanes' own idle notices
+carry that time. The desk was inside one long turn (inline edits,
+bookings, a second dispatch) and saw none of them. At 18:30 it read
+the three data files as static for seven minutes, concluded the
+lanes had stalled, and sent three report demands. All three lanes
+re-sent. The originals and the re-sends arrived together when the
+desk's turn ended. Cost: three needless resumes and three duplicate
+reports in the desk's context.
+
+**Class.** The mailbox binding read in one direction only. The
+skill states that a message reaches a LANE at its next turn
+boundary. The same holds for the DESK: a report sent to it waits
+for the desk's own turn to end. A desk that keeps working cannot
+tell "nothing was sent" from "nothing has been delivered to me
+yet", which is the false negative forms.md already names for the
+receiving lane.
+
+**Pre-formulated rule text** (forms.md section 2, the delivery
+binding, as a fourth consequence beside steering, deadlock and
+reanimation): "(4) The DESK is a receiver too. A report sent to
+it is delivered at the desk's own turn boundary, so a desk working
+through one long turn reads finished lanes as silent. Before a
+status demand, the desk ends its turn once: a static artifact plus
+no report, observed from inside a running turn, is not yet a
+finding."
+
+**Consumer + drain seam.** The dispatch skill's forms reference
+(`references/forms.md`, the delivery binding), at the consolidation
+pass booked under dg-52. Same class as the 2026-08-27 delivery
+entry; merge there rather than landing a sibling.
