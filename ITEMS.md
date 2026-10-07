@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 22
+added: 23
 compacted: 0
 
 ## dg-5
@@ -317,3 +317,13 @@ write-set: plugin/hooks/subagent-push-gate.py,plugin/hooks/push-claim-reminder.p
 done-criterion: strip_heredoc_bodies moves to _dispatch_common (one home, both hooks import it) and subagent-push-gate matches the stripped command. Red first on the unmodified gate: a heredoc whose body carries a comment naming git push is DENIED; green after. Must not move: a real git push on a heredoc's opener line or after the heredoc is still denied. Both directions as --test bites and as corpus cases; bench and every hook --test green. Verb stays deny.
 evidence: MEASURED 2026-10-07 by the desk at HEAD 4d7e73f, the real hook over stdin with a subagent agent_id (scratch probe, five arms): heredoc body with a comment naming git push -> DENY; the same with an apostrophe in the comment -> DENY; body with the bare word push only -> silent; a real git push -> DENY (control); no push anywhere -> silent (control). RELAYED from the dotfiles desk (dotfiles-2b) the same day: dotfiles lane opus-w7-df306 had a compound command refused whole on plugin 0.11.26, cause inferred by that lane. RELAYED from this session's read-only enumeration: dev-notes/dispatch-OBSERVATIONS.md entry at line 4956 names the same gap.
 blocked-by: NONE
+
+## dg-55
+grade: PARKED
+requirement: Migrate this repo's lifecycle declaration off schema 2, diagnosing first why its migration dry run answered COULD NOT VERIFY. Asked of this repo's session by the lifecycle desk (lifecycle-72) on 2026-10-07; brief: /home/g/dev/Gunther-Schulz/lifecycle/docs/directives/2026-10-07-lc239-repo-migration-brief.md, its section on the two repos needing diagnosis.
+goal: general-maintenance
+write-set: .claude/lifecycle.json,ITEMS.md,ITEMS-DONE.md,LEDGER.md
+done-criterion: The dry run's COULD NOT VERIFY is explained from its own output before any write; the declaration is on the current schema; item check, conservation and move integrity read clean afterwards with the open and done counts unchanged; one message reports the outcome to the lifecycle desk.
+evidence: RELAYED 2026-10-07 from lifecycle-72, not measured here: the dry run answered COULD NOT VERIFY for this repo (itself relayed there from an earlier desk), and the operator decided at the lifecycle desk that each governed repo's own session runs its migration. MEASURED here the same day: ITEMS.md line 1 reads schema: 2; the brief was NOT opened by this desk and no dry run was executed.
+blocked-by: decision does the operator want the dispatch-guards session to run the lifecycle schema migration (surfaced to them 2026-10-07 with a yes recommendation, unanswered at session close)
+not-derivable: 2026-10-07 the only record of the operator's decision is a peer's relay, which is testimony about a decision and never the decision; nothing in this repo's ledger or CLAUDE.md states it
