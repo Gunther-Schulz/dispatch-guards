@@ -6174,6 +6174,12 @@ class register's fire-rate review counts this as a luna-cell fire.
   messages beyond the ONE critique-pass message the brief commissions."
   The EXECUTION tail is not affected (it carries no such prohibition),
   so the edit is one sentence in references/forms.md, READ-ONLY tail.
+- **Recurrence 2026-10-29:** product-search desk, discovery lane
+  `sonnet-acq-sweep-b` named the same contradiction in its critique
+  pass and resolved it the same way (first message = the exception);
+  plugin 0.11.26, tail text unchanged. Sibling lane A sent its critique
+  pass without flagging it — one resolution each way would have been
+  invisible, so the fix stays owed.
 - **Consumer + drain:** the dispatch-guards maintainer at this carrier's
   next drain pass; the retirement quota reads this entry like any other.
 
