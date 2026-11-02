@@ -1,5 +1,5 @@
 {
-  "schema": 2,
+  "schema": 6,
   "id-prefix": "dg",
   "public": true,
   "laws": "CLAUDE.md",
@@ -31,7 +31,8 @@
         "recording-act": "the item close fire-log line",
         "detail": "to ITEMS-DONE.md on DONE or DROPPED"
       },
-      "growth": "bounded-by-exit — every item leaves by a recorded closure or a recorded drop, and the alarm is a kind that grew without an exit event, never a count (R22)"
+      "growth": "bounded-by-exit — every item leaves by a recorded closure or a recorded drop, and the alarm is a kind that grew without an exit event, never a count (R22)",
+      "trigger": "verb item add — admission is the write that CREATES a body; `item park` and `item close` move one already admitted, so they are transitions of this kind rather than its trigger"
     },
     "done bodies": {
       "home": "ITEMS-DONE.md",
@@ -46,7 +47,8 @@
         "recording-act": "a ledger decision line naming the compacted range",
         "detail": "WAVE 4 — declared now so the kind has no undeclared stage, not implemented"
       },
-      "growth": "compacted — done bodies fold on the retire lane's declared rule and git keeps the body; the archive section is history and dropping it would lose the basis of laws still in force"
+      "growth": "compacted — done bodies fold on the retire lane's declared rule and git keeps the body; the archive section is history and dropping it would lose the basis of laws still in force",
+      "trigger": "verb item close"
     },
     "ledger lines": {
       "home": "LEDGER.md",
@@ -60,7 +62,8 @@
         "action": "never",
         "recording-act": "compaction only — a line whose item is DONE and past the horizon folds into that body's compaction line"
       },
-      "growth": "unbounded-with-reason — one line per decision event, no bodies; the decision rate is the control, and the pre-migration prose sits below the archive heading held verbatim"
+      "growth": "unbounded-with-reason — one line per decision event, no bodies; the decision rate is the control, and the pre-migration prose sits below the archive heading held verbatim",
+      "trigger": "verb ledger add decision — the button, and one of four: `ledger add` is a command GROUP, so the trigger names a leaf; `dropped`, `rejected` and `superseded` write this kind by the same act and are listed in the writer; `session` is the path around the button, for a fact or an open question"
     }
   }
 }

@@ -3,7 +3,7 @@
 # file: the archive below is empty because there was nothing to
 # archive, which is a different fact from nothing having been read.
 
-schema: 2
+schema: 6
 
 ## dg-31
 grade: DONE

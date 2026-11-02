@@ -1,5 +1,7 @@
 # dispatch-guards — ledger
 
+schema: 6
+
 On-disk ledger for this repo: one entry per line, append-only,
 chronological. Facts carry their basis, decisions carry their why
 (and the rejected alternative where it is not obvious), open
