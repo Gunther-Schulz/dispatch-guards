@@ -1,6 +1,6 @@
 schema: 2
 baseline: 39
-added: 23
+added: 26
 compacted: 0
 
 ## dg-5
@@ -329,3 +329,30 @@ blocked-by: decision does the operator want the dispatch-guards session to run t
 not-derivable: 2026-10-07 the only record of the operator's decision is a peer's relay, which is testimony about a decision and never the decision; nothing in this repo's ledger or CLAUDE.md states it
 amend-reason: 2026-10-07 the lifecycle desk closed and named where its side of this lives
 amended-evidence: 2026-10-07 RELAYED 2026-10-07 from lifecycle-72 at its close, not measured here: the lifecycle-side carrier is item lc-239, its verifier is kind check over the roster, and no report is owed to that session; the commit in this repo is the record, with one line to a lifecycle session only if one is listed. RELAYED earlier the same day from the same desk: the dry run answered COULD NOT VERIFY for this repo, and the operator decided there that each governed repo runs its own migration. MEASURED here: ITEMS.md line 1 reads schema: 2; the brief was not opened and no dry run was executed.
+
+## dg-56
+grade: READY
+requirement: The global corpus drops its horizon mechanics (corpus-shrink arc, map rows I3b + F6c: dotfiles claude/records/corpus-shrink-map-2026-11-02.md); the dispatch skill section 4 is their home, and today section 4 still prescribes a bare background sleep the pre-shrink corpus forbade.
+goal: general-maintenance
+write-set: plugin/skills/dispatch/SKILL.md
+done-criterion: SKILL.md section 4 carries the pre-shrink corpus clauses (git show corpus-pre-shrink-2026-11-02:plugin/modules/insurance.md in ethos: Dispatched work + Horizon sizing and firing; fixing.md: the silence-instrument sentences on delta baseline, per-pass anchor resolution, baseline shown at arming), each kept or dispositioned; the bare-sleep vs poll contradiction is resolved one way and stated.
+evidence: MEASURED: SKILL.md section 4 reads "as its own background timer (a sleep <horizon> whose exit re-invokes the session)"; the pre-shrink corpus Insurance bullet reads "Never a bare background sleep". RELAYED: map graded PASS at the assessment desk 2026-11-02.
+blocked-by: NONE
+
+## dg-57
+grade: READY
+requirement: The global corpus drops its peer-desk delegation and peer-traffic mechanics (corpus-shrink arc, map rows Ro4b + Ro6b: dotfiles claude/records/corpus-shrink-map-2026-11-02.md); the dispatch skill has no home for them yet.
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/peer-desk.md,plugin/skills/dispatch/SKILL.md
+done-criterion: references/peer-desk.md exists and carries the pre-shrink routing clauses the shrunk corpus dropped (git show corpus-pre-shrink-2026-11-02:claude/modules/routing.md in dotfiles: the desk-delegation mechanics — paste-line form, scope clause never enumerating items, quoting onward with source, release gate vs push — and the peer-session boot-state, membership-by-function and residue clauses), each kept or dispositioned against SKILL.md section 4; SKILL.md section map names the file.
+evidence: RELAYED: map graded PASS at the assessment desk 2026-11-02. DERIVED: the shrunk corpus keeps only the delegation core (first-hand in the receiver, desk decides, carve-out floor, closable verdict); the mechanics are lens-shaped for dispatching desks.
+blocked-by: NONE
+
+## dg-58
+grade: READY
+requirement: codex-routing.md DETECTION clause asks the first session to observe a codex limit refusal to stamp its verbatim stderr; observed 2026-11-02 by dev-a2 (corpus-shrink arc), not stamped because that arc may not edit this repo.
+goal: general-maintenance
+write-set: plugin/skills/dispatch/references/codex-routing.md
+done-criterion: DETECTION in references/codex-routing.md quotes the observed refusal verbatim with its date, CLI, model and window reading, and the site note that codex routing is OFF at the operator site since dotfiles 99664d8.
+evidence: MEASURED: 2026-11-02, codex exec -s read-only -m gpt-5.6-luna, two parallel lanes, both: "ERROR: You’ve hit your usage limit. Upgrade to Plus to continue using Codex (https://chatgpt.com/explore/plus), or try again at Nov 20th, 2026 12:48 PM.", exit 1, empty output. DERIVED: an 18-day reset reads as the weekly-or-longer window. RELAYED: operator ended the codex trial the same day (dotfiles 99664d8).
+blocked-by: external a dispatch-guards desk takes it: the corpus-shrink arc that observed the refusal is scoped out of editing dispatch-guards skill text (handoff docs/directives/2026-11-02-corpus-shrink-arc.md, Scope)
